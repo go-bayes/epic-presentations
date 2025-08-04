@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPIC-lab Presentations</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <header>
+        <h1>EPIC-lab Presentations</h1>
+        <p>Research talks and conference presentations from the EPIC-lab</p>
+    </header>
+
+    <main>
+        <section class="year-section">
+            <h2>2025</h2>
+            <div class="presentations-grid">
+                <article class="presentation-card">
+                    <span class="status-badge live">Live</span>
+                    <h3>Advances in Causal Inference for Psychology</h3>
+                    <p class="meta">
+                        <span class="date">January 2025</span> • 
+                        <span class="venue">APA-BIER Conference</span>
+                    </p>
+                    <p class="presenter">Joseph Bulbulia</p>
+                    <div class="actions">
+                        <a href="2025/apa-bier/" class="btn primary">View Presentation</a>
+                        <a href="https://github.com/go-bayes/epic-presentations/tree/main/2025/apa-bier" class="btn secondary">Source</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="year-section">
+            <h2>2024</h2>
+            <div class="presentations-grid">
+                <p class="no-content">Presentations from 2024 will be added soon.</p>
+            </div>
+        </section>
+
+        <section class="archive-section">
+            <h2>Archived Presentations</h2>
+            <p>Older presentations have been moved to Dropbox to conserve repository space. They remain fully accessible via the links below.</p>
+            <div id="archived-presentations">
+                <!-- Populated from archive.json -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 EPIC-lab | <a href="https://go-bayes.github.io/epic-lab/">Main Site</a> | <a href="https://github.com/go-bayes/epic-presentations">GitHub</a></p>
+    </footer>
+
+    <script>
+        // Load archived presentations from archive.json
+        fetch('archive.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('archived-presentations');
+                if (data.archived && data.archived.length > 0) {
+                    const grid = document.createElement('div');
+                    grid.className = 'presentations-grid';
+                    
+                    data.archived.forEach(pres => {
+                        const card = document.createElement('article');
+                        card.className = 'presentation-card';
+                        card.innerHTML = `
+                            <span class="status-badge archived">Archived</span>
+                            <h3>${pres.title}</h3>
+                            <p class="meta">
+                                <span class="date">${pres.date}</span> • 
+                                <span class="venue">${pres.venue}</span>
+                            </p>
+                            <p class="presenter">${pres.presenter}</p>
+                            <div class="actions">
+                                <a href="${pres.dropbox_url}" class="btn primary" target="_blank">View on Dropbox</a>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    
+                    container.appendChild(grid);
+                } else {
+                    container.innerHTML = '<p class="no-content">No archived presentations yet.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading archive:', error);
+                document.getElementById('archived-presentations').innerHTML = 
+                    '<p class="no-content">No archived presentations yet.</p>';
+            });
+    </script>
+</body>
+</html>

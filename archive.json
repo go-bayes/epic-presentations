@@ -1,0 +1,13 @@
+{
+  "archived": [
+    {
+      "title": "Example Archived Presentation",
+      "date": "June 2023",
+      "venue": "Example Conference",
+      "presenter": "Joseph Bulbulia",
+      "dropbox_url": "https://www.dropbox.com/...",
+      "archived_date": "2024-01-01"
+    }
+  ],
+  "archive_policy": "Presentations are archived to Dropbox after 6 months to conserve repository space."
+}
