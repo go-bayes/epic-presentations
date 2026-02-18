@@ -1,49 +1,68 @@
 # EPIC-lab Presentations
 
-Static hosting for EPIC-lab research presentations. Fast, lightweight, no build process.
+Static hosting for EPIC-lab research presentations and course slides via GitHub Pages.
 
-## Structure
+## Branches
+
+- **`main`**: source files only (index.html, assets, archive.json, this README). Lightweight.
+- **`gh-pages`**: deployed content. Force-pushed on each deploy so no history accumulates. GitHub Pages serves from this branch.
+
+## Structure (on gh-pages)
 
 ```
 epic-presentations/
-├── index.html          # Main presentations index
-├── archive.json        # Metadata for archived presentations
-├── assets/            # Shared CSS and resources
-├── 2025/              # Current year presentations
-│   └── apa-bier/      # Each presentation in its own folder
-│       └── index.html # Self-contained HTML presentation
-└── 2024/              # Previous years...
+├── index.html              # presentations index
+├── archive.json            # metadata for archived presentations
+├── assets/                 # shared CSS
+├── 2026/
+│   └── psyc-434-w01/       # course slides by week
+│       └── index.html      # self-contained revealjs HTML
+├── 2025/
+│   └── apa-bier/           # research presentation
+│       └── index.html
+└── .nojekyll
 ```
 
-## Adding a New Presentation
+## Course slides workflow (PSYC 434)
 
-1. Create a folder: `YYYY/presentation-name/`
-2. Add your HTML file as `index.html`
-3. Update the main `index.html` to include your presentation
-4. Commit and push - deploys automatically via GitHub Pages
+QMD sources live in the course repo (`26-434`). Rendered slides are deployed here. The render script handles everything:
 
-## Archiving Policy
+```bash
+# from the 26-434 repo
+./scripts/render-slides.sh /path/to/NN-slides.qmd NN
+```
 
-After 6 months, presentations are moved to Dropbox to conserve space:
+This command:
+1. Renders the QMD to self-contained revealjs HTML with the catppuccin mocha theme
+2. Switches this repo to the `gh-pages` branch
+3. Copies the rendered HTML to `2026/psyc-434-wNN/index.html`
+4. Force-pushes `gh-pages` (no history accumulation)
+5. Switches back to `main`
 
-1. Upload presentation to Dropbox
-2. Add entry to `archive.json`
-3. Remove from GitHub repository
-4. The index page will automatically show the Dropbox link
+Slides are then live at `https://go-bayes.github.io/epic-presentations/2026/psyc-434-wNN/`.
 
-## Deployment
+### Theme
 
-This repository uses GitHub Pages:
-- Push to main branch → Live in minutes
-- No build process required
-- Direct HTML serving for speed
+The revealjs theme is `26-434/theme/catppuccin-mocha-revealjs.scss`, adapted from `GIT/templates/css/catppuccin-mocha.css` with SCSS layer boundaries added for Quarto compatibility.
 
-## Size Management
+## Adding a research presentation
 
-- Keep active presentations under 100MB each
-- Archive older presentations to Dropbox
-- Monitor repository size (aim to stay under 1GB total)
+1. Switch to `gh-pages`: `git checkout gh-pages`
+2. Create a folder: `YYYY/presentation-name/`
+3. Add your self-contained HTML as `index.html`
+4. Update the root `index.html` to include a card for the presentation
+5. Commit and force-push: `git push --force origin gh-pages`
+6. Switch back: `git checkout main`
 
-## Local Preview
+## Archiving policy
 
-Simply open `index.html` in a browser. No server required.
+After 6 months, presentations can be moved to Dropbox to save space:
+
+1. Upload the presentation HTML to Dropbox
+2. Add an entry to `archive.json`
+3. Remove from the `gh-pages` branch
+4. The index page loads archived entries from `archive.json` automatically
+
+## Local preview
+
+Open any `index.html` in a browser. No server required.
