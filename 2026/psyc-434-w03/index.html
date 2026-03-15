@@ -1085,10 +1085,28 @@ display:block!important;
 <section id="what-is-confounding" class="slide level2">
 <h2>What is confounding?</h2>
 <p>Confounding exists when a common cause of treatment <span class="math inline">A</span> and outcome <span class="math inline">Y</span> opens a non-causal backdoor path. A backdoor path starts with an arrow <strong>into</strong> <span class="math inline">A</span>.</p>
-<p><span class="math display">A \leftarrow L \to Y</span></p>
-<p>This path mixes causal and spurious association. If <span class="math inline">L</span> is unmeasured, the mix is unresolvable.</p>
+
+<img role="img" data-src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPCEtLSBUaGlzIGZpbGUgd2FzIGdlbmVyYXRlZCBieSBkdmlzdmdtIDMuMi4yIC0tPgo8c3ZnIHZlcnNpb249JzEuMScgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB4bWxuczp4bGluaz0naHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluaycgd2lkdGg9JzEyMC43NzYyMXB0JyBoZWlnaHQ9JzI2Ljk1ODI1cHQnIHZpZXdCb3g9Jy03MS4wMDM3NjcgLTcyLjAwMDEwNSAxMjAuNzc2MjEgMjYuOTU4MjUnPgo8c3R5bGUgdHlwZT0ndGV4dC9jc3MnPgo8IVtDREFUQVtAZm9udC1mYWNle2ZvbnQtZmFtaWx5OmNtbWkxMDtzcmM6dXJsKGRhdGE6YXBwbGljYXRpb24veC1mb250LXdvZmY7YmFzZTY0LGQwOUdSZ0FCQUFBQUFBU0lBQW9BQUFBQUJXZ0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFCUFV5OHlBQUFBOUFBQUFFUUFBQUJnaFZ4MDNtTnRZWEFBQUFFNEFBQUFNd0FBQUVRQVlBRUVaMng1WmdBQUFXd0FBQUczQUFBQ0lMUmdxQlpvWldGa0FBQURKQUFBQUM4QUFBQTJMZHNJNzJob1pXRUFBQU5VQUFBQUhRQUFBQ1FHTXdGTGFHMTBlQUFBQTNRQUFBQVFBQUFBRUFxQUFIQnNiMk5oQUFBRGhBQUFBQW9BQUFBS0FXUUFvbTFoZUhBQUFBT1FBQUFBR0FBQUFDQUFCd0JHYm1GdFpRQUFBNmdBQUFEVUFBQUJQcGtSZGNkd2IzTjBBQUFFZkFBQUFBd0FBQUFnQUFNQUFIamFZMkJtV3NBNGdZR1ZnWUZwRnRQWmZ5SU0vU0NhOFEzakd3WmpSazRHSUdCamdBTkdCaVNRVWx5V0RwUjBaSWhrWnZnUDVETkRwSkhVL0FjS0F3RGg0QTBxZU5wallHQmdZbUJnWUFaaUVTREpDS1paR0F5QU5BY1FndVFjR1h3WUl2Ly9SN0QrSC9pLzdmOHFzRm93QUFEa1BndGVBSGphVmRBL2I5TkFITWJ4ZSs3aTM4V083eHhqKzZ6Uy9GR2F5S1pTbTZBazJDb1NZWUNLRFFsRUVUdWlYYnBSMFEzS253RWhNYkhBRzRFRmlaVjN3QUlETTRoM2tJUnpBa0xjVGI5bit1akxPQnNzbC93Ny84WkdiTXhZaWFJY216U0t6YVF3TklMTXMzeGFwS1lvUitoSmlrMWFwQnAycitiSkRPVkVmTUFEaWhWaFpuWVQrTTdKV2QyQmFrUlQ0Y3JGOHFacVJVcEFPVWYzZlBqdTF1emRqOTRqZnJjSk41aWZtVUMwSllRQXJ3Y1M4TlBEL1JmeG9Ba2VhS3BtTHlEMFArTTJzdy9zd25MTzMvQ1BiR2dQRVlBbWFWR3VmbW9DYU9ROVdrT2phVCtuR2Jvb1U1UEdsRzhSbnJ5cUFmcjBwUEM5blVSNkNnYzFMMXhrTGEwdmQ1elhyYXdObjE2KzlSdzB6ZjZBSDgrL25DTVBvbXlvMmJXVWMvZW5iemxXaXFqRDkwSXVXbXUwYTVYSjJtWWJDdC9hcmxjMkRhdExxSXRpVmVwdndhczhGMFAwS2Y5bnkwaHVvaXlHeUxOTHEzVWNVMTlEOHZzTGNzU3V3enNyMnZPbnJnTnI3Y3FlcWoxMnp1OGszQlo5V0swcXVTaE9md1VOYklZRVJZZDNsRitmWERIOHh1SXIrZnA5TEFQdy95TEgyOC8yUXR5S21rTHJQN09XM0EwWG54REdRZHVyN2lyK0JqbmJHNHo5Qm5yaVNwc0FlTnBqWUdSZ1lBRGllbWV2eS9IOE5sOFptRmtZUU9EcDdVYzlDUHIvWDJZZXBydEFMZ2NERTBnVUFGdFFETmdBZU5wallHUmdZR2I0endBaUdWVCt1ekh6TUFCRlVBQUxBRDd3QW9RQUFBQUNkZ0FBQXdBQUpBSzRBQ2dDVWdBa0FBQUFBQUJVQUtJQkVBQUFlTnBqWUdSZ1lHQmhjR1ZnWWdBQlJnWTBBQUFIcHdCT2VOcE5qckZxd3pBVVJZK3BZNmhieUpRTUhZcW1qTVoyK2dHRkRKbXlaaXdra1FndVNBcXlZOGdTK2dIOTZENHJHdnFFSGtmblhRa0JKWGN5cHNxWXh6NVZUaUduQjg5NFlaRzRrS1VTbDd5eDRva3NmeGJ6em1maW5GZStFczlZOHAyNEVQK1R1T1NEMzQyM2wrdGdndHA1YllJN1dkczE5ZDZFdnZOT05WWDlFRnZqVERnTVJxdmpUZW14NjhlelZldXFyVm8yZUN3WHJnd1lndnhzSjBaSGRweGtadWxvcU5sSDE4dkp5MFNKcThUK1Qyd2w0V0xxRUYvVGtqcHlrNjRaSmROTFAwdGFzWmE3N2JUL0FPQ0NNTDE0Mm1OZ1pzQUxBQUI5QUFRPSkgZm9ybWF0KCd3b2ZmJyk7fQp0ZXh0LmYwIHtmb250LWZhbWlseTpjbW1pMTA7Zm9udC1zaXplOjkuOTYyNjRweH0KXV0+Cjwvc3R5bGU+CjxnIGlkPSdwYWdlMSc+Cjx0ZXh0IGNsYXNzPSdmMCcgeD0nLTY3LjYxMzY2NycgeT0nLTQ4LjQ0NTc1NScgdHJhbnNmb3JtPSdtYXRyaXgoMSAwIDAgMSAtMy4zOTAxIDMuNDAzOSknPjx0c3BhbiBmaWxsPScjY2RkNmY0Jz5MPC90c3Bhbj48L3RleHQ+Cjx0ZXh0IGNsYXNzPSdmMCcgeD0nLTY3LjYxMzY2NycgeT0nLTQ4LjQ0NTc1NScgdHJhbnNmb3JtPSdtYXRyaXgoMSAwIDAgMSA1Mi45NTc2IDMuNDAzOSknPjx0c3BhbiBmaWxsPScjY2RkNmY0Jz5BPC90c3Bhbj48L3RleHQ+Cjx0ZXh0IGNsYXNzPSdmMCcgeD0nLTY3LjYxMzY2NycgeT0nLTQ4LjQ0NTc1NScgdHJhbnNmb3JtPSdtYXRyaXgoMSAwIDAgMSAxMDkuMzg4MyAzLjQwMzkpJz48dHNwYW4gZmlsbD0nI2NkZDZmNCc+WTwvdHNwYW4+PC90ZXh0Pgo8cGF0aCBkPSdNLTYzLjAyNzM0LTQ4LjQ0NTMxMkgtMjAuNTE1Nicgc3Ryb2tlPScjZjM4YmE4JyBmaWxsPSdub25lJyBzdHJva2Utd2lkdGg9Jy43OTcwMScgc3Ryb2tlLW1pdGVybGltaXQ9JzEwJy8+CjxwYXRoIGQ9J00tMTUuODUxNTItNDguNDQ1MzEyQy0xNy4yMzQzMy00OC43MDMxMjQtMTkuNDc2NTItNDkuNDgwNDctMjEuMDMxMjA5LTUwLjM4NjcyVi00Ni41MDM5MUMtMTkuNDc2NTItNDcuNDEwMTYtMTcuMjM0MzMtNDguMTg3NDk5LTE1Ljg1MTUyLTQ4LjQ0NTMxMicgZmlsbD0nI2YzOGJhOCcvPgo8cGF0aCBkPSdNLTYzLjAyNzM0LTUxLjA4OTg0Qy0yNy45Njg3LTcxLjQ4ODMgNS4zODI4LTcxLjYwMTYgMzYuNTM1My01My43NTc4MScgc3Ryb2tlPScjZjM4YmE4JyBmaWxsPSdub25lJyBzdHJva2Utd2lkdGg9Jy43OTcwMScgc3Ryb2tlLW1pdGVybGltaXQ9JzEwJy8+CjxwYXRoIGQ9J000MC41NzgwODItNTEuNDQxNDI4QzM5LjUwNzc2OS01Mi4zNTE1ODggMzcuOTQ5MTc1LTU0LjE0MDY0NSAzNy4wNTA3MzYtNTUuNzAzMTQ2TDM1LjExNzE0NS01Mi4zMjgxNTJDMzYuOTE3OTI4LTUyLjM0Mzc3NCAzOS4yNDk5NTUtNTEuOTAyMzY3IDQwLjU3ODA4Mi01MS40NDE0MjgnIGZpbGw9JyNmMzhiYTgnLz4KPC9nPgo8L3N2Zz4=" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>This path mixes causal and spurious association. If <span class="math inline">L</span> is unmeasured, the mix is unresolvable.</p>
 <aside class="notes">
 <p>Health consciousness (<span class="math inline">L</span>) might affect both exercise (<span class="math inline">A</span>) and blood pressure (<span class="math inline">Y</span>). Someone who exercises more may also eat better, sleep more, and manage stress. The observed association between exercise and blood pressure includes both the causal effect and the shared influence of health consciousness. Conditioning on <span class="math inline">L</span> isolates the causal component.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
+</section>
+<section id="conditioning-on-the-common-cause" class="slide level2">
+<h2>Conditioning on the common cause</h2>
+
+<img role="img" data-src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPCEtLSBUaGlzIGZpbGUgd2FzIGdlbmVyYXRlZCBieSBkdmlzdmdtIDMuMi4yIC0tPgo8c3ZnIHZlcnNpb249JzEuMScgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB4bWxuczp4bGluaz0naHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluaycgd2lkdGg9JzEyNS4xNTk4cHQnIGhlaWdodD0nMzEuODE2NThwdCcgdmlld0JveD0nLTcyLjAwMDA2NSAtNzIuMDAwMTA1IDEyNS4xNTk4IDMxLjgxNjU4Jz4KPHN0eWxlIHR5cGU9J3RleHQvY3NzJz4KPCFbQ0RBVEFbQGZvbnQtZmFjZXtmb250LWZhbWlseTpjbW1pMTA7c3JjOnVybChkYXRhOmFwcGxpY2F0aW9uL3gtZm9udC13b2ZmO2Jhc2U2NCxkMDlHUmdBQkFBQUFBQVNJQUFvQUFBQUFCV2dBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQlBVeTh5QUFBQTlBQUFBRVFBQUFCZ2hWeDAzbU50WVhBQUFBRTRBQUFBTXdBQUFFUUFZQUVFWjJ4NVpnQUFBV3dBQUFHM0FBQUNJTFJncUJab1pXRmtBQUFESkFBQUFDOEFBQUEyTGRzSThXaG9aV0VBQUFOVUFBQUFIUUFBQUNRR013RkxhRzEwZUFBQUEzUUFBQUFRQUFBQUVBcUFBSEJzYjJOaEFBQURoQUFBQUFvQUFBQUtBV1FBb20xaGVIQUFBQU9RQUFBQUdBQUFBQ0FBQndCR2JtRnRaUUFBQTZnQUFBRFVBQUFCUHBrUmRjZHdiM04wQUFBRWZBQUFBQXdBQUFBZ0FBTUFBSGphWTJCbVdzQTRnWUdWZ1lGcEZ0UFpmeUlNL1NDYThRM2pHd1pqUms0R0lHQmpnQU5HQmlTUVVseVdEcFIwWkloa1p2Z1A1RE5EcEpIVS9BY0tBd0RoNEEwcWVOcGpZR0JnWW1CZ1lBWmlFU0RKQ0taWkdBeUFOQWNRZ3VRY0dYd1lJdi8vUjdEK0gvaS83Zjhxc0Zvd0FBRGtQZ3RlQUhqYVZkQS9iOU5BSE1ieGUrN2kzOFdPN3h4ais2elMvRkdheUtaU202QWsyQ29TWVlDS0RRbEVFVHVpWGJwUjBRM0tud0VoTWJIQUc0RUZpWlYzd0FJRE00aDNrSVJ6QWtMY1RiOW4rdWpMT0Jzc2wvdzcvOFpHYk14WWlhSWNtelNLemFRd05JTE1zM3hhcEtZb1IraEppazFhcEJwMnIrYkpET1ZFZk1BRGloVmhabllUK003SldkMkJha1JUNGNyRjhxWnFSVXBBT1VmM2ZQanUxdXpkajk0amZyY0pONWlmbVVDMEpZUUFyd2NTOE5QRC9SZnhvQWtlYUtwbUx5RDBQK00yc3cvc3duTE8zL0NQYkdnUEVZQW1hVkd1Zm1vQ2FPUTlXa09qYVQrbkdib29VNVBHbEc4Um5yeXFBZnIwcFBDOW5VUjZDZ2MxTDF4a0xhMHZkNXpYcmF3Tm4xNis5UncwemY2QUg4Ky9uQ01Qb215bzJiV1VjL2VuYnpsV2lxakQ5MEl1V211MGE1WEoybVliQ3QvYXJsYzJEYXRMcUl0aVZlcHZ3YXM4RjBQMEtmOW55MGh1b2l5R3lMTkxxM1VjVTE5RDh2c0xjc1N1d3pzcjJ2T25yZ05yN2NxZXFqMTJ6dThrM0JaOVdLMHF1U2hPZndVTmJJWUVSWWQzbEYrZlhESDh4dUlyK2ZwOUxBUHcveUxIMjgvMlF0eUtta0xyUDdPVzNBMFhueERHUWR1cjdpcitCam5iRzR6OUJucmlTcHNBZU5wallHUmdZQURpZW1ldjgvSDhObDhabUZrWVFPRHA3VWU5Q1ByL1gyWWVwcnRBTGdjREUwZ1VBRnJTRE5ZQWVOcGpZR1JnWUdiNHp3QWlHVlQrdXpIek1BQkZVQUFMQUQ3d0FvUUFBQUFDZGdBQUF3QUFKQUs0QUNnQ1VnQWtBQUFBQUFCVUFLSUJFQUFBZU5wallHUmdZR0JoY0dWZ1lnQUJSZ1kwQUFBSHB3Qk9lTnBOanJGcXd6QVVSWStwWTZoYnlKUU1IWXFtak1aMitnR0ZESm15Wml3a2tRZ3VTQXF5WThnUytnSDk2RDRyR3ZxRUhrZm5YUWtCSlhjeXBzcVl4ejVWVGlHbkI4OTRZWkc0a0tVU2w3eXg0b2tzZnhienptZmluRmUrRXM5WThwMjRFUCtUdU9TRDM0MjNsK3RnZ3RwNWJZSTdXZHMxOWQ2RXZ2Tk9OVlg5RUZ2alREZ01ScXZqVGVteDY4ZXpWZXVxclZvMmVDd1hyZ3dZZ3Z4c0owWkhkcHhrWnVsb3FObEgxOHZKeTBTSnE4VCtUMndsNFdMcUVGL1RranB5azY0WkpkTkxQMHRhc1phNzdiVC9BT0NDTUwxNDJtTmdac0FMQUFCOUFBUT0pIGZvcm1hdCgnd29mZicpO30KdGV4dC5mMCB7Zm9udC1mYW1pbHk6Y21taTEwO2ZvbnQtc2l6ZTo5Ljk2MjY0cHh9Cl1dPgo8L3N0eWxlPgo8ZyBpZD0ncGFnZTEnPgo8cGF0aCBkPSdNLTcxLjYwMTU2LTQwLjU4MjAzSC01Ni44NTE1NlYtNTUuMzU5MzhILTcxLjYwMTU2Wicgc3Ryb2tlPScjODliNGZhJyBmaWxsPSdub25lJyBzdHJva2Utd2lkdGg9Jy43OTcwMScvPgo8dGV4dCBjbGFzcz0nZjAnIHg9Jy02NC4yMjYzNzUnIHk9Jy00Ny45Njk3MjYnIHRyYW5zZm9ybT0nbWF0cml4KDEgMCAwIDEgLTMuMzkwMSAzLjQwMzkpJz48dHNwYW4gZmlsbD0nI2NkZDZmNCc+TDwvdHNwYW4+PC90ZXh0Pgo8dGV4dCBjbGFzcz0nZjAnIHg9Jy02NC4yMjYzNzUnIHk9Jy00Ny45Njk3MjYnIHRyYW5zZm9ybT0nbWF0cml4KDEgMCAwIDEgNTIuOTU3NiAzLjQwMzkpJz48dHNwYW4gZmlsbD0nI2NkZDZmNCc+QTwvdHNwYW4+PC90ZXh0Pgo8dGV4dCBjbGFzcz0nZjAnIHg9Jy02NC4yMjYzNzUnIHk9Jy00Ny45Njk3MjYnIHRyYW5zZm9ybT0nbWF0cml4KDEgMCAwIDEgMTA5LjM4ODMgMy40MDM5KSc+PHRzcGFuIGZpbGw9JyNjZGQ2ZjQnPlk8L3RzcGFuPjwvdGV4dD4KPHBhdGggZD0nTS01Ni40NTMxMi00Ny45Njg3NUgtMTcuMTI1JyBzdHJva2U9JyNjYmE2ZjcnIGZpbGw9J25vbmUnIHN0cm9rZS13aWR0aD0nLjc5NzAxJyBzdHJva2UtbWl0ZXJsaW1pdD0nMTAnLz4KPHBhdGggZD0nTS0xMi40NjQ4LTQ3Ljk2ODc1Qy0xMy44NDc2MS00OC4yMzA0NjktMTYuMDg5OC00OS4wMDM5MS0xNy42NDQ0ODktNDkuOTE0MDZWLTQ2LjAyNzM0Qy0xNi4wODk4LTQ2LjkzMzU5LTEzLjg0NzYxLTQ3LjcxMDkzOC0xMi40NjQ4LTQ3Ljk2ODc1JyBmaWxsPScjY2JhNmY3Jy8+CjxwYXRoIGQ9J00tNTYuNDUzMTItNTIuNDUzMTNDLTIyLjEyMTEtNzEuNjAxNiAxMC4yMTQ4LTcxLjEyMTEgMzkuOTY0Ni01My4zNTU0Nycgc3Ryb2tlPScjY2JhNmY3JyBmaWxsPSdub25lJyBzdHJva2Utd2lkdGg9Jy43OTcwMScgc3Ryb2tlLW1pdGVybGltaXQ9JzEwJy8+CjxwYXRoIGQ9J000My45NjQ4ODgtNTAuOTY0ODM3QzQyLjkxNDA5OC01MS44OTQ1MjcgNDEuMzgyODQ4LTUzLjcxNDg0MiA0MC41MTU2NjUtNTUuMjg5MDYxTDM4LjUyMzQ3NS01MS45NTMxMTdDNDAuMzIwMzUtNTEuOTMzNTkzIDQyLjY0ODQ3OS01MS40NDkyMDkgNDMuOTY0ODg4LTUwLjk2NDgzNycgZmlsbD0nI2NiYTZmNycvPgo8L2c+Cjwvc3ZnPg==" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>Conditioning on <span class="math inline">\boxed{L}</span> blocks the backdoor path. The arrows turn from red to white: no bias flows through a blocked path.</p>
+<aside class="notes">
+<p>The box around <span class="math inline">L</span> is the standard DAG convention for conditioning. Once we condition on <span class="math inline">L</span>, the path <span class="math inline">A \leftarrow L \to Y</span> is blocked, and any remaining association between <span class="math inline">A</span> and <span class="math inline">Y</span> reflects only the causal effect. This is the logic behind the backdoor criterion, which the next slide formalises.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2446,6 +2464,44 @@ window.QuartoSupport = function () {
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
