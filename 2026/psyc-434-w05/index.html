@@ -1123,8 +1123,9 @@ display:block!important;
 </section>
 <section id="assumption-1-causal-consistency" class="slide level2">
 <h2>Assumption 1: causal consistency</h2>
-<p><span class="math display">\text{If } A_i = a, \text{ then } Y_i = Y_i(a).</span></p>
-<p>The observed outcome equals the potential outcome corresponding to the treatment actually received. This is what links counterfactual quantities to data.</p>
+<p>The switching equation: each person carries two potential outcomes, but we observe only the one selected by their actual treatment.</p>
+<p><span class="math display">Y_i^{obs} = A_i \cdot Y_i(1) + (1 - A_i) \cdot Y_i(0)</span></p>
+<p>This is what links counterfactual quantities to data.</p>
 <aside class="notes">
 <p>Without consistency, potential outcomes remain purely theoretical. Data scientists estimate parameters for observed data. Causal inference goes further: we estimate contrasts involving counterfactual parameters. We must compute the average response when the entire target population is exposed, then when the entire population is unexposed, then contrast these averages. Consistency is what allows us to bridge from counterfactual to observed. It subsumes no-interference (one person’s treatment does not affect another’s outcome) and treatment-version irrelevance (there is only one version of each treatment level). Both are special cases: if treatments are heterogeneous or if interference exists, the potential outcome <span class="math inline">Y(a)</span> is ill-defined.</p>
 <style type="text/css">
@@ -1139,15 +1140,13 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="consistency-in-practice" class="slide level2">
-<h2>Consistency in practice</h2>
-<p>For treated individuals (<span class="math inline">A = 1</span>):</p>
-<p><span class="math display">Y^{obs} = Y^{a=1}.</span></p>
-<p>For untreated individuals (<span class="math inline">A = 0</span>):</p>
-<p><span class="math display">Y^{obs} = Y^{a=0}.</span></p>
+<section id="consistency-the-two-cases" class="slide level2">
+<h2>Consistency: the two cases</h2>
+<p>For <span class="math inline">A_i = 1</span>: <span class="math inline">\quad Y_i^{obs} = 1 \cdot Y_i(1) + 0 \cdot Y_i(0) = Y_i(1).</span></p>
+<p>For <span class="math inline">A_i = 0</span>: <span class="math inline">\quad Y_i^{obs} = 0 \cdot Y_i(1) + 1 \cdot Y_i(0) = Y_i(0).</span></p>
 <p>Consistency fails when treatment versions are mixed under one label. If “oestrogen therapy” includes different formulations, dosages, and initiation times, <span class="math inline">Y(1)</span> does not correspond to a single intervention.</p>
 <aside class="notes">
-<p>The formal derivation makes the switching equation explicit. For a person with <span class="math inline">A_i = 1</span>: <span class="math inline">Y_i^{obs} = A_i \cdot Y_i^{a=1} + (1 - A_i) \cdot Y_i^{a=0} = 1 \cdot Y_i^{a=1} + 0 \cdot Y_i^{a=0} = Y_i^{a=1}</span>. For a person with <span class="math inline">A_i = 0</span>: <span class="math inline">Y_i^{obs} = 0 \cdot Y_i^{a=1} + 1 \cdot Y_i^{a=0} = Y_i^{a=0}</span>. The switching equation makes clear that we only observe one potential outcome per person. The other is missing. This is why we need population-level assumptions to identify causal effects.</p>
+<p>The switching equation makes clear that we only observe one potential outcome per person. The other is missing, by necessity. This is why we need population-level assumptions to identify causal effects. Consistency also subsumes no-interference (one person’s treatment does not affect another’s outcome) and treatment-version irrelevance (there is only one version of each treatment level).</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
