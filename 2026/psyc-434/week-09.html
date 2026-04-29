@@ -1,0 +1,639 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Week 9: Resource Allocation and Policy Trees - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="week-9-resource-allocation-and-policy-trees"><a class="header" href="#week-9-resource-allocation-and-policy-trees">Week 9: Resource Allocation and Policy Trees</a></h1>
+<p><strong>Date: 6 May 2026</strong></p>
+<blockquote>
+<p><strong>Readings</strong></p>
+<p><strong>Required</strong></p>
+<ul>
+<li><a href="https://grf-labs.github.io/grf/index.html">grf: Generalised Random
+Forests</a></li>
+<li><a href="https://grf-labs.github.io/grf/articles/policy_learning.html">Policy learning
+(tutorial)</a></li>
+<li><a href="https://grf-labs.github.io/grf/articles/rate.html">RATE (tutorial)</a></li>
+<li><a href="https://grf-labs.github.io/grf/articles/maq.html">QINI curves
+(tutorial)</a></li>
+</ul>
+<p><strong>Optional</strong></p>
+<ul>
+<li>VanderWeele et al. (<a href="#ref-vanderweele2020">2020</a>)</li>
+<li>Suzuki et al. (<a href="#ref-suzuki2020">2020</a>)</li>
+<li>Bulbulia (<a href="#ref-bulbulia2024PRACTICAL">2024</a>)</li>
+<li>Hoffman et al. (<a href="#ref-hoffman2023">2023</a>)</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Key concepts</strong></p>
+<ol>
+<li>Policy learning turns CATE scores into treatment rules.</li>
+<li>Policy value must be evaluated out of sample.</li>
+<li>Shallow policy trees trade a little value for a lot of
+interpretability.</li>
+<li>Fairness constraints are design choices, not automatic outputs.</li>
+</ol>
+</blockquote>
+<hr />
+<p>Week 8 estimated individual-level treatment contrasts and assessed
+whether targeting has practical value. Rankings alone are not policy.
+This week translates those rankings into interpretable, publicly
+defensible allocation rules, and asks how much of the underlying
+heterogeneity a short rule can recover.</p>
+<h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
+<h3 id="motivating-example"><a class="header" href="#motivating-example">Motivating example</a></h3>
+<p>A district health board can fund an intervention to enhance sense of
+purpose for only twenty percent of eligible residents. A causal forest
+suggests large heterogeneity. The top-ranked group appears to benefit
+most. The board now needs a rule that can be defended in public, not
+just a ranking inside a script. The rule must be short enough to fit on
+a single page, robust enough to survive scrutiny by people who did not
+fit the model, and accompanied by an honest account of what the data can
+and cannot decide.</p>
+<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The lab&#39;s day-to-day workflow estimates effects across many outcomes at once, then asks the policy question only for those whose effects survive sensitivity analysis." /></p>
+<h2 id="from-ranking-to-policy"><a class="header" href="#from-ranking-to-policy">From ranking to policy</a></h2>
+<p>Week 8 produced a ranked list: who is predicted to benefit most. A
+ranking is informative, but it is not a rule. A rule maps any covariate
+profile $x$ to an action $d(x) \in {0, 1}$, "treat" or "do not
+treat". Two profiles that are nearly identical should receive nearly
+identical decisions, and a ranking gives no such guarantee, because rank
+position drifts with sample size.</p>
+<p>Let $d(x) \in {0, 1}$ denote a treatment rule. Its <strong>policy value</strong> is
+the expected outcome if the rule were applied to every member of the
+target population:</p>
+<p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
+<p>A budget cap restricts the share of the population the rule may treat:</p>
+<p>$$ \mathbb{E}[d(X)] \le q. $$</p>
+<p>Policy learning seeks the rule with the highest $V(d)$ subject to the
+cap. Two practical complications follow. First, $V(d)$ is a
+counterfactual quantity, since for any individual we observe at most one
+of $Y(0)$ or $Y(1)$. We need to evaluate candidate rules without
+assigning everyone to them. Second, the rule must be small enough to
+defend in front of a non-statistical audience. Both constraints push the
+analysis toward shallow, transparent decision trees evaluated with
+doubly-robust scores.</p>
+<h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
+<p>A causal forest maps a high-dimensional covariate vector $X$ to a
+personalised score $\hat{\tau}(X)$. The function itself is too tangled
+(thousands of overlapping splits across hundreds of trees) to hand to a
+decision-maker. The <code>policytree</code> algorithm bridges that gap. It
+collapses the forest's many $\hat{\tau}(X)$ values into a single
+shallow decision tree, where each split is chosen to maximise expected
+policy value subject to the depth budget (<a href="#ref-policytree_package_2024">Sverdrup et al.,
+2024</a>).</p>
+<p>The algorithm proceeds greedily, top down. At the root, it searches
+every covariate and every threshold for the split that delivers the
+largest gain in policy value when each child receives the
+locally-optimal action. It then recurses into each child until the depth
+limit is reached. Because the rule must hold for the entire population,
+the search uses <strong>doubly-robust scores</strong> rather than raw outcomes. The
+score for individual $i$ under treatment $a$ is the <strong>augmented
+inverse-propensity-weighted (AIPW)</strong> score:</p>
+<p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{W_i = a}}{\Pr(W = a
+\mid X_i)},\bigl(Y_i - \mu_a(X_i)\bigr), $$</p>
+<p>where $\mu_a(x)$ is the outcome model and $\Pr(W = a \mid x)$ is the
+propensity. AIPW scores are unbiased estimates of $Y_i(a)$ as long as
+<em>either</em> the outcome model <em>or</em> the propensity model is correct. The
+resulting rule is therefore robust to one form of misspecification.</p>
+<p>In this course we cap tree depth at two. Three reasons motivate the cap.
+First, at most three yes/no questions per rule means the logic fits on a
+slide for policy-makers or clinicians. Second, each leaf retains enough
+observations to yield a stable effect estimate, and stability matters
+more than precision when the audience is non-technical. Third, deeper
+trees increase computational complexity faster than they improve
+payoffs; the gain from a depth-3 tree over a depth-2 tree is usually
+small relative to the added opacity.</p>
+<blockquote>
+<p><strong>Pair exercise: designing a depth-2 policy rule</strong></p>
+<ol>
+<li>You have a 20% treatment budget. From this list, choose two
+splitting variables: age, deprivation index, baseline loneliness,
+self-esteem, neuroticism.</li>
+<li>Sketch a depth-2 tree with your two variables. Label each leaf
+"treat" or "do not treat."</li>
+<li>Verify that approximately 20% of the population falls in the
+"treat" leaves (make plausible assumptions about the variable
+distributions).</li>
+<li>Give two reasons to prefer a depth-2 tree over a depth-4 tree for
+a public-health decision.</li>
+</ol>
+</blockquote>
+<h2 id="reading-a-policy-tree"><a class="header" href="#reading-a-policy-tree">Reading a policy tree</a></h2>
+<p>Two visualisations work in tandem. The decision-tree diagram shows the
+rule abstractly: which covariate, which threshold, which leaf. The
+prediction-points scatter shows the rule as a partition of the
+underlying covariate space, with each individual coloured by the
+assigned action.</p>
+<p><img src="figures/lab-09/policy-tree-purpose-depth2.svg" alt="Depth-2 policy tree for purpose under community-group participation. Each non-leaf node names the covariate and threshold that maximises expected policy value at that branch; each leaf says &quot;treat&quot; or &quot;control&quot;. Read top to bottom: the first split is on openness at $-0.395$. People at or below that level enter the left subtree, where openness is split again at $-0.431$. People above the first threshold enter the right subtree, where neuroticism is split at $1.831$. A three-question rule like this is what makes a policy tree defensible: a clinician, teacher, or community organiser can repeat the logic verbatim." /></p>
+<p><img src="figures/lab-09/policy-tree-scatter-purpose-depth2.svg" alt="Prediction-points scatter for the same depth-2 rule. The two panels correspond to the left and right subtrees of the policy tree above. Each point is one person, located at their values on the splitting covariates and coloured by the assigned action (control = blue circle, treat = orange triangle). Dashed lines mark the split thresholds; grey rectangles mark the regions in which everyone is recommended for treatment. The tree describes the rule abstractly; the scatter shows the rule as a partition of the underlying continuous heterogeneity surface. Points hugging a threshold are the most fragile cases, where small changes in covariates flip the recommendation; points deep inside a &quot;treat&quot; or &quot;control&quot; region are robustly classified." /></p>
+<p>Read the two together. Where the scatter has many control-coloured
+points clustered against a treat boundary, the rule is treating
+individuals whose own predicted benefit is small but whose neighbourhood
+benefit is large. That is the cost of forcing a sharp threshold onto a
+smooth surface, and it is one reason a policy tree should never be the
+only output of an analysis. The underlying CATE estimates and the
+omnibus heterogeneity test from week 8 carry information the tree
+discards.</p>
+<h2 id="choosing-tree-depth"><a class="header" href="#choosing-tree-depth">Choosing tree depth</a></h2>
+<p>The depth budget is a design choice, not a property of the data. A
+depth-1 rule asks one question; a depth-2 rule asks two or three.
+Whether the extra depth pays off depends on whether the second-level
+splits carve out subregions in which the locally optimal action differs
+from the parent's recommendation.</p>
+<p>Compare the two depths for community-group participation on purpose.</p>
+<p><img src="figures/lab-09/policy-tree-purpose-depth1.svg" alt="Depth-1 policy tree for the same outcome. A single split on log income at $-1.195$ partitions the population: those at or below the threshold are recommended for control, those above are recommended for treatment. The first split here differs from the depth-2 first split (openness), because the algorithm&#39;s greedy search optimises the whole tree at each depth, not just the root. A depth-1 tree can therefore choose a globally different splitter from the depth-2 tree&#39;s root." /></p>
+<p>On the same held-out sample, the depth-1 policy delivers an estimated
+policy value of $0.215$; the depth-2 policy delivers $0.243$, a lift
+of $0.028$ (about thirteen percent above depth-1). The lift is real
+but small relative to the additional complexity.</p>
+<p>A useful rule of thumb: prefer the shallower tree unless the lift is
+both statistically significant and practically meaningful. "Practically
+meaningful" depends on context. For a high-stakes clinical intervention,
+a thirteen-percent lift may justify the extra complexity. For a
+community programme that must be administered by volunteers, the simpler
+depth-1 rule may be preferable even at a real cost in policy value,
+because the rule is more likely to be applied correctly in the field. A
+rule a worker mis-remembers is not the rule that was evaluated.</p>
+<p>The lab's workflow returns both depths automatically, with a default
+switch threshold of $0.5%$ relative gain. That threshold is
+conservative: a small statistical lift will tip the recommendation
+toward depth-2. Investigators should examine both trees, then justify
+the chosen depth in the methods section.</p>
+<blockquote>
+<p><strong>Pair exercise: depth-1 versus depth-2</strong></p>
+<ol>
+<li>Look at the depth-1 and depth-2 policy trees above. State each
+rule in one sentence of plain language.</li>
+<li>The depth-2 rule lifts policy value by $0.028$ over the depth-1
+rule. Estimate, in your own words, what an extra $0.028$
+standard-deviation units of purpose per person treated means at
+population scale. Use a hypothetical of $10,000$ people in your
+reasoning.</li>
+<li>Identify one practical scenario in which you would deploy the
+depth-1 rule despite the lift, and one in which you would deploy
+the depth-2 rule.</li>
+</ol>
+</blockquote>
+<h2 id="off-policy-evaluation"><a class="header" href="#off-policy-evaluation">Off-policy evaluation</a></h2>
+<p>A policy fitted to a sample will always look good on that sample. The
+serious test is held-out evaluation. The lab's workflow uses AIPW scores
+computed on a held-out fold, then estimates policy value and its
+sampling distribution by averaging over individuals' scores under the
+proposed rule. The estimator is <strong>doubly robust</strong> in the sense above;
+the standard errors come from a plug-in or bootstrap calculation that
+respects the sampling design.</p>
+<p>Two consequences follow. First, the same rule can have different value
+estimates depending on which fold is used; small samples make this drift
+visible. The lab's stability analysis (<code>margot_policy_tree_stability()</code>)
+repeats the fit across many train-test splits to surface this
+variability. Rules that change splits across resamples are flagged as
+unstable, even if any single fit looks reasonable. Second, the policy
+value's confidence interval reflects only sampling noise. Model
+misspecification, residual confounding, and measurement error sit
+outside the interval. Sensitivity analysis on the underlying causal
+estimates (E-values, week 8) and equity audits on the rule itself
+(below) carry the rest of the inferential burden.</p>
+<p>If the held-out value is statistically reliably above the no-treatment
+baseline, the rule is worth considering for deployment. If the held-out
+value is indistinguishable from random allocation, the rule is not. The
+<strong>policy_value_audit</strong> that <code>margot_policy_workflow()</code> returns flags
+both cases automatically.</p>
+<h2 id="practical-interpretation"><a class="header" href="#practical-interpretation">Practical interpretation</a></h2>
+<p>A policy tree's splits are selected to maximise policy value, not to
+identify causally privileged variables. If a depth-2 tree splits on
+openness and neuroticism, that does not mean these variables are deep
+causes of purpose; it means they help separate high-value and low-value
+treatment regions under the chosen objective and within the budget cap.
+The same data with a different outcome could pick out an entirely
+different splitter.</p>
+<p>Conversely, a variable that does not appear in the tree is not
+necessarily causally irrelevant. The greedy search may have found a
+single composite that explains most of the heterogeneity, leaving
+secondary variables unused. Variable-importance summaries from the
+underlying causal forest (week 8's <code>variable_importance()</code>) give a
+complementary picture of what the forest used to estimate
+$\hat{\tau}(x)$, even if those variables do not appear at the top of
+any policy tree.</p>
+<p>When you write up a policy-tree analysis, name the splitters, state the
+policy value with its confidence interval, and explicitly disclaim the
+causal interpretation of the splits. Readers who skim past those
+clarifications will otherwise treat the splitters as causes.</p>
+<h2 id="equity-and-governance"><a class="header" href="#equity-and-governance">Equity and governance</a></h2>
+<p>Efficiency is not enough. A rule that maximises policy value can still
+be unjust, opaque, or politically untenable. Three structural concerns
+recur.</p>
+<p>Proxy variables can encode historical inequity. A split on deprivation
+may indirectly stratify by ethnicity or structural disadvantage, even
+when neither variable appears explicitly in the tree. Removing the
+explicit variable does not remove the bias if its proxy remains.</p>
+<p>Targeting concentrates resources on those who benefit most, by design.
+People who would benefit <em>somewhat</em> from the intervention receive
+nothing under a tight budget. That trade-off may be defensible, but it
+is a moral choice the analyst is making on behalf of the affected
+community, and it should be acknowledged in the writeup rather than
+concealed inside an objective function.</p>
+<p>Under Te Tiriti o Waitangi, allocation rules in health and
+social-service settings need explicit equity consideration. A
+statistical optimum that worsens disparities for Māori or Pasifika
+populations is not legally or politically optimum.</p>
+<p>Before deployment, investigators should check:</p>
+<ol>
+<li>Who gains and who loses?</li>
+<li>Are protected groups differentially affected through proxies?</li>
+<li>Does the rule reduce or worsen disparities?</li>
+<li>Can affected communities understand and contest the rule?</li>
+</ol>
+<blockquote>
+<p><strong>Pair exercise: equity audit</strong></p>
+<ol>
+<li>A policy tree splits first on deprivation index, then on age. The
+rule treats high-deprivation residents under 40.</li>
+<li>Explain how a deprivation split indirectly stratifies by ethnicity
+in an Aotearoa New Zealand context (consider the correlation
+between deprivation and Māori/Pasifika populations).</li>
+<li>Apply two of the four governance checks above to this rule.</li>
+<li>Propose one modification informed by Te Tiriti o Waitangi
+obligations (e.g., guaranteed allocation floors, community
+consultation, or co-governance of the decision rule).</li>
+<li>Your partner says "the algorithm is objective because it only uses
+data." Counter this claim in two sentences.</li>
+</ol>
+</blockquote>
+<h2 id="workflow-for-this-week"><a class="header" href="#workflow-for-this-week">Workflow for this week</a></h2>
+<ol>
+<li>Estimate heterogeneity and targeting value (week 8 outputs).</li>
+<li>Fit shallow policy trees at multiple depths under explicit budget
+constraints.</li>
+<li>Evaluate each policy out of sample with AIPW scores; report policy
+value with a confidence interval.</li>
+<li>Examine stability across train-test splits and reject unstable rules
+even when any single fit looks reasonable.</li>
+<li>Conduct an equity audit before recommending deployment.</li>
+<li>Report trade-offs: value, fairness, transparency, and feasibility.</li>
+</ol>
+<h2 id="heterogeneity-as-scientific-discovery"><a class="header" href="#heterogeneity-as-scientific-discovery">Heterogeneity as scientific discovery</a></h2>
+<p>Conditional average treatment effect (CATE) machinery does more than
+power allocation decisions. It helps science move past a
+one-size-fits-all mindset. Mapping treatment effects across a
+high-dimensional covariate space tests whether our conventional
+categories (gender, age group, clinical severity) capture the
+differences that matter. Sometimes they do; often they do not.
+Discovering where the forest finds meaningful splits can generate fresh
+hypotheses about who responds and why, even when no policy decision is
+on the table. A forest that splits on loneliness rather than age, for
+example, suggests the psychological mechanism operates through social
+connection, not biological ageing. This use of heterogeneity is
+exploratory, not confirmatory, and a follow-up study designed around the
+discovered subgroup is the proper test.</p>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>Back to the district health board. The right question is not "what rule
+maximises sample gain?" The right question is "what rule performs
+robustly out of sample, under realistic budget constraints, and remains
+acceptable under equity and governance standards?" Those four conditions
+are what move a tree from a slide in a methods talk to a deployable rule
+in a clinic.</p>
+<p>The workflow from question to policy rule is now in place. One
+assumption has been present throughout but never examined: that our
+instruments measure the same construct across the groups we compare.
+Week 10 asks whether that assumption holds.</p>
+<blockquote>
+<p><strong>Pair exercise: policy tree versus ranking</strong></p>
+<ol>
+<li>Strategy A ranks individuals by $\hat{\tau}(X_i)$ and treats the
+top 20%. Strategy B fits a depth-2 policy tree with a 20% budget
+constraint.</li>
+<li>Compare the two strategies on: (a) estimated policy value, (b)
+explainability to a non-technical audience, and (c) ability to
+answer "why was I selected?"</li>
+<li>State one scenario where Strategy A (pure ranking) is preferable
+to Strategy B (policy tree).</li>
+<li>State one scenario where Strategy B is preferable.</li>
+</ol>
+</blockquote>
+<hr />
+<p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
+<p>Bulbulia, J. A. (2024). A practical guide to causal inference in
+three-wave panel studies. <em>PsyArXiv Preprints</em>.
+<a href="https://doi.org/10.31234/osf.io/uyg3d">https://doi.org/10.31234/osf.io/uyg3d</a></p>
+</div>
+<div id="ref-hoffman2023" class="csl-entry">
+<p>Hoffman, K. L., Salazar-Barreto, D., Rudolph, K. E., &amp; Díaz, I. (2023).
+<em>Introducing longitudinal modified treatment policies: A unified
+framework for studying complex exposures</em>.
+<a href="https://doi.org/10.48550/arXiv.2304.09460">https://doi.org/10.48550/arXiv.2304.09460</a></p>
+</div>
+<div id="ref-suzuki2020" class="csl-entry">
+<p>Suzuki, E., Shinozaki, T., &amp; Yamamoto, E. (2020). Causal Diagrams:
+Pitfalls and Tips. <em>Journal of Epidemiology</em>, <em>30</em>(4), 153–162.
+<a href="https://doi.org/10.2188/jea.JE20190192">https://doi.org/10.2188/jea.JE20190192</a></p>
+</div>
+<div id="ref-policytree_package_2024" class="csl-entry">
+<p>Sverdrup, E., Kanodia, A., Zhou, Z., Athey, S., &amp; Wager, S. (2024).
+<em>Policytree: Policy learning via doubly robust empirical welfare
+maximization over trees</em>.
+<a href="https://CRAN.R-project.org/package=policytree">https://CRAN.R-project.org/package=policytree</a></p>
+</div>
+<div id="ref-vanderweele2020" class="csl-entry">
+<p>VanderWeele, T. J., Mathur, M. B., &amp; Chen, Y. (2020). Outcome-wide
+longitudinal designs for causal inference: A new template for empirical
+studies. <em>Statistical Science</em>, <em>35</em>(3), 437–466.</p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week-08.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week-10.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week-08.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week-10.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

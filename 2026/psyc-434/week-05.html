@@ -1,0 +1,785 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Week 5: Average Treatment Effects - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="week-5-causal-inference-average-treatment-effects"><a class="header" href="#week-5-causal-inference-average-treatment-effects">Week 5: Causal Inference: Average Treatment Effects</a></h1>
+<p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w05/">Slides</a></p>
+<p><strong>Date:</strong> 25 Mar 2026</p>
+<blockquote>
+<p><strong>Readings</strong></p>
+<p><strong>Required</strong></p>
+<ul>
+<li>Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>), chapters 1-3.
+<a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">link</a></li>
+<li><span class="nocase">Cashin et al.</span>
+(<a href="#ref-cashin2025target">2025</a>). TARGET (Transparent Reporting of
+Observational Studies Emulating a Target Trial) statement.</li>
+</ul>
+<p><strong>Optional</strong></p>
+<ul>
+<li>Neal (<a href="#ref-neal2020introduction">2020</a>), chapters 1-2.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Key concepts for the test(s)</strong></p>
+<ul>
+<li><strong>The fundamental problem of causal inference</strong></li>
+<li><strong>Average (marginal) treatment effects</strong></li>
+<li><strong>Causal consistency</strong></li>
+<li><strong>Exchangeability</strong></li>
+<li><strong>Positivity</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Lab</strong></p>
+<p>Use <a href="lab-05.html">Lab 5: Average Treatment Effects</a> for this week's
+hands-on work.</p>
+</blockquote>
+<blockquote>
+<p><strong>Terminology</strong></p>
+<p>In these notes, we use "potential outcomes" and "counterfactual
+outcomes" interchangeably.</p>
+</blockquote>
+<hr />
+<p>Weeks 1 through 4 built a framework for asking causal questions and
+identifying the structural threats that obstruct answers: confounding,
+selection bias, and measurement error. Week 2 stated the three
+identification assumptions. This week shows how those assumptions,
+together with a well-specified target trial, connect a causal question
+to an estimable population contrast.</p>
+<p>The shift in emphasis matters. Week 4 asked, "where can bias enter?"
+Week 5 asks, "what causal contrast do we want, and what assumptions let
+observed data stand in for the missing counterfactuals?"</p>
+<h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
+<h3 id="opening-example-one-question-two-different-answers"><a class="header" href="#opening-example-one-question-two-different-answers">Opening example: one question, two different answers</a></h3>
+<p>Observational studies often suggest that students who choose to use a
+mindfulness app have lower anxiety than students who do not. Randomised
+trials usually find a smaller and less consistent average benefit once
+investigators standardise when the intervention begins, what counts as
+treatment, and when outcomes are measured.</p>
+<p>Same substantive question. Different design. Different answer.</p>
+<p>This week explains why.</p>
+<h2 id="a-simple-map-for-this-week"><a class="header" href="#a-simple-map-for-this-week">A simple map for this week</a></h2>
+<p>This lecture has three moves.</p>
+<blockquote>
+<p><strong>Three moves</strong></p>
+<ol>
+<li>Write the causal contrast we want.</li>
+<li>See why we cannot observe that contrast for one person.</li>
+<li>Use identification assumptions to recover a population average
+from observed data.</li>
+</ol>
+</blockquote>
+<p>Potential outcomes and DAGs do different jobs. Potential outcomes define
+the causal contrast. DAGs help us judge whether exchangeability is
+plausible, which variables belong in $L$, and whether the design has a
+coherent time zero.</p>
+<h2 id="step-1-state-the-causal-question"><a class="header" href="#step-1-state-the-causal-question">Step 1: state the causal question</a></h2>
+<p>Return to the mindfulness example. Let $A=1$ denote starting a guided
+mindfulness app at the beginning of semester and completing one
+10-minute session per day for eight weeks. Let $A=0$ denote not
+starting the app. Let $Y$ be anxiety symptoms at week 8.</p>
+<p>For student $i$, $Y_i(1)$ is the outcome under the app-based
+intervention, and $Y_i(0)$ the outcome without it. The individual
+causal effect is:</p>
+<p>$$ Y_i(1)-Y_i(0). $$</p>
+<p>We never observe both terms for one student at one time.</p>
+<h2 id="the-fundamental-problem-of-causal-inference"><a class="header" href="#the-fundamental-problem-of-causal-inference">The fundamental problem of causal inference</a></h2>
+<p>The individual causal effect requires two quantities, but we can observe
+at most one. If student $i$ starts the app ($A_i = 1$), we observe
+$Y_i(1)$ but not $Y_i(0)$. If the student does not start it ($A_i =
+0$), we observe $Y_i(0)$ but not $Y_i(1)$. The unobserved term is
+the counterfactual.</p>
+<p>This is not a sample-size problem or a measurement problem. It is a
+structural feature of the physical world: a person cannot simultaneously
+exist under two incompatible conditions. No dataset, however large,
+contains both potential outcomes for one individual at one time.
+Individual causal effects are missing by necessity, not by accident.</p>
+<blockquote>
+<p><strong>Pair exercise: building a potential outcomes table</strong></p>
+<ol>
+<li>Consider four students in the mindfulness example. Construct a
+table with columns: person ($i$), $Y_i(1)$, $Y_i(0)$,
+$\delta_i = Y_i(1) - Y_i(0)$, treatment received ($A_i$), and
+observed outcome ($Y_i^{\mathrm{obs}}$).</li>
+<li>Assign plausible values: let two students receive $A = 1$ and
+two receive $A = 0$. Make the true individual effects vary
+(e.g., one positive, one negative, two zero).</li>
+<li>Compute the true ATE from all four $\delta_i$ values.</li>
+<li>Compute the naive difference in means:
+$\bar{Y}<em>{A=1}^{\mathrm{obs}} - \bar{Y}</em>{A=0}^{\mathrm{obs}}$.</li>
+<li>Do the two quantities match? Explain why the discrepancy arises
+(or why it does not).</li>
+</ol>
+</blockquote>
+<h2 id="step-2-move-from-individuals-to-populations"><a class="header" href="#step-2-move-from-individuals-to-populations">Step 2: move from individuals to populations</a></h2>
+<p>Because individual effects are unobservable, we target a population
+causal estimand. The average treatment effect (ATE) is:</p>
+<p>$$ \text{ATE}=\mathbb{E}[Y(1)-Y(0)]. $$</p>
+<p>This is the mean contrast if everyone in the target population received
+$A=1$ versus $A=0$.</p>
+<h2 id="step-3-connect-the-causal-estimand-to-observed-data"><a class="header" href="#step-3-connect-the-causal-estimand-to-observed-data">Step 3: connect the causal estimand to observed data</a></h2>
+<p>The three identification assumptions are easier to remember if you ask
+what each one contributes to the argument.</p>
+<h3 id="assumption-1-causal-consistency"><a class="header" href="#assumption-1-causal-consistency">Assumption 1: causal consistency</a></h3>
+<p>If $A_i=a$, then $Y_i=Y_i(a)$. The observed outcome equals the
+potential outcome corresponding to the treatment actually received.</p>
+<p>Data scientists estimate parameters for observed data. Causal inference
+goes further: we estimate contrasts involving counterfactual parameters.
+We compute the average response when the entire target population is
+exposed, then when the entire population is unexposed, then contrast
+these averages. Consistency is what allows us to bridge from
+counterfactual to observed. Without it, potential outcomes remain purely
+theoretical.</p>
+<p>The general switching equation expresses the observed outcome as a
+function of treatment and both potential outcomes:</p>
+<p>$$ Y_i^{obs} = A_i \cdot Y_i(1) + (1 - A_i) \cdot Y_i(0). $$</p>
+<p>Each person carries two potential outcomes, but we observe only the one
+selected by their actual treatment. For treated individuals ($A_i =
+1$), the switching equation reduces to:</p>
+<p>$$ Y_i^{obs} = 1 \cdot Y_i(1) + 0 \cdot Y_i(0) = Y_i(1). $$</p>
+<p>For untreated individuals ($A_i = 0$):</p>
+<p>$$ Y_i^{obs} = 0 \cdot Y_i(1) + 1 \cdot Y_i(0) = Y_i(0). $$</p>
+<p>In short:</p>
+<p>$$ Y_i = Y_i(1) \quad \text{if } A_i = 1; \qquad Y_i = Y_i(0) \quad
+\text{if } A_i = 0. $$</p>
+<p>Consistency subsumes two conditions that are sometimes stated
+separately. No interference requires that one person's treatment does
+not affect another person's outcome. Treatment-version irrelevance
+requires that there is only one version of each treatment level. Both
+are special cases: if treatments are heterogeneous or if interference
+exists, the potential outcome $Y(a)$ is ill-defined. Consistency fails
+when treatment versions are mixed under one label. If "mindfulness
+practice" includes different apps, dosages, and start dates under the
+same label, $Y(1)$ does not refer to one intervention.</p>
+<h3 id="assumption-2-exchangeability"><a class="header" href="#assumption-2-exchangeability">Assumption 2: exchangeability</a></h3>
+<p>The conditional probability of receiving every value of an exposure
+level, though not decided by investigators, depends only on the measured
+covariates
+((<a href="#ref-chatton_g-computation_2020"><strong>chatton_g-computation_2020?</strong></a>);
+(<a href="#ref-hernan_causal_2023"><strong>hernan_causal_2023?</strong></a>)).</p>
+<p>In a randomised trial, exchangeability holds unconditionally:</p>
+<p>$$ Y(a) \coprod A. $$</p>
+<p>In observational data, we require conditional exchangeability. For each
+$a$:</p>
+<p>$$ Y(a) \coprod A \mid L, $$</p>
+<p>where $L$ is the set of covariates sufficient to ensure the
+independence of the counterfactual outcomes and the exposure.
+Equivalently, $A \coprod Y(a) \mid L$. When this condition holds,
+counterfactual outcomes are independent of actual exposures received,
+conditional on $L$.</p>
+<p>Exchangeability cannot be verified from observed data. It can only be
+defended by subject-matter knowledge and a plausible DAG. This is the
+no-unmeasured-confounding assumption.</p>
+<h3 id="assumption-3-positivity"><a class="header" href="#assumption-3-positivity">Assumption 3: positivity</a></h3>
+<p>The probability of receiving every value of the exposure within all
+strata of covariates is greater than zero
+((<a href="#ref-hernan_causal_2023"><strong>hernan_causal_2023?</strong></a>);
+(<a href="#ref-westreich_invited_2010"><strong>westreich_invited_2010?</strong></a>)):</p>
+<p>$$ 0 &lt; P(A=a \mid L=l) &lt; 1, \quad \forall, a \in \mathcal{A},;
+\forall, l \in \mathcal{L}. $$</p>
+<p>There are two types of positivity violation.</p>
+<p><strong>Random non-positivity</strong> occurs when the sample data do not contain all
+levels of exposure within strata for whom exposures are defined. For
+example, if no participants aged 22–24 received treatment, investigators
+must extrapolate from other ages. Random non-positivity can be addressed
+by modelling assumptions, but those assumptions carry their own risks.</p>
+<p><strong>Deterministic non-positivity</strong> occurs when it is scientifically
+impossible for certain strata to receive specific levels of exposure.
+For example, biological males cannot receive hysterectomy. Deterministic
+violations require restricting the analysis to scientifically plausible
+cases.</p>
+<p>Positivity is the one identification assumption we can partially check
+empirically. Plot propensity score distributions and look for gaps or
+near-zero densities.</p>
+<blockquote>
+<p><strong>What each assumption buys us</strong></p>
+<ul>
+<li><strong>Consistency</strong> links one observed outcome to one potential outcome.
+It is what connects counterfactual quantities to data.</li>
+<li><strong>Exchangeability</strong> lets observed outcomes in one group stand in for
+the missing counterfactual outcomes in the other.</li>
+<li><strong>Positivity</strong> ensures that the needed comparison exists in every
+relevant subgroup.</li>
+</ul>
+</blockquote>
+<h2 id="how-the-assumptions-recover-population-contrasts"><a class="header" href="#how-the-assumptions-recover-population-contrasts">How the assumptions recover population contrasts</a></h2>
+<p>Start with the easiest case: a randomised trial, where exchangeability
+holds without conditioning. The assumptions work in sequence:</p>
+<p>$$ \begin{aligned}
+\underbrace{\mathbb{E}[Y(1)]}_{\textcolor{blue}{\text{everyone
+treated}}} &amp;\overset{\text{exchangeability}}{=}
+\underbrace{\mathbb{E}[Y(1)\mid A=1]}_{\textcolor{blue}{\text{treated
+arm}}} \overset{\text{consistency}}{=} \underbrace{\mathbb{E}[Y \mid
+A=1]}_{\textcolor{teal}{\text{observed treated mean}}}, \newline
+\underbrace{\mathbb{E}[Y(0)]}_{\textcolor{red}{\text{everyone
+untreated}}} &amp;\overset{\text{exchangeability}}{=}
+\underbrace{\mathbb{E}[Y(0)\mid A=0]}_{\textcolor{red}{\text{control
+arm}}} \overset{\text{consistency}}{=} \underbrace{\mathbb{E}[Y \mid
+A=0]}_{\textcolor{orange}{\text{observed untreated mean}}}.
+\end{aligned} $$</p>
+<p>So the ATE becomes</p>
+<p>$$ \begin{aligned} \text{ATE} &amp;=
+\underbrace{\mathbb{E}[Y(1)]}_{\textcolor{blue}{\text{counterfactual
+treated mean}}} {}-
+\underbrace{\mathbb{E}[Y(0)]}_{\textcolor{red}{\text{counterfactual
+untreated mean}}} \newline &amp;= \underbrace{\mathbb{E}[Y \mid
+A=1]}_{\textcolor{teal}{\text{observed treated mean}}} {}-
+\underbrace{\mathbb{E}[Y \mid
+A=0]}_{\textcolor{orange}{\text{observed untreated mean}}}.
+\end{aligned} $$</p>
+<p>This is the key identification move. We replace missing counterfactual
+averages with observed group averages.</p>
+<p>In observational data, the same logic works only after conditioning on a
+sufficient set $L$. Positivity then ensures that each relevant stratum
+contains both treated and untreated individuals, so those adjusted
+comparisons are estimable.</p>
+<blockquote>
+<p><strong>Pair exercise: tracing the identification logic</strong></p>
+<ol>
+<li>Your partner claims "students who chose the mindfulness app had
+lower anxiety, therefore the app works."</li>
+<li>Walk through each identification assumption in turn. Where does
+the reasoning break?</li>
+<li>Check consistency: were all students labelled $A = 1$ receiving
+the same intervention?</li>
+<li>Check exchangeability: is $Y(a) \coprod A$, or could the
+students who chose the app differ systematically from those who
+did not?</li>
+<li>Check positivity: are there covariate strata where no students
+used (or declined) the app?</li>
+<li>State which assumption is most plausible violated and why.</li>
+</ol>
+</blockquote>
+<h2 id="the-observational-data-version"><a class="header" href="#the-observational-data-version">The observational-data version</a></h2>
+<p>Assume consistency, exchangeability given $L$, and positivity. Then:</p>
+<p>$$ \mathbb{E}[Y(a)] = \sum_l \mathbb{E}[Y \mid A=a, L=l]P(L=l).
+$$</p>
+<p>So the ATE is identified by standardisation:</p>
+<p>$$ \text{ATE}=\sum_l \underbrace{\Big(\mathbb{E}[Y \mid
+A=1,L=l]-\mathbb{E}[Y \mid
+A=0,L=l]\Big)}_{\textcolor{teal}{\text{within-stratum observed
+contrast}}} \underbrace{P(L=l)}_{\textcolor{blue}{\text{stratum
+weight}}}. $$</p>
+<h2 id="what-we-can-check-and-what-we-cannot"><a class="header" href="#what-we-can-check-and-what-we-cannot">What we can check, and what we cannot</a></h2>
+<p>Positivity is the only assumption we can directly inspect with data. If
+some covariate strata contain no treated (or no untreated) individuals,
+the contrast for those strata relies on model extrapolation rather than
+observed comparisons.</p>
+<p>Consistency requires that "treatment" means the same thing for everyone
+labelled $A = 1$. In the mindfulness example, beginning a guided app
+at semester start, trying one unguided breathing exercise in week 5, and
+attending a group class irregularly are different interventions. A
+well-specified target trial defines treatment precisely enough that
+consistency is defensible.</p>
+<p>Exchangeability cannot be verified from observed data. We can check
+whether measured covariates are balanced after adjustment, but we cannot
+test whether unmeasured common causes remain. This is why the DAG
+matters: it forces investigators to state which variables they believe
+are sufficient and to defend that belief with subject-matter knowledge.</p>
+<p>Design and subject-matter knowledge are not optional extras. They are
+what makes identification assumptions assessable.</p>
+<blockquote>
+<p><strong>Quick diagnostic</strong></p>
+<ul>
+<li>If treatment is vague, worry about consistency.</li>
+<li>If treated and untreated people differ in causes of the outcome,
+worry about exchangeability.</li>
+<li>If one treatment level barely occurs in some subgroup, worry about
+positivity.</li>
+</ul>
+</blockquote>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>The mindfulness discrepancy illustrates what happens when investigators
+fail to emulate a target trial. If "users" are defined as students who
+have already adopted the app, the design mixes recent starters with
+persistent users who may differ in motivation, baseline distress, and
+help-seeking. That makes the exposed group look healthier than a true
+start-of-intervention comparison would justify.</p>
+<p>The lesson is that design comes before estimation. If the hypothetical
+trial is not specified, the identifying assumptions are hard to
+interpret and even harder to defend. We now have the tools to identify
+and estimate an average causal contrast for a defined population. Week 6
+asks the next question: does that contrast vary across subgroups?</p>
+<blockquote>
+<p><strong>Pair exercise: designing a target trial</strong></p>
+<ol>
+<li>Your intervention is daily meditation (20 minutes). Your outcome
+is anxiety symptoms at 6 months. Your target population is
+university students.</li>
+<li>State the causal estimand precisely: what are the two contrast
+conditions?</li>
+<li>Define time zero (when does follow-up begin?).</li>
+<li>Name two baseline covariates you would adjust for, and give a
+causal rationale for each (draw a short DAG if it helps).</li>
+<li>Describe one plausible positivity failure in this setting (a
+subgroup where one side of the contrast is effectively empty).</li>
+</ol>
+</blockquote>
+<p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
+<h2 id="the-causal-workflow"><a class="header" href="#the-causal-workflow">The causal workflow</a></h2>
+<p>The identification assumptions are not items on a checklist to be ticked
+off after analysis. They are design commitments that must be defended
+before estimation begins. The following workflow organises these
+commitments into a sequence. Each step depends on the ones before it.
+Also see the course <a href="causal-workflow.html">causal workflow</a> reference
+page.</p>
+<p><strong>Step 0: state a well-defined treatment.</strong> Specify the hypothetical
+intervention precisely enough that every member of the target population
+could, in principle, receive it. "Mindfulness" is too vague: people
+meditate with different apps, in groups, alone, once, or every day. A
+clearer intervention is: "start a guided mindfulness app at the
+beginning of semester and complete one 10-minute session per day for
+eight weeks." Precision here underwrites consistency and makes the
+timeline visible.</p>
+<p><strong>Step 1: establish time zero.</strong> Define the point at which treatment
+assignment begins and follow-up starts. We cannot do this until the
+treatment is specified, because time zero is the moment that
+intervention becomes assigned or initiated. In the mindfulness example,
+time zero is the beginning of semester when students start the app or
+are assigned not to start it. Without a clear time zero, consistency is
+undermined and exchangeability is hard to assess.</p>
+<p><strong>Step 2: state a well-defined outcome.</strong> Define the outcome so the
+causal contrast is meaningful and temporally anchored. "Sense of
+Purpose" is underspecified; "psychological distress one year
+post-intervention measured with the Kessler-6" is interpretable and
+reproducible. Include timing, scale, and instrument.</p>
+<p><strong>Step 3: clarify the target population.</strong> Say exactly who you aim to
+inform. Eligibility rules define the source population, but sampling and
+participation can yield an analytic sample with a different distribution
+of effect modifiers (Bulbulia (<a href="#ref-bulbulia2024wierd">2024</a>)). If you
+intend to generalise beyond the source population (transport),
+articulate the additional conditions required.</p>
+<p><strong>Step 4: evaluate exchangeability.</strong> Make the case that potential
+outcomes are independent of treatment conditional on covariates: $Y(a)
+\coprod A \mid L$ (Hernan &amp; Robins (<a href="#ref-hernan2024WHATIF">2020</a>)).
+Use design and diagnostics: DAGs, subject-matter arguments,
+pre-treatment covariate balance, and overlap checks. If exchangeability
+is doubtful, redesign rather than rely solely on modelling.</p>
+<p><strong>Step 5: ensure causal consistency.</strong> Consistency requires that, for
+units receiving a treatment version compatible with level $a$, the
+observed outcome equals $Y(a)$. It also presumes well-defined versions
+and no interference between units (VanderWeele &amp; Hernan
+(<a href="#ref-vanderweele2013">2013</a>); Hernan &amp; Robins
+(<a href="#ref-hernan2024WHATIF">2020</a>)). When multiple versions exist, either
+refine the intervention so versions are irrelevant to $Y(a)$, or
+condition on version-defining covariates.</p>
+<p><strong>Step 6: check positivity.</strong> Each treatment level must occur with
+non-zero probability at every covariate profile needed for
+exchangeability
+((<a href="#ref-westreich_invited_2010"><strong>westreich_invited_2010?</strong></a>)). Diagnose
+limited overlap using propensity score distributions and extreme
+weights. Consider design-stage remedies (trimming, restriction) before
+estimation.</p>
+<p><strong>Step 7: ensure measurement aligns with the scientific question.</strong> Be
+explicit about probable forms of measurement error (classical, Berkson,
+differential, misclassification) and their structural implications for
+bias (Hernan &amp; Robins (<a href="#ref-hernan2024WHATIF">2020</a>); Bulbulia
+(<a href="#ref-bulbulia2024wierd">2024</a>)). Where feasible, incorporate
+validation studies or calibration models.</p>
+<p><strong>Step 8: preserve representativeness from start to finish.</strong>
+Differential attrition, non-response, or measurement processes tied to
+treatment and outcomes can induce selection bias in the presence of true
+effects (Hernán (<a href="#ref-hernan2017SELECTIONWITHOUTCOLLIDER">2017</a>);
+Bulbulia (<a href="#ref-bulbulia2024wierd">2024</a>)). Plan strategies such as
+inverse probability weighting for censoring, multiple imputation under
+defensible mechanisms, and sensitivity analyses for data missing not at
+random.</p>
+<p><strong>Step 9: document the reasoning that supports steps 0–8.</strong> Make
+assumptions, disagreements, and judgement calls legible. Register or
+time-stamp the analytic plan. Include identification arguments, code,
+and data where possible. Report robustness and sensitivity analyses.
+Transparent reasoning is a scientific result in its own right (Ogburn &amp;
+Shpitser (<a href="#ref-ogburn2021">2021</a>)).</p>
+<h2 id="reporting-the-target-checklist"><a class="header" href="#reporting-the-target-checklist">Reporting: the TARGET checklist</a></h2>
+<p>The TARGET (Transparent Reporting of Observational Studies Emulating a
+Target Trial) statement (<span class="nocase">Cashin et al.</span>
+(<a href="#ref-cashin2025target">2025</a>)) provides a structured checklist for
+reporting studies that emulate a target trial. It maps directly onto the
+causal workflow above. Use it when writing up results.</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">No.</th><th style="text-align: left">Item</th><th style="text-align: left">Workflow step</th></tr></thead><tbody>
+<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Title and Abstract</strong></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">1</td><td style="text-align: left">Identify that the study emulates a target trial; state objectives</td><td style="text-align: left">Steps 0–1</td></tr>
+<tr><td style="text-align: left">2</td><td style="text-align: left">Report the data source(s)</td><td style="text-align: left">Step 3</td></tr>
+<tr><td style="text-align: left">3</td><td style="text-align: left">Summarise assumptions, methods, findings, conclusions</td><td style="text-align: left">Steps 4–9</td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Introduction</strong></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">4</td><td style="text-align: left">Describe scientific background and gap</td><td style="text-align: left">Motivation</td></tr>
+<tr><td style="text-align: left">5</td><td style="text-align: left">Summarise the causal question</td><td style="text-align: left">Steps 0–2</td></tr>
+<tr><td style="text-align: left">6</td><td style="text-align: left">Describe rationale for emulating a target trial</td><td style="text-align: left">Steps 0–1</td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Methods</strong></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">7</td><td style="text-align: left">Cite data sources; describe purpose, type, setting, time period</td><td style="text-align: left">Step 3</td></tr>
+<tr><td style="text-align: left">8a</td><td style="text-align: left">Eligibility criteria and operationalisation</td><td style="text-align: left">Step 3</td></tr>
+<tr><td style="text-align: left">8b</td><td style="text-align: left">Treatment strategies and operationalisation</td><td style="text-align: left">Step 0</td></tr>
+<tr><td style="text-align: left">8c</td><td style="text-align: left">Assignment procedures and operationalisation</td><td style="text-align: left">Step 4</td></tr>
+<tr><td style="text-align: left">8d</td><td style="text-align: left">Follow-up: starts at assignment; describe operationalisation</td><td style="text-align: left">Step 1</td></tr>
+<tr><td style="text-align: left">8e</td><td style="text-align: left">Outcomes and operationalisation</td><td style="text-align: left">Step 2</td></tr>
+<tr><td style="text-align: left">8f</td><td style="text-align: left">Causal contrasts and operationalisation</td><td style="text-align: left">Steps 0–2</td></tr>
+<tr><td style="text-align: left">8g</td><td style="text-align: left">Identifying assumptions; describe related variables</td><td style="text-align: left">Steps 4–6</td></tr>
+<tr><td style="text-align: left">8h</td><td style="text-align: left">Data analysis procedures for each causal estimand</td><td style="text-align: left">Steps 4–8</td></tr>
+<tr><td style="text-align: left">8i</td><td style="text-align: left">Additional analyses for each causal estimand</td><td style="text-align: left">Step 9</td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Results</strong></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">9</td><td style="text-align: left">Numbers assessed, eligible, and assigned</td><td style="text-align: left">Step 3</td></tr>
+<tr><td style="text-align: left">10</td><td style="text-align: left">Baseline characteristics by treatment strategy</td><td style="text-align: left">Step 4</td></tr>
+<tr><td style="text-align: left">11</td><td style="text-align: left">Follow-up length and reasons for end of follow-up</td><td style="text-align: left">Steps 1, 8</td></tr>
+<tr><td style="text-align: left">12</td><td style="text-align: left">Missing data frequency by variable</td><td style="text-align: left">Step 8</td></tr>
+<tr><td style="text-align: left">13</td><td style="text-align: left">Outcome frequency or distribution at each wave</td><td style="text-align: left">Step 2</td></tr>
+<tr><td style="text-align: left">14</td><td style="text-align: left">Effect estimates with measures of precision</td><td style="text-align: left">Steps 4–6</td></tr>
+<tr><td style="text-align: left">15</td><td style="text-align: left">Sensitivity of estimates to choices and assumptions</td><td style="text-align: left">Step 9</td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Discussion</strong></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">16</td><td style="text-align: left">Interpretation of key findings</td><td style="text-align: left">—</td></tr>
+<tr><td style="text-align: left">17</td><td style="text-align: left">Limitations, including differences between target trial and emulation</td><td style="text-align: left">Steps 4–8</td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Other Information</strong></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">18</td><td style="text-align: left">Ethics approval</td><td style="text-align: left">—</td></tr>
+<tr><td style="text-align: left">19</td><td style="text-align: left">Registration</td><td style="text-align: left">Step 9</td></tr>
+<tr><td style="text-align: left">20</td><td style="text-align: left">Data and code availability</td><td style="text-align: left">Step 9</td></tr>
+<tr><td style="text-align: left">21</td><td style="text-align: left">Funding sources</td><td style="text-align: left">—</td></tr>
+<tr><td style="text-align: left">22</td><td style="text-align: left">Conflicts of interest</td><td style="text-align: left">—</td></tr>
+</tbody></table>
+</div>
+<p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
+<hr />
+<h2 id="appendix-a-notation-variants"><a class="header" href="#appendix-a-notation-variants">Appendix A: notation variants</a></h2>
+<p>Equivalent notations for the individual contrast include</p>
+<p>$$ Y_i^{1} - Y_i^{0} $$</p>
+<p>and</p>
+<p>$$ Y_i(a=1) - Y_i(a=0). $$</p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-bulbulia2024wierd" class="csl-entry">
+<p>Bulbulia, J. A. (2024). Methods in causal inference part 3: Measurement
+error and external validity threats. <em>Evolutionary Human Sciences</em>, <em>6</em>,
+e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2024.33</a></p>
+</div>
+<div id="ref-cashin2025target" class="csl-entry">
+<p><span class="nocase">Cashin, A. G., Hansford, H. J., Hernán, M. A., et
+al.</span> (2025). Transparent reporting of observational studies
+emulating a target trial—the TARGET statement. <em>JAMA</em>, <em>334</em>(12),
+1084–1093. <a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
+</div>
+<div id="ref-hernan2024WHATIF" class="csl-entry">
+<p>Hernan, M. A., &amp; Robins, J. M. (2020). <em>Causal inference: What if?</em>
+Taylor &amp; Francis.
+<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/</a></p>
+</div>
+<div id="ref-hernan2017SELECTIONWITHOUTCOLLIDER" class="csl-entry">
+<p>Hernán, M. A. (2017). Invited commentary: Selection bias without
+colliders | american journal of epidemiology | oxford academic.
+<em>American Journal of Epidemiology</em>, <em>185</em>(11), 1048–1050.
+<a href="https://doi.org/10.1093/aje/kwx077">https://doi.org/10.1093/aje/kwx077</a></p>
+</div>
+<div id="ref-hernanrobins2025" class="csl-entry">
+<p>Hernán, M. A., &amp; Robins, J. M. (2025). <em>Causal inference: What if</em>.
+Chapman &amp; Hall/CRC.
+<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/</a></p>
+</div>
+<div id="ref-neal2020introduction" class="csl-entry">
+<p>Neal, B. (2020). Introduction to causal inference from a machine
+learning perspective. <em>Course Lecture Notes (Draft)</em>.
+<a href="https://www.bradyneal.com/Introduction_to_Causal_Inference-Dec17_2020-Neal.pdf">https://www.bradyneal.com/Introduction_to_Causal_Inference-Dec17_2020-Neal.pdf</a></p>
+</div>
+<div id="ref-ogburn2021" class="csl-entry">
+<p>Ogburn, E. L., &amp; Shpitser, I. (2021). Causal modelling: The two
+cultures. <em>Observational Studies</em>, <em>7</em>(1), 179–183.
+<a href="https://doi.org/10.1353/obs.2021.0006">https://doi.org/10.1353/obs.2021.0006</a></p>
+</div>
+<div id="ref-vanderweele2013" class="csl-entry">
+<p>VanderWeele, T. J., &amp; Hernan, M. A. (2013). Causal inference under
+multiple versions of treatment. <em>Journal of Causal Inference</em>, <em>1</em>(1),
+1–20.</p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week-04.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week-06.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week-04.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week-06.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

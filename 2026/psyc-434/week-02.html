@@ -1,0 +1,678 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Week 2: Causal Diagrams: Elementary Structures - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="week-2-causal-diagrams-five-elementary-structures"><a class="header" href="#week-2-causal-diagrams-five-elementary-structures">Week 2: Causal Diagrams: Five Elementary Structures</a></h1>
+<p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w02/">Slides</a></p>
+<blockquote>
+<p><strong>Optional Readings</strong></p>
+<ul>
+<li>Barrett (<a href="#ref-barrett2023ggdag">2023</a>). See also: <a href="https://r-causal.github.io/ggdag/articles/intro-to-dags.html">Introduction to
+DAGs</a>
+and <a href="https://r-causal.github.io/ggdag/articles/bias-structures.html">Common Structures of
+Bias</a>.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Key concepts for the test(s)</strong></p>
+<ul>
+<li><strong>Internal validity</strong></li>
+<li><strong>External validity</strong></li>
+<li><strong>Causal directed acyclic graph (causal DAG)</strong></li>
+<li><strong>Five elementary causal structures</strong></li>
+<li><strong>Confounding</strong></li>
+<li><strong>d-separation</strong></li>
+<li><strong>Backdoor path</strong></li>
+<li><strong>Conditioning</strong></li>
+<li><strong>Fork</strong></li>
+<li><strong>Chain</strong></li>
+<li><strong>Collider bias</strong></li>
+<li><strong>Mediator bias</strong></li>
+<li><strong>Four rules of confounding control</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Lab 2 setup</strong></p>
+<p>Use <a href="lab-02.html">Lab 2: Install R and Set Up Your IDE</a> for this week's
+practical work. The optional script is here: <a href="scripts/lab-02.R">Download the R script
+for Lab 02</a>.</p>
+</blockquote>
+<hr />
+<h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
+<h3 id="motivating-example-the-salk-vaccine"><a class="header" href="#motivating-example-the-salk-vaccine">Motivating example: the Salk vaccine</a></h3>
+<p>The 1954 field trial of the Salk polio vaccine was a multi-site study
+conducted across many communities in the United States (<a href="#ref-dublin1955">Dublin,
+1955</a>; <a href="#ref-francis1955">Francis Jr., 1955</a>). Two
+protocols were used in different participating areas. In the
+observed-control protocol, second-grade children whose parents consented
+received the vaccine. Children in the first and third grades served as
+controls. In the placebo-controlled protocol, children were randomised
+to vaccine or placebo under double-blind conditions.</p>
+<p>The placebo-controlled protocol supported a causal conclusion. The
+vaccine reduced paralytic polio (<a href="#ref-francis1955">Francis Jr., 1955</a>).
+The observed-control protocol did not support the same conclusion,
+because parental consent shaped vaccine assignment.</p>
+<p>Parents who consented tended to have higher socioeconomic status, and
+socioeconomic status also predicted baseline susceptibility to paralytic
+polio. The observed-control comparison was therefore confounded:
+vaccination status and polio risk differed for reasons other than the
+vaccine itself.</p>
+<p>Same question. Different assignment mechanism. Different estimate,
+different reliability.</p>
+<p>Salk later reported on the 1956 vaccination campaign (<a href="#ref-salk1957">Salk,
+1957</a>).</p>
+<h2 id="why-this-week-matters"><a class="header" href="#why-this-week-matters">Why this week matters</a></h2>
+<p>In Week 1 we defined causal questions. This week we learn how to
+represent structural assumptions using a causal directed acyclic graph
+(causal DAG): a diagram in which nodes represent variables and arrows
+represent assumed causal directions, with no cycles. A causal DAG does
+not create causal knowledge. It makes assumptions explicit, checkable,
+and discussable.</p>
+<h2 id="a-simple-map-for-week-2"><a class="header" href="#a-simple-map-for-week-2">A simple map for week 2</a></h2>
+<p>For test purposes, most week 2 questions reduce to three steps.</p>
+<blockquote>
+<p><strong>How to read a DAG</strong></p>
+<ol>
+<li>Identify the path structure: fork, chain, or collider.</li>
+<li>Ask whether the path is open or blocked as drawn.</li>
+<li>Ask what conditioning would do: close the path or open it.</li>
+</ol>
+</blockquote>
+<p>If you can do those three things, you can usually explain the bias logic
+in words.</p>
+<h2 id="independence-language"><a class="header" href="#independence-language">Independence language</a></h2>
+<p>Do not let the notation do more work than it should. It is just
+shorthand.</p>
+<ul>
+<li>$A \coprod Y(a)$: $A$ and $Y(a)$ are independent.</li>
+<li>$A \cancel\coprod Y(a)$: $A$ and $Y(a)$ are dependent.</li>
+<li>$A \coprod Y(a)\mid L$: $A$ and $Y(a)$ are independent once we
+condition on $L$.</li>
+</ul>
+<p><strong>Conditioning</strong> means restricting attention to observations that share
+the same value of a variable (or, equivalently, adjusting for that
+variable in an analysis). In a causal DAG, a conditioned variable is
+drawn inside a box.</p>
+<h2 id="randomisation-and-exchangeability"><a class="header" href="#randomisation-and-exchangeability">Randomisation and exchangeability</a></h2>
+<p>Under random assignment,</p>
+<p>$$ Y(a) \coprod A. $$</p>
+<p>This condition is unconditional exchangeability. Under this condition, a
+difference in means identifies the average treatment effect (ATE):</p>
+<p>$$ \widehat{\text{ATE}}=\hat{\mathbb{E}}[Y\mid
+A=1]-\hat{\mathbb{E}}[Y\mid A=0]. $$</p>
+<p>In observational studies, this condition usually fails without
+adjustment.</p>
+<h2 id="working-definitions"><a class="header" href="#working-definitions">Working definitions</a></h2>
+<p><strong>Internal validity</strong> concerns whether the study contrast estimates the
+target causal contrast in the study population.</p>
+<p><strong>External validity</strong> concerns whether that causal contrast transports
+to the target population.</p>
+<p>These are design properties, not instrument properties. Measurement
+validity (Week 1) is a precondition, not a synonym.</p>
+<p><strong>Confounding bias</strong> exists when treatment groups differ systematically
+in ways that affect the outcome, so that the observed association
+between $A$ and $Y$ does not equal the causal effect. In graph
+terms, confounding corresponds to an open non-causal path from $A$ to
+$Y$ (a "backdoor path," formalised below in the four rules of
+confounding control).</p>
+<h2 id="causal-dag-notation-and-elements"><a class="header" href="#causal-dag-notation-and-elements">Causal DAG notation and elements</a></h2>
+<p><img src="figures/terminologylocalconventions.svg" alt="Our variable naming conventions (adapted from Bulbulia, 2023)" /></p>
+<ul>
+<li>$A$: treatment or exposure.</li>
+<li>$Y$: outcome.</li>
+<li>$Y(a)$: potential outcome under intervention level $a$.</li>
+<li>$L$: measured confounder set.</li>
+<li>$U$: unmeasured cause.</li>
+<li>$M$: mediator.</li>
+<li>$\bar{X}$: sequence of variables.</li>
+<li>$\mathcal{R}$: chance mechanism, including randomisation.</li>
+</ul>
+<p><img src="figures/terminologygeneral.svg" alt="Nodes, edges, and conditioning conventions (adapted from Bulbulia, 2023)" /></p>
+<ul>
+<li>Arrows encode assumed causal direction.</li>
+<li>Boxes indicate conditioning.</li>
+<li>Open red paths indicate biasing pathways.</li>
+</ul>
+<h2 id="five-elementary-structures"><a class="header" href="#five-elementary-structures">Five elementary structures</a></h2>
+<p><img src="figures/terminologydirectedgraph.svg" alt="Five elementary structures (adapted from Bulbulia, 2023)" /></p>
+<ol>
+<li><strong>No causal relation:</strong> $A \coprod B$. The variables are
+statistically independent.</li>
+<li><strong>Direct causation:</strong> $A\to B$. The variables are statistically
+dependent: $A \cancel\coprod B$.</li>
+<li><strong>Fork:</strong> $A\to B$ and $A\to C$. Because $A$ causes both $B$
+and $C$, they are associated. Conditioning on $A$ removes that
+association: $B \coprod C \mid A$.</li>
+<li><strong>Chain:</strong> $A\to B\to C$. Because $B$ mediates the effect of
+$A$ on $C$, they are associated. Conditioning on $B$ blocks
+the path: $A \coprod C \mid B$.</li>
+<li><strong>Collider:</strong> $A\to C\leftarrow B$. Because $A$ and $B$ both
+cause $C$ but do not cause each other, they are marginally
+independent. Conditioning on $C$ opens a spurious association: $A
+\cancel\coprod B \mid C$.</li>
+</ol>
+<p>These five structures generate all patterns of conditional independence
+and dependence in a causal DAG. Understanding which structures block and
+which transmit association is the basis for confounding control.</p>
+<blockquote>
+<p><strong>Three questions for any path</strong></p>
+<ul>
+<li>Is this path causal or non-causal?</li>
+<li>Is it open or blocked right now?</li>
+<li>What would conditioning on the middle variable do?</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Pair exercise: naming the structure</strong></p>
+<p>For each scenario, name the elementary structure, state whether the
+two end variables are marginally associated, and predict what
+conditioning does.</p>
+<ol>
+<li>Socioeconomic status (SES) causes both neighbourhood quality and
+health outcomes. What structure links neighbourhood and health?
+What happens if you condition on SES?</li>
+<li>A drug reduces inflammation, and inflammation causes pain. What
+structure links the drug to pain? What happens if you condition on
+inflammation?</li>
+<li>Genetics affects blood pressure and diet affects blood pressure,
+but genetics and diet do not cause each other. What structure
+links genetics and diet through blood pressure? What happens if
+you condition on blood pressure?</li>
+</ol>
+</blockquote>
+<h2 id="three-identification-assumptions"><a class="header" href="#three-identification-assumptions">Three identification assumptions</a></h2>
+<blockquote>
+<p><strong>Assumption 1: Causal consistency</strong></p>
+<p>If person $i$ receives $A_i=a$, then $Y_i=Y_i(a)$.</p>
+</blockquote>
+<blockquote>
+<p><strong>Assumption 2: Conditional exchangeability</strong></p>
+<p>After conditioning on an adequate set $L$,</p>
+<p>$$ Y(a) \coprod A \mid L. $$</p>
+</blockquote>
+<blockquote>
+<p><strong>Assumption 3: Positivity</strong></p>
+<p>For all treatment levels and covariate strata used for inference,</p>
+<p>$$ P(A=a\mid L=l)&gt;0. $$</p>
+</blockquote>
+<blockquote>
+<p><strong>Pair exercise: checking assumptions against a causal DAG</strong></p>
+<ol>
+<li>Draw a causal DAG for the Salk vaccine example. Include: parental
+consent ($L$), vaccine assignment ($A$), polio outcome
+($Y$), and socioeconomic status ($U$) as an unmeasured common
+cause of $L$ and $Y$.</li>
+<li>In the observational design (assignment by parental consent),
+check exchangeability: is $Y(a) \coprod A$? Trace the open
+backdoor path.</li>
+<li>In the randomised design, check exchangeability: is $Y(a) \coprod
+A$? Explain why the path is now blocked.</li>
+<li>Check positivity in each design. In which design is a positivity
+violation more probable, and why?</li>
+</ol>
+</blockquote>
+<h2 id="four-rules-of-confounding-control"><a class="header" href="#four-rules-of-confounding-control">Four rules of confounding control</a></h2>
+<p><img src="figures/terminologyelconfounders.svg" alt="Four rules of confounding control" /></p>
+<ol>
+<li><strong>Condition on common causes (or defensible proxies).</strong> If $L$
+causes both $A$ and $Y$, the fork $A \leftarrow L \to Y$ opens
+a backdoor path. Conditioning on $L$ closes it. When $L$ is
+unmeasured, conditioning on a measured proxy can reduce, though not
+eliminate, confounding.</li>
+<li><strong>Do not condition on mediators when estimating total effects.</strong> If
+$A \to M \to Y$, conditioning on $M$ blocks part of the causal
+path we want to estimate.</li>
+<li><strong>Do not condition on colliders.</strong> If $A \to C \leftarrow Y$,
+conditioning on $C$ opens a spurious path between $A$ and $Y$.
+The "control for everything" instinct is unsafe for this reason.</li>
+<li><strong>Treat descendants carefully.</strong> Conditioning on a descendant of a
+variable is akin to partially conditioning on that variable. A
+descendant of a collider can transmit collider bias; a descendant of
+a confounder can partially reduce confounding.</li>
+</ol>
+<blockquote>
+<p><strong>A short rulebook for the test</strong></p>
+<ul>
+<li>Common cause: usually condition.</li>
+<li>Mediator: do not condition if you want the total effect.</li>
+<li>Collider: do not condition.</li>
+<li>Descendant: ask what it is downstream of before you adjust for it.</li>
+</ul>
+</blockquote>
+<h2 id="a-note-on-the-generality-of-d-separation"><a class="header" href="#a-note-on-the-generality-of-d-separation">A note on the generality of d-separation</a></h2>
+<p>Two variables are <strong>d-separated</strong> ("directionally separated") in a
+causal DAG when every path between them is blocked. In practice, this
+means that the DAG implies conditional independence once the relevant
+conditioning set is stated. The rules above focus on confounding, but
+d-separation is more general than confounding control. It is the reason
+the same DAG logic can later be used for collider bias, mediator bias,
+and measurement problems.</p>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>The Salk example is a structural lesson about assignment. The
+observed-control design produced a biased effect estimate because
+socioeconomic status confounded the comparison. The randomised design
+blocked that path. Causal DAGs help us state this lesson before
+analysis. First we define the question. Then we draw assumptions. Then
+we choose an adjustment set. Then we estimate.</p>
+<h2 id="where-do-causal-assumptions-come-from"><a class="header" href="#where-do-causal-assumptions-come-from">Where do causal assumptions come from?</a></h2>
+<p>A causal DAG encodes assumptions. Those assumptions do not come from the
+data. They come from prior knowledge: theory, mechanism, previous
+studies, and domain expertise. This dependence on existing knowledge
+might seem circular. If we need knowledge to draw a causal DAG, and a
+causal DAG is required for causal inference, where do we start?</p>
+<p>Otto Neurath's metaphor of the ship at sea captures the answer:</p>
+<blockquote>
+<p>We are like sailors who on the open sea must reconstruct their ship
+but are never able to start afresh from the bottom. Where a beam is
+taken away a new one must at once be put there, and for this the rest
+of the ship is used as support. In this way, by using the old beams
+and driftwood, the ship can be shaped entirely anew, but only by
+gradual reconstruction. (<a href="#ref-neurath1973">Neurath, 1973, p. 199</a>)</p>
+</blockquote>
+<p>Causal diagrams are planks in Neurath's boat. We build them from the
+best available knowledge, test their implications, and revise when
+evidence warrants. The alternative, letting data alone determine causal
+structure, is not available. Data reveal associations. Associations are
+compatible with many causal structures. Without assumptions, the data do
+not tell us which structure generated them.</p>
+<p>Next week we apply these structures to the specific problem of
+confounding bias: the patterns that open backdoor paths and the
+strategies for closing them.</p>
+<h2 id="epilogue-avoid-within-person-and-between-person"><a class="header" href="#epilogue-avoid-within-person-and-between-person">Epilogue: avoid "within-person" and "between-person"</a></h2>
+<ol>
+<li>Students often describe designs as "within-person" or
+"between-person". These labels feel intuitive, but they hide the
+causal object. "Between-person" in particular can mislead because it
+sounds like we compare two different populations. In an experiment
+we have one population, which we project into two potential states
+under two intervention levels. Randomisation lets two groups stand
+in for those two projected states.</li>
+</ol>
+<p>In this course we instead name a target population, two intervention
+regimes, an outcome, and the time that we measure that outcome.</p>
+<ol>
+<li>
+<p>This framing works even when the target population contains one
+unit. Let the population be Alice. Define two regimes over time:
+$a=1$ means Alice doom-scrolls for two hours nightly for four
+weeks, and $a=0$ means she studies for two hours nightly for four
+weeks. Let the outcome be her life satisfaction, measured after each
+four-week period. The causal contrast for Alice is
+$\delta_{\text{Alice}}=Y_{\text{Alice}}(1)-Y_{\text{Alice}}(0)$.</p>
+</li>
+<li>
+<p>Week 1 shows why this contrast is inaccessible from observation
+alone. Alice can follow regime $a=1$ or regime $a=0$, but not
+both in the same period. We therefore observe only one of
+$Y_{\text{Alice}}(1)$ or $Y_{\text{Alice}}(0)$. This missing
+counterfactual is not a statistical inconvenience. It is a logical
+constraint.</p>
+</li>
+<li>
+<p>Week 2 adds a second lesson. Even when we target a population-level
+average, we still need a defensible assignment story. Causal DAGs
+let us state, and critique, the assumptions that connect the
+observed data to the causal contrast. They do not rescue imprecise
+language. They force us to say what we compare, for whom, and why.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Pair exercise: Neurath's ship and your own causal DAG</strong></p>
+<ol>
+<li>Draw a causal DAG from your own discipline or research interest
+with at least four variables.</li>
+<li>Identify one fork and one chain in your causal DAG.</li>
+<li>Swap with your partner. Your partner plays sceptic: challenge one
+arrow by proposing an alternative causal direction or an omitted
+common cause.</li>
+<li>Revise your causal DAG in response. State what changed and why.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Further reading</strong></p>
+<p>The identification assumptions and randomisation framework are treated
+in Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>) (chapters 1-2) and
+Bulbulia (<a href="#ref-bulbulia2023">2024a</a>). See also Bulbulia
+(<a href="#ref-bulbulia_2024_experiments">2024b</a>).</p>
+</blockquote>
+<hr />
+<p>Lab materials: <a href="lab-02.html">Lab 2: Install R and Set Up Your IDE</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-barrett2023ggdag" class="csl-entry">
+<p>Barrett, M. (2023). <em>Ggdag: Analyze and create elegant directed acyclic
+graphs</em>. <a href="https://github.com/malcolmbarrett/ggdag">https://github.com/malcolmbarrett/ggdag</a></p>
+</div>
+<div id="ref-bulbulia2023" class="csl-entry">
+<p>Bulbulia, J. A. (2024a). Methods in causal inference part 1: Causal
+diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
+<a href="https://doi.org/10.1017/ehs.2024.35">https://doi.org/10.1017/ehs.2024.35</a></p>
+</div>
+<div id="ref-bulbulia_2024_experiments" class="csl-entry">
+<p>Bulbulia, J. A. (2024b). Methods in causal inference part 4: Confounding
+in experiments. <em>Evolutionary Human Sciences</em>, <em>6</em>, e43.
+<a href="https://doi.org/10.1017/ehs.2024.34">https://doi.org/10.1017/ehs.2024.34</a></p>
+</div>
+<div id="ref-dublin1955" class="csl-entry">
+<p>Dublin, T. D. (1955). 1954 poliomyelitis vaccine field trial: Plan,
+field operations, and follow-up observations. <em>JAMA</em>, <em>158</em>(14),
+1258–1265. <a href="https://doi.org/10.1001/jama.1955.02960140020003">https://doi.org/10.1001/jama.1955.02960140020003</a></p>
+</div>
+<div id="ref-francis1955" class="csl-entry">
+<p>Francis Jr., T. (1955). Evaluation of the 1954 poliomyelitis vaccine
+field trial: Further studies of results determining the effectiveness of
+poliomyelitis vaccine (salk) in preventing paralytic poliomyelitis.
+<em>JAMA</em>, <em>158</em>(14), 1266–1270.
+<a href="https://doi.org/10.1001/jama.1955.02960140028004">https://doi.org/10.1001/jama.1955.02960140028004</a></p>
+</div>
+<div id="ref-hernanrobins2025" class="csl-entry">
+<p>Hernán, M. A., &amp; Robins, J. M. (2025). <em>Causal inference: What if</em>.
+Chapman &amp; Hall/CRC.
+<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/</a></p>
+</div>
+<div id="ref-neurath1973" class="csl-entry">
+<p>Neurath, O. (1973). Anti-spengler. In M. Neurath &amp; R. S. Cohen (Eds.),
+<em>Empiricism and sociology</em> (pp. 158–213). Springer Netherlands.
+<a href="https://doi.org/10.1007/978-94-010-2525-6_6">https://doi.org/10.1007/978-94-010-2525-6_6</a></p>
+</div>
+<div id="ref-salk1957" class="csl-entry">
+<p>Salk, J. E. (1957). Poliomyelitis vaccination in the fall of 1956.
+<em>American Journal of Public Health and the Nation’s Health</em>, <em>47</em>(1),
+1–18. <a href="https://doi.org/10.2105/AJPH.47.1.1">https://doi.org/10.2105/AJPH.47.1.1</a></p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week-01.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week-03.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week-01.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week-03.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

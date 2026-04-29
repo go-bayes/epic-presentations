@@ -1,0 +1,562 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Week 3: Causal Diagrams: Confounding Bias - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="week-3-causal-diagrams-the-structures-of-confounding-bias"><a class="header" href="#week-3-causal-diagrams-the-structures-of-confounding-bias">Week 3: Causal Diagrams: The Structures of Confounding Bias</a></h1>
+<p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w03/">Slides</a></p>
+<p><strong>Date:</strong> 11 Mar 2026</p>
+<blockquote>
+<p><strong>Readings</strong></p>
+<p><strong>Required</strong></p>
+<ul>
+<li>Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>), chapter 6.
+<a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">link</a></li>
+</ul>
+<p><strong>Optional</strong></p>
+<ul>
+<li>Suzuki et al. (<a href="#ref-suzuki2020">2020</a>).
+<a href="https://www.dropbox.com/scl/fi/4midxwr9ltg9oce02e0ss/suzuki-causal-diagrams.pdf?rlkey=uktzf3nurtgpbj8m4h0xz82dn&amp;dl=0">link</a></li>
+<li>Neal (<a href="#ref-neal2020introduction">2020</a>), chapter 3.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Key concepts for the test(s)</strong></p>
+<ul>
+<li><strong>Confounding bias</strong></li>
+<li><strong>Backdoor path</strong></li>
+<li><strong>Backdoor criterion</strong></li>
+<li><strong>Valid adjustment set</strong></li>
+<li><strong>M-bias</strong></li>
+<li><strong>Regression</strong></li>
+<li><strong>Intercept</strong></li>
+<li><strong>Regression coefficient</strong></li>
+<li><strong>Model fit</strong></li>
+<li><strong>Why model fit is misleading for causality</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Lab 3 setup</strong></p>
+<p>Use <a href="lab-03.html">Lab 3: Regression, Graphing, and Simulation</a> for this
+week's practical work. The optional script is here: <a href="scripts/lab-03.R">Download the R
+script for Lab 03</a>.</p>
+</blockquote>
+<hr />
+<p>Week 2 introduced five elementary causal structures and the rules of
+d-separation. This week we use those structures to diagnose confounding
+bias: when does conditioning on a variable remove bias, and when does it
+create bias?</p>
+<h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
+<h3 id="motivating-example-higher-r2-worse-identification"><a class="header" href="#motivating-example-higher-r2-worse-identification">Motivating example: higher $R^2$, worse identification</a></h3>
+<p>Suppose investigators want the total effect of an exercise programme
+($A$) on cardiovascular risk ($Y$). They begin with a regression
+that adjusts for baseline confounders. Then they add body composition
+measured after the programme ($M$). The model $R^2$ rises, because
+body composition is a strong correlate of cardiovascular risk.</p>
+<p>Did the higher $R^2$ improve the causal estimate? No. If the programme
+changes body composition and body composition changes cardiovascular
+risk, then $M$ is a mediator on the path $A \to M \to Y$.
+Conditioning on $M$ blocks part of the very effect the investigators
+wanted to estimate. The model fits the observed data better, but it
+answers the wrong causal question.</p>
+<h2 id="a-simple-map-for-week-3"><a class="header" href="#a-simple-map-for-week-3">A simple map for week 3</a></h2>
+<p>Week 3 asks one repeated question: which variables should we condition
+on, and why?</p>
+<blockquote>
+<p><strong>A practical workflow</strong></p>
+<ol>
+<li>Draw the relevant backdoor paths from $A$ to $Y$.</li>
+<li>Decide which variables would block those paths.</li>
+<li>Check that you are not conditioning on a mediator, a collider, or
+a descendant of treatment.</li>
+</ol>
+</blockquote>
+<p>That is the logic behind the backdoor criterion. Regression is only one
+way of carrying out the conditioning decision.</p>
+<h3 id="learning-outcomes"><a class="header" href="#learning-outcomes">Learning outcomes</a></h3>
+<p>By the end of this week, you will be able to:</p>
+<ol>
+<li>Define confounding bias and identify it in a DAG.</li>
+<li>Apply the backdoor criterion.</li>
+<li>Explain why good model fit does not rule out confounding.</li>
+<li>Distinguish confounding problems that time ordering can solve from
+those it cannot.</li>
+<li>Define M-bias and explain why conditioning on a pre-treatment
+collider can introduce bias.</li>
+</ol>
+<h3 id="what-is-confounding"><a class="header" href="#what-is-confounding">What is confounding?</a></h3>
+<p>Confounding exists when a common cause of treatment $A$ and outcome
+$Y$ opens a non-causal backdoor path.</p>
+<blockquote>
+<p><strong>Definition: confounding bias</strong></p>
+<p>Confounding bias exists when at least one backdoor path from $A$ to
+$Y$ is open.</p>
+<p>A backdoor path starts with an arrow into $A$.</p>
+</blockquote>
+<p>Example: exercise and blood pressure. Health consciousness ($L$) may
+affect exercise ($A$). Health consciousness ($L$) may also affect
+blood pressure ($Y$). Then $A \leftarrow L \to Y$ is a backdoor
+path. If we do not condition on $L$, we mix causal association and
+spurious association.</p>
+<blockquote>
+<p><strong>Quick test</strong></p>
+<p>If a path from $A$ to $Y$ starts with an arrow into $A$, treat
+it as a candidate backdoor path.</p>
+</blockquote>
+<h3 id="the-backdoor-criterion"><a class="header" href="#the-backdoor-criterion">The backdoor criterion</a></h3>
+<p>Pearl's backdoor criterion tells us when an adjustment set is valid.</p>
+<blockquote>
+<p><strong>Definition: backdoor criterion</strong></p>
+<p>A set $L$ satisfies the backdoor criterion for $A$ and $Y$ if:</p>
+<ol>
+<li>No variable in $L$ is a descendant of $A$.</li>
+<li>$L$ blocks every backdoor path from $A$ to $Y$.</li>
+</ol>
+<p>If both conditions hold, conditioning on $L$ supports
+exchangeability: $Y(a) \coprod A \mid L$.</p>
+</blockquote>
+<blockquote>
+<p><strong>A short memory aid</strong></p>
+<ul>
+<li>Block all backdoor paths.</li>
+<li>Do not adjust for descendants of treatment.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Pair exercise: applying the backdoor criterion</strong></p>
+<ol>
+<li>Draw a DAG for the effect of exercise ($A$) on cardiovascular
+risk ($Y$) with three additional variables: health consciousness
+($L_1$), diet ($L_2$), and body composition ($M$, a mediator
+on the $A \to Y$ path). Include arrows: $L_1 \to A$, $L_1 \to
+L_2$, $L_2 \to Y$, $L_1 \to Y$, $A \to M \to Y$.</li>
+<li>List all paths from $A$ to $Y$.</li>
+<li>Check whether ${L_1}$ satisfies the backdoor criterion. Does it
+block every backdoor path without conditioning on a descendant of
+$A$?</li>
+<li>Explain why adding $M$ to the adjustment set violates the
+backdoor criterion (which part of the causal path does it block?).</li>
+</ol>
+</blockquote>
+<h3 id="confounding-and-regression"><a class="header" href="#confounding-and-regression">Confounding and regression</a></h3>
+<p>Regression is one way to condition on measured variables. For example,</p>
+<p>$$ Y = \beta_0 + \beta_1A + \beta_2L + \varepsilon $$</p>
+<blockquote>
+<p><strong>Definition: key regression terms</strong></p>
+<ul>
+<li><strong>Intercept</strong> ($\beta_0$): expected outcome when covariates are
+zero.</li>
+<li><strong>Coefficient</strong> ($\beta_1$): expected outcome difference per unit
+change in $A$, conditional on model terms.</li>
+<li><strong>Model fit</strong> ($R^2$): variance explained by the fitted model.</li>
+</ul>
+</blockquote>
+<p>High $R^2$ does not imply no confounding. Fit is a statistical
+property. Confounding is a causal-structure property. A model can fit
+the observed data very well and still answer the wrong causal question.</p>
+<blockquote>
+<p><strong>Why model fit is misleading for causality</strong></p>
+<p>A model can fit very well and still be causally wrong.</p>
+<p>If investigators condition on a mediator, they can block part of the
+target effect.</p>
+<p>If investigators condition on a collider, they can open a spurious
+path.</p>
+<p>Neither problem is diagnosed by $R^2$.</p>
+</blockquote>
+<h3 id="confounding-problems-that-time-ordering-can-resolve"><a class="header" href="#confounding-problems-that-time-ordering-can-resolve">Confounding problems that time ordering can resolve</a></h3>
+<p>Cross-sectional measurements blur temporal order. Longitudinal design
+can resolve several ambiguities. A common strategy is:</p>
+<ol>
+<li>Measure confounders at baseline ($t_0$).</li>
+<li>Measure treatment at $t_1$.</li>
+<li>Measure outcome at $t_2$.</li>
+</ol>
+<p><img src="figures/time-resolved-confounding.svg" alt="Confounding problems resolved by time-series data (adapted from Bulbulia, 2023)" /></p>
+<h3 id="confounding-problems-that-time-ordering-alone-cannot-resolve"><a class="header" href="#confounding-problems-that-time-ordering-alone-cannot-resolve">Confounding problems that time ordering alone cannot resolve</a></h3>
+<p>Some problems persist even with multiple waves.</p>
+<p><img src="figures/dag-time-series-not-resolved.svg" alt="Confounding problems not resolved by time-series data (adapted from Bulbulia, 2023)" /></p>
+<blockquote>
+<p><strong>Definition: M-bias</strong></p>
+<p>M-bias occurs when investigators condition on a pre-treatment
+collider.</p>
+<p>In the structure $U_1 \to L \leftarrow U_2$, with $U_1 \to A$ and
+$U_2 \to Y$, conditioning on $L$ opens a previously blocked path
+between $A$ and $Y$.</p>
+</blockquote>
+<p>M-bias is important because "control for everything" is not a safe rule.</p>
+<blockquote>
+<p><strong>Pair exercise: M-bias in practice</strong></p>
+<ol>
+<li>Consider the question "does religious attendance increase
+charitable giving?" Suppose neighbourhood social capital ($L$)
+is a collider of two unmeasured causes: one that affects
+attendance ($U_1$) and one that affects giving ($U_2$).</li>
+<li>Draw the DAG with $U_1 \to L \leftarrow U_2$, $U_1 \to A$, and
+$U_2 \to Y$.</li>
+<li>Trace what conditioning on $L$ does: which path opens?</li>
+<li>State in one sentence why "adjust for all pre-treatment variables"
+fails here.</li>
+</ol>
+</blockquote>
+<h3 id="worked-example-mediation-assumptions"><a class="header" href="#worked-example-mediation-assumptions">Worked example: mediation assumptions</a></h3>
+<p><img src="figures/mediation.svg" alt="The assumptions in causal mediation (adapted from Bulbulia, 2023)" /></p>
+<p>Mediation analysis needs stronger assumptions than total-effect
+analysis. Treatment-induced confounding of the mediator-outcome relation
+can make standard regression unsuitable.</p>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>Back to the exercise programme example. Higher $R^2$ did not answer
+the causal question, because adding post-treatment body composition
+changed the estimand. To estimate the total effect of the programme on
+cardiovascular risk, we need a defended DAG and a valid adjustment set,
+not just a better-fitting regression. This is why we separate modelling
+from causal identification.</p>
+<blockquote>
+<p><strong>What to remember for the test</strong></p>
+<ul>
+<li>Confounding is about open non-causal backdoor paths.</li>
+<li>The backdoor criterion tells us when an adjustment set is valid.</li>
+<li>Regression can implement conditioning, but it cannot tell us which
+variables should be conditioned on.</li>
+<li>Better fit is not the same as better identification.</li>
+</ul>
+</blockquote>
+<p>Confounding is one structural threat to causal identification. Week 4
+adds two others: selection bias and measurement bias.</p>
+<blockquote>
+<p><strong>Pair exercise: $R^2$ versus identification</strong></p>
+<ol>
+<li>Investigator A adjusts for age, income, and education ($R^2 =
+0.42$). Investigator B adjusts for age and conscientiousness
+($R^2 = 0.31$).</li>
+<li>Explain to your partner why higher $R^2$ does not imply less
+confounding.</li>
+<li>Propose a DAG where Investigator A's larger adjustment set
+introduces bias (hint: include a collider or mediator).</li>
+<li>State what would need to be true for Investigator B's smaller set
+to satisfy the backdoor criterion.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Further reading</strong></p>
+<p>All open access: Bulbulia (<a href="#ref-bulbulia2023">2024</a>); Hernán &amp; Robins
+(<a href="#ref-hernanrobins2025">2025, Chapter 6</a>).</p>
+</blockquote>
+<hr />
+<p>Lab materials: <a href="lab-03.html">Lab 3: Regression, Graphing, and Simulation</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-bulbulia2023" class="csl-entry">
+<p>Bulbulia, J. A. (2024). Methods in causal inference part 1: Causal
+diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
+<a href="https://doi.org/10.1017/ehs.2024.35">https://doi.org/10.1017/ehs.2024.35</a></p>
+</div>
+<div id="ref-hernanrobins2025" class="csl-entry">
+<p>Hernán, M. A., &amp; Robins, J. M. (2025). <em>Causal inference: What if</em>.
+Chapman &amp; Hall/CRC.
+<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/</a></p>
+</div>
+<div id="ref-neal2020introduction" class="csl-entry">
+<p>Neal, B. (2020). Introduction to causal inference from a machine
+learning perspective. <em>Course Lecture Notes (Draft)</em>.
+<a href="https://www.bradyneal.com/Introduction_to_Causal_Inference-Dec17_2020-Neal.pdf">https://www.bradyneal.com/Introduction_to_Causal_Inference-Dec17_2020-Neal.pdf</a></p>
+</div>
+<div id="ref-suzuki2020" class="csl-entry">
+<p>Suzuki, E., Shinozaki, T., &amp; Yamamoto, E. (2020). Causal Diagrams:
+Pitfalls and Tips. <em>Journal of Epidemiology</em>, <em>30</em>(4), 153–162.
+<a href="https://doi.org/10.2188/jea.JE20190192">https://doi.org/10.2188/jea.JE20190192</a></p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week-02.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week-04.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week-02.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week-04.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

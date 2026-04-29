@@ -1,0 +1,575 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Lab 8: RATE and QINI Curves - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lab-8-rate-and-qini-curves"><a class="header" href="#lab-8-rate-and-qini-curves">Lab 8: RATE and QINI Curves</a></h1>
+<blockquote>
+<p><strong>R script</strong></p>
+<p><a href="scripts/lab-08.R">Download the R script for this lab</a></p>
+</blockquote>
+<p>This lab evaluates whether targeting treatment to those predicted to
+benefit most improves outcomes compared with treating everyone. You will
+compute RATE curves and QINI curves from causal forest predictions and
+assess targeting efficiency at different population percentiles.</p>
+<blockquote>
+<p><strong>What you will learn</strong></p>
+<ol>
+<li>How to rank individuals by predicted treatment benefit</li>
+<li>How to compute and interpret RATE curves (gain over random
+assignment)</li>
+<li>How to compute and interpret QINI curves (cumulative targeting
+gain)</li>
+<li>How to characterise the covariate profile of high-benefit
+individuals</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Connection to previous labs</strong></p>
+<p>This lab builds directly on Labs 5 and 6. You will use the causal
+forest fitted in those labs to evaluate whether targeting resources to
+the most responsive individuals is worthwhile.</p>
+</blockquote>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<pre><code class="language-r">library(causalworkshop)
+library(grf)
+library(tidyverse)
+</code></pre>
+<blockquote>
+<p><strong>Install packages</strong></p>
+<p>If <code>simulate_nzavs_data()</code> is missing, upgrade <code>causalworkshop</code> and
+install <code>grf</code>: <code>install.packages("grf")</code>
+<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
+<code>pak::pak("go-bayes/causalworkshop")</code></p>
+</blockquote>
+<p>Re-fit the causal forest from Labs 5-6 (or copy the code from Lab 5):</p>
+<pre><code class="language-r"># simulate data
+d &lt;- simulate_nzavs_data(n = 5000, seed = 2026)
+d0 &lt;- d |&gt; filter(wave == 0)
+d1 &lt;- d |&gt; filter(wave == 1)
+d2 &lt;- d |&gt; filter(wave == 2)
+
+# construct matrices
+covariate_cols &lt;- c(
+  "age", "male", "nz_european", "education", "partner", "employed",
+  "log_income", "nz_dep", "agreeableness", "conscientiousness",
+  "extraversion", "neuroticism", "openness",
+  "community_group", "purpose"
+)
+
+X &lt;- as.matrix(d0[, covariate_cols])
+Y &lt;- d2$purpose
+W &lt;- d1$community_group
+
+# fit causal forest
+cf &lt;- causal_forest(
+  X, Y, W,
+  num.trees = 1000,
+  honesty = TRUE,
+  tune.parameters = "all",
+  seed = 2026
+)
+
+# extract predicted individual treatment effects
+tau_hat &lt;- predict(cf)$predictions
+</code></pre>
+<h2 id="rank-individuals-by-predicted-benefit"><a class="header" href="#rank-individuals-by-predicted-benefit">Rank individuals by predicted benefit</a></h2>
+<p>The first step in any targeting analysis is to sort individuals from
+highest to lowest predicted treatment effect:</p>
+<pre><code class="language-r"># sort by predicted benefit (descending)
+n &lt;- length(tau_hat)
+tau_order &lt;- order(tau_hat, decreasing = TRUE)
+tau_sorted &lt;- tau_hat[tau_order]
+
+# what does the top of the distribution look like?
+cat("Top 5 predicted effects:   ", round(head(tau_sorted, 5), 3), "\n")
+cat("Bottom 5 predicted effects:", round(tail(tau_sorted, 5), 3), "\n")
+cat("Overall mean:              ", round(mean(tau_hat), 3), "\n")
+</code></pre>
+<h2 id="rate-curve"><a class="header" href="#rate-curve">RATE curve</a></h2>
+<p>The RATE (Rank-Weighted Average Treatment Effect) curve shows how much
+we gain by targeting treatment to the top $q%$ of predicted
+beneficiaries, compared with random assignment.</p>
+<p>For each targeting rate $q$, we compute the average predicted effect
+among the top $q%$ of individuals, minus the overall average:</p>
+<pre><code class="language-r"># compute RATE curve
+rates &lt;- seq(0.05, 1.00, by = 0.05)
+rate_results &lt;- tibble(
+  rate = numeric(),
+  avg_tau_targeted = numeric(),
+  gain_over_random = numeric()
+)
+
+for (r in rates) {
+  n_targeted &lt;- floor(r * n)
+  targeted_idx &lt;- tau_order[seq_len(n_targeted)]
+
+  avg_targeted &lt;- mean(tau_hat[targeted_idx])
+  gain &lt;- avg_targeted - mean(tau_hat)
+
+  rate_results &lt;- bind_rows(
+    rate_results,
+    tibble(rate = r, avg_tau_targeted = avg_targeted, gain_over_random = gain)
+  )
+}
+
+print(rate_results |&gt; mutate(across(where(is.numeric), \(x) round(x, 3))))
+</code></pre>
+<p>Plot the RATE curve:</p>
+<pre><code class="language-r">ggplot(rate_results, aes(x = rate, y = gain_over_random)) +
+  geom_line(colour = "#E69F00", linewidth = 1) +
+  geom_point(colour = "#E69F00", size = 2) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "RATE curve: gain from targeting",
+    x = "Targeting rate (proportion treated)",
+    y = "Gain over random assignment"
+  ) +
+  theme_minimal()
+</code></pre>
+<blockquote>
+<p><strong>Reading the RATE curve</strong></p>
+<p>A steep curve at low targeting rates means a small group benefits
+substantially more than average. A flat curve means everyone benefits
+similarly, and targeting adds no value. The curve always reaches zero
+at 100% (treating everyone is the same as random).</p>
+</blockquote>
+<h2 id="qini-curve"><a class="header" href="#qini-curve">QINI curve</a></h2>
+<p>The QINI curve measures the <em>cumulative</em> gain from targeting. For each
+percentile $p$, it computes the total benefit from targeting the top
+$p%$, minus the proportional share they would get under random
+assignment:</p>
+<pre><code class="language-r"># compute QINI curve
+qini_results &lt;- tibble(
+  percentile = numeric(),
+  cumulative_gain = numeric()
+)
+
+for (p in rates) {
+  n_top &lt;- floor(p * n)
+  top_idx &lt;- tau_order[seq_len(n_top)]
+
+  # cumulative gain: total effect for targeted minus proportional share
+
+  cum_gain &lt;- sum(tau_hat[top_idx]) - p * sum(tau_hat)
+
+  qini_results &lt;- bind_rows(
+    qini_results,
+    tibble(percentile = p, cumulative_gain = cum_gain)
+  )
+}
+
+print(qini_results |&gt; mutate(across(where(is.numeric), \(x) round(x, 3))))
+</code></pre>
+<p>Plot the QINI curve:</p>
+<pre><code class="language-r">ggplot(qini_results, aes(x = percentile, y = cumulative_gain)) +
+  geom_line(colour = "#56B4E9", linewidth = 1) +
+  geom_point(colour = "#56B4E9", size = 2) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "QINI curve: cumulative targeting gain",
+    x = "Population percentile",
+    y = "Cumulative gain over random"
+  ) +
+  theme_minimal()
+</code></pre>
+<p>Compute the area under the QINI curve (AUQC) via trapezoidal
+approximation:</p>
+<pre><code class="language-r"># area under QINI curve via trapezoidal rule
+qini_for_area &lt;- bind_rows(
+  tibble(percentile = 0, cumulative_gain = 0),
+  qini_results
+)
+
+auqc &lt;- sum(
+  diff(qini_for_area$percentile) *
+    (head(qini_for_area$cumulative_gain, -1) +
+       tail(qini_for_area$cumulative_gain, -1)) / 2
+)
+cat("Area Under QINI Curve (AUQC):", round(auqc, 3), "\n")
+</code></pre>
+<blockquote>
+<p><strong>AUQC interpretation</strong></p>
+<p>A larger AUQC means targeting is more valuable. An AUQC near zero
+means there is little heterogeneity to exploit, and random assignment
+performs nearly as well as targeted assignment.</p>
+</blockquote>
+<h2 id="targeting-efficiency"><a class="header" href="#targeting-efficiency">Targeting efficiency</a></h2>
+<p>Create a summary table comparing the top 10%, 20%, and 50% of predicted
+beneficiaries:</p>
+<pre><code class="language-r"># targeting efficiency at key percentiles
+top_10_idx &lt;- tau_order[seq_len(floor(0.10 * n))]
+top_20_idx &lt;- tau_order[seq_len(floor(0.20 * n))]
+top_50_idx &lt;- tau_order[seq_len(floor(0.50 * n))]
+
+overall_mean &lt;- mean(tau_hat)
+
+efficiency &lt;- tibble(
+  group = c("Top 10%", "Top 20%", "Top 50%", "Everyone"),
+  avg_effect = c(
+    mean(tau_hat[top_10_idx]),
+    mean(tau_hat[top_20_idx]),
+    mean(tau_hat[top_50_idx]),
+    mean(tau_hat)
+  )
+) |&gt;
+  mutate(
+    gain_vs_random = avg_effect - overall_mean,
+    lift_vs_random = if_else(
+      abs(overall_mean) &gt; 1e-8,
+      avg_effect / overall_mean,
+      NA_real_
+    ),
+    efficiency_gain_pct = if_else(
+      abs(overall_mean) &gt; 1e-8,
+      round((lift_vs_random - 1) * 100, 1),
+      NA_real_
+    )
+  )
+
+print(efficiency |&gt; mutate(across(where(is.numeric), \(x) round(x, 3))))
+</code></pre>
+<p>If <code>mean(tau_hat)</code> is close to zero, prefer <code>gain_vs_random</code> over
+<code>lift_vs_random</code> because ratios become unstable.</p>
+<p>Characterise the covariate profile of high-benefit individuals:</p>
+<pre><code class="language-r"># who are the top 10%?
+top_10_data &lt;- d0[tau_order[seq_len(floor(0.10 * n))], ]
+everyone &lt;- d0
+
+cat("Top 10% vs everyone:\n")
+cat("  Extraversion:    ", round(mean(top_10_data$extraversion), 2),
+    "vs", round(mean(everyone$extraversion), 2), "\n")
+cat("  Neuroticism:     ", round(mean(top_10_data$neuroticism), 2),
+    "vs", round(mean(everyone$neuroticism), 2), "\n")
+cat("  Partner (prop):  ", round(mean(top_10_data$partner), 2),
+    "vs", round(mean(everyone$partner), 2), "\n")
+cat("  Agreeableness:   ", round(mean(top_10_data$agreeableness), 2),
+    "vs", round(mean(everyone$agreeableness), 2), "\n")
+</code></pre>
+<blockquote>
+<p><strong>Key takeaway</strong></p>
+<p>RATE and QINI curves translate heterogeneous treatment effects into
+actionable targeting decisions. If the curves are steep, concentrating
+resources on high-benefit individuals improves overall outcomes. If
+the curves are flat, treating everyone equally is just as effective.
+In Lab 9, we will learn how to express these targeting decisions as
+simple, interpretable rules using policy trees.</p>
+</blockquote>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<blockquote>
+<p><strong>Lab diary</strong></p>
+<p>Complete at least two of the following exercises for your lab diary.</p>
+</blockquote>
+<ol>
+<li>
+<p><strong>Different outcome.</strong> Compute RATE and QINI curves for a different
+outcome (e.g., <code>belonging</code> or <code>life_satisfaction</code>). Is the AUQC
+larger or smaller? What does this imply about targeting?</p>
+</li>
+<li>
+<p><strong>Negative effects.</strong> Some individuals may have $\widehat{\tau}(x)
+&lt; 0$, meaning the treatment is predicted to harm them. How many
+individuals in your sample have negative predicted effects? What are
+the implications for resource allocation?</p>
+</li>
+<li>
+<p><strong>AUTOC vs QINI weighting.</strong> The RATE curve (AUTOC weighting)
+emphasises the top of the ranking, while the QINI curve weights all
+percentiles equally. In one paragraph, explain when each metric
+would be more useful for a policy-maker.</p>
+</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="lab-06.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="lab-09.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="lab-06.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="lab-09.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

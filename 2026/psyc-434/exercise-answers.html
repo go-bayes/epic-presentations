@@ -1,0 +1,714 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Suggested Answers: Pair Exercises - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="suggested-answers-pair-exercises"><a class="header" href="#suggested-answers-pair-exercises">Suggested Answers: Pair Exercises</a></h1>
+<p>These are brief suggested answers for the pair exercises embedded in
+weekly lectures. They are intended as discussion guides, not definitive
+solutions. Many exercises are deliberately open-ended.</p>
+<hr />
+<h2 id="week-1"><a class="header" href="#week-1">Week 1</a></h2>
+<h3 id="formulating-a-contrast"><a class="header" href="#formulating-a-contrast">Formulating a contrast</a></h3>
+<p>A well-formed causal question might be: "Would replacing two hours of
+nightly screen time with two hours of reading reduce sleep onset latency
+(in minutes) over four weeks among 14-to-16-year-olds in Aotearoa New
+Zealand?" Both sides of the contrast are specified (screen time versus
+reading), the outcome is defined (sleep onset latency), the time horizon
+is stated (four weeks), and the target population is named
+(14-to-16-year-olds in Aotearoa NZ). Common critique points: "screen
+time" is vague (passive scrolling? gaming? messaging?), "poor sleep"
+needs a measurable operationalisation, and "teenagers" lumps
+heterogeneous age groups.</p>
+<h3 id="three-problems-in-one-claim"><a class="header" href="#three-problems-in-one-claim">Three problems in one claim</a></h3>
+<ol>
+<li><strong>Definitional clarity</strong>: "religion" could mean attendance, belief,
+prayer, or community membership. "Mental health" could mean
+depression, life satisfaction, anxiety, or a composite. Neither side
+of the contrast is specified.</li>
+<li><strong>Population specificity</strong>: the answer may differ between
+adolescents and older adults, between countries with
+majority-religion norms and secular societies, or between
+denominations.</li>
+<li><strong>Unobservability</strong>: we cannot observe the same person both
+practising and not practising religion. The individual causal effect
+is missing by construction.</li>
+</ol>
+<p>A rewrite: "Among adults aged 40-65 in Aotearoa New Zealand, would
+initiating weekly religious service attendance (versus maintaining no
+attendance) reduce depressive symptoms (PHQ-9 score) over 12 months?"</p>
+<hr />
+<h2 id="week-2"><a class="header" href="#week-2">Week 2</a></h2>
+<h3 id="naming-the-structure"><a class="header" href="#naming-the-structure">Naming the structure</a></h3>
+<ol>
+<li><strong>Fork.</strong> SES causes both neighbourhood quality and health outcomes:
+neighbourhood $\leftarrow$ SES $\to$ health. Neighbourhood and
+health are marginally associated (through SES). Conditioning on SES
+removes the association.</li>
+<li><strong>Chain.</strong> Drug $\to$ inflammation $\to$ pain. Drug and pain are
+marginally associated (through the mediating path). Conditioning on
+inflammation blocks the path and removes the association between
+drug and pain.</li>
+<li><strong>Collider.</strong> Genetics $\to$ BP $\leftarrow$ diet. Genetics and
+diet are marginally independent (neither causes the other).
+Conditioning on blood pressure opens a spurious association: among
+people with the same BP, knowing genetic risk tells you something
+about diet (they must compensate).</li>
+</ol>
+<h3 id="checking-assumptions-against-a-causal-dag"><a class="header" href="#checking-assumptions-against-a-causal-dag">Checking assumptions against a causal DAG</a></h3>
+<p>In the observational design, parental consent ($L$) is driven by SES
+($U$), and $U$ also affects polio risk ($Y$). The backdoor path
+$A \leftarrow L \leftarrow U \to Y$ is open. Exchangeability fails:
+$Y(a) \cancel\coprod A$.</p>
+<p>In the randomised design, $A$ is assigned by a chance mechanism
+($\mathcal{R}$) that is independent of $U$ and $L$. The backdoor
+path through $L$ and $U$ is severed because $A$ no longer depends
+on $L$. Exchangeability holds: $Y(a) \coprod A$.</p>
+<p>Positivity is more probable to fail in the observational design: some
+SES strata may have near-universal consent or refusal, leaving no
+comparison group.</p>
+<h3 id="neuraths-ship-and-your-own-causal-dag"><a class="header" href="#neuraths-ship-and-your-own-causal-dag">Neurath's ship and your own causal DAG</a></h3>
+<p>Answers vary by discipline. The key check is whether the partner can
+identify a fork (common cause generating spurious association) and a
+chain (mediating path). The sceptic's challenge should propose either a
+reversed arrow or a missing common cause that would change the
+adjustment strategy.</p>
+<hr />
+<h2 id="week-3"><a class="header" href="#week-3">Week 3</a></h2>
+<h3 id="applying-the-backdoor-criterion"><a class="header" href="#applying-the-backdoor-criterion">Applying the backdoor criterion</a></h3>
+<p>Paths from $A$ to $Y$: (1) $A \to M \to Y$ (causal, through
+mediator); (2) $A \leftarrow L_1 \to Y$ (backdoor through health
+consciousness); (3) $A \leftarrow L_1 \to L_2 \to Y$ (backdoor through
+health consciousness and diet).</p>
+<p>${L_1}$ satisfies the backdoor criterion: it blocks both backdoor
+paths (paths 2 and 3) and $L_1$ is not a descendant of $A$.
+Conditioning on ${L_1}$ supports exchangeability.</p>
+<p>Adding $M$ violates the criterion because $M$ is a descendant of
+$A$ (it lies on the causal path $A \to M \to Y$). Conditioning on
+$M$ blocks part of the total effect we want to estimate.</p>
+<h3 id="m-bias-in-practice"><a class="header" href="#m-bias-in-practice">M-bias in practice</a></h3>
+<p>The DAG: $U_1 \to A$ (attendance), $U_2 \to Y$ (giving), $U_1 \to L
+\leftarrow U_2$ (neighbourhood social capital is a collider of two
+unmeasured causes). Without conditioning on $L$, the path $A
+\leftarrow U_1 \to L \leftarrow U_2 \to Y$ is blocked at the collider
+$L$.</p>
+<p>Conditioning on $L$ opens this path, creating a spurious association
+between $A$ and $Y$ through the unmeasured causes. "Adjust for all
+pre-treatment variables" fails because $L$ is pre-treatment but is a
+collider: conditioning on it opens, rather than closes, a biasing path.</p>
+<h3 id="r2-versus-identification"><a class="header" href="#r2-versus-identification">$R^2$ versus identification</a></h3>
+<p>$R^2$ measures variance explained, a statistical property. Confounding
+is a structural property of the DAG. A model with high $R^2$ can still
+be biased if the adjustment set includes a collider (opening a spurious
+path) or a mediator (blocking part of the causal path).</p>
+<p>Example DAG where the larger set introduces bias: if Investigator A's
+set includes a variable $C$ that is a collider ($A \to C \leftarrow
+Y$), conditioning on $C$ opens a non-causal path and biases the
+estimate, despite improving $R^2$. Investigator B's smaller set
+${$age, conscientiousness$}$ would satisfy the backdoor criterion if
+conscientiousness blocks all backdoor paths and is not a descendant of
+$A$.</p>
+<hr />
+<h2 id="week-4"><a class="header" href="#week-4">Week 4</a></h2>
+<h3 id="classifying-measurement-error"><a class="header" href="#classifying-measurement-error">Classifying measurement error</a></h3>
+<ol>
+<li><strong>Type 1: independent, uncorrelated.</strong> The screen-time noise and the
+purpose noise do not share a common cause and neither is causally
+affected by the other variable. This typically attenuates toward the
+null.</li>
+<li><strong>Type 3: dependent, uncorrelated.</strong> The treatment (bilingualism)
+causally affects how the outcome (cognitive performance) is
+measured, because the test instrument is language-dependent. The DAG
+shows $A \to$ measurement error node $\to Y^<em>$ (recorded
+outcome), opening a non-causal path from $A$ to $Y^</em>$.</li>
+<li><strong>Type 2: independent, correlated.</strong> The shared translation team
+creates a common cause of errors in both measures. Neither
+variable's true value causes the other's measurement error, but the
+errors co-vary through the shared cause.</li>
+</ol>
+<h3 id="collider-bias-versus-confounding"><a class="header" href="#collider-bias-versus-confounding">Collider bias versus confounding</a></h3>
+<p>The DAG: depression ($A$) $\to$ ward admission ($C$)
+$\leftarrow$ injury severity $\to$ recovery ($Y$). Marginally,
+$A$ and $Y$ may be independent (or associated only through a causal
+path). Restricting to admitted patients conditions on $C$, opening the
+path $A \to C \leftarrow$ injury severity $\to Y$.</p>
+<p>This is not confounding. Confounding requires an open backdoor path
+through a common cause (e.g., $A \leftarrow L \to Y$). Here, the path
+was blocked before conditioning. Conditioning on the collider $C$
+actively opens a previously blocked path. Among admitted patients, less
+depressed individuals tend to have more severe injuries (otherwise they
+would not have been admitted), creating a spurious negative association
+between depression and recovery.</p>
+<p>Design fix: analyse all eligible patients regardless of admission
+status, or use inverse probability weighting to account for selection
+into the hospital sample.</p>
+<h3 id="auditing-a-study-for-two-failure-modes"><a class="header" href="#auditing-a-study-for-two-failure-modes">Auditing a study for two failure modes</a></h3>
+<p>Selection bias: university mailing list recruitment acts as a filter.
+Academic motivation and language confidence jointly affect enrolment,
+making the analytic sample unrepresentative. If motivation or confidence
+also relates to bilingualism or cognitive outcomes, conditioning on
+sample membership distorts the contrast.</p>
+<p>Measurement bias: type 3 (dependent, uncorrelated). The treatment
+(bilingualism) causally affects how the English-only cognitive test
+measures the outcome. Non-English-dominant bilinguals are systematically
+mismeasured, and this mismeasurement depends on treatment status.</p>
+<hr />
+<h2 id="week-5"><a class="header" href="#week-5">Week 5</a></h2>
+<h3 id="building-a-potential-outcomes-table"><a class="header" href="#building-a-potential-outcomes-table">Building a potential outcomes table</a></h3>
+<p>The key distinction is between the hidden science and the observed data.
+In the hidden science, each student has both potential outcomes and an
+individual effect. In the observed data, one potential outcome and hence
+$\delta_i$ are missing for every student.</p>
+<p>One possible hidden science table is:</p>
+<div class="table-wrapper"><table><thead><tr><th>$i$</th><th>$Y_i(1)$</th><th>$Y_i(0)$</th><th>$\delta_i$</th></tr></thead><tbody>
+<tr><td>1</td><td>0</td><td>1</td><td>$-1$</td></tr>
+<tr><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>4</td><td>1</td><td>1</td><td>0</td></tr>
+</tbody></table>
+</div>
+<p>If treatment assignment is $A_1=A_2=1$ and $A_3=A_4=0$, the
+observed-data table is:</p>
+<div class="table-wrapper"><table><thead><tr><th>$i$</th><th>$Y_i(1)$</th><th>$Y_i(0)$</th><th>$\delta_i$</th><th>$A_i$</th><th>$Y_i^{\text{obs}}$</th></tr></thead><tbody>
+<tr><td>1</td><td>0</td><td>NA</td><td>NA</td><td>1</td><td>0</td></tr>
+<tr><td>2</td><td>0</td><td>NA</td><td>NA</td><td>1</td><td>0</td></tr>
+<tr><td>3</td><td>NA</td><td>0</td><td>NA</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>NA</td><td>1</td><td>NA</td><td>0</td><td>1</td></tr>
+</tbody></table>
+</div>
+<p>The true ATE in the hidden science is $(-1 + 0 + 1 + 0)/4 = 0$. The
+naive observed difference in means is $\bar{Y}<em>{A=1}^{\mathrm{obs}} -
+\bar{Y}</em>{A=0}^{\mathrm{obs}} = 0 - 0.5 = -0.5$. The discrepancy arises
+because treatment assignment is not random with respect to the potential
+outcomes: students 1 and 2, who received $A=1$, differ in their hidden
+counterfactual outcomes from students 3 and 4, who received $A=0$.
+Exchangeability does not hold.</p>
+<h3 id="tracing-the-identification-logic"><a class="header" href="#tracing-the-identification-logic">Tracing the identification logic</a></h3>
+<p>The claim "students who chose the mindfulness app had lower anxiety,
+therefore the app works" compares $\mathbb{E}[Y \mid A=1]$ with
+$\mathbb{E}[Y \mid A=0]$ and interprets the difference causally.</p>
+<p><strong>Consistency</strong> is questionable if "used the app" pools different
+versions of treatment under one label: different apps, different session
+lengths, different start dates, or irregular adherence. Multiple
+versions undermine the link between $A_i = 1$ and a well-defined
+$Y_i(1)$.</p>
+<p><strong>Exchangeability</strong> is the most plausible violated assumption: students
+who chose the app may have differed from non-users in baseline anxiety,
+motivation, help-seeking, or available time. The treated group may
+therefore have had different counterfactual outcomes even without the
+app, so $Y(0) \cancel\coprod A$.</p>
+<p><strong>Positivity</strong> may also fail: in some covariate strata, such as students
+with very high workload or students already receiving intensive therapy,
+almost no one may choose one side of the contrast, leaving no meaningful
+comparison group in those strata.</p>
+<h3 id="designing-a-target-trial"><a class="header" href="#designing-a-target-trial">Designing a target trial</a></h3>
+<p>Causal estimand: the average difference in anxiety symptoms (e.g., GAD-7
+score) at 6 months if all university students practised 20 minutes of
+daily meditation versus if all maintained their current routine (no
+meditation).</p>
+<p>Time zero: the date of programme enrolment (or randomisation in the
+target trial).</p>
+<p>Two baseline covariates with causal rationale: (1) baseline anxiety
+(GAD-7 at enrolment), because prior anxiety affects both the decision to
+meditate and the outcome; (2) academic workload (full-time vs part-time
+enrolment), because workload affects adherence to meditation and anxiety
+levels.</p>
+<p>Positivity failure: students with severe clinical anxiety may be
+referred to treatment rather than a meditation programme, so the stratum
+"severe baseline anxiety" may contain no one in the meditation arm.</p>
+<hr />
+<h2 id="week-6"><a class="header" href="#week-6">Week 6</a></h2>
+<h3 id="interaction-versus-effect-modification"><a class="header" href="#interaction-versus-effect-modification">Interaction versus effect modification</a></h3>
+<p>The causal estimand for interaction requires four potential outcomes:
+$Y(a=1,g=\text{young})$, $Y(a=1,g=\text{old})$,
+$Y(a=0,g=\text{young})$, $Y(a=0,g=\text{old})$. This is conceptually
+odd because we cannot intervene on age.</p>
+<p>The causal estimand for effect modification involves one intervention
+(exercise) with subgroup contrasts: $\mathbb{E}[Y(1)-Y(0) \mid
+G=\text{young}]$ versus $\mathbb{E}[Y(1)-Y(0) \mid G=\text{old}]$.
+This is the design that matches the study.</p>
+<p>The regression interaction term could be non-zero without causal
+modification if, for example, the linear specification is wrong (the
+true effect varies non-linearly with a confounder correlated with age),
+or if age is a collider or descendant of a collider in the DAG.</p>
+<h3 id="why-conditioning-changes-effect-modification"><a class="header" href="#why-conditioning-changes-effect-modification">Why conditioning changes effect modification</a></h3>
+<p>Even without a direct $G \to Y$ path, the CATE varies by age because
+$G$ (age) affects $L$ (fitness), and if the treatment effect varies
+with $L$, then the distribution of $L$ within age strata determines
+the subgroup average. Different age groups have different fitness
+distributions, so $\tau(g)$ differs.</p>
+<p>The colleague's null interaction conclusion is premature: the regression
+test depends on the conditioning set and the functional form. A
+non-significant $A \times G$ term in a linear model does not rule out
+effect modification visible with a richer specification or different
+conditioning set.</p>
+<p>Two apparent modifiers could vanish together if both $G_1$ and $G_2$
+are proxies for the same underlying variable $L$. Each captures part
+of the variation in $L$; conditioning on both accounts for $L$
+fully, and the residual variation in treatment effect disappears.</p>
+<h3 id="from-average-to-subgroup"><a class="header" href="#from-average-to-subgroup">From average to subgroup</a></h3>
+<p>If 60% of participants have CATE = 8 and 40% have CATE = $-2$: ATE =
+$0.6 \times 8 + 0.4 \times (-2) = 4.8 - 0.8 = 4.0$. Adjust
+proportions: e.g., 50% with CATE = 8 and 50% with CATE = $-2$: ATE =
+$4 - 1 = 3$ mmHg. The policy-maker misses that 50% of participants are
+harmed (blood pressure increases by 2 mmHg).</p>
+<p>The claim "$\hat{\tau}(X_i) = 8$ means the programme will reduce my
+blood pressure by 8" confuses an estimated subgroup average with an
+individual effect. $\hat{\tau}(X_i) = 8$ estimates the average effect
+for everyone sharing person $i$'s measured profile. Person $i$'s
+true individual effect $Y_i(1) - Y_i(0)$ is unobservable and could be
+larger, smaller, or opposite in sign.</p>
+<hr />
+<h2 id="week-8"><a class="header" href="#week-8">Week 8</a></h2>
+<h3 id="from-tree-to-forest-to-causal-forest"><a class="header" href="#from-tree-to-forest-to-causal-forest">From tree to forest to causal forest</a></h3>
+<p>A single regression tree is interpretable (you can read the decision
+path), but unstable: small changes in the data shift splits and
+predictions (high variance).</p>
+<p>Averaging many trees (a forest) reduces variance. Each tree's
+idiosyncratic splits cancel out, producing smoother, more reliable
+predictions.</p>
+<p>Two differences in a causal forest: (a) the target is $\tau(x) =
+\mathbb{E}[Y(1)-Y(0) \mid X=x]$, a treatment contrast, not a
+prediction of $Y$; (b) honest splitting uses one subsample to choose
+splits and a separate subsample to estimate contrasts within leaves.
+Honest splitting is necessary because treatment contrasts require
+estimating quantities under two exposures, only one of which is observed
+per person. Using the same data for splitting and estimation would
+overfit to noise in the individual-level contrasts.</p>
+<h3 id="reading-a-toc-curve"><a class="header" href="#reading-a-toc-curve">Reading a TOC curve</a></h3>
+<p>A steep initial rise means treatment gains are heavily concentrated
+among the top-ranked individuals. The programme helps some people a lot
+but most people only a little.</p>
+<p>Large AUTOC but small Qini at $q=0.3$ means that gains concentrate in
+a very narrow top slice (perhaps the top 5-10%), and by the time you
+expand to 30% coverage, the additional individuals contribute little.
+For a decision-maker with a 30% budget, the targeting advantage over
+random allocation is small.</p>
+<p>Computing the TOC curve on training data overfits: the forest's rankings
+are optimised for the training sample, so in-sample evaluation inflates
+the apparent targeting value. Honest evaluation requires held-out or
+cross-fitted data.</p>
+<h3 id="should-we-target"><a class="header" href="#should-we-target">Should we target?</a></h3>
+<p>The Qini addresses the causal estimand: "does treating the top $q$
+fraction (ranked by estimated treatment effect) yield greater total
+benefit than treating a random $q$ fraction?" It goes beyond the ATE
+by asking whether benefits are concentrated enough to justify selective
+allocation.</p>
+<p>Two non-statistical reasons not to target: (1) logistical feasibility
+(screening and scoring may cost more than universal provision); (2)
+stigma or fairness concerns (singling out individuals with high
+loneliness scores may be perceived as labelling).</p>
+<p>Response to the stigma concern: "The concern about stigmatisation is
+legitimate and must shape how targeting is implemented. The evidence
+shows that some students benefit substantially more than others, but it
+does not mandate that selection criteria be disclosed or that
+participation be compulsory. A self-referral design using the targeting
+criteria as capacity planning could capture most of the benefit without
+labelling individuals."</p>
+<hr />
+<h2 id="week-9"><a class="header" href="#week-9">Week 9</a></h2>
+<h3 id="designing-a-depth-2-policy-rule"><a class="header" href="#designing-a-depth-2-policy-rule">Designing a depth-2 policy rule</a></h3>
+<p>Example: split first on deprivation index (high vs low), then split the
+high-deprivation leaf on baseline loneliness (high vs low). Treat the
+"high deprivation, high loneliness" leaf. If roughly 40% of the
+population is high-deprivation and 50% of those are high-loneliness, the
+treated group is approximately 20%.</p>
+<p>Two reasons to prefer depth-2 over depth-4: (1) a depth-2 tree has at
+most 4 leaves and 3 yes/no questions, which a policy-maker or clinician
+can explain in a sentence; (2) deeper trees split the sample into
+smaller subgroups, reducing the number of observations per leaf and
+increasing the variance of the estimated policy value.</p>
+<h3 id="equity-audit"><a class="header" href="#equity-audit">Equity audit</a></h3>
+<p>A deprivation split indirectly stratifies by ethnicity because in
+Aotearoa NZ, Māori and Pasifika populations are disproportionately
+represented in high-deprivation areas due to historical and structural
+inequities. A rule that targets high deprivation will differentially
+affect these groups.</p>
+<p>Applying governance checks: (1) "Who gains and who loses?" The
+high-deprivation-under-40 group gains access; everyone else is excluded.
+If the excluded group includes high-deprivation people over 40 who also
+benefit, the rule creates an age-based inequity within disadvantaged
+communities. (2) "Can affected communities understand and contest the
+rule?" A depth-2 tree is transparent enough to explain, but communities
+need a mechanism to challenge the split variables and thresholds.</p>
+<p>Te Tiriti modification: guarantee a minimum allocation floor for Māori
+regardless of the tree's splits, ensuring that the algorithmic rule does
+not reduce access below current levels for tangata whenua.</p>
+<p>"The algorithm is objective because it only uses data" is incorrect. The
+algorithm optimises a chosen objective function on data that reflect
+historical inequities. Structural disadvantage is encoded in the
+variables. Objectivity in computation does not imply fairness in
+outcomes.</p>
+<h3 id="policy-tree-versus-ranking"><a class="header" href="#policy-tree-versus-ranking">Policy tree versus ranking</a></h3>
+<p>(a) Estimated policy value: Strategy A (pure ranking) typically
+achieves equal or slightly higher policy value because it uses the full
+granularity of $\hat{\tau}(X_i)$. Strategy B loses some value by
+collapsing to a few leaves.</p>
+<p>(b) Explainability: Strategy B is far more explainable. A depth-2 tree
+is a short set of if-then rules. Strategy A requires explaining a
+continuous score derived from thousands of overlapping tree splits.</p>
+<p>(c) Ability to answer "why was I selected?": Strategy B can give a
+clear answer ("because your deprivation index is above 8 and your
+loneliness score is above the median"). Strategy A can only say "because
+your estimated benefit score was in the top 20%," which is opaque.</p>
+<p>Strategy A is preferable when the decision is internal (e.g., a research
+team allocating limited follow-up resources) and does not require public
+justification. Strategy B is preferable when the rule must be defended
+publicly, contested by affected communities, or implemented by
+non-technical staff.</p>
+<hr />
+<h2 id="week-10"><a class="header" href="#week-10">Week 10</a></h2>
+<h3 id="interpreting-invariance-results"><a class="header" href="#interpreting-invariance-results">Interpreting invariance results</a></h3>
+<p><strong>Configural invariance</strong> means the same items load on the same factors
+in both groups (same pattern of zero and non-zero loadings). <strong>Metric
+invariance</strong> means the factor loadings are equal across groups (a
+one-unit increase in the latent variable produces the same change in
+item responses). <strong>Scalar/threshold invariance</strong> means the intercepts
+(or thresholds for ordinal items) are equal, so the same latent level
+produces the same expected response.</p>
+<p>Failing scalar/threshold invariance means that even at the same latent
+distress level, the two groups endorse "felt hopeless" and "felt
+worthless" differently. A one-unit difference in total score does not
+correspond to the same latent difference across groups. Group mean
+comparisons on the total score therefore confound true latent
+differences with measurement artefact.</p>
+<p>Hypothesis for differential functioning: cultural norms about expressing
+hopelessness or worthlessness may differ. In some cultural contexts,
+endorsing "felt worthless" may carry greater stigma, leading to
+systematically lower endorsement at the same latent distress level.
+Alternatively, translation may anchor response categories differently.</p>
+<h3 id="fit-is-not-identification"><a class="header" href="#fit-is-not-identification">Fit is not identification</a></h3>
+<p>Good fit means the model reproduces the observed covariance matrix. It
+does not establish causal direction. Multiple causal structures can
+generate the same covariance pattern.</p>
+<p>Reflective DAG: $\eta \to X_1, \eta \to X_2, \ldots, \eta \to X_6$.
+The latent variable causes the indicators. Formative DAG: $X_1 \to
+\eta, X_2 \to \eta, \ldots, X_6 \to \eta$. The indicators cause the
+composite. Both can produce identical fit statistics for a single-factor
+solution.</p>
+<p>The choice matters for downstream causal inference. If the construct is
+reflective and we use it as a confounder, we assume the latent variable
+is the true common cause. If the construct is actually formative (a
+composite of independent causes), conditioning on the composite may not
+block the backdoor paths we intend to close, because each component may
+have a different causal relationship with treatment and outcome.</p>
+<h3 id="measurement-as-an-identification-problem"><a class="header" href="#measurement-as-an-identification-problem">Measurement as an identification problem</a></h3>
+<p>Scalar/threshold non-invariance means the same response pattern
+corresponds to different latent levels across groups. Put differently,
+the mapping from the latent outcome $Y^<em>$ to the measured outcome
+$Y$ depends on group membership. This matters for CATE because CATE is
+defined by a group contrast. If measurement differs by group, the
+estimated heterogeneity can be measurement artefact. This can happen
+even when exchangeability and positivity hold for $Y^</em>$, because the
+analysis uses $Y$, not $Y^*$.</p>
+<p>Example intuition: population A is distressed and population B is not.
+In A, "worthlessness" may be caused by unemployment. In B, it may be
+rare and have different causes. The same K6 item can have different
+causal parents across groups. The factor structure and item means can
+therefore differ without any change in "true distress".</p>
+<p>Counter to "validated in hundreds of studies": most validation evidence
+is about internal consistency, short-term stability, and associations
+with other variables. Those are associational properties. They do not
+establish that the items have the same meaning, the same causes, or the
+same measurement function across the particular groups you want to
+compare. A scale can be reliable within each group and still be
+non-comparable across groups.</p>
+<p>Proposed workflow step (between DAG and estimation): write down a
+measurement submodel as causal assumptions. State whether your estimand
+is the effect on reported K6 ($Y$) or the effect on the underlying
+state ($Y^*$). Then draw a measurement DAG that makes explicit what
+causes item responses in each group, including stigma, translation, and
+response norms. Decide what design or data would support those
+assumptions. If you choose to run measurement invariance tests, treat
+them as descriptive stress tests of a specific reflective model, not as
+evidence that measurement is causally comparable. If the stress test
+fails, the honest conclusion is that your group comparison is not
+identified without stronger measurement assumptions or better data.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="zed-download.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="zed-download.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

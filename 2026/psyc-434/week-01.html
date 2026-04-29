@@ -1,0 +1,587 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Week 1: How to Ask a Question in Psychological Science? - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="week-1-how-to-ask-a-question-in-psychological-science"><a class="header" href="#week-1-how-to-ask-a-question-in-psychological-science">Week 1: How to Ask a Question in Psychological Science?</a></h1>
+<p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w01/">Slides</a></p>
+<p><strong>Lab: Git and GitHub</strong></p>
+<p><img src="figures/dag-week01.svg" alt="Causal graph: we refer to this image in the lecture and begin reviewing causal graphs in Week 2" /></p>
+<blockquote>
+<p><strong>Background readings</strong></p>
+<p>None today. Recommended readings are listed at the end of this page.</p>
+</blockquote>
+<blockquote>
+<p><strong>Key concepts for the test(s)</strong></p>
+<p>Today we introduce three problems that recur throughout the course:</p>
+<ul>
+<li><strong>Defining the question</strong>: a causal question requires a clear
+contrast</li>
+<li><strong>Specifying the target population</strong>: the answer depends on who the
+question is about</li>
+<li><strong>Unobservability of causal effects</strong>: we never observe both sides
+of the contrast for one person</li>
+</ul>
+<p><strong>Before next week</strong></p>
+<p>Bring your laptop in Week 1. Install R before Week 2. Instructions are
+in <a href="lab-02.html">Lab 2: Install R and Set Up Your IDE</a>.</p>
+</blockquote>
+<hr />
+<h2 id="motivating-example-does-social-media-harm-adolescent-purpose"><a class="header" href="#motivating-example-does-social-media-harm-adolescent-purpose">Motivating example: does social media harm adolescent purpose?</a></h2>
+<p>Orben &amp; Przybylski (<a href="#ref-orben2019">2019</a>) reports a negative
+association between time spent on social media and purpose among British
+teenagers. The observed correlation was 0.04, comparable in magnitude to
+the association between wearing glasses and purpose in the same dataset.</p>
+<p>The finding was widely reported as evidence that social media harms
+young people. Some investigators argued the conclusions were not strong
+enough: those teenagers who most frequently engaged with social media
+exhibited the lowest purpose scores, and the negative association is
+non-linear (<a href="#ref-twenge2020underestimating"><span class="nocase">Twenge et al.</span>,
+2020</a>).</p>
+<p>Questions about whether social media use harms young people remain live.
+On 18 February 2026, CNN reported testimony in ongoing litigation about
+adolescent social media use
+(<a href="https://edition.cnn.com/2026/02/18/tech/meta-mark-zuckerberg-testifies-social-media-addiction-trial">link</a>).
+Courts, legislators, and parents are making decisions right now on the
+basis of findings reported in scientific journals.</p>
+<p>Yet what do the associational findings really tell us? Can we move from
+associations to policy-relevant <em>causal</em> conclusions about whether
+social media use harms young people? If so, what steps would we need to
+take? And for whom would our conclusions generalise?</p>
+<p>These questions will occupy us over the coming weeks. The aim of this
+course is to provide you with a set of skills that enable you to ask and
+answer causal questions using observational data, and to identify
+variability in response across subgroups in the population of interest.</p>
+<h2 id="a-simple-map-for-week-1"><a class="header" href="#a-simple-map-for-week-1">A simple map for week 1</a></h2>
+<p>This week gives you a checklist for deciding whether a claim is even
+asking a causal question yet.</p>
+<blockquote>
+<p><strong>Three questions to ask of any causal claim</strong></p>
+<ol>
+<li>What are the two states of the world being compared?</li>
+<li>For which population is the comparison meant to hold?</li>
+<li>What part of the contrast is necessarily missing from observation?</li>
+</ol>
+</blockquote>
+<p>If a study claim does not answer the first two questions, it is still
+too vague. If it forgets the third question, it will slip from causal
+language into loose talk about associations.</p>
+<h2 id="psychology-begins-with-a-question"><a class="header" href="#psychology-begins-with-a-question">Psychology begins with a question</a></h2>
+<p>Before we can answer whether social media harms teenagers, we must ask a
+question that is clear enough to be answered. "Does social media harm
+purpose?" is not yet a causal question because it does not specify what
+is being compared with what. A causal question compares two states of
+the world. This question names only one.</p>
+<p>We will use two words that are easy to confuse. An <em>association</em> asks
+whether two variables co-occur. A <em>causal effect</em>, on the other hand,
+asks what would happen if we changed something about the world.</p>
+<p>Consider the difference. "Is time on social media associated with lower
+purpose?" asks whether two variables co-occur. "Would adolescent purpose
+improve if we replaced two hours of nightly doom-scrolling with two
+hours of study?" asks what would happen under a specific comparison. The
+second question states a contrast (scrolling versus studying), a
+population (adolescents), an outcome (purpose), and a time horizon
+(nightly, over some stated period). The first question does not.</p>
+<p>The comparison between two states is what we call a <em>causal contrast</em>,
+or <em>contrast</em> for short. A contrast is the simplest structure a causal
+question can have: state A versus state B, for a defined group, measured
+on a defined outcome, over a defined time horizon.</p>
+<p>A practical template is: for <em>population</em>, what is the effect of
+<em>intervention</em> versus <em>control</em> on <em>outcome</em>, measured by <em>measure</em>
+after an exposure period of <em>time horizon</em>? The arrow of time is built
+in: the intervention comes first, then we measure the outcome.</p>
+<blockquote>
+<p><strong>Five parts of a usable causal question</strong></p>
+<ul>
+<li><strong>Population</strong>: who is the question about?</li>
+<li><strong>Intervention</strong>: what state of the world are we interested in?</li>
+<li><strong>Control</strong>: what is the comparison condition?</li>
+<li><strong>Outcome</strong>: what do we measure?</li>
+<li><strong>Timing</strong>: when do we measure it?</li>
+</ul>
+</blockquote>
+<p>Everything in this course follows from the demand that psychological
+questions specify their contrasts. This lecture introduces three
+problems that make specifying a contrast harder than it first appears.</p>
+<h2 id="problem-1-both-sides-of-the-contrast-must-be-precisely-defined"><a class="header" href="#problem-1-both-sides-of-the-contrast-must-be-precisely-defined">Problem 1: both sides of the contrast must be precisely defined</a></h2>
+<p>When investigators evaluate "time on social media," what do they mean?
+Passive scrolling, direct messaging, and creative content production may
+differ in their consequences. We need an interval over which the
+behaviour occurs: one week, one month, one year. We need to specify what
+the comparison condition is: passive scrolling versus studying, versus
+socialising in person, versus something else. Without precise
+specification, the question has no answer because it has not yet been
+asked.</p>
+<p>The two sides of a contrast have names. The condition whose consequences
+we want to evaluate is the <em>intervention</em>. The state we compare it
+against is the <em>control</em>. "Intervention" and "control" are placeholders:
+neither implies a medical procedure or a laboratory setting. They simply
+label the two states of the world that define our comparison.</p>
+<p>Precision extends to what we measure. "Sense of Purpose" aggregates
+self-esteem, life satisfaction, anxiety symptoms, and depressive
+symptoms. Each is a distinct construct, and they do not always move
+together. We must define the <em>outcome</em>, its measure (for example, life
+satisfaction on a 0 to 10 scale), and the time frame over which we
+assess it. The consequences of scrolling for a teenager's purpose in
+five hundred years are zero because life ends.</p>
+<p>Notice that specifying interventions and outcomes forces us to order
+events along a timeline. For one state to influence another, it must
+precede it. There must be a contrast condition and a stated time
+horizon, because timing affects the magnitude of interest. The effects
+of scrolling for five minutes for three weeks (contrasted with no social
+media) might differ from the effects of scrolling for five hours every
+day for five years.</p>
+<p>In later weeks we extend this idea to more complex questions with more
+than two states of the world, or with sequences of actions over time.
+The same demand applies: name the states, the population, the outcome,
+and the time horizon.</p>
+<h2 id="problem-2-the-answer-to-a-causal-question-depends-on-the-population"><a class="header" href="#problem-2-the-answer-to-a-causal-question-depends-on-the-population">Problem 2: the answer to a causal question depends on the population</a></h2>
+<p>The teenagers that Orben &amp; Przybylski (<a href="#ref-orben2019">2019</a>) studied
+were a convenience sample from one country at one moment in time. Would
+the association of 0.04 hold in other countries? Would it hold today?
+The concept of "teenager" is itself vague. It lumps thirteen-year-olds,
+essentially children, with nineteen-year-olds, essentially adults. The
+answer to a causal question may systematically differ by age, gender,
+socioeconomic background, or parental attention.</p>
+<p>Before we can evaluate whether social media influences purpose, we must
+specify the target population. The answer to a contrast for one
+population may differ from, or reverse for, another. There is no
+abstract answer to a causal question without reference to both the
+contrast conditions and a population.</p>
+<p>The distinction between the <em>sample population</em> (who you studied) and
+the <em>target population</em> (who you want to learn about) is central to
+external validity, which we formalise in Week 4. We return to population
+specificity when we discuss variation in responses across subgroups
+(Week 6, 8, and 9) and transportability (Week 4).</p>
+<h2 id="problem-3-no-more-than-one-side-of-the-contrast-can-be-measured-for-each-individual"><a class="header" href="#problem-3-no-more-than-one-side-of-the-contrast-can-be-measured-for-each-individual">Problem 3: no more than one side of the contrast can be measured for each individual</a></h2>
+<p>Consider Alice, who takes up two hours of doom-scrolling each night
+before bed. Suppose she enrolled in an experiment and was randomised to
+the doom-scrolling condition. The contrast is studying mathematics for
+two hours each night. At the end of the trial Alice reports high life
+satisfaction. Can we say that doom-scrolling <em>caused</em> Alice's life
+satisfaction?</p>
+<p>We cannot, because no more than one side of the contrast can be measured
+for Alice in a given period. Alice followed the doom-scrolling protocol.
+She did not follow the mathematics protocol. We observe only one state
+of the world for Alice, never both.</p>
+<p>This is the central logical problem in causal inference. A causal effect
+compares two possible futures for the same person, but we only ever
+observe one future.</p>
+<p>We formalise this with potential outcomes notation. Let $Y_i(1)$
+denote the outcome that person $i$ would experience under the
+intervention ($A = 1$), and $Y_i(0)$ the outcome under the control
+condition ($A = 0$). The individual causal effect is:</p>
+<p>$$\delta_i = Y_i(1) - Y_i(0)$$</p>
+<p>This quantity, $\delta_i$, is the contrast at the level of a single
+person: the difference between what would happen to person $i$ under
+treatment and what would happen under control. We observe only one of
+$Y_i(1)$ or $Y_i(0)$ for any individual. The individual causal
+effect $\delta_i$ is therefore never directly observable. This is not
+a limitation of our methods; it is a logical constraint. No amount of
+data collection, no statistical technique, and no machine learning
+algorithm can reveal both potential outcomes for the same person at the
+same time.</p>
+<blockquote>
+<p><strong>Pair exercise: formulating a contrast</strong></p>
+<ol>
+<li>Take the headline "Screen time linked to poor sleep in teenagers."</li>
+<li>Write a causal question that specifies both sides of the contrast
+(screen time versus what?), a defined outcome (which aspect of
+sleep?), a target population, and a time horizon.</li>
+<li>Swap with your partner and critique: is the other side of the
+contrast well defined? Is the population specific enough?</li>
+</ol>
+</blockquote>
+<h2 id="from-individuals-to-populations"><a class="header" href="#from-individuals-to-populations">From individuals to populations</a></h2>
+<p>If individual causal effects are unobservable, what can we learn? We can
+learn about average effects across a population. The average treatment
+effect (ATE) is:</p>
+<p>$$\text{ATE} = \mathbb{E}[Y(1) - Y(0)]$$</p>
+<p>This is the expected difference in the outcome if everyone in the target
+population experienced the intervention versus if everyone experienced
+the control condition. The ATE is a population-level quantity. It tells
+us what would happen on average, not what would happen to any particular
+person.</p>
+<p>Causal inference contrasts counterfactual states at the population or
+subpopulation level. When we say "social media influences purpose," we
+mean that on average, across a defined population, one pattern of use
+changes life satisfaction relative to the counterfactual of another
+pattern. We must specify the contrast conditions and the population for
+this statement to have content.</p>
+<blockquote>
+<p><strong>A short memory aid</strong></p>
+<ul>
+<li>A causal question needs a contrast.</li>
+<li>A causal answer is always population-specific.</li>
+<li>Individual causal effects are not directly observed.</li>
+</ul>
+</blockquote>
+<h2 id="what-we-learned"><a class="header" href="#what-we-learned">What we learned</a></h2>
+<p>Return to the social media question. Orben &amp; Przybylski
+(<a href="#ref-orben2019">2019</a>) found an association of 0.04 between social
+media use and lower purpose. Courts and legislators are treating this as
+evidence of harm. We now see three reasons why the leap from association
+to causation fails.</p>
+<p>First, "the influence of social media on purpose" is undefined until we
+specify the interventions (scrolling versus what?), the outcomes (which
+dimension of purpose?), and the time frame. Second, the answer to a
+causal question depends on the target population, and the populations
+that matter (thirteen-year-olds in Aotearoa New Zealand today) may
+differ from the population studied (British teenagers before 2019).
+Third, the individual causal effect is never observable; we can only
+recover average effects under assumptions we have not yet stated.</p>
+<p>The lesson is that before answering a question we must ask it.
+Psychology begins with a clearly defined question. A well-defined causal
+question requires a contrast between at least two interventions, a
+specified outcome and time horizon, and a target population. In later
+weeks we add the further question of whether the observed data can
+identify that contrast.</p>
+<p>Most psychological research cannot randomise the variables we care
+about. We cannot randomly assign people to experience trauma, adopt a
+religion, or lose a job. Week 2 introduces the randomised experiment as
+the benchmark for causal inference and the graphical tools (causal
+diagrams) that allow us to reason about causation when randomisation is
+impossible.</p>
+<blockquote>
+<p><strong>Pair exercise: three problems in one claim</strong></p>
+<ol>
+<li>Take the claim "Religion improves mental health."</li>
+<li>Specify the contrast by naming a concrete intervention and control
+condition (religion versus what, exactly?).</li>
+<li>Specify the population (for whom, where, and when?).</li>
+<li>Specify the outcome, the measure, and the timing (what do we
+measure, and when do we measure it after the exposure period?).</li>
+<li>Rewrite the claim using the course template: for <em>population</em>,
+what is the effect of <em>intervention</em> versus <em>control</em> on
+<em>outcome</em>, measured by <em>measure</em> after an exposure period of <em>time
+horizon</em>?</li>
+<li>Swap with your partner and critique: is the contrast precise, is
+the population defensible, and does the timing make sense
+(intervention first, outcome later)?</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Further reading</strong></p>
+<p>For an accessible introduction to causal inference and its history,
+see Pearl &amp; Mackenzie (<a href="#ref-pearl2018">2018</a>). The two core causal
+questions and the formal treatment of causal inference appear in
+Bulbulia (<a href="#ref-bulbulia2023">2024</a>).</p>
+</blockquote>
+<hr />
+<p>Lab materials: <a href="lab-01.html">Lab 1: Git and GitHub</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-bulbulia2023" class="csl-entry">
+<p>Bulbulia, J. A. (2024). Methods in causal inference part 1: Causal
+diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
+<a href="https://doi.org/10.1017/ehs.2024.35">https://doi.org/10.1017/ehs.2024.35</a></p>
+</div>
+<div id="ref-orben2019" class="csl-entry">
+<p>Orben, A., &amp; Przybylski, A. K. (2019). The association between
+adolescent well-being and digital technology use. <em>Nature Human
+Behaviour</em>, <em>3</em>(2), 173–182. <a href="https://doi.org/10.1038/s41562-018-0506-1">https://doi.org/10.1038/s41562-018-0506-1</a></p>
+</div>
+<div id="ref-pearl2018" class="csl-entry">
+<p>Pearl, J., &amp; Mackenzie, D. (2018). <em>The book of why: The new science of
+cause and effect</em>. Basic books.</p>
+</div>
+<div id="ref-twenge2020underestimating" class="csl-entry">
+<p><span class="nocase">Twenge, J. M., Haidt, J., Joiner, T. E., et
+al.</span> (2020). Underestimating digital media harm. <em>Nature Human
+Behaviour</em>, <em>4</em>, 346–348. <a href="https://doi.org/10.1038/s41562-020-0839-4">https://doi.org/10.1038/s41562-020-0839-4</a></p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="readings.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week-02.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="readings.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week-02.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

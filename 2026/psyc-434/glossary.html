@@ -1,0 +1,395 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Glossary and DAG Hand-outs - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="glossary-and-dag-hand-outs"><a class="header" href="#glossary-and-dag-hand-outs">Glossary and DAG Hand-outs</a></h1>
+<p>A reference page covering causal inference terminology and links to
+hand-out PDFs on directed acyclic graphs (DAGs), confounding, selection
+bias, and measurement error.</p>
+<hr />
+<h2 id="causal-inference-glossary"><a class="header" href="#causal-inference-glossary">Causal inference glossary</a></h2>
+<p>Causal inference rests on mathematical foundations that enjoy broad
+agreement, but the terminology varies across disciplines. The same word
+sometimes carries different (even opposite) meanings in different
+literatures. Terms to watch include "selection", "fixed effects",
+"standardisation", "moderator", "structural equation model", and
+"identification".</p>
+<h3 id="core-concepts"><a class="header" href="#core-concepts">Core concepts</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody>
+<tr><td><strong>Average Treatment Effect (ATE)</strong></td><td>The expected difference in potential outcomes across the entire population: $\text{ATE} = \mathbb{E}[Y(1) - Y(0)]$. Also called the marginal effect.</td></tr>
+<tr><td><strong>Conditional Average Treatment Effect (CATE)</strong></td><td>The ATE within a subgroup defined by covariates $X = x$: $\text{CATE}(x) = \mathbb{E}[Y(1) - Y(0) \mid X = x]$.</td></tr>
+<tr><td><strong>Potential outcomes</strong></td><td>The outcomes that would be observed under each possible treatment level. For individual $i$: $Y_i(1)$ under treatment, $Y_i(0)$ under control. Also called counterfactual outcomes.</td></tr>
+<tr><td><strong>Counterfactual</strong></td><td>The potential outcome corresponding to the treatment level not actually received. Unobservable for any given individual.</td></tr>
+<tr><td><strong>Causal consistency</strong></td><td>$Y_i(a) = Y_i$ when $A_i = a$. The observed outcome equals the potential outcome under the treatment actually received. Requires well-defined treatment and no interference.</td></tr>
+<tr><td><strong>Exchangeability</strong></td><td>Potential outcomes are independent of treatment assignment: $Y(a) \coprod A$. In observational studies, we require conditional exchangeability: $Y(a) \coprod A \mid L$.</td></tr>
+<tr><td><strong>Positivity</strong></td><td>Every subgroup has a non-zero probability of receiving each treatment level: $P(A = a \mid L = l) &gt; 0$.</td></tr>
+</tbody></table>
+</div>
+<h3 id="graphical-concepts"><a class="header" href="#graphical-concepts">Graphical concepts</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody>
+<tr><td><strong>DAG (directed acyclic graph)</strong></td><td>A graph with directed edges (arrows) and no cycles. Used to encode causal assumptions about which variables influence which.</td></tr>
+<tr><td><strong>Confounder</strong></td><td>A common cause of both the exposure and the outcome. Creates a non-causal (backdoor) path that must be blocked for valid causal inference.</td></tr>
+<tr><td><strong>Collider</strong></td><td>A variable caused by two or more other variables on a path. Conditioning on a collider opens a spurious association.</td></tr>
+<tr><td><strong>Mediator</strong></td><td>A variable on the causal pathway between exposure and outcome ($A \to M \to Y$). Conditioning on a mediator blocks the indirect effect.</td></tr>
+<tr><td><strong>Backdoor path</strong></td><td>A non-causal path from exposure to outcome that passes through a common cause. Blocking all backdoor paths satisfies the backdoor criterion.</td></tr>
+<tr><td><strong>d-separation</strong></td><td>A graphical criterion for determining conditional independence. Two variables are d-separated given a set $Z$ if every path between them is blocked by $Z$.</td></tr>
+</tbody></table>
+</div>
+<h3 id="estimation-and-sensitivity"><a class="header" href="#estimation-and-sensitivity">Estimation and sensitivity</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody>
+<tr><td><strong>Propensity score</strong></td><td>The probability of receiving treatment given covariates: $e(L) = P(A = 1 \mid L)$. Used for weighting, matching, or stratification.</td></tr>
+<tr><td><strong>E-value</strong></td><td>The minimum strength of association an unmeasured confounder would need with both treatment and outcome (on the risk ratio scale) to explain away an observed effect.</td></tr>
+<tr><td><strong>RATE (Rank Average Treatment Effect)</strong></td><td>A metric for assessing treatment effect heterogeneity. Measures how well a prioritisation rule identifies individuals with larger effects.</td></tr>
+<tr><td><strong>QINI curve</strong></td><td>A cumulative gain curve showing the benefit of treating individuals in order of predicted treatment effect. Area under the QINI curve summarises heterogeneity.</td></tr>
+<tr><td><strong>Policy tree</strong></td><td>A decision tree that assigns treatment based on covariates to maximise a welfare criterion. Used for identifying high-response subgroups.</td></tr>
+<tr><td><strong>Doubly robust estimation</strong></td><td>An estimation strategy that yields consistent causal estimates if either the outcome model or the propensity score model (but not necessarily both) is correctly specified.</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="dag-hand-outs"><a class="header" href="#dag-hand-outs">DAG hand-outs</a></h2>
+<p>The following hand-outs cover DAG conventions, common structures, and
+specific forms of bias. All PDFs are available for download from the
+<a href="https://www.dropbox.com/scl/fo/671c41e0sudhd5r9azys5/AMenMB2ZvsdFRmQk6wPVobI?rlkey=zo93bg2l176xkpk868ntbuduf&amp;dl=0">hand-outs folder
+(Dropbox)</a>.</p>
+<h3 id="foundations"><a class="header" href="#foundations">Foundations</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Hand-out</th><th>Topic</th></tr></thead><tbody>
+<tr><td>1a. Local conventions</td><td>Conventions for causal diagram construction and interpretation</td></tr>
+<tr><td>1b. Directed graph terminology</td><td>Core terminology for directed acyclic graphs</td></tr>
+<tr><td>S1. Graphical key</td><td>Visual reference guide for DAG symbols and notation</td></tr>
+<tr><td>S2. Glossary</td><td>Comprehensive glossary of causal inference terminology</td></tr>
+</tbody></table>
+</div>
+<h3 id="common-applications"><a class="header" href="#common-applications">Common applications</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Hand-out</th><th>Topic</th></tr></thead><tbody>
+<tr><td>2. Common causal questions</td><td>Frequently encountered causal questions and how to set them up</td></tr>
+<tr><td>6. Effect modification</td><td>When and how treatment effects vary across subgroups</td></tr>
+<tr><td>9. External validity</td><td>Generalising causal findings across populations and contexts</td></tr>
+</tbody></table>
+</div>
+<h3 id="time-series-and-confounding"><a class="header" href="#time-series-and-confounding">Time series and confounding</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Hand-out</th><th>Topic</th></tr></thead><tbody>
+<tr><td>3. Time series approaches</td><td>How longitudinal data help address confounding bias</td></tr>
+<tr><td>4. Three-wave panel methods</td><td>Using three-wave panel data for causal inference</td></tr>
+<tr><td>5. Time series limitations</td><td>When time series approaches may not resolve confounding</td></tr>
+<tr><td>S3. Time-resolved confounding</td><td>Advanced approaches to time-varying confounding</td></tr>
+</tbody></table>
+</div>
+<h3 id="advanced-topics"><a class="header" href="#advanced-topics">Advanced topics</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Hand-out</th><th>Topic</th></tr></thead><tbody>
+<tr><td>7. Selection bias</td><td>Selection bias in longitudinal studies</td></tr>
+<tr><td>8. Measurement error</td><td>Structural approaches to representing and addressing measurement error</td></tr>
+<tr><td>10. Experimental design</td><td>How experiments address confounding and selection bias</td></tr>
+</tbody></table>
+</div>
+<h3 id="supplementary-materials"><a class="header" href="#supplementary-materials">Supplementary materials</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Hand-out</th><th>Topic</th></tr></thead><tbody>
+<tr><td>S5. Timing examples</td><td>Practical examples of confounding and timing issues</td></tr>
+<tr><td>S6. Detailed panel examples</td><td>What can go wrong in a three-wave panel</td></tr>
+<tr><td>S7. Cross-sectional approaches</td><td>When to report multiple DAGs in cross-sectional studies</td></tr>
+<tr><td>S8. Bias correction</td><td>Quantitative approaches to bias correction</td></tr>
+<tr><td>S9. Mediator bias</td><td>Confounding bias in mediation analysis</td></tr>
+<tr><td>S10. Misclassification bias</td><td>Examples of misclassification bias and bias towards the null</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p><strong>Accessing hand-outs</strong></p>
+<p>All PDFs are in the <a href="https://www.dropbox.com/scl/fo/671c41e0sudhd5r9azys5/AMenMB2ZvsdFRmQk6wPVobI?rlkey=zo93bg2l176xkpk868ntbuduf&amp;dl=0">hand-outs folder on
+Dropbox</a>.
+File names match the numbering in the tables above (e.g.,
+<code>1a-terminologylocalconventions.pdf</code>, <code>S2-glossary.pdf</code>).</p>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="simulation-guide.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ggdag-tutorial.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="simulation-guide.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ggdag-tutorial.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,1069 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Lab 1: Git and GitHub - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lab-1-git-and-github"><a class="header" href="#lab-1-git-and-github">Lab 1: Git and GitHub</a></h1>
+<p>This session introduces version control with Git and GitHub. Setting up
+these tools first means you can track your work from day one.</p>
+<blockquote>
+<p><strong>Week 1 software requirement</strong></p>
+<p>Bring your laptop in week 1 and confirm Git/GitHub access. Install
+both R and RStudio in week 1, and use RStudio as the standard editor
+for this course. Instructions are in <a href="lab-02.html">Lab 2: Install R and Set Up Your
+IDE</a>.</p>
+</blockquote>
+<hr />
+<h2 id="what-is-version-control"><a class="header" href="#what-is-version-control">What is version control?</a></h2>
+<p>Version control tracks every change you make to your files. Instead of
+saving e.g. <code>report_v2_final_FINAL.docx</code>, you save a single file and Git
+remembers its entire history. You can go back to any previous version,
+see exactly what changed, and collaborate without overwriting each
+other's work.</p>
+<p><strong>GitHub</strong> is a website that hosts your Git repositories online. It
+serves as a backup and lets you share your work. There are other
+services like GitLab and Bitbucket, but GitHub is the most popular.</p>
+<h2 id="why-bother"><a class="header" href="#why-bother">Why bother?</a></h2>
+<ul>
+<li>Your lab diary and final report will be easier to manage.</li>
+<li>You will never lose work (every version is saved).</li>
+<li>Employers value version control skills.</li>
+<li>It is the standard tool for reproducible research -- much more
+powerful than OSF presentations because every change is tracked and
+time-stamped.</li>
+</ul>
+<h2 id="step-1-create-a-github-account"><a class="header" href="#step-1-create-a-github-account">Step 1: Create a GitHub account</a></h2>
+<ol>
+<li>Go to <a href="https://github.com">https://github.com</a>.</li>
+<li>Click <strong>Sign up</strong> and follow the prompts. (Get the student version
+-- see below).</li>
+<li>Choose a username you are happy to use professionally (e.g.,
+<code>jsmith-nz</code>, not <code>xXx_gamer_xXx</code>).</li>
+<li>Verify your email address.</li>
+</ol>
+<blockquote>
+<p><strong>Student benefits</strong></p>
+<p>Apply for the <a href="https://education.github.com/pack">GitHub Student Developer
+Pack</a> with your university email.
+It includes free access to GitHub Copilot, cloud credits, and other
+developer tools.</p>
+</blockquote>
+<h2 id="step-2-install-git"><a class="header" href="#step-2-install-git">Step 2: Install Git</a></h2>
+<h3 id="macos"><a class="header" href="#macos">macOS</a></h3>
+<p>Open <strong>Terminal</strong> (search for it in Spotlight) and type:</p>
+<pre><code class="language-bash">git --version
+</code></pre>
+<p>If Git is not installed, macOS will prompt you to install the Xcode
+Command Line Tools. Follow the prompts.</p>
+<h3 id="windows"><a class="header" href="#windows">Windows</a></h3>
+<p>Download Git from <a href="https://git-scm.com/download/win">https://git-scm.com/download/win</a>. Run the installer
+and accept the defaults.</p>
+<h3 id="verify-installation"><a class="header" href="#verify-installation">Verify installation</a></h3>
+<p>Open a terminal (Terminal on macOS, Git Bash on Windows) and type:</p>
+<pre><code class="language-bash">git --version
+</code></pre>
+<p>You should see something like <code>git version 2.44.0</code>.</p>
+<h2 id="step-3-configure-git"><a class="header" href="#step-3-configure-git">Step 3: Configure Git</a></h2>
+<p>Tell Git your name and email (use the same email as your GitHub
+account):</p>
+<pre><code class="language-bash">git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+</code></pre>
+<h2 id="step-4-set-up-ssh-authentication"><a class="header" href="#step-4-set-up-ssh-authentication">Step 4: Set up SSH authentication</a></h2>
+<p>Before you can push code, GitHub needs to verify who you are. SSH keys
+let your computer prove its identity without a password each time. You
+do this once and it works from then on.</p>
+<h3 id="check-whether-you-already-have-a-key"><a class="header" href="#check-whether-you-already-have-a-key">Check whether you already have a key</a></h3>
+<p>Many students already have an SSH key from a previous course,
+internship, or Git setup. Before creating a new one, check what is
+already in your <code>~/.ssh/</code> folder:</p>
+<pre><code class="language-bash">ls -la ~/.ssh
+</code></pre>
+<p>If you see files such as <code>id_ed25519</code> and <code>id_ed25519.pub</code>, you may
+already have a usable key. If you are unsure, it is fine to create a
+fresh key for this course. GitHub allows more than one SSH key on an
+account.</p>
+<h3 id="generate-an-ssh-key"><a class="header" href="#generate-an-ssh-key">Generate an SSH key</a></h3>
+<p>Open a terminal and run:</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C "your.email@example.com"
+</code></pre>
+<p>Use the email address attached to your GitHub account.</p>
+<p>You will see prompts like these:</p>
+<pre><code class="language-text">Generating public/private ed25519 key pair.
+Enter file in which to save the key (/Users/yourname/.ssh/id_ed25519):
+</code></pre>
+<p>Press <strong>Enter</strong> to accept the default location unless you already have a
+key there and want to keep it. If you already have an <code>id_ed25519</code> key
+and want a separate course key, you can type a different file name such
+as <code>~/.ssh/id_ed25519_psyc434</code>.</p>
+<p>Next you will be asked about a passphrase:</p>
+<pre><code class="language-text">Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+</code></pre>
+<p>You may press <strong>Enter</strong> twice to skip it. A passphrase adds security,
+but it also means you may need to unlock the key when you restart your
+computer.</p>
+<p>This creates two files in <code>~/.ssh/</code>:</p>
+<div class="table-wrapper"><table><thead><tr><th>File</th><th>What it is</th><th>Share it?</th></tr></thead><tbody>
+<tr><td><code>id_ed25519</code></td><td>Your <strong>private</strong> key</td><td><strong>Never.</strong> Do not copy, email, upload, or commit this file. Anyone who has it can impersonate you.</td></tr>
+<tr><td><code>id_ed25519.pub</code></td><td>Your <strong>public</strong> key</td><td>Yes. This is what you give to GitHub.</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p><strong>Protect your private key</strong></p>
+<p>The file <code>~/.ssh/id_ed25519</code> (no <code>.pub</code>) is your private key. Treat it
+like a password. Never paste it into a chat, never commit it to a
+repository, never upload it anywhere. If you suspect it has been
+exposed, delete the key from your GitHub account immediately at
+<a href="https://github.com/settings/keys">github.com/settings/keys</a> and
+generate a new one.</p>
+</blockquote>
+<h3 id="confirm-that-the-files-were-created"><a class="header" href="#confirm-that-the-files-were-created">Confirm that the files were created</a></h3>
+<p>Run:</p>
+<pre><code class="language-bash">ls -l ~/.ssh
+</code></pre>
+<p>You should see both the private key and the public key. If you saved the
+key under a custom name, look for that name instead of <code>id_ed25519</code>.</p>
+<h3 id="add-the-key-to-the-ssh-agent"><a class="header" href="#add-the-key-to-the-ssh-agent">Add the key to the SSH agent</a></h3>
+<p>The SSH agent remembers your key so Git can use it automatically.</p>
+<p>Start the agent:</p>
+<pre><code class="language-bash">eval "$(ssh-agent -s)"
+</code></pre>
+<p>Then add your key:</p>
+<pre><code class="language-bash">ssh-add ~/.ssh/id_ed25519
+</code></pre>
+<p>If you used a custom file name, replace <code>id_ed25519</code> with that name.</p>
+<p>On some macOS systems, the following command is preferred because it
+stores the passphrase in the keychain:</p>
+<pre><code class="language-bash">ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+</code></pre>
+<p>If that command gives an error, use the plain
+<code>ssh-add ~/.ssh/id_ed25519</code> command instead.</p>
+<h3 id="add-the-public-key-to-your-github-account"><a class="header" href="#add-the-public-key-to-your-github-account">Add the public key to your GitHub account</a></h3>
+<p>Copy the <strong>public</strong> key (the file ending in <code>.pub</code>) to your clipboard.</p>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-bash">pbcopy &lt; ~/.ssh/id_ed25519.pub
+</code></pre>
+<p><strong>Windows (Git Bash):</strong></p>
+<pre><code class="language-bash">cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p>Select and copy the output manually.</p>
+<p>If <code>pbcopy</code> does not work on your system, you can also print the key
+manually:</p>
+<pre><code class="language-bash">cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p>Copy the entire line beginning with <code>ssh-ed25519</code>.</p>
+<p>Then add it to GitHub:</p>
+<ol>
+<li>Go to <a href="https://github.com/settings/keys">github.com/settings/keys</a>.</li>
+<li>Click <strong>New SSH key</strong>.</li>
+<li>Give it a title (e.g., "My laptop").</li>
+<li>Paste the key into the <strong>Key</strong> field.</li>
+<li>Click <strong>Add SSH key</strong>.</li>
+</ol>
+<h3 id="test-the-connection"><a class="header" href="#test-the-connection">Test the connection</a></h3>
+<pre><code class="language-bash">ssh -T git@github.com
+</code></pre>
+<p>The first time, you will usually see a message like:</p>
+<pre><code class="language-text">The authenticity of host 'github.com (IP ADDRESS)' can't be established.
+ED25519 key fingerprint is ...
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+</code></pre>
+<p>Type <code>yes</code> and press <strong>Enter</strong>. You should then see:</p>
+<pre><code>Hi your-username! You've successfully authenticated, but GitHub does not provide shell access.
+</code></pre>
+<p>That message means it worked. All future <code>git push</code> and <code>git pull</code>
+commands will authenticate automatically.</p>
+<h3 id="common-problems"><a class="header" href="#common-problems">Common problems</a></h3>
+<p><strong>If you get <code>Permission denied (publickey)</code></strong></p>
+<p>This usually means one of four things:</p>
+<ol>
+<li>You copied the wrong key to GitHub.</li>
+<li>You copied the private key instead of the public key.</li>
+<li>Your key was not added to the SSH agent.</li>
+<li>You are using a different GitHub account from the one attached to
+the key.</li>
+</ol>
+<p>Work through these checks:</p>
+<pre><code class="language-bash">ls -l ~/.ssh
+ssh-add -l
+cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p>Then compare the printed public key with the one shown at
+<a href="https://github.com/settings/keys">github.com/settings/keys</a>.</p>
+<p><strong>If <code>~/.ssh/id_ed25519.pub</code> does not exist</strong></p>
+<p>The key pair was not created where you think it was. Run <code>ls -la ~/.ssh</code>
+and look for the file name you chose during <code>ssh-keygen</code>.</p>
+<p><strong>If you see <code>Agent admitted failure to sign</code></strong></p>
+<p>Run:</p>
+<pre><code class="language-bash">ssh-add ~/.ssh/id_ed25519
+</code></pre>
+<p>and then test again with <code>ssh -T git@github.com</code>.</p>
+<blockquote>
+<p><strong>If <code>ssh -T</code> hangs or fails</strong></p>
+<p>Some university networks block SSH. If you are on campus Wi-Fi and the
+command hangs, try from a different network (e.g., your phone
+hotspot). If it still fails, contact the course coordinator.</p>
+</blockquote>
+<h2 id="step-5-create-a-private-repository-on-github"><a class="header" href="#step-5-create-a-private-repository-on-github">Step 5: Create a private repository on GitHub</a></h2>
+<ol>
+<li>Go to <a href="https://github.com/new">github.com/new</a>.</li>
+<li>Name your repository <code>psy434-labs</code> (or similar).</li>
+<li>Set visibility to <strong>Private</strong>.</li>
+<li>Check <strong>Add a README file</strong>.</li>
+<li>Click <strong>Create repository</strong>.</li>
+</ol>
+<blockquote>
+<p><strong>Privacy and submission</strong></p>
+<p>Your GitHub repository must remain <strong>private</strong> for the duration of the
+course. Do not change its visibility to public. Lab diaries are
+submitted as <code>.md</code> files via <strong>NUKU</strong>, not through GitHub. GitHub is
+your version-control tool; NUKU is where marking happens. Submission
+instructions for each lab diary appear on the NUKU assignment page.</p>
+</blockquote>
+<h2 id="step-6-clone-the-repository-to-your-computer"><a class="header" href="#step-6-clone-the-repository-to-your-computer">Step 6: Clone the repository to your computer</a></h2>
+<p>Cloning downloads a copy of the repository to your machine and links it
+to GitHub.</p>
+<ol>
+<li>On your repository page, click the green <strong>Code</strong> button.</li>
+<li>Select <strong>SSH</strong> and copy the URL (it starts with <code>git@github.com:</code>).</li>
+<li>Open a terminal and navigate to where you want to store your work:</li>
+</ol>
+<pre><code class="language-bash">mkdir -p ~/Documents/psy434
+cd ~/Documents/psy434
+</code></pre>
+<ol>
+<li>Clone the repository:</li>
+</ol>
+<pre><code class="language-bash">git clone git@github.com:YOUR-USERNAME/psy434-labs.git
+</code></pre>
+<p>Replace <code>YOUR-USERNAME</code> with your GitHub username.</p>
+<ol>
+<li>Move into the repository folder:</li>
+</ol>
+<pre><code class="language-bash">cd psy434-labs
+</code></pre>
+<p>You now have a local copy linked to GitHub.</p>
+<p>Sanity check that you are in the right place:</p>
+<pre><code class="language-bash">pwd
+ls
+</code></pre>
+<p>You should see your location end with <code>psy434-labs</code>, and you should see
+the files in your repository (it may be empty at first).</p>
+<blockquote>
+<p><strong>If you are new to Terminal</strong></p>
+<p>These commands help you check where you are and what files you have:</p>
+<pre><code class="language-bash">pwd        # print the current folder (your location)
+ls         # list files in the current folder
+cd ..      # go up one folder
+cd ~       # go to your home folder
+</code></pre>
+<p>If you ever see an error like "No such file or directory", run <code>pwd</code>
+and <code>ls</code> to check your location and spelling.</p>
+</blockquote>
+<blockquote>
+<p><strong>Checkpoint</strong></p>
+<p>If you have cloned your repository successfully, you are on track.
+Everything below can be finished before next week's lab if you run out
+of time.</p>
+</blockquote>
+<h2 id="step-7-the-basic-git-workflow"><a class="header" href="#step-7-the-basic-git-workflow">Step 7: The basic Git workflow</a></h2>
+<p>The everyday workflow has three steps: <strong>stage</strong>, <strong>commit</strong>, <strong>push</strong>.</p>
+<blockquote>
+<p><strong>Recommended editor</strong></p>
+<p>RStudio is the recommended editor for creating and editing <code>.md</code>,
+<code>.R</code>, and <code>.qmd</code> files. It reduces file-extension errors (for example,
+accidentally saving <code>README.md.txt</code>) and all lab instructions assume
+RStudio. Install instructions are in <a href="lab-02.html">Lab 2</a>. You may use
+another editor, but you will need to adapt instructions yourself.</p>
+</blockquote>
+<h3 id="1-create-your-first-file"><a class="header" href="#1-create-your-first-file">1. Create your first file</a></h3>
+<p>Your repository already has a <code>README.md</code> from Step 5. Open it and
+replace its contents with:</p>
+<pre><code class="language-markdown"># PSYCH 434 lab diary
+
+This is my lab diary for PSYCH 434 (2026).
+</code></pre>
+<p>Save the file in the root of your repository folder (<code>psy434-labs/</code>).
+Use RStudio if available (<code>File &gt; New File &gt; Text File</code>), then save as
+<code>README.md</code>.</p>
+<blockquote>
+<p><strong>Windows file extensions</strong></p>
+<p>If you create the file in File Explorer, make sure it is named
+<code>README.md</code> (not <code>README.md.txt</code>). If you cannot see extensions, turn
+on "File name extensions" in File Explorer.</p>
+</blockquote>
+<blockquote>
+<p><strong>Creating a file from the command line</strong></p>
+<p>If you are already in your repository folder, you can create an empty
+file with:</p>
+<pre><code class="language-bash">touch README.md
+</code></pre>
+<p>Then open it in a text editor and paste in the text above. If you are
+not sure you are in the right place, run <code>pwd</code> and check that the
+folder name ends with <code>psy434-labs</code>.</p>
+</blockquote>
+<h3 id="2-check-what-changed"><a class="header" href="#2-check-what-changed">2. Check what changed</a></h3>
+<p>Before staging, check what Git sees:</p>
+<pre><code class="language-bash">git status
+</code></pre>
+<p>You should see <code>README.md</code> in red under "Untracked files". This command
+is your best friend: run it whenever you are unsure what state your
+repository is in.</p>
+<p>A typical first output looks something like this:</p>
+<pre><code class="language-text">On branch main
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+        README.md
+
+nothing added to commit but untracked files present
+</code></pre>
+<p>Read this output slowly:</p>
+<ol>
+<li><code>On branch main</code> tells you which branch you are working on.</li>
+<li><code>Untracked files</code> means Git sees the file, but is not yet tracking
+it.</li>
+<li>The suggested <code>git add</code> command tells you the next step.</li>
+</ol>
+<blockquote>
+<p><strong>If you see "not a git repository"</strong></p>
+<p>You are not in your repository folder. Run <code>pwd</code> and <code>ls</code>, then
+<code>cd psy434-labs</code> and try <code>git status</code> again.</p>
+</blockquote>
+<h3 id="3-stage-the-change"><a class="header" href="#3-stage-the-change">3. Stage the change</a></h3>
+<p>Staging tells Git which changes you want to include in your next
+snapshot:</p>
+<pre><code class="language-bash">git add README.md
+</code></pre>
+<p>Run <code>git status</code> again immediately afterward:</p>
+<pre><code class="language-bash">git status
+</code></pre>
+<p>Now <code>README.md</code> should appear in green under a heading such as
+<code>Changes to be committed</code>. That means the file is staged and ready for
+the next commit.</p>
+<p>You can inspect exactly what is staged with:</p>
+<pre><code class="language-bash">git diff --staged
+</code></pre>
+<p>This command shows the line-by-line changes that will go into the
+commit. It is a good habit to check this before every commit.</p>
+<blockquote>
+<p><strong>Safety: always name the files you are staging</strong></p>
+<p><code>git add README.md</code> stages one file. You know exactly what will be
+committed. Commands like <code>git add .</code> or <code>git add -A</code> stage
+<em>everything</em> Git can see in the current directory and below. If you
+run one of these from the wrong folder, you can accidentally stage
+thousands of files, including private data, SSH keys, or your entire
+home directory. One student ran <code>git add ..</code> (note the two dots,
+meaning the parent folder) and began uploading gigabytes of data.</p>
+<p>Rules:</p>
+<ol>
+<li><strong>Always run <code>pwd</code> first.</strong> Confirm you are inside your repository
+folder.</li>
+<li><strong>Always run <code>git status</code> before committing.</strong> Check that only the
+files you expect appear in green.</li>
+<li><strong>Prefer naming files explicitly</strong> (e.g.,
+<code>git add README.md diaries/lab-01.md</code>). Use <code>git add .</code> only when
+you have just checked <code>git status</code> and every listed file belongs
+in the commit.</li>
+<li><strong>If you see hundreds of files listed in <code>git status</code></strong>, stop. You
+are probably in the wrong directory. Do not commit. Run <code>pwd</code>,
+then <code>cd</code> to the right folder.</li>
+</ol>
+</blockquote>
+<h3 id="4-commit-the-change"><a class="header" href="#4-commit-the-change">4. Commit the change</a></h3>
+<p>A commit is a snapshot with a short message describing what you did:</p>
+<pre><code class="language-bash">git commit -m "add readme with course details"
+</code></pre>
+<p>Think of the commit message as an instruction to your future self. Good
+commit messages are short and specific.</p>
+<p>Good examples:</p>
+<pre><code class="language-bash">git commit -m "add readme with course details"
+git commit -m "start lab 01 diary"
+git commit -m "fix typo in README"
+</code></pre>
+<p>Poor examples:</p>
+<pre><code class="language-bash">git commit -m "stuff"
+git commit -m "update"
+git commit -m "final final really final"
+</code></pre>
+<p>Sanity check that Git recorded your commit:</p>
+<pre><code class="language-bash">git log -1 --oneline
+</code></pre>
+<p>You should see your commit message listed.</p>
+<blockquote>
+<p><strong>Common mistake</strong></p>
+<p>There must be a space after <code>commit</code> and between <code>-m</code> and the message:</p>
+<pre><code class="language-bash">git commit -m "update readme"   # correct
+git commit-m "update readme"    # wrong: git does not recognise commit-m
+git commit -m"update readme"    # wrong: missing space before the message
+</code></pre>
+</blockquote>
+<blockquote>
+<p><strong>If Git says "nothing to commit"</strong></p>
+<p>Either you forgot to save the file in your editor, or you forgot to
+stage it. Run:</p>
+<pre><code class="language-bash">git status
+</code></pre>
+<p>If the file appears under <code>Changes not staged for commit</code>, run
+<code>git add README.md</code> again. If Git shows nothing changed, save the file
+and try again.</p>
+</blockquote>
+<h3 id="5-push-to-github"><a class="header" href="#5-push-to-github">5. Push to GitHub</a></h3>
+<p>Push sends your commits to GitHub so they are backed up online:</p>
+<pre><code class="language-bash">git push
+</code></pre>
+<p>If you set up authentication in Step 4, this should work without a
+password prompt.</p>
+<p>If you see an error about an upstream branch, run:</p>
+<pre><code class="language-bash">git push -u origin HEAD
+</code></pre>
+<p>That command tells Git which remote branch your local branch should
+track. You usually only need to do it once.</p>
+<p>If the push succeeds, Git will print a summary showing which branch was
+updated on GitHub.</p>
+<blockquote>
+<p><strong>If <code>git push</code> is rejected</strong></p>
+<p>Sometimes GitHub has changes that your computer does not yet have, for
+example if you edited the README on the GitHub website. In that case,
+run:</p>
+<pre><code class="language-bash">git pull --rebase
+git push
+</code></pre>
+<p>If Git reports a conflict, stop and ask for help rather than guessing.</p>
+</blockquote>
+<h2 id="step-8-check-your-work"><a class="header" href="#step-8-check-your-work">Step 8: Check your work</a></h2>
+<p>Go to your repository page on GitHub. You should see the updated README
+file with your changes.</p>
+<p>You should also see:</p>
+<ol>
+<li>The latest commit message near the top of the file list.</li>
+<li>The commit count link, which you can click to view history.</li>
+<li>Your updated README rendered as formatted text on the repository
+front page.</li>
+</ol>
+<p>If the page has not changed, refresh the browser and check that your
+<code>git push</code> command succeeded.</p>
+<h2 id="quick-reference"><a class="header" href="#quick-reference">Quick reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody>
+<tr><td><code>git status</code></td><td>Show which files have changed</td></tr>
+<tr><td><code>git add &lt;file&gt;</code></td><td>Stage a file for the next commit</td></tr>
+<tr><td><code>git add -A</code></td><td>Stage all changes</td></tr>
+<tr><td><code>git commit -m "message"</code></td><td>Save a snapshot with a message</td></tr>
+<tr><td><code>git push</code></td><td>Upload commits to GitHub</td></tr>
+<tr><td><code>git pull</code></td><td>Download changes from GitHub</td></tr>
+<tr><td><code>git log --oneline</code></td><td>Show commit history</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p><strong>Workflow summary</strong></p>
+<p>Edit files → <code>git add</code> → <code>git commit -m "message"</code> → <code>git push</code>.
+Repeat.</p>
+</blockquote>
+<blockquote>
+<p><strong>Emergency: stuck in a rebase</strong></p>
+<p>If you accidentally start a rebase and want to get back to where you
+were:</p>
+<pre><code class="language-bash">git rebase --abort
+</code></pre>
+<p>If you are resolving a rebase conflict, the usual flow is:</p>
+<pre><code class="language-bash">git add &lt;file&gt;
+git rebase --continue
+</code></pre>
+<p>If you are unsure, run <code>git status</code> and ask for help before you try
+random commands.</p>
+</blockquote>
+<h2 id="what-never-belongs-in-a-repository"><a class="header" href="#what-never-belongs-in-a-repository">What never belongs in a repository</a></h2>
+<p>Git remembers everything you commit, even after you delete the file. If
+you push a secret to GitHub, assume it is compromised. Removing it from
+later commits does not remove it from the history.</p>
+<p><strong>Never commit any of the following:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Category</th><th>Examples</th></tr></thead><tbody>
+<tr><td>SSH or API keys</td><td><code>~/.ssh/id_ed25519</code>, <code>.env</code> files, API tokens</td></tr>
+<tr><td>Passwords and credentials</td><td>database connection strings, login details</td></tr>
+<tr><td>Personal data</td><td>NZAVS datasets, participant records, anything with names or ID numbers</td></tr>
+<tr><td>Large binary files</td><td><code>.zip</code>, <code>.rds</code>, <code>.csv</code>, <code>.mp4</code> (your <code>.gitignore</code> already excludes these)</td></tr>
+</tbody></table>
+</div>
+<p>Your <code>.gitignore</code> blocks most data and output files automatically, but
+it cannot protect you if you stage files from outside your repository or
+override it with a force flag.</p>
+<blockquote>
+<p><strong>If you accidentally push something private</strong></p>
+<ol>
+<li>Do not panic, but act quickly.</li>
+<li><strong>Revoke the credential.</strong> If it is an SSH key, delete it from
+<a href="https://github.com/settings/keys">github.com/settings/keys</a> and
+generate a new one (repeat Step 4). If it is an API token or
+password, revoke it on the service that issued it. Once revoked,
+the exposed copy is useless.</li>
+<li><strong>Delete and recreate the repository.</strong> Removing the file from a
+later commit does not remove it from the history. The simplest fix
+is to delete the repository on GitHub, create a new one, and push
+your current local folder to it. Your local files are unaffected.</li>
+<li><strong>If personal data was exposed</strong> (e.g., participant records with
+names or ID numbers), this is a privacy breach. Report it to the
+course coordinator immediately so it can be escalated to the
+university.</li>
+</ol>
+</blockquote>
+<h2 id="terminal-basics"><a class="header" href="#terminal-basics">Terminal basics</a></h2>
+<p>You have already used a few terminal commands (<code>cd</code>, <code>git clone</code>). The
+terminal is a text interface for your computer. Every command you type
+runs a small program. Here are the commands you will use most often.</p>
+<h3 id="where-am-i"><a class="header" href="#where-am-i">Where am I?</a></h3>
+<pre><code class="language-bash">pwd
+</code></pre>
+<p><code>pwd</code> (print working directory) shows the folder you are currently in.</p>
+<h3 id="list-files"><a class="header" href="#list-files">List files</a></h3>
+<pre><code class="language-bash">ls
+</code></pre>
+<p><code>ls</code> lists the files and folders in the current directory. To see hidden
+files (names starting with <code>.</code>), use:</p>
+<pre><code class="language-bash">ls -a
+</code></pre>
+<p>Git stores its data in a hidden folder called <code>.git</code>. Try <code>ls -a</code> inside
+your repository to see it.</p>
+<h3 id="change-directory"><a class="header" href="#change-directory">Change directory</a></h3>
+<pre><code class="language-bash">cd ~/Documents/psy434/psy434-labs
+</code></pre>
+<p><code>cd</code> moves you into a folder. A few shortcuts:</p>
+<div class="table-wrapper"><table><thead><tr><th>Shortcut</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>~</code></td><td>Your home folder</td></tr>
+<tr><td><code>..</code></td><td>One level up</td></tr>
+<tr><td><code>.</code></td><td>The current folder</td></tr>
+</tbody></table>
+</div>
+<p>So <code>cd ..</code> moves up one level, and <code>cd ~</code> takes you home.</p>
+<h3 id="create-a-folder"><a class="header" href="#create-a-folder">Create a folder</a></h3>
+<pre><code class="language-bash">mkdir diaries
+</code></pre>
+<p><code>mkdir</code> (make directory) creates a new folder.</p>
+<h3 id="create-an-empty-file"><a class="header" href="#create-an-empty-file">Create an empty file</a></h3>
+<pre><code class="language-bash">touch lab-01.md
+</code></pre>
+<p><code>touch</code> creates an empty file if it does not already exist. (Windows
+users: <code>touch</code> works in Git Bash but not in PowerShell or Command
+Prompt. Make sure you are using Git Bash.)</p>
+<h3 id="terminal-quick-reference"><a class="header" href="#terminal-quick-reference">Terminal quick reference</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody>
+<tr><td><code>pwd</code></td><td>Print the current directory</td></tr>
+<tr><td><code>ls</code></td><td>List files</td></tr>
+<tr><td><code>ls -a</code></td><td>List files including hidden ones</td></tr>
+<tr><td><code>cd &lt;folder&gt;</code></td><td>Change directory</td></tr>
+<tr><td><code>cd ..</code></td><td>Go up one level</td></tr>
+<tr><td><code>mkdir &lt;name&gt;</code></td><td>Create a folder</td></tr>
+<tr><td><code>touch &lt;name&gt;</code></td><td>Create an empty file</td></tr>
+</tbody></table>
+</div>
+<h2 id="organise-your-repository"><a class="header" href="#organise-your-repository">Organise your repository</a></h2>
+<p>Set up a simple folder structure for the course. From inside your
+repository folder:</p>
+<pre><code class="language-bash">mkdir diaries data R
+</code></pre>
+<p>Git does not track empty folders. To make sure <code>diaries/</code>, <code>data/</code>, and
+<code>R/</code> appear on GitHub, add a placeholder file to each:</p>
+<pre><code class="language-bash">touch diaries/.gitkeep data/.gitkeep R/.gitkeep
+</code></pre>
+<p>(<code>data/.gitkeep</code> is the only file in <code>data/</code> that should be tracked.)</p>
+<p>Each folder has a purpose:</p>
+<div class="table-wrapper"><table><thead><tr><th>Folder</th><th>Contents</th></tr></thead><tbody>
+<tr><td><code>diaries/</code></td><td>Weekly lab diary entries (<code>.md</code> files)</td></tr>
+<tr><td><code>data/</code></td><td>Datasets you generate or download (ignored by Git because of <code>.gitignore</code>, but useful for keeping your project organised locally)</td></tr>
+<tr><td><code>R/</code></td><td>R scripts and Quarto documents (<code>.R</code>, <code>.qmd</code>)</td></tr>
+</tbody></table>
+</div>
+<p>A tidy repository separates source files (code you write) from generated
+output (plots, PDFs, HTML). Source files go into Git; output does not.
+If your code is correct, anyone can regenerate the output by running it.
+This principle, that results follow from code, is the basis of
+reproducible research.</p>
+<h3 id="naming-conventions"><a class="header" href="#naming-conventions">Naming conventions</a></h3>
+<p>Good file names are lowercase, use hyphens instead of spaces, and sort
+naturally:</p>
+<div class="table-wrapper"><table><thead><tr><th>Good</th><th>Bad</th><th>Why</th></tr></thead><tbody>
+<tr><td><code>lab-01.md</code></td><td><code>Lab 1.md</code></td><td>spaces break terminal commands</td></tr>
+<tr><td><code>lab-02.md</code></td><td><code>lab2.md</code></td><td>the hyphen and zero-padding (<code>01</code>, <code>02</code>, …) keep files in order</td></tr>
+<tr><td><code>clean-data.R</code></td><td><code>CleanData_FINAL(2).R</code></td><td>one clear name, no version suffixes</td></tr>
+<tr><td><code>fig-ate-by-age.png</code></td><td><code>Figure 3.png</code></td><td>describes content, not position</td></tr>
+</tbody></table>
+</div>
+<p>Three rules of thumb:</p>
+<ol>
+<li><strong>No spaces.</strong> Use hyphens (<code>-</code>) or underscores (<code>_</code>). Spaces
+require quoting in the terminal and cause errors in scripts.</li>
+<li><strong>Zero-pad numbers.</strong> <code>01</code>, <code>02</code>, ... <code>10</code> sort correctly; <code>1</code>, <code>2</code>,
+... <code>10</code> does not (your system puts <code>10</code> before <code>2</code>).</li>
+<li><strong>Name for content, not sequence.</strong> A file called <code>analysis-ate.R</code>
+is still meaningful six months later; <code>script3.R</code> is not.</li>
+</ol>
+<p>Next, create a <code>.gitignore</code> file. This tells Git to ignore files that
+should not be tracked (system files, R temporary files, datasets, large
+binaries, etc.).</p>
+<p>If you are using RStudio:</p>
+<ol>
+<li>Go to <code>File &gt; New File &gt; Text File</code>.</li>
+<li>Paste the contents below.</li>
+<li>Go to <code>File &gt; Save As...</code>.</li>
+<li>Save the file as <code>.gitignore</code> in the root of your repository
+(<code>psy434-labs/</code>).</li>
+<li>In the Files pane, click <code>More &gt; Show Hidden Files</code> so dotfiles are
+visible.</li>
+<li>Open <code>.gitignore</code> from the Files pane whenever you want to edit it.</li>
+</ol>
+<p>Paste the following contents:</p>
+<pre><code class="language-text"># system files
+.DS_Store
+Thumbs.db
+
+# R
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+# data files
+data/**
+!data/.gitkeep
+*.rds
+*.qs
+*.parquet
+*.arrow
+*.csv
+*.xlsx
+*.sav
+*.dta
+
+# large binary and archive files
+*.zip
+*.7z
+*.tar
+*.gz
+*.bz2
+*.xz
+*.dmg
+*.iso
+*.mp4
+*.mov
+*.avi
+*.mp3
+*.wav
+
+# output files
+*.pdf
+*.html
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.gif
+*.tiff
+_files/
+*_cache/
+.quarto/
+</code></pre>
+<p>Save the file in the root of your repository (the same folder as
+<code>README.md</code>). The filename must start with a dot: <code>.gitignore</code>, not
+<code>gitignore</code>.</p>
+<p>Your repository should look like this:</p>
+<pre><code>psy434-labs/
+├── .gitignore
+├── README.md
+├── R/
+│   └── .gitkeep
+├── data/
+│   └── .gitkeep
+└── diaries/
+    └── .gitkeep
+</code></pre>
+<p>Notice that <code>data/</code> exists on your computer but Git ignores its contents
+by default. This is intentional: data files can be large, and anyone
+with your code can regenerate them. Keep data local; keep code in Git.</p>
+<p>Before every commit, check that you are staging only source files
+(<code>.md</code>, <code>.R</code>, <code>.qmd</code>, and small config files):</p>
+<pre><code class="language-bash">git status
+git diff --cached --name-only
+</code></pre>
+<p>If you accidentally stage a data file or large object, unstage it:</p>
+<pre><code class="language-bash">git restore --staged &lt;file&gt;
+</code></pre>
+<p>If you already committed it, remove it from tracking while keeping the
+local copy:</p>
+<pre><code class="language-bash">git rm --cached &lt;file&gt;
+git commit -m "stop tracking data file"
+git push
+</code></pre>
+<p>Lab diary files go in the <code>diaries/</code> folder, named by week number:</p>
+<pre><code>diaries/
+├── lab-01.md
+├── lab-02.md
+├── lab-03.md
+├── ...
+└── lab-10.md
+</code></pre>
+<p>There is no <code>lab-07.md</code> (week 7 is test 1). Create your first diary file
+now:</p>
+<pre><code class="language-bash">touch diaries/lab-01.md
+</code></pre>
+<h2 id="markdown-basics"><a class="header" href="#markdown-basics">Markdown basics</a></h2>
+<p>Markdown is a plain-text format that converts to formatted documents.
+You write in a <code>.md</code> file using simple symbols for headings, bold,
+lists, and so on. GitHub renders markdown automatically, so your diary
+will look formatted when you view it online.</p>
+<h3 id="headings"><a class="header" href="#headings">Headings</a></h3>
+<p>Use <code>#</code> symbols. More <code>#</code> signs mean smaller headings:</p>
+<pre><code class="language-markdown"># Heading 1
+## Heading 2
+### Heading 3
+</code></pre>
+<h3 id="paragraphs"><a class="header" href="#paragraphs">Paragraphs</a></h3>
+<p>Separate paragraphs with a blank line. A single line break without a
+blank line will not start a new paragraph.</p>
+<h3 id="bold-and-italics"><a class="header" href="#bold-and-italics">Bold and italics</a></h3>
+<pre><code class="language-markdown">This is **bold** and this is *italic*.
+</code></pre>
+<h3 id="lists"><a class="header" href="#lists">Lists</a></h3>
+<p>Unordered lists use <code>-</code>:</p>
+<pre><code class="language-markdown">- first item
+- second item
+- third item
+</code></pre>
+<p>Numbered lists use <code>1.</code>, <code>2.</code>, etc.:</p>
+<pre><code class="language-markdown">1. first step
+2. second step
+3. third step
+</code></pre>
+<h3 id="inline-code"><a class="header" href="#inline-code">Inline code</a></h3>
+<p>Wrap code in single backticks:</p>
+<pre><code class="language-markdown">Use the `git push` command to upload your work.
+</code></pre>
+<h3 id="links"><a class="header" href="#links">Links</a></h3>
+<pre><code class="language-markdown">[GitHub](https://github.com)
+</code></pre>
+<blockquote>
+<p><strong>Markdown reference</strong></p>
+<p>GitHub has a concise guide to GitHub-flavoured markdown: <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-syntax/basic-writing-and-formatting-syntax">Basic
+writing and formatting
+syntax</a>.</p>
+</blockquote>
+<h2 id="write-your-first-lab-diary"><a class="header" href="#write-your-first-lab-diary">Write your first lab diary</a></h2>
+<p>Create your week 1 diary entry now. Open <code>diaries/lab-01.md</code> in RStudio
+and write ~150 words covering:</p>
+<ol>
+<li>What this lab covered and what you did.</li>
+<li>A connection to the week's lecture content.</li>
+<li>One thing you found useful, surprising, or challenging.</li>
+</ol>
+<p>Use at least one heading, one bold or italic word, and one list. When
+you are done, stage these files, commit, and push:</p>
+<pre><code class="language-bash">git add .gitignore diaries/lab-01.md diaries/.gitkeep data/.gitkeep R/.gitkeep
+git commit -m "add lab 01 diary and repo structure"
+git push
+</code></pre>
+<p>Check your repository on GitHub to confirm the file appears and the
+markdown renders correctly.</p>
+<h2 id="editors"><a class="header" href="#editors">Editors</a></h2>
+<p>RStudio is the recommended editor for this course. All examples and
+in-class instructions assume RStudio. You are welcome to use any editor
+you prefer (VS Code, Zed, Neovim, etc.), but you will need to translate
+instructions on your own. Avoid rich-text editors (Word, Pages,
+TextEdit) that can silently change file format or extensions.</p>
+<h2 id="alternative-github-desktop"><a class="header" href="#alternative-github-desktop">Alternative: GitHub Desktop</a></h2>
+<p>If you prefer a graphical interface, download <a href="https://desktop.github.com/">GitHub
+Desktop</a>. It provides the same
+stage/commit/push workflow with buttons instead of terminal commands.
+Either approach is fine for this course.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week-12.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="lab-02.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week-12.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="lab-02.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

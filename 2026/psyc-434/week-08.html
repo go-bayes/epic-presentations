@@ -1,0 +1,720 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Week 8: Heterogeneous Treatment Effects and Machine Learning - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="week-8-heterogeneous-treatment-effects-and-machine-learning"><a class="header" href="#week-8-heterogeneous-treatment-effects-and-machine-learning">Week 8: Heterogeneous Treatment Effects and Machine Learning</a></h1>
+<p><strong>Date: 29 Apr 2026</strong></p>
+<blockquote>
+<p><strong>Readings</strong></p>
+<p><strong>Required</strong></p>
+<ul>
+<li><a href="https://grf-labs.github.io/grf/index.html">grf: Generalised Random
+Forests</a></li>
+<li><a href="https://grf-labs.github.io/grf/articles/grf_guide.html">GRF guide
+(tutorial)</a></li>
+<li><a href="https://grf-labs.github.io/grf/articles/rate.html">RATE (tutorial)</a></li>
+<li><a href="https://grf-labs.github.io/grf/articles/maq.html">QINI curves
+(tutorial)</a></li>
+</ul>
+<p><strong>Optional</strong></p>
+<ul>
+<li>VanderWeele et al. (<a href="#ref-vanderweele2020">2020</a>)</li>
+<li>Suzuki et al. (<a href="#ref-suzuki2020">2020</a>)</li>
+<li>Bulbulia (<a href="#ref-bulbulia2024PRACTICAL">2024</a>)</li>
+<li>Hoffman et al. (<a href="#ref-hoffman2023">2023</a>)</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Key concepts</strong></p>
+<ol>
+<li>ATE and CATE answer different causal questions.</li>
+<li>Causal forests estimate heterogeneity, not just average effects.</li>
+<li>Honest splitting and out-of-bag estimation reduce overfitting.</li>
+<li>Doubly-robust scores let us evaluate targeting rules without
+observing every counterfactual.</li>
+<li>RATE and Qini assess whether targeting has practical value.</li>
+</ol>
+</blockquote>
+<hr />
+<p>Week 6 introduced the conditional average treatment effect (CATE): the
+contrast for a subgroup defined by baseline covariates at time zero.
+Estimating CATE with parametric models requires the analyst to guess the
+functional form. This week introduces causal forests, which learn the
+heterogeneity surface from data. The machine-learning step changes the
+estimator, not the identification logic: treatment must still be
+well-defined, subgroup variables must still precede treatment, and
+exchangeability and positivity still do the causal work. What machine
+learning adds is the ability to estimate $\tau(x)$ at high resolution
+without committing in advance to a particular shape for the
+heterogeneity.</p>
+<h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
+<h3 id="motivating-example"><a class="header" href="#motivating-example">Motivating example</a></h3>
+<p>Suppose a university can fund a community-socialising programme for only
+thirty percent of students. If we treat everyone, the budget fails. If
+we choose badly, the impact is small. We need a defensible ranking of
+expected benefit, and we need to know whether the ranking carries enough
+information to be worth the administrative cost of targeting at all.</p>
+<p>The right question is not just "who would benefit most?" but also "is
+the variation in benefit large enough that any targeting rule could
+outperform random allocation?" If the answer to the second question is
+no, the simplest defensible policy is treat-everyone-equally. The week's
+tools are designed to let investigators answer both questions
+explicitly, with held-out evidence rather than asserted intuition.</p>
+<h2 id="from-ate-to-cate"><a class="header" href="#from-ate-to-cate">From ATE to CATE</a></h2>
+<p>Relying on the average treatment effect alone is a bit like handing out
+size-nine shoes to an entire student body: on <em>average</em> they fit, but
+watch the tall students hobble and the small ones trip. Today's question
+is how big the variation in fit is, how to estimate it from data, and
+whether the variation is worth tailoring an exposure to individual
+circumstances.</p>
+<p>The average treatment effect is</p>
+<p>$$ \text{ATE}=\mathbb{E}[Y(1)-Y(0)]. $$</p>
+<p>The conditional average treatment effect is</p>
+<p>$$ \tau(x)=\mathbb{E}[Y(1)-Y(0)\mid X=x]. $$</p>
+<p>Here $X$ must be a baseline profile measured before treatment begins.
+ATE answers "does it work on average?" CATE answers "for whom does it
+work more or less?"</p>
+<p>The individual treatment effect $Y_i(1) - Y_i(0)$ is unidentified,
+because for any single person we observe at most one of the potential
+outcomes. CATE is the most granular contrast we <em>can</em> identify: the
+average of individual effects across people who share covariate profile
+$x$. Two people with identical baseline covariates may differ in their
+realised potential outcomes, so $\tau(x)$ smooths over within-profile
+variation that is, by definition, beyond reach.</p>
+<p>Investigators rarely look at one outcome in isolation. The lab's
+day-to-day workflow estimates the average treatment effect across
+several outcomes at once, then asks which estimates survive sensitivity
+analysis before drilling into heterogeneity for any single outcome.</p>
+<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (sense of purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. Estimates whose E-value bound is below 1.2 are flagged: a confounder of moderate strength could explain those rows away. The lab returns to this view in week 9 as the entry point to the policy question." /></p>
+<p>The CATE machinery for any single outcome below sits inside this larger
+workflow. We pick one outcome at a time only to make the heterogeneity
+story concrete; the lab itself runs the same machinery in parallel on
+every outcome on the menu.</p>
+<p><img src="figures/lab-09/cate-histogram.svg" alt="Histogram of estimated individual treatment effects from a small causal forest fit on the simulated NZAVS panel (outcome: sense of purpose). Each bar counts how many people received an estimate $\hat{\tau}(x)$ in that bin. The orange line marks the average treatment effect; the dashed line marks zero. A wide spread is the empirical signature of heterogeneity, not of individual-level estimates: each bar is a count of people whose covariate profile produced an estimate near that value." /></p>
+<h2 id="causal-estimand-statistical-estimand-estimator"><a class="header" href="#causal-estimand-statistical-estimand-estimator">Causal estimand, statistical estimand, estimator</a></h2>
+<p>The same workflow that organised weeks 5 and 6 still organises this
+week. The full ten-step version lives on the <a href="causal-workflow.html">causal
+workflow</a> reference page; the five-step digest below
+is the version specific to heterogeneous treatment effects.</p>
+<blockquote>
+<p><strong>Workflow for heterogeneous treatment effects</strong></p>
+<ol>
+<li><strong>State the causal estimand.</strong> The target is $\tau(x) =
+\mathbb{E}[Y(1) - Y(0) \mid X = x]$: the conditional average
+treatment effect at baseline profile $X = x$, where $X$ is
+measured at time zero.</li>
+<li><strong>Defend the identifying assumptions.</strong> Conditional
+exchangeability $Y(a) \coprod A \mid X$, consistency, and
+positivity must hold within every covariate profile that indexes
+$\tau(x)$. The machine-learning step does not weaken these
+requirements.</li>
+<li><strong>Construct a statistical estimand that targets the causal one.</strong>
+Under the assumptions in step 2, the causal contrast equals an
+observable contrast: $\tau(x) = \mathbb{E}[Y \mid A = 1, X =
+x] - \mathbb{E}[Y \mid A = 0, X = x]$. This is the quantity we
+estimate from data.</li>
+<li><strong>Estimate it.</strong> A causal forest learns the two conditional
+expectations non-parametrically, with honest splitting and
+out-of-bag prediction (below). The forest returns
+$\hat{\tau}(x)$ for each unit without committing in advance to a
+functional form for the heterogeneity.</li>
+<li><strong>Communicate.</strong> Report the ATE, the distribution of
+$\hat{\tau}(x)$, and targeting metrics (RATE, Qini) on held-out
+data, accompanied by the standard sensitivity analyses (E-values,
+missing-data diagnostics).</li>
+</ol>
+</blockquote>
+<p>The bridge that does the causal work is step 3. Without it, the forest
+is a flexible regression and nothing more. With it, the forest's two
+conditional means inherit causal meaning from the identification
+assumptions, and their difference $\hat{\tau}(x)$ targets $\tau(x)$.
+Machine learning replaces the <em>guessed functional form</em> of an
+interaction model with a <em>learned</em> one; it does not replace the
+identification argument.</p>
+<p><img src="figures/week-08/estimand-pipeline.svg" alt="Three-stage pipeline showing how heterogeneous-treatment-effect analysis bridges what we want to know to what the forest produces. Left: the causal estimand $\tau(x) = \mathbb{E}[Y(1) - Y(0) \mid X = x]$ is the unobservable contrast we care about. Centre: under exchangeability, consistency, and positivity, the causal estimand equals an observable contrast of conditional means $\mathbb{E}[Y \mid A = 1, X = x] - \mathbb{E}[Y \mid A = 0, X = x]$, which is the statistical estimand the forest can target. Right: the causal forest estimates the two conditional means non-parametrically and returns $\hat{\tau}(x)$. Identification is what carries causal meaning across the first arrow; estimation is what carries it across the second." /></p>
+<h2 id="why-linear-interaction-models-are-often-not-enough"><a class="header" href="#why-linear-interaction-models-are-often-not-enough">Why linear interaction models are often not enough</a></h2>
+<p>A small interaction model assumes a simple shape. If the analyst writes
+$\tau(x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2$ and stops there, every
+covariate must enter linearly and the heterogeneity along $x_1$ must
+be the same regardless of $x_2$. Real treatment-response surfaces are
+often non-linear, contain interactions among more than two variables,
+and carry sharp regime changes (the effect of a programme on purpose may
+climb steeply with extraversion up to a saturation point, then flatten).
+A pre-specified interaction model can miss all three features.</p>
+<p>A non-parametric estimator like a causal forest sidesteps the
+functional-form problem by letting the data dictate where to draw splits
+and how deep to go. The cost is interpretability: the forest is no
+longer a small set of coefficients you can read off. The lab handles
+that by extracting policy trees (week 9) on top of the forest, and by
+computing variable-importance summaries that flag which covariates
+matter most.</p>
+<p><img src="figures/week-08/parametric-vs-forest.svg" alt="Single-covariate sketch contrasting a parametric linear interaction model with a causal forest under a non-linear truth. The blue curve is the true treatment-effect function $\tau(x)$: the effect climbs through an intermediate range of extraversion and saturates at high values. The dashed orange line is the best-fitting linear interaction model; because it is committed in advance to a constant slope, it overshoots in the flat region at low extraversion, undershoots through the steep climb, and undershoots again on the plateau. The green step function is a causal-forest approximation; its piecewise-constant shape hugs the truth without committing to a functional form. Shaded orange regions mark where the linear model&#39;s structural error is largest. With more trees and more data, the forest&#39;s steps grow finer and the green curve smooths toward the blue." /></p>
+<h2 id="from-regression-trees-to-causal-forests"><a class="header" href="#from-regression-trees-to-causal-forests">From regression trees to causal forests</a></h2>
+<p>Understanding causal forests requires three steps.</p>
+<p><strong>Regression tree.</strong> A regression tree splits the covariate space with
+yes/no questions ("Age $\le$ 20?", "Baseline purpose $&gt; 0.3$?").
+Each terminal leaf predicts the sample mean of the outcome for units
+that land there. The result is a piecewise-constant surface, not a
+global line. A single tree is interpretable but unstable: small changes
+in the data can shift splits and predictions. The instability is the
+price of letting the data choose the splits.</p>
+<p><img src="figures/week-08/tile-partition.svg" alt="A two-covariate sketch of how a single causal tree partitions the covariate space into rectangular leaves. Filled circles mark treated units; open triangles mark control units. The tree&#39;s three splits (one along $X_1$, two along $X_2$) carve the plane into four leaves, and each leaf returns its own treated-minus-control contrast $\hat{\tau}$. The value of $\hat{\tau}$ jumps at every split boundary and is constant inside each leaf, which is what makes the surface piecewise-constant. A causal forest averages many such tiled surfaces, each cut differently, to produce a smoother estimate of $\tau(x)$." /></p>
+<p><strong>Regression forest.</strong> A random forest grows many trees on bootstrap
+samples and averages their outputs. Averaging cancels much of the noise
+that makes any one tree unreliable (<a href="#ref-breiman2001random">Breiman,
+2001</a>). The price is interpretability: the
+forest's prediction surface is the average of hundreds of jagged tile
+patterns, with no single tree responsible for any particular prediction.</p>
+<p><strong>Causal forest.</strong> Each tree still asks "where should I split the
+covariate space?" — but the question it answers is different. A
+regression tree looks for splits that group units with similar
+<em>outcomes</em>: it finds cutpoints where the average value of $Y$ jumps. A
+causal tree looks for splits that group units with similar <em>treatment
+effects</em>: it finds cutpoints where the <em>gap between treated and control
+units jumps</em>. So the tree's splits land on covariates that change the
+<em>effect</em> of treatment, not covariates that merely predict the outcome.</p>
+<p>Each tree then plays an honest two-step game on its bootstrap sample
+(<a href="#ref-wager2018">Wager &amp; Athey, 2018</a>). The first half of the data
+decides where the splits go. The second, non-overlapping half estimates
+the treated-minus-control gap inside each resulting leaf. The forest
+averages those leaf-level gaps across hundreds of trees to estimate the
+CATE surface:</p>
+<p>$$ \hat{\tau}(x) \approx \tau(x)=\mathbb{E}[Y(1) - Y(0) \mid X = x].
+$$</p>
+<p>The leaf-level contrast for an individual leaf is just the mean outcome
+among treated units in that leaf minus the mean among controls. Because
+individual leaf estimates are noisy and point in many directions, their
+average across hundreds of trees is far less variable. The progression
+matters: students cannot reason about causal forests without first
+understanding what a tree does and why averaging helps.</p>
+<blockquote>
+<p><strong>Key intuition</strong></p>
+<p>A regression tree tiles the covariate space into locally flat regions.
+A forest averages many such tiles to smooth away noise. A causal
+forest adds honest splitting so the averaged contrasts estimate
+treatment effects, not just predictions.</p>
+</blockquote>
+<blockquote>
+<p><strong>Pair exercise: from tree to forest to causal forest</strong></p>
+<ol>
+<li>Explain the three-step progression to your partner in your own
+words.</li>
+<li>Name one strength and one weakness of a single regression tree.</li>
+<li>Explain why averaging many trees (a forest) helps with the
+weakness you identified.</li>
+<li>State the two differences between a regression forest and a causal
+forest: (a) what is the target quantity? (b) what does honest
+splitting add? Explain in one sentence why honest splitting is
+necessary when we estimate treatment contrasts rather than
+predictions.</li>
+</ol>
+</blockquote>
+<h2 id="honest-splitting-and-out-of-bag-prediction"><a class="header" href="#honest-splitting-and-out-of-bag-prediction">Honest splitting and out-of-bag prediction</a></h2>
+<p>Honest splitting separates model selection from estimation. This
+separation matters because we estimate parameters for an entire
+population under two exposures, at most one of which is observed for any
+individual. If the same data chose the splits and estimated the
+contrasts, the forest would overfit: the very leaves that look most
+informative on the training sample would be the ones whose
+treatment-control gap was inflated by chance. The CATE estimates would
+inherit that inflation.</p>
+<p>Honesty splits the data inside each tree. The first half decides where
+to split; the second half estimates the leaf-level treatment-control
+gap. The two halves do not see each other's information. The cost is
+sample size (each subsample is half the size); the benefit is unbiased
+leaf estimates.</p>
+<p><img src="figures/week-08/honest-splitting.svg" alt="Schematic of honest splitting inside a single tree. The bootstrap sample for tree $t$ is partitioned into two disjoint halves. Half A (left) chooses cutpoints for the splits using a criterion that separates treated from control units; the resulting tree skeleton has empty leaves. Half B (right) routes its rows down that fixed skeleton and computes the treated-minus-control contrast $\hat{\tau}$ in each leaf. Because no row is used by both halves, the data that chose a leaf cannot inflate the contrast measured within that leaf. The forest averages many such trees, each grown on a fresh bootstrap sample with a fresh A/B split." /></p>
+<p>The forest adds a second safeguard: out-of-bag (OOB) prediction. Each
+$\hat{\tau}(x_i)$ is averaged only over trees that never used
+observation $i$ in their split phase. OOB prediction is analogous to
+leave-one-out cross-validation but comes for free from the bootstrap
+structure: each tree was grown on a bootstrap sample that left some
+observations out, so those observations are immediately available for
+honest prediction. Together, honesty and OOB deliver reliable point
+estimates and uncertainty intervals even in high-dimensional settings
+with many covariates.</p>
+<h3 id="doubly-robust-scores"><a class="header" href="#doubly-robust-scores">Doubly-robust scores</a></h3>
+<p>For evaluation, the lab works with a derived quantity called the
+<strong>augmented inverse-propensity-weighted (AIPW)</strong> score:</p>
+<p>$$ \Gamma_i(a) =
+\underbrace{\mu_a(X_i)}_{\textcolor{blue}{\text{outcome model
+prediction}}} + \underbrace{\frac{\mathbb{1}\lbrace W_i =
+a\rbrace}{\Pr(W = a \mid X_i)}}_{\textcolor{teal}{\text{IPW
+weight}}}\thinspace\underbrace{\bigl(Y_i -
+\mu_a(X_i)\bigr)}_{\textcolor{red}{\text{residual correction}}}, $$</p>
+<p>where $\mu_a(x)$ is the causal forest's estimate of the outcome
+surface under treatment $a$, and $\Pr(W = a \mid x)$ is the
+propensity for treatment $a$ given covariates. $\Gamma_i(a)$ is an
+unbiased estimate of $Y_i(a)$ when <em>either</em> the outcome model <em>or</em> the
+propensity model is correct, hence "doubly robust". Targeting metrics,
+sensitivity analyses, and policy-tree evaluation in week 9 all read AIPW
+scores rather than raw outcomes, because the scores let us reason about
+counterfactual quantities even though we never observe both $Y_i(0)$
+and $Y_i(1)$ for the same person.</p>
+<h2 id="missing-data-in-grf"><a class="header" href="#missing-data-in-grf">Missing data in <code>grf</code></a></h2>
+<p><code>grf</code> can treat missingness as a splitting attribute (MIA) rather than
+deleting rows by default. A missing value is itself informative: it can
+correlate with treatment, with the outcome, or with both. MIA lets the
+tree send "missing" units down whichever branch produces the cleaner
+treatment-control contrast.</p>
+<p>That can preserve sample size, but it does not remove identification
+concerns. We still need a causal missingness argument, and we still need
+covariates defined before treatment if they are to index $\tau(x)$.
+MIA is a convenience for estimation; it does not absolve the analyst of
+the duty to model why data are missing.</p>
+<h2 id="is-heterogeneity-actionable"><a class="header" href="#is-heterogeneity-actionable">Is heterogeneity actionable?</a></h2>
+<p>After estimating $\hat{\tau}(x)$, we rank units from largest to
+smallest estimated effect and ask: does treating high-ranked units first
+yield meaningfully larger gains than treating at random?</p>
+<p>The Targeting Operator Characteristic (TOC) curve answers this question.
+It plots cumulative gain against treatment coverage:</p>
+<p>$$ G(q)=\frac{1}{n}\sum_{i=1}^{\lfloor
+qn\rfloor}\hat{\tau}_{(i)},\qquad 0\le q\le 1, $$</p>
+<p>where $\hat{\tau}_{(1)} \ge \hat{\tau}_{(2)} \ge \cdots$ are the
+sorted estimated effects. The horizontal axis $q$ is the fraction of
+the population we would treat. The vertical axis $G(q)$ is the
+cumulative gain from treating that top-$q$ slice.</p>
+<p><img src="figures/lab-09/toc-curve.svg" alt="TOC curve from the same small causal forest used above. Targeting rate $q$ on the horizontal axis; gain over random assignment on the vertical axis. A steep early rise indicates concentrated heterogeneity: the highest-ranked individuals carry most of the treatment benefit. A flat curve indicates none. The curve must return to zero at $q = 1$, since at full coverage every targeting rule is identical to &quot;treat everyone&quot;." /></p>
+<p>The TOC curve is the most direct answer to "does targeting beat random?"
+but it carries no single-number summary. Two integrals of the curve give
+that summary:</p>
+<p><strong>RATE AUTOC</strong> (area under the TOC) puts equal weight on every value of
+$q$. It answers: across all possible budgets, how much can we gain by
+selecting? A large AUTOC indicates concentrated heterogeneity. A small
+AUTOC indicates that the ranking carries little practical information.</p>
+<p><strong>RATE Qini</strong> weights the mid-range of $q$ more heavily. It answers:
+at a realistic, moderate budget (say, treating 20–50% of individuals),
+does targeting improve on random allocation? Qini is the practical
+metric when investigators face a fixed budget constraint.</p>
+<h2 id="reading-a-qini-curve"><a class="header" href="#reading-a-qini-curve">Reading a Qini curve</a></h2>
+<p><img src="figures/lab-09/qini-curve.svg" alt="Qini curve produced by margot::margot_plot_qini_batch() for a single-outcome causal forest fit on the simulated NZAVS panel (n = 5 000, 1 000 trees, exposure community-group participation, outcome purpose). The horizontal axis is the spend rate (proportion treated); the vertical axis is the average gain in outcome over a no-treatment baseline. The dashed grey line traces the policy &quot;treat everyone equally&quot;, which by construction reaches the average treatment effect at $q = 1$. The solid orange line traces the CATE-targeted policy: at each spend level, the rule treats the top-$q$ share of individuals by estimated benefit. Vertical markers at 10% and 40% spend mark common policy budgets. The gap between the orange and grey lines at any $q$ is the lift from targeting at that budget." /></p>
+<p>Read the curve in three passes.</p>
+<p>First, look at the right edge. Both lines must meet at $q = 1$,
+because a hundred-percent treatment rate is treat-everyone whatever the
+rule. The shared end-point is the ATE.</p>
+<p>Second, look at the gap between the orange and grey lines across the
+middle range. In this fit the orange line sits roughly $0.05$ above
+the grey line at the 40% marker and roughly $0.02$ above at the 10%
+marker. Those gaps are the <em>lift from targeting</em> at those budgets,
+expressed in the outcome's standard-deviation units. The 0.05 lift at
+40% spend says that a CATE-targeted rule covering forty percent of the
+population delivers, on average, $0.05$ more standard-deviation units
+of purpose per person treated than a treat-everyone-equally policy at
+the same coverage.</p>
+<p>Third, look at the shape near $q = 0$. A curve that rises steeply over
+the leftmost few percent indicates that the very top of the ranking is
+heavily concentrated. A curve that hugs the diagonal everywhere
+indicates that the ranking carries no useful targeting information; in
+that case, treat-everyone is the simplest defensible policy.</p>
+<p>Both summaries (AUTOC and Qini) must be computed on held-out or
+cross-fitted data, not in-sample rankings. The forest reuses information
+across trees through its bootstrap structure. Evaluating RATE or Qini on
+the training fold produces optimistic estimates. Computing them on a
+separate fold blocks this bias and yields honest confidence intervals.</p>
+<blockquote>
+<p><strong>Pair exercise: reading a TOC curve</strong></p>
+<ol>
+<li>A university socialising programme produces a TOC curve that rises
+steeply for the top 20% of ranked students, then flattens.</li>
+<li>Interpret the shape: what does the steep rise mean about where
+treatment gains are concentrated?</li>
+<li>Suppose the AUTOC is large but the Qini at $q = 0.3$ (a 30%
+budget) is small. Explain what this combination means for a
+decision-maker with a fixed budget.</li>
+<li>Why would computing the TOC curve on the same data used to train
+the causal forest produce misleading results? State the problem in
+one sentence.</li>
+</ol>
+</blockquote>
+<h2 id="workflow-for-this-week"><a class="header" href="#workflow-for-this-week">Workflow for this week</a></h2>
+<p>The week's tools answer three questions in sequence:</p>
+<ol>
+<li><strong>Is there substantial heterogeneity?</strong> Reject the null that
+$\tau(x)$ is constant if the differential-prediction omnibus test
+rejects, or if RATE-AUTOC is positive and statistically reliable.</li>
+<li><strong>Does targeting pay at realistic budgets?</strong> Inspect the slope of
+the Qini curve around plausible coverage levels.</li>
+<li><strong>Can we express the targeting rule in a few defensible steps?</strong>
+Week 9 fits and validates a shallow policy tree to answer this
+question.</li>
+</ol>
+<p>The pipeline below operationalises these questions:</p>
+<ol>
+<li>Specify the causal estimand: treatment, time zero, target
+population, outcome, and identification assumptions.</li>
+<li>Fit a causal forest with honest splitting on baseline covariates
+measured at time zero.</li>
+<li>Verify that heterogeneity is real (the omnibus test for differential
+prediction in week 9, run early to avoid spending time on a flat
+forest).</li>
+<li>Estimate targeting value with RATE-AUTOC and RATE-Qini on held-out
+data.</li>
+<li>Run sensitivity analysis (E-values from week 4) on the underlying
+ATE before staking a policy on it.</li>
+<li>Decide whether heterogeneity is large enough to inform allocation.
+If yes, week 9 turns the ranking into a transparent rule. If no,
+treat-everyone-equally is the simpler defensible policy.</li>
+</ol>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>Back to the university budget. The question is not only whether the
+programme works. The question is whether gains are concentrated enough
+that targeting improves outcomes under a real budget constraint, and
+whether the targeting evidence survives the standard sensitivity checks.
+A causal forest with a Qini curve that hovers near the diagonal is
+<em>also</em> a finding: it tells the university to fund the programme
+uniformly, or to spend the targeting budget on a different question.</p>
+<p>Week 9 turns the ranking into transparent policy rules and asks how
+short a rule can be while still capturing most of the targeting value.</p>
+<blockquote>
+<p><strong>Pair exercise: should we target?</strong></p>
+<ol>
+<li>The ATE is 0.15 SD. The Qini curve is statistically significant at
+a budget of $q = 0.3$ (treating 30% of the population).</li>
+<li>State the causal estimand that the Qini addresses (what question
+does it answer beyond the ATE?).</li>
+<li>List two non-statistical reasons a decision-maker might choose not
+to target (consider ethics, logistics, or governance).</li>
+<li>A colleague argues "targeting lonely students for a socialising
+programme is stigmatising." Draft a two-sentence response that
+takes the concern seriously while explaining what the evidence
+does and does not show.</li>
+</ol>
+</blockquote>
+<hr />
+<h2 id="further-material"><a class="header" href="#further-material">Further material</a></h2>
+<p>Susan Athey's lecture on causal forests gives a deeper account of the
+statistical machinery introduced above. The relevant material on causal
+forests starts around the eighteen-minute mark.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YBbnCDRCcAI" title="Causal forests" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
+<hr />
+<p>Lab materials: <a href="lab-08.html">Lab 8: RATE and QINI Curves</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-breiman2001random" class="csl-entry">
+<p>Breiman, L. (2001). Random forests. <em>Machine Learning</em>, <em>45</em>(1), 5–32.
+<a href="https://doi.org/10.1023/A:1010933404324">https://doi.org/10.1023/A:1010933404324</a></p>
+</div>
+<div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
+<p>Bulbulia, J. A. (2024). A practical guide to causal inference in
+three-wave panel studies. <em>PsyArXiv Preprints</em>.
+<a href="https://doi.org/10.31234/osf.io/uyg3d">https://doi.org/10.31234/osf.io/uyg3d</a></p>
+</div>
+<div id="ref-hoffman2023" class="csl-entry">
+<p>Hoffman, K. L., Salazar-Barreto, D., Rudolph, K. E., &amp; Díaz, I. (2023).
+<em>Introducing longitudinal modified treatment policies: A unified
+framework for studying complex exposures</em>.
+<a href="https://doi.org/10.48550/arXiv.2304.09460">https://doi.org/10.48550/arXiv.2304.09460</a></p>
+</div>
+<div id="ref-suzuki2020" class="csl-entry">
+<p>Suzuki, E., Shinozaki, T., &amp; Yamamoto, E. (2020). Causal Diagrams:
+Pitfalls and Tips. <em>Journal of Epidemiology</em>, <em>30</em>(4), 153–162.
+<a href="https://doi.org/10.2188/jea.JE20190192">https://doi.org/10.2188/jea.JE20190192</a></p>
+</div>
+<div id="ref-vanderweele2020" class="csl-entry">
+<p>VanderWeele, T. J., Mathur, M. B., &amp; Chen, Y. (2020). Outcome-wide
+longitudinal designs for causal inference: A new template for empirical
+studies. <em>Statistical Science</em>, <em>35</em>(3), 437–466.</p>
+</div>
+<div id="ref-wager2018" class="csl-entry">
+<p>Wager, S., &amp; Athey, S. (2018). Estimation and inference of heterogeneous
+treatment effects using random forests. <em>Journal of the American
+Statistical Association</em>, <em>113</em>(523), 1228–1242.
+<a href="https://doi.org/10.1080/01621459.2017.1319839">https://doi.org/10.1080/01621459.2017.1319839</a></p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week-07.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week-09.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week-07.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week-09.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

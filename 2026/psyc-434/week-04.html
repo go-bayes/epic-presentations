@@ -1,0 +1,701 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Week 4: Selection Bias and Measurement Bias - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="week-4-selection-bias-and-measurement-bias"><a class="header" href="#week-4-selection-bias-and-measurement-bias">Week 4: Selection Bias and Measurement Bias</a></h1>
+<p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w04/">Slides</a></p>
+<blockquote>
+<p><strong>Readings</strong></p>
+<p><strong>Required</strong></p>
+<ul>
+<li>Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>), chapters 6-9.
+<a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">link</a></li>
+<li>J. A. Bulbulia (<a href="#ref-bulbulia2023">2024a</a>).
+<a href="https://www.cambridge.org/core/journals/evolutionary-human-sciences/article/methods-in-causal-inference-part-1-causal-diagrams-and-confounding/E734F72109F1BE99836E268DF3AA0359">link</a></li>
+</ul>
+<p><strong>Optional</strong></p>
+<ul>
+<li>J. Bulbulia &amp; Hine (<a href="#ref-bulbulia_hine_2024">2024</a>).
+<a href="https://osf.io/preprints/psyarxiv/tbjx8">link</a></li>
+<li>Hernán et al. (<a href="#ref-hernan2004STRUCTURAL">2004</a>).
+<a href="https://www.dropbox.com/scl/fi/qni0y1lstntmdw410m2nh/Heran2004StructuralSelectionBias.pdf?rlkey=0ob86mmx7vscxqmn3ipg9m94f&amp;dl=0">link</a></li>
+<li>Hernán (<a href="#ref-hernan2017SELECTIONWITHOUTCOLLIDER">2017</a>).
+<a href="https://www.dropbox.com/scl/fi/zr3tk7ngsutjprqr18bbg/hernan-selection-without-colliders.pdf?rlkey=vfluyl3a7zksfphqepao04fix&amp;dl=0">link</a></li>
+<li>Hernán &amp; Cole (<a href="#ref-hernan2009MEASUREMENT">2009</a>).
+<a href="https://www.dropbox.com/scl/fi/ip8nil6uc5l0x9xw14mbr/hernan_cole_Measure_causal_diagrams.pdf?rlkey=wkj3ayen8xb6ncog46sps2g49&amp;dl=0">link</a></li>
+<li>VanderWeele &amp; Hernán (<a href="#ref-vanderweele2012a">2012</a>).
+<a href="https://www.dropbox.com/scl/fi/wtqoibuyitdwm5nlpjuu7/vander_hernan_measurement_error_vanderweel.pdf?rlkey=e4znxaqdfzf2vg6sj4ui799bb&amp;dl=0">link</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Key concepts for the test(s)</strong></p>
+<ul>
+<li><strong>Independent/uncorrelated measurement error bias</strong></li>
+<li><strong>Independent/correlated measurement error bias</strong></li>
+<li><strong>Dependent/uncorrelated measurement error bias</strong></li>
+<li><strong>Dependent/correlated measurement error bias</strong></li>
+<li><strong>Collider bias as a distinct mechanism</strong></li>
+<li><strong>Selection bias and transportability</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Lab 4 setup</strong></p>
+<p>Use <a href="lab-04.html">Lab 4: Writing Regression Models</a> for this week's
+practical work. The lab page links the student practice script first
+and the instructor script second.</p>
+</blockquote>
+<hr />
+<h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
+<h3 id="motivating-example-one-study-two-failure-modes"><a class="header" href="#motivating-example-one-study-two-failure-modes">Motivating example: one study, two failure modes</a></h3>
+<p>Suppose investigators recruit participants for a bilingualism study
+through university mailing lists. Recruitment is selective. People with
+high academic motivation and strong language confidence are more likely
+to enrol.</p>
+<p>Now add measurement error. Suppose the cognitive task is validated only
+in English. Then non-English-dominant participants may be mismeasured.</p>
+<p>One study can fail in two ways. It can fail through biased sampling. It
+can fail through biased measurement.</p>
+<h2 id="learning-outcomes"><a class="header" href="#learning-outcomes">Learning outcomes</a></h2>
+<p>By the end of this week, you should be able to:</p>
+<ol>
+<li>Use fork, chain, and collider structures to recognise how bias
+enters a study.</li>
+<li>Classify four structural types of measurement error.</li>
+<li>Explain how conditioning on selection can bias causal contrasts.</li>
+<li>Distinguish target, source, and analytic populations for transport
+claims.</li>
+</ol>
+<h2 id="why-this-week-extends-weeks-2-3"><a class="header" href="#why-this-week-extends-weeks-2-3">Why this week extends Weeks 2-3</a></h2>
+<p>Weeks 2-3 focused on confounding paths between treatment and outcome.
+That may have made DAGs look like a tool just for "finding confounders".
+They are more general than that.</p>
+<p>Week 4 adds two structural threats. The first threat is selection bias.
+The second threat is measurement bias. Both can be analysed with the
+same elementary graph logic you already know.</p>
+<h2 id="the-same-graph-logic-still-applies"><a class="header" href="#the-same-graph-logic-still-applies">The same graph logic still applies</a></h2>
+<p>The key idea from the earlier weeks is not just "adjust for
+confounders". The key idea is that a small number of graph structures
+determine which paths are open and which are blocked. Once you can
+recognise a fork, a chain, and a collider, you can start to diagnose
+bias in almost any study.</p>
+<p>More complicated studies are built from simpler pieces. Selection
+problems, attrition problems, and measurement problems usually look
+confusing at first because they involve more nodes. But the underlying
+logic is still the same.</p>
+<p><img src="figures/terminologydirectedgraph.svg" alt="Five elementary graph structures, adapted from Bulbulia (2023)" /></p>
+<blockquote>
+<p><strong>Five elementary structures</strong></p>
+<ol>
+<li><strong>No causal relation</strong>: no arrow connects the variables.</li>
+<li><strong>Direct causation</strong>: one variable causes another.</li>
+<li><strong>Fork</strong>: one variable is a common cause of two others.</li>
+<li><strong>Chain</strong>: one variable sits on the path between two others.</li>
+<li><strong>Collider</strong>: one variable is a common effect of two others.</li>
+</ol>
+</blockquote>
+<p>When you see $A \coprod Y$, read this as "A is statistically
+independent of Y". When you see $A \cancel\coprod Y$, read this as "A
+is statistically dependent on Y".</p>
+<h2 id="a-short-rulebook-for-week-4"><a class="header" href="#a-short-rulebook-for-week-4">A short rulebook for week 4</a></h2>
+<p><img src="figures/terminologyelconfounders.svg" alt="Four practical rules for conditioning on DAGs, adapted from Bulbulia (2023)" /></p>
+<blockquote>
+<p><strong>Four practical rules</strong></p>
+<ul>
+<li><strong>Condition on common causes or their good proxies</strong> when you want
+to block a non-causal backdoor path.</li>
+<li><strong>Do not condition on mediators</strong> when you want the total effect,
+because you would block part of the causal pathway.</li>
+<li><strong>Do not condition on colliders</strong>, because conditioning opens a path
+that was previously blocked.</li>
+<li><strong>Be careful with descendants and proxies</strong>, because conditioning on
+them can behave like conditioning on their parent.</li>
+</ul>
+</blockquote>
+<p>This is the bridge to this week. Selection bias often appears because
+study entry, study retention, or analytic restriction acts like a
+collider or a descendant of a collider. Measurement bias often appears
+because the variable we record is a noisy proxy or downstream
+consequence of the variable we actually care about.</p>
+<blockquote>
+<p><strong>Pair check: what does conditioning do?</strong></p>
+<ol>
+<li>In a fork, $A \leftarrow L \to Y$, what does conditioning on
+$L$ do?</li>
+<li>In a chain, $A \to M \to Y$, what happens if we condition on
+$M$ when we want the total effect of $A$ on $Y$?</li>
+<li>In a collider, $A \to C \leftarrow Y$, what happens if we
+condition on $C$?</li>
+</ol>
+<p>You only need one sentence for each answer.</p>
+</blockquote>
+<h2 id="common-causal-questions-as-graphs"><a class="header" href="#common-causal-questions-as-graphs">Common causal questions as graphs</a></h2>
+<p><img src="figures/common-causal-questions.svg" alt="Common causal questions presented as causal graphs, adapted from Bulbulia (2024)" /></p>
+<p>Different questions require different graphs. Different questions
+require different causal estimands. Different questions require
+different assumptions. The important point for this week is that the
+same picture language can represent confounding, selection, measurement,
+mediation, and transport problems. The effect modification graph (open
+circle into the outcome) reappears below when we distinguish two
+mechanisms of selection bias.</p>
+<h2 id="a-typology-of-measurement-error-bias"><a class="header" href="#a-typology-of-measurement-error-bias">A typology of measurement error bias</a></h2>
+<p>Measurement error is not a separate universe from the DAGs you have
+already seen. It becomes easier to understand once we separate the true
+variable from the recorded variable. Then the same questions return:
+what causes what, what is shared, and what happens if we condition on
+the recorded value?</p>
+<p><img src="figures/measurementerrorbias.svg" alt="A typology of measurement error bias, adapted from Bulbulia (2024)" /></p>
+<blockquote>
+<p><strong>Four structural types of measurement error</strong></p>
+<p>Measurement error is classified along two dimensions.</p>
+<p><strong>Dimension 1: independent vs dependent</strong></p>
+<ul>
+<li>Independent (undirected): one true variable does not causally affect
+another variable's measurement error.</li>
+<li>Dependent (directed): one true variable causally affects another
+variable's measurement error.</li>
+</ul>
+<p><strong>Dimension 2: uncorrelated vs correlated</strong></p>
+<ul>
+<li>Uncorrelated: errors do not share a common cause.</li>
+<li>Correlated: errors share a common cause.</li>
+</ul>
+<p>Combinations:</p>
+<ol>
+<li><strong>Independent, uncorrelated</strong>: often attenuates effects toward the
+null. Example: a self-report anxiety scale adds random noise to
+the true score. The noise is unrelated to treatment status, so it
+blurs the signal without creating a false one.</li>
+<li><strong>Independent, correlated</strong>: can create spurious associations even
+when no causal effect exists. Example: societies with advanced
+record-keeping produce more precise records of both religious
+beliefs and social complexity. The shared cause (record-keeping
+quality) induces a non-causal association between treatment and
+outcome measures.</li>
+<li><strong>Dependent, uncorrelated</strong>: can open non-causal paths from
+treatment to measured outcome. Example: participants who receive
+an intervention report their outcomes more favourably because the
+treatment itself changes how they interpret survey items. The
+exposure causally affects measurement of the outcome.</li>
+<li><strong>Dependent, correlated</strong>: can bias in either direction, and the
+direction is hard to predict analytically. Example: social
+complexity shapes how historical archives record both religious
+beliefs and governance structures, and the errors in both records
+share a common cause in elite patronage of scribes.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Pair exercise: classifying measurement error</strong></p>
+<p>For each scenario, classify the measurement error using the two
+dimensions (independent/dependent, correlated/uncorrelated) and name
+the type number (1-4).</p>
+<ol>
+<li>A self-report screen-time measure adds noise because participants
+guess rather than track. Social desirability also inflates purpose
+reports. The errors are unrelated to each other and unrelated to
+treatment status.</li>
+<li>A cognitive test for bilingualism effects is validated only in
+English. Non-English-dominant participants are systematically
+mismeasured. The treatment (bilingualism) causally affects
+measurement of the outcome.</li>
+<li>A cross-cultural study uses the same translation team for exposure
+and outcome instruments. Shared translation quality introduces
+correlated errors in both measures.</li>
+</ol>
+<p>For scenario 2, draw a short DAG showing how the treatment ($A$)
+creates a path through the measurement node to the recorded outcome.</p>
+</blockquote>
+<h2 id="selection-bias-and-transportability"><a class="header" href="#selection-bias-and-transportability">Selection bias and transportability</a></h2>
+<p>Selection bias occurs when inclusion in the analytic sample depends on
+variables related to treatment, outcome, or effect modifiers. It
+threatens validity in two structurally distinct ways.</p>
+<p><strong>Mechanism 1: collider conditioning (internal validity).</strong> When both
+treatment and outcome affect who enters the sample, selection acts as a
+collider. Conditioning on it opens a non-causal path between $A$ and
+$Y$. The estimate is biased for the population it claims to describe.</p>
+<p><strong>Mechanism 2: effect modifier imbalance (external validity).</strong> Even
+without confounding, a sample can fail to generalise. Suppose treatment
+$A$ is randomised, so no backdoor paths are open. If a variable $Z$
+modifies the effect of $A$ on $Y$, and $Z$ is distributed
+differently in the analytic sample than in the target population, the
+sample ATE does not equal the population ATE. No non-causal path is
+opened; the internal validity is intact. The problem is that the average
+treatment effect is a weighted average of subgroup effects, and the
+weights differ between populations.</p>
+<p><img src="figures/effect-modifier-transport.svg" alt="Effect modification without confounding: $Z$ modifies the effect of $A$ on $Y$ (open circle) but no backdoor path is open" /></p>
+<p>The open circle on the arrow from $Z$ to $Y$ denotes effect
+modification: $Z$ changes the size of $A$'s effect on $Y$. This is
+not a standard causal arrow. No confounding is present. Yet if $Z$ is
+distributed differently in the sample than in the target population, the
+sample ATE does not transport.</p>
+<p>This second mechanism does not require a collider. A study of exercise
+and blood pressure conducted entirely in young adults may correctly
+estimate the ATE for young adults. If older adults benefit more (effect
+modification by age), the sample ATE underestimates the population ATE.
+The design is unconfounded but the conclusion does not transport.</p>
+<p><img src="figures/externalvalidity.svg" alt="Threats to external validity, adapted from Bulbulia (2024)" /></p>
+<p>Transportability asks whether effect-relevant structure is compatible
+between analytic and target populations. This requires knowing where
+effect modifiers differ, not just whether the sample is "representative"
+in some demographic sense.</p>
+<blockquote>
+<p><strong>Target, source, and analytic populations</strong></p>
+<ul>
+<li><strong>Target population</strong>: where we want the causal claim to apply.</li>
+<li><strong>Source population</strong>: where recruitment occurs.</li>
+<li><strong>Analytic sample</strong>: who is actually analysed.</li>
+</ul>
+<p>Transportability requires that effect-relevant structure is compatible
+between analytic and target populations.</p>
+</blockquote>
+<h2 id="collider-bias-a-distinct-mechanism"><a class="header" href="#collider-bias-a-distinct-mechanism">Collider bias: a distinct mechanism</a></h2>
+<p>Collider bias can feel new because the earlier weeks mostly taught you
+how to close open backdoor paths. Here the warning runs in the opposite
+direction: some conditioning decisions create bias rather than remove
+it.</p>
+<p><strong>Why collider bias is not confounding.</strong> Confounding arises from an
+open backdoor path through a common cause: $A \leftarrow L \to Y$. We
+usually reduce confounding by conditioning on $L$. Collider bias works
+in the opposite direction. In the structure $A \to C \leftarrow Y$,
+the path is blocked at first ($A \coprod Y$). Conditioning on $C$
+opens a spurious association ($A \cancel\coprod Y \mid C$).</p>
+<p><strong>Why collider bias is not identical to selection bias.</strong> When collider
+conditioning happens through sample restriction, it appears as selection
+bias because the sample is truncated. Berkson's bias is the classic
+example. But collider bias can also appear when we stratify or adjust
+for a common effect inside a complete dataset. In that case the problem
+comes from the analytic decision, not from who entered the sample.</p>
+<p><strong>Why the same DAG rules still work.</strong> Pearl's d-separation criterion
+tells us which paths are opened and closed by conditioning. That is why
+DAGs help with more than confounding. The same framework lets us reason
+about collider bias, mediator bias, measurement error, and selection
+problems.</p>
+<p>For this course, the practical upshot is simple: never condition on
+common effects, whether through sample restriction, stratification, or
+statistical adjustment. Conditioning on a collider opens a non-causal
+path.</p>
+<blockquote>
+<p><strong>Pair exercise: collider bias versus confounding</strong></p>
+<ol>
+<li>A hospital study investigates whether depression ($A$) slows
+recovery ($Y$). Ward admission ($C$) depends on both
+depression severity and injury severity. Only admitted patients
+are analysed.</li>
+<li>Draw a DAG with $A \to C \leftarrow Y$ (ward admission as a
+collider of depression and recovery-related injury severity).</li>
+<li>Explain the non-causal path that opens when the study conditions
+on $C$ by restricting to admitted patients.</li>
+<li>Your partner argues "this is just confounding by injury severity."
+Counter by explaining the structural difference: confounding is an
+open backdoor path through a common cause, whereas collider bias
+opens a previously blocked path by conditioning on a common
+effect.</li>
+<li>Propose one design change that avoids this bias.</li>
+</ol>
+</blockquote>
+<h2 id="attrition-as-a-measurement-error-structure"><a class="header" href="#attrition-as-a-measurement-error-structure">Attrition as a measurement error structure</a></h2>
+<p>Right-censoring (attrition) can bias causal estimates through two
+distinct mechanisms. The first is distortion: if the outcome affects who
+drops out, conditioning on the end-of-study sample conditions on a
+common effect of exposure and outcome. This opens a non-causal path. The
+bias is an internal validity problem; the estimate is wrong for the
+population it claims to describe.</p>
+<p>The second mechanism is restriction: if effect modifiers are distributed
+differently among survivors than in the baseline population, the average
+treatment effect (ATE) estimated from the end-of-study sample may not
+match the ATE for the target population. No non-causal path is opened,
+but the sample no longer represents the population of interest. This is
+an external validity problem; the estimate may be correct for survivors
+but does not transport.</p>
+<p>The structural parallel to measurement error is direct. Distortion
+through attrition mirrors dependent measurement error (type 3 above):
+the outcome causally affects what is recorded. Restriction through
+attrition mirrors independent measurement error off the null (type 1):
+the signal is diluted because the analytic sample differs from the
+target in composition. Investigators should diagnose which mechanism is
+operating, because the remedies differ: inverse-probability-of-censoring
+weights address distortion, whereas reweighting to the target population
+addresses restriction.</p>
+<h2 id="weird-samples-and-effect-heterogeneity"><a class="header" href="#weird-samples-and-effect-heterogeneity">WEIRD samples and effect heterogeneity</a></h2>
+<p>A WEIRD sample is not automatically invalid. The problem is Mechanism 2:
+if effect modifiers are distributed differently between the analytic and
+target populations, and treatment effects vary by those modifiers, the
+sample ATE does not transport. A perfectly unconfounded study in a WEIRD
+sample can produce a correct estimate for that sample and a wrong
+estimate for the population of interest.</p>
+<h2 id="link-to-week-10"><a class="header" href="#link-to-week-10">Link to Week 10</a></h2>
+<p>Measurement invariance is a transport problem for constructs. If a scale
+measures different constructs across groups, between-group contrasts can
+reflect measurement artefact.</p>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>Back to the bilingualism study. Two design checks are non-negotiable.
+First, why did these participants enter the analytic sample? Second, do
+the instruments measure the same constructs across participants? If
+either check fails, causal interpretation weakens.</p>
+<p>With the structural threat landscape mapped (confounding, selection,
+measurement), Week 5 shows how the three identification assumptions
+introduced in Week 2 connect a causal question to a population-level
+causal contrast.</p>
+<blockquote>
+<p><strong>Pair exercise: auditing a study for two failure modes</strong></p>
+<ol>
+<li>Return to the bilingualism example from the start of this lecture.</li>
+<li>Name the selection bias mechanism (what variable is acting as a
+collider or filter?).</li>
+<li>Name the measurement bias type from the four-type classification
+(independent/dependent, correlated/uncorrelated).</li>
+<li>Write a two-sentence design critique stating both problems and how
+each distorts the causal contrast.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Further reading</strong></p>
+<p>All open access: J. A. Bulbulia (<a href="#ref-bulbulia2024wierd">2024c</a>); J.
+A. Bulbulia (<a href="#ref-bulbulia2023">2024a</a>); J. A. Bulbulia
+(<a href="#ref-bulbulia2024swigstime">2024b</a>).</p>
+</blockquote>
+<hr />
+<p>Lab materials: <a href="lab-04.html">Lab 4: Writing Regression Models</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-bulbulia2023" class="csl-entry">
+<p>Bulbulia, J. A. (2024a). Methods in causal inference part 1: Causal
+diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
+<a href="https://doi.org/10.1017/ehs.2024.35">https://doi.org/10.1017/ehs.2024.35</a></p>
+</div>
+<div id="ref-bulbulia2024swigstime" class="csl-entry">
+<p>Bulbulia, J. A. (2024b). Methods in causal inference part 2:
+Interaction, mediation, and time-varying treatments. <em>Evolutionary Human
+Sciences</em>, <em>6</em>, e41. <a href="https://doi.org/10.1017/ehs.2024.32">https://doi.org/10.1017/ehs.2024.32</a></p>
+</div>
+<div id="ref-bulbulia2024wierd" class="csl-entry">
+<p>Bulbulia, J. A. (2024c). Methods in causal inference part 3: Measurement
+error and external validity threats. <em>Evolutionary Human Sciences</em>, <em>6</em>,
+e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2024.33</a></p>
+</div>
+<div id="ref-bulbulia_hine_2024" class="csl-entry">
+<p>Bulbulia, J., &amp; Hine, D. W. (2024). Causal inference in environmental
+psychology. <em>PsyArXiv</em>. <a href="https://osf.io/preprints/psyarxiv/tbjx8">https://osf.io/preprints/psyarxiv/tbjx8</a></p>
+</div>
+<div id="ref-hernan2017SELECTIONWITHOUTCOLLIDER" class="csl-entry">
+<p>Hernán, M. A. (2017). Invited commentary: Selection bias without
+colliders | american journal of epidemiology | oxford academic.
+<em>American Journal of Epidemiology</em>, <em>185</em>(11), 1048–1050.
+<a href="https://doi.org/10.1093/aje/kwx077">https://doi.org/10.1093/aje/kwx077</a></p>
+</div>
+<div id="ref-hernan2009MEASUREMENT" class="csl-entry">
+<p>Hernán, M. A., &amp; Cole, S. R. (2009). Invited commentary: Causal diagrams
+and measurement bias. <em>American Journal of Epidemiology</em>, <em>170</em>(8),
+959–962. <a href="https://doi.org/10.1093/aje/kwp293">https://doi.org/10.1093/aje/kwp293</a></p>
+</div>
+<div id="ref-hernan2004STRUCTURAL" class="csl-entry">
+<p>Hernán, M. A., Hernández-Díaz, S., &amp; Robins, J. M. (2004). A structural
+approach to selection bias. <em>Epidemiology</em>, <em>15</em>(5), 615–625.
+<a href="https://www.jstor.org/stable/20485961">https://www.jstor.org/stable/20485961</a></p>
+</div>
+<div id="ref-hernanrobins2025" class="csl-entry">
+<p>Hernán, M. A., &amp; Robins, J. M. (2025). <em>Causal inference: What if</em>.
+Chapman &amp; Hall/CRC.
+<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/</a></p>
+</div>
+<div id="ref-vanderweele2012a" class="csl-entry">
+<p>VanderWeele, T. J., &amp; Hernán, M. A. (2012). Results on differential and
+dependent measurement error of the exposure and the outcome using signed
+directed acyclic graphs. <em>American Journal of Epidemiology</em>, <em>175</em>(12),
+1303–1310. <a href="https://doi.org/10.1093/aje/kwr458">https://doi.org/10.1093/aje/kwr458</a></p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week-03.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week-05.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week-03.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week-05.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

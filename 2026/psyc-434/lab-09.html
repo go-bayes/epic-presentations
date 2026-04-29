@@ -1,0 +1,597 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Lab 9: Policy Trees - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lab-9-policy-trees-multi-outcome-workflow-with-margot"><a class="header" href="#lab-9-policy-trees-multi-outcome-workflow-with-margot">Lab 9: Policy Trees (multi-outcome workflow with margot)</a></h1>
+<blockquote>
+<p><strong>R script</strong></p>
+<p><a href="scripts/lab-09.R">Download the R script for this lab</a></p>
+<p>The lab also requires the cache helper, which the script sources
+automatically: <a href="scripts/lab-09-cache.R"><code>scripts/lab-09-cache.R</code></a>.</p>
+</blockquote>
+<p>This lab moves from evaluating heterogeneity (Lab 8) to making decisions
+across several outcomes at once. You will run the lab's actual research
+workflow on a four-outcome batch: estimate average treatment effects
+with E-values, test for genuine heterogeneity, fit depth-2 policy trees,
+evaluate targeting value with QINI and RATE, and read margot's
+auto-generated prose summary.</p>
+<blockquote>
+<p><strong>What you will learn</strong></p>
+<ol>
+<li>How to read an outcome-wide average treatment effect (ATE) forest
+plot with E-values.</li>
+<li>How to test for genuine heterogeneity per outcome.</li>
+<li>How to read a depth-2 policy tree and the auto-generated prose
+that describes it.</li>
+<li>How to compare per-outcome QINI curves and RATE-AUTOC summaries.</li>
+<li>How to audit the workflow against simulator ground truth.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Connection to previous labs</strong></p>
+<p>Lab 5 introduced the average treatment effect. Lab 6 introduced the
+conditional average treatment effect (CATE). Lab 8 evaluated whether
+targeting based on a CATE ranking has practical value. This lab adds
+two new ideas: estimating across multiple outcomes at once and turning
+a CATE into a transparent allocation rule.</p>
+</blockquote>
+<h2 id="how-this-lab-is-different"><a class="header" href="#how-this-lab-is-different">How this lab is different</a></h2>
+<p>Earlier labs fit one causal forest at a time, on one outcome, using
+<code>grf</code> directly. Real lab-bench work uses the lab's <code>margot</code> package to
+fit a <em>batch</em> of forests at once, attach E-values for sensitivity
+analysis, and produce decision-tree allocation rules with auto-generated
+prose. Today's lab loads pre-fitted models from a cache (about 80 MB) so
+the full workflow fits inside one session.</p>
+<blockquote>
+<p><strong>Cached fits</strong></p>
+<p>The cache holds three artefacts:</p>
+<ul>
+<li><code>models_binary</code> — the batch causal forest (one per outcome) with
+augmented inverse-propensity-weighted (AIPW) scores, out-of-bag
+predictions, and the combined ATE table.</li>
+<li><code>policy_tree_stability</code> — bootstrap-based stability output for each
+outcome's depth-1 and depth-2 policy trees.</li>
+<li><code>policy_workflow</code> — the interpretive layer: depth recommendations,
+plots, and auto-generated prose summaries.</li>
+</ul>
+<p>The fit script that produced the cache is at
+<code>scripts/fit-lab-09-cache.R</code>. You do not need to run it; the helper
+downloads the result.</p>
+</blockquote>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<pre><code class="language-r">library(causalworkshop)
+library(margot)
+library(ggplot2)
+library(dplyr)
+</code></pre>
+<blockquote>
+<p><strong>Install packages</strong></p>
+<p>If needed, run:</p>
+<pre><code class="language-r">install.packages(c("googledrive", "qs", "pak", "tibble", "dplyr"))
+pak::pak("go-bayes/margot")
+pak::pak("go-bayes/causalworkshop")
+</code></pre>
+</blockquote>
+<p>Source the cache helper and load the fits. The first call downloads
+roughly 80 MB into a per-user cache directory; subsequent calls read
+from disk.</p>
+<pre><code class="language-r">source("scripts/lab-09-cache.R")
+cache &lt;- load_lab_09_cache()
+
+models_binary &lt;- cache$models_binary
+policy_tree_stability &lt;- cache$policy_tree_stability
+wf &lt;- cache$policy_workflow
+</code></pre>
+<p>The four outcomes are purpose, belonging, self-esteem, and life
+satisfaction at wave 2. The exposure is community-group participation at
+wave 1. We pass a label mapping to every plot and table call so the
+figures are legible.</p>
+<pre><code class="language-r">label_mapping &lt;- list(
+  model_t2_purpose = "Sense of Purpose",
+  model_t2_belonging = "Belonging",
+  model_t2_self_esteem = "Self-esteem",
+  model_t2_life_satisfaction = "Life satisfaction"
+)
+</code></pre>
+<h2 id="step-1-outcome-wide-ate-forest-plot"><a class="header" href="#step-1-outcome-wide-ate-forest-plot">Step 1: outcome-wide ATE forest plot</a></h2>
+<p>The combined ATE table holds one row per outcome with the
+risk-difference effect, a 95% confidence interval, and two E-values. The
+E-value of the point estimate measures how strong an unmeasured
+confounder would need to be, on the relative-risk scale, to explain the
+result away. The E-value bound applies the same calculation to the
+confidence-interval limit closest to the null.</p>
+<pre><code class="language-r">print(models_binary$combined_table)
+</code></pre>
+<p>Convert the table into a forest plot:</p>
+<pre><code class="language-r">ate_plot &lt;- margot_plot(
+  models_binary$combined_table,
+  type = "RD",
+  order = "magnitude_desc",
+  e_val_bound_threshold = 1.2,
+  label_mapping = label_mapping,
+  save_path = tempdir()
+)
+print(ate_plot$plot)
+</code></pre>
+<blockquote>
+<p><strong>Reading the forest plot</strong></p>
+<p>The dashed line at zero is the null. Estimates whose E-value bound is
+below 1.2 are flagged: a confounder of moderate strength could explain
+the effect away. Treat those rows with caution when you describe the
+result. The plot's <code>$interpretation</code> slot contains a one-sentence
+draft naming the outcomes most worth treating as causal. Read it as a
+draft, not a verdict.</p>
+</blockquote>
+<h2 id="step-2-omnibus-heterogeneity-test"><a class="header" href="#step-2-omnibus-heterogeneity-test">Step 2: omnibus heterogeneity test</a></h2>
+<p>The ATE asks "does it work on average?". The next question is "does it
+work the same for everyone?". <code>margot_omnibus_hetero_test()</code> wraps
+<code>grf::test_calibration()</code>. The output's "Differential prediction"
+coefficient is what matters: a positive coefficient with a small p-value
+means the forest sees genuine heterogeneity, not just sampling noise.</p>
+<pre><code class="language-r">omnibus &lt;- margot_omnibus_hetero_test(
+  models_binary,
+  label_mapping = label_mapping
+)
+print(omnibus)
+</code></pre>
+<blockquote>
+<p><strong>What if heterogeneity is absent?</strong></p>
+<p>If an outcome shows reliable mean prediction but no differential
+prediction, the forest is telling you that targeting will not beat
+random allocation for that outcome. Reporting only the ATE is the
+honest move.</p>
+</blockquote>
+<h2 id="step-3-per-outcome-policy-trees"><a class="header" href="#step-3-per-outcome-policy-trees">Step 3: per-outcome policy trees</a></h2>
+<p>A policy tree converts the personalised CATE into a transparent
+allocation rule: "treat people in this leaf, do not treat in this leaf".
+The lab caps depth at two, so each rule asks at most three yes/no
+questions before committing.</p>
+<p>The <code>policy_workflow</code> object returns one combined plot per outcome,
+bundling the tree diagram with a scatter of who lands in each leaf.
+Print one per outcome:</p>
+<pre><code class="language-r">for (m in names(wf$plots)) {
+  cat("\n=== ", label_mapping[[m]], " ===\n", sep = "")
+  print(wf$plots[[m]])
+}
+</code></pre>
+<p>When slide real estate is tight, <code>margot_plot_decision_tree()</code> returns
+the tree diagram alone:</p>
+<pre><code class="language-r">tree_only &lt;- margot_plot_decision_tree(
+  policy_tree_stability,
+  model_name = "model_t2_purpose",
+  max_depth = 2,
+  label_mapping = label_mapping
+)
+print(tree_only)
+</code></pre>
+<blockquote>
+<p><strong>Reading a policy tree</strong></p>
+<p>Each non-leaf node names a covariate and a threshold. Branches go left
+if the condition is true and right otherwise. Each leaf says "treat"
+or "do not treat". A leaf labelled "treat" with covariates that read
+like a real-world subgroup is what makes a policy tree useful: the
+rule can be defended in front of a clinician, teacher, or community
+organiser.</p>
+</blockquote>
+<h2 id="step-4-qini-curves"><a class="header" href="#step-4-qini-curves">Step 4: QINI curves</a></h2>
+<p>QINI curves answer: at a moderate, realistic budget (say 10–40% of the
+population treated), does targeting beat random allocation? The vertical
+lines mark spend levels.</p>
+<pre><code class="language-r">qini_plots &lt;- margot_plot_qini_batch(
+  models_binary,
+  label_mapping = label_mapping,
+  spend_levels = c(0.1, 0.4)
+)
+for (p in qini_plots) print(p)
+</code></pre>
+<p>A curve that bows above the diagonal at a 30% spend level says targeting
+is worth it at that budget. A curve hugging the diagonal says targeting
+is no better than random.</p>
+<h2 id="step-5-rate-table"><a class="header" href="#step-5-rate-table">Step 5: RATE table</a></h2>
+<p>RATE summarises targeting value as a single number per outcome.</p>
+<pre><code class="language-r">rate_table &lt;- margot_plot_rate_batch(
+  models_binary,
+  target = "AUTOC",
+  label_mapping = label_mapping
+)
+print(rate_table)
+</code></pre>
+<blockquote>
+<p><strong>AUTOC versus QINI</strong></p>
+<p>AUTOC weights all targeting rates equally. QINI weights mid-range
+rates more. AUTOC suits exploratory work where the budget is not
+fixed; QINI suits a real budget question with a known share treated.</p>
+</blockquote>
+<h2 id="step-6-read-the-auto-generated-prose"><a class="header" href="#step-6-read-the-auto-generated-prose">Step 6: read the auto-generated prose</a></h2>
+<p><code>margot</code> synthesises a draft narrative from the policy-workflow object.
+The prose is generated from the same numbers you saw above; it does not
+bring new information. Its value is structural: it forces an <em>assumption
+→ finding → caveat</em> shape that you can imitate when you write your own
+results section.</p>
+<pre><code class="language-r">cat(wf$report_prose)
+</code></pre>
+<p>The <code>policy_brief_df</code> is a tabular one-pager for the same content:</p>
+<pre><code class="language-r">print(wf$policy_brief_df)
+</code></pre>
+<blockquote>
+<p><strong>Read the prose critically</strong></p>
+<p>Auto-generated text is a draft. Check the numbers against the tables
+you printed earlier. Replace any phrasing that overstates causal
+certainty. The prose is a starting point for your own writing, not a
+final answer.</p>
+</blockquote>
+<h2 id="step-7-audit-against-simulator-ground-truth"><a class="header" href="#step-7-audit-against-simulator-ground-truth">Step 7: audit against simulator ground truth</a></h2>
+<p>The analyses above never see the truth. The simulator stores the <em>true</em>
+individual treatment effects in <code>tau_community_&lt;outcome&gt;</code> columns.
+Ranking outcomes by their true population mean tau lets you audit
+<code>margot</code>'s recommendations without circularity.</p>
+<pre><code class="language-r">d &lt;- simulate_nzavs_data(n = 5000, seed = 2026)
+d0 &lt;- d |&gt; filter(wave == 0)
+
+true_tau_table &lt;- tibble::tibble(
+  outcome = c("Sense of Purpose", "Belonging", "Self-esteem", "Life satisfaction"),
+  true_mean_tau = c(
+    mean(d0$tau_community_purpose),
+    mean(d0$tau_community_belonging),
+    mean(d0$tau_community_self_esteem),
+    mean(d0$tau_community_life_satisfaction)
+  ),
+  true_sd_tau = c(
+    sd(d0$tau_community_purpose),
+    sd(d0$tau_community_belonging),
+    sd(d0$tau_community_self_esteem),
+    sd(d0$tau_community_life_satisfaction)
+  )
+) |&gt;
+  arrange(desc(true_mean_tau))
+
+print(true_tau_table)
+</code></pre>
+<p>The <code>true_sd_tau</code> column is the headroom for targeting: it tells you
+whether even a perfect ranking would deliver appreciable extra benefit
+beyond the average. Compare this ranking with the order in
+<code>margot_plot()</code>'s ATE forest. Discrepancies between estimated and true
+rank are an honest measure of how much information the forest extracted
+from a finite sample.</p>
+<h2 id="ethical-considerations"><a class="header" href="#ethical-considerations">Ethical considerations</a></h2>
+<blockquote>
+<p><strong>Statistical optimality is not social optimality</strong></p>
+<p>A policy tree maximises expected treatment benefit, but it does not
+account for:</p>
+<ul>
+<li><strong>Fairness.</strong> The tree may split on variables correlated with
+protected characteristics (ethnicity, gender, socioeconomic status).
+Even if a variable is not in the covariate set, proxy variables may
+reproduce discriminatory patterns.</li>
+<li><strong>Equity.</strong> Targeting resources to those who benefit <em>most</em> may mean
+those who benefit <em>somewhat</em> receive nothing. A policy that is
+statistically optimal may be socially unjust.</li>
+<li><strong>Transparency.</strong> A depth-2 tree is interpretable; a depth-5 tree is
+not. Policy-makers and the public need to understand the rule.</li>
+<li><strong>Override.</strong> A clinician or social worker should always be able to
+override an algorithmic recommendation based on individual context
+the model cannot see.</li>
+</ul>
+<p>When presenting policy tree results, always discuss these trade-offs.</p>
+</blockquote>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<blockquote>
+<p><strong>Lab diary</strong></p>
+<p>Complete at least two of the following exercises for your lab diary.</p>
+</blockquote>
+<ol>
+<li>
+<p><strong>Compare estimated and true rankings.</strong> The simulator stores the
+true per-outcome ATE. Compare the four-outcome ATE order in
+<code>margot_plot()</code> with <code>true_tau_table</code>. Where do the two rankings
+agree and where do they disagree? Suggest one reason for any
+discrepancy.</p>
+</li>
+<li>
+<p><strong>Read a single policy tree.</strong> Pick one of the four outcomes.
+Translate its depth-2 policy tree into a plain-language rule a
+non-technical reader could follow. Then state one substantive
+limitation of that rule.</p>
+</li>
+<li>
+<p><strong>Discuss override.</strong> In one paragraph, describe a scenario in which
+a community-group co-ordinator should override a policy tree
+recommendation. What information would they have that the model does
+not?</p>
+</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="lab-08.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="lab-10.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="lab-08.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="lab-10.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

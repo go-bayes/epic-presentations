@@ -1,0 +1,692 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Lab 10: Measurement Invariance - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lab-10-measurement-invariance"><a class="header" href="#lab-10-measurement-invariance">Lab 10: Measurement Invariance</a></h1>
+<blockquote>
+<p><strong>R script</strong></p>
+<p><a href="scripts/lab-10.R">Download the R script for this lab</a></p>
+</blockquote>
+<p>This lab introduces measurement invariance testing, a prerequisite for
+meaningful cross-group comparisons. You will conduct exploratory factor
+analysis (EFA), confirmatory factor analysis (CFA), and multigroup CFA
+on simulated distress scale data with known non-invariance built in.</p>
+<blockquote>
+<p><strong>What you will learn</strong></p>
+<ol>
+<li>How to assess factorability (KMO, Bartlett's test) and extract
+factors using EFA</li>
+<li>How to fit a CFA in lavaan and evaluate model fit (CFI, RMSEA,
+SRMR)</li>
+<li>How to test configural, metric, and scalar invariance across
+groups</li>
+<li>How to discover and release non-invariant items (partial
+invariance)</li>
+<li>Why measurement invariance matters for causal inference across
+groups</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Connection to the lecture</strong></p>
+<p>This lab aligns with Week 10's lecture on classical measurement theory
+from a causal perspective. The lecture covers measurement error in
+DAGs, EFA, CFA, and VanderWeele's model linking measurement to causal
+identification. This lab focuses on the practical skills: fitting and
+comparing models.</p>
+</blockquote>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<pre><code class="language-r">library(causalworkshop)
+library(psych)
+library(lavaan)
+library(tidyverse)
+</code></pre>
+<blockquote>
+<p><strong>Install packages</strong></p>
+<p>If you haven't installed these packages, run:
+<code>install.packages(c("psych", "lavaan"))</code>
+<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
+<code>pak::pak("go-bayes/causalworkshop")</code></p>
+</blockquote>
+<h2 id="generate-data"><a class="header" href="#generate-data">Generate data</a></h2>
+<p>The <code>simulate_measurement_items()</code> function generates a 6-item
+psychological distress scale (modelled on the Kessler-6) with a known
+factor structure and built-in measurement non-invariance across two
+groups:</p>
+<pre><code class="language-r"># simulate measurement data
+d &lt;- simulate_measurement_items(n = 2000, seed = 2026)
+
+# check structure
+dim(d)
+names(d)
+</code></pre>
+<p>The six items correspond to:</p>
+<ul>
+<li><code>item_1</code>: nervous</li>
+<li><code>item_2</code>: hopeless</li>
+<li><code>item_3</code>: restless</li>
+<li><code>item_4</code>: depressed</li>
+<li><code>item_5</code>: effort (everything was an effort)</li>
+<li><code>item_6</code>: worthless</li>
+</ul>
+<pre><code class="language-r"># check the true factor loadings
+attr(d, "true_loadings")
+
+# check the true intercepts (they differ for items 3 and 5 across groups)
+attr(d, "true_intercepts_group0")
+attr(d, "true_intercepts_group1")
+</code></pre>
+<blockquote>
+<p><strong>What is non-invariance?</strong></p>
+<p>Items 3 (restless) and 5 (effort) have different intercepts across
+groups. This means that at the same level of true distress, group 1
+members score higher on these two items. If we ignore this,
+cross-group comparisons of mean distress scores will be biased.</p>
+</blockquote>
+<h2 id="exploratory-factor-analysis-efa"><a class="header" href="#exploratory-factor-analysis-efa">Exploratory factor analysis (EFA)</a></h2>
+<p>Before fitting a CFA, we check whether the data are factorable and how
+many factors to extract.</p>
+<h3 id="factorability"><a class="header" href="#factorability">Factorability</a></h3>
+<pre><code class="language-r"># select just the items
+items &lt;- d |&gt; select(item_1:item_6)
+
+# Kaiser-Meyer-Olkin measure of sampling adequacy
+psych::KMO(items)
+
+# Bartlett's test of sphericity
+psych::cortest.bartlett(cor(items), n = nrow(items))
+</code></pre>
+<blockquote>
+<p><strong>Interpreting KMO</strong></p>
+<p>KMO values above 0.60 are considered adequate for factor analysis.
+Values above 0.80 are good. Bartlett's test should be significant (p
+&lt; 0.05), indicating that correlations between items are sufficiently
+large for factor analysis.</p>
+</blockquote>
+<h3 id="extract-factors"><a class="header" href="#extract-factors">Extract factors</a></h3>
+<pre><code class="language-r"># one-factor solution
+fa_1 &lt;- psych::fa(items, nfactors = 1, fm = "ml", rotate = "none")
+print(fa_1$loadings, cutoff = 0.3)
+
+# two-factor solution (for comparison)
+fa_2 &lt;- psych::fa(items, nfactors = 2, fm = "ml", rotate = "oblimin")
+print(fa_2$loadings, cutoff = 0.3)
+</code></pre>
+<blockquote>
+<p><strong>How many factors?</strong></p>
+<p>The one-factor solution should show all six items loading
+substantially on a single factor (consistent with the data-generating
+process). The two-factor solution should not improve fit meaningfully.
+Compare the proportion of variance explained and check whether the
+two-factor loadings make theoretical sense.</p>
+</blockquote>
+<h2 id="confirmatory-factor-analysis-cfa"><a class="header" href="#confirmatory-factor-analysis-cfa">Confirmatory factor analysis (CFA)</a></h2>
+<p>Now we specify the one-factor model and fit it using lavaan:</p>
+<pre><code class="language-r"># specify one-factor CFA model
+model &lt;- "
+  distress =~ item_1 + item_2 + item_3 + item_4 + item_5 + item_6
+"
+
+# fit CFA on full sample
+fit_cfa &lt;- cfa(model, data = d)
+
+# summary with fit measures
+summary(fit_cfa, fit.measures = TRUE, standardized = TRUE)
+</code></pre>
+<p>Evaluate model fit:</p>
+<pre><code class="language-r"># extract key fit indices
+fit_indices &lt;- fitmeasures(fit_cfa, c("cfi", "rmsea", "srmr"))
+print(round(fit_indices, 3))
+</code></pre>
+<blockquote>
+<p><strong>Fit index guidelines</strong></p>
+<ul>
+<li><strong>CFI</strong> (Comparative Fit Index): &gt; 0.95 is excellent, &gt; 0.90 is
+acceptable</li>
+<li><strong>RMSEA</strong> (Root Mean Square Error of Approximation): &lt; 0.06 is
+excellent, &lt; 0.08 is acceptable</li>
+<li><strong>SRMR</strong> (Standardised Root Mean Square Residual): &lt; 0.08 is
+acceptable</li>
+</ul>
+</blockquote>
+<h2 id="multigroup-cfa-invariance-testing"><a class="header" href="#multigroup-cfa-invariance-testing">Multigroup CFA: invariance testing</a></h2>
+<p>We now test whether the factor structure is equivalent across the two
+groups. Invariance testing proceeds through a hierarchy of progressively
+stricter constraints:</p>
+<h3 id="step-1-configural-invariance"><a class="header" href="#step-1-configural-invariance">Step 1: Configural invariance</a></h3>
+<p>The same factor structure holds in both groups, but loadings and
+intercepts are freely estimated:</p>
+<pre><code class="language-r">fit_configural &lt;- cfa(model, data = d, group = "group")
+summary(fit_configural, fit.measures = TRUE)
+</code></pre>
+<h3 id="step-2-metric-invariance"><a class="header" href="#step-2-metric-invariance">Step 2: Metric invariance</a></h3>
+<p>Factor loadings are constrained to be equal across groups:</p>
+<pre><code class="language-r">fit_metric &lt;- cfa(model, data = d, group = "group",
+                  group.equal = "loadings")
+summary(fit_metric, fit.measures = TRUE)
+</code></pre>
+<p>Compare configural and metric models:</p>
+<pre><code class="language-r">lavTestLRT(fit_configural, fit_metric)
+</code></pre>
+<blockquote>
+<p><strong>Interpreting the comparison</strong></p>
+<p>A non-significant chi-square difference (p &gt; 0.05) means the metric
+model fits no worse than the configural model, so equal loadings
+across groups are supported. Because chi-square is sensitive to large
+sample sizes, also inspect $\Delta$CFI, $\Delta$RMSEA, and
+$\Delta$SRMR below.</p>
+</blockquote>
+<h3 id="step-3-scalar-invariance"><a class="header" href="#step-3-scalar-invariance">Step 3: Scalar invariance</a></h3>
+<p>Both loadings and intercepts are constrained to be equal:</p>
+<pre><code class="language-r">fit_scalar &lt;- cfa(model, data = d, group = "group",
+                  group.equal = c("loadings", "intercepts"))
+summary(fit_scalar, fit.measures = TRUE)
+</code></pre>
+<p>Compare metric and scalar models:</p>
+<pre><code class="language-r">lavTestLRT(fit_metric, fit_scalar)
+</code></pre>
+<blockquote>
+<p><strong>Expected result</strong></p>
+<p>Full scalar invariance should <strong>fail</strong>. In this lab, chi-square
+differences are usually significant, and fit-index changes should also
+worsen when intercepts are constrained. This is by design: items 3 and
+5 have different intercepts across groups in the data-generating
+process.</p>
+</blockquote>
+<h2 id="discover-partial-non-invariance"><a class="header" href="#discover-partial-non-invariance">Discover partial non-invariance</a></h2>
+<p>When full scalar invariance fails, we can release constraints on
+specific items to achieve <strong>partial scalar invariance</strong>. Based on
+modification indices or theory, we free the intercepts of items 3 and 5:</p>
+<pre><code class="language-r"># partial scalar invariance: free intercepts for items 3 and 5
+model_partial &lt;- "
+  distress =~ item_1 + item_2 + item_3 + item_4 + item_5 + item_6
+  item_3 ~ c(i3a, i3b) * 1
+  item_5 ~ c(i5a, i5b) * 1
+"
+
+fit_partial &lt;- cfa(model_partial, data = d, group = "group",
+                   group.equal = c("loadings", "intercepts"))
+summary(fit_partial, fit.measures = TRUE)
+</code></pre>
+<p>Compare partial scalar with metric invariance:</p>
+<pre><code class="language-r">lavTestLRT(fit_metric, fit_partial)
+</code></pre>
+<p>Calculate fit-index changes between adjacent models:</p>
+<pre><code class="language-r">delta_fit &lt;- tibble(
+  comparison = c("Metric - Configural", "Scalar - Metric", "Partial Scalar - Metric"),
+  delta_cfi = c(
+    fitmeasures(fit_metric, "cfi") - fitmeasures(fit_configural, "cfi"),
+    fitmeasures(fit_scalar, "cfi") - fitmeasures(fit_metric, "cfi"),
+    fitmeasures(fit_partial, "cfi") - fitmeasures(fit_metric, "cfi")
+  ),
+  delta_rmsea = c(
+    fitmeasures(fit_metric, "rmsea") - fitmeasures(fit_configural, "rmsea"),
+    fitmeasures(fit_scalar, "rmsea") - fitmeasures(fit_metric, "rmsea"),
+    fitmeasures(fit_partial, "rmsea") - fitmeasures(fit_metric, "rmsea")
+  ),
+  delta_srmr = c(
+    fitmeasures(fit_metric, "srmr") - fitmeasures(fit_configural, "srmr"),
+    fitmeasures(fit_scalar, "srmr") - fitmeasures(fit_metric, "srmr"),
+    fitmeasures(fit_partial, "srmr") - fitmeasures(fit_metric, "srmr")
+  )
+) |&gt;
+  mutate(across(starts_with("delta_"), \(x) round(x, 3)))
+
+print(delta_fit)
+</code></pre>
+<blockquote>
+<p><strong>Expected result</strong></p>
+<p>Partial scalar invariance should hold after jointly considering
+chi-square tests and fit-index changes. As a rule of thumb, evidence
+against invariance is often flagged by $\Delta$CFI &lt; -0.01,
+$\Delta$RMSEA &gt; 0.015, or $\Delta$SRMR &gt; 0.01. By releasing
+items 3 and 5, you should see improved fit relative to full scalar
+constraints.</p>
+</blockquote>
+<h2 id="compare-all-models"><a class="header" href="#compare-all-models">Compare all models</a></h2>
+<pre><code class="language-r"># summary table of fit indices
+models &lt;- list(
+  Configural = fit_configural,
+  Metric = fit_metric,
+  Scalar = fit_scalar,
+  "Partial Scalar" = fit_partial
+)
+
+fit_table &lt;- map_dfr(names(models), function(name) {
+  fm &lt;- fitmeasures(models[[name]], c("cfi", "rmsea", "srmr", "chisq", "df"))
+  tibble(
+    model = name,
+    cfi = round(fm["cfi"], 3),
+    rmsea = round(fm["rmsea"], 3),
+    srmr = round(fm["srmr"], 3),
+    chisq = round(fm["chisq"], 1),
+    df = fm["df"]
+  )
+})
+
+print(fit_table)
+</code></pre>
+<h2 id="connection-to-causal-inference"><a class="header" href="#connection-to-causal-inference">Connection to causal inference</a></h2>
+<blockquote>
+<p><strong>Why measurement invariance matters for causal inference</strong></p>
+<p>If a scale measures the same construct differently across groups
+(non-invariance), then cross-group comparisons of treatment effects
+may be biased. In DAG terms, the measured outcome $Y^*$ is a
+function of both the true outcome $Y$ and group membership $G$:</p>
+<p>$$Y^* = f(Y, G)$$</p>
+<p>If $f$ differs by group (non-invariance), then even if the treatment
+has the same causal effect on $Y$ in both groups, the observed
+effect on $Y^*$ will differ. This is measurement bias in the causal
+inference framework.</p>
+<p>Establishing measurement invariance before estimating treatment
+effects is therefore a prerequisite for valid cross-group comparisons.</p>
+</blockquote>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<blockquote>
+<p><strong>Lab diary</strong></p>
+<p>Complete at least two of the following exercises for your lab diary.</p>
+</blockquote>
+<ol>
+<li>
+<p><strong>Group by sex.</strong> Repeat the invariance testing using <code>male</code> as the
+grouping variable instead of <code>group</code>. Does the invariance pattern
+change? (Since the data-generating process only introduces
+non-invariance by <code>group</code>, invariance by <code>male</code> should hold.)</p>
+</li>
+<li>
+<p><strong>Two-factor model.</strong> Fit a two-factor CFA where items 1-3 load on
+factor 1 and items 4-6 load on factor 2. Compare fit with the
+one-factor model. Does the data support a two-factor structure?</p>
+</li>
+<li>
+<p><strong>Interpretation.</strong> In one paragraph, explain what you would
+conclude about using a single distress score to compare
+psychological purpose across two demographic groups, given that
+items 3 and 5 show non-invariance. What practical steps would you
+take before reporting cross-group differences?</p>
+</li>
+</ol>
+<hr />
+<h2 id="part-b-quarto-research-report-walkthrough"><a class="header" href="#part-b-quarto-research-report-walkthrough">Part B: Quarto research-report walkthrough</a></h2>
+<p>The research report (Option A) asks you to estimate an average treatment
+effect on the simulated NZAVS panel and write it up in a structured
+format. Part B of this lab walks through the manuscript scaffold you
+copy for that report. The scaffold mirrors the lab's actual research
+workflow: a <code>setup.R</code> script that holds every constant, helper, label,
+and plotting default, alongside a <code>manuscript.qmd</code> Quarto document that
+sources <code>setup.R</code> and renders end-to-end.</p>
+<h3 id="why-split-a-manuscript-into-two-files"><a class="header" href="#why-split-a-manuscript-into-two-files">Why split a manuscript into two files</a></h3>
+<p>Putting the manuscript in one big <code>.qmd</code> file works for a one-off
+report. It does not work when you need to swap the exposure, change the
+colour palette, or rerun the analysis on new data, because every change
+scatters across the document. The lab's solution is to keep <code>setup.R</code> as
+the single source of truth for study-level decisions and to keep
+<code>manuscript.qmd</code> thin: prose, headings, and chunks that read from
+<code>setup.R</code>.</p>
+<p>You will see this pattern in every published manuscript from the lab.</p>
+<h3 id="walkthrough"><a class="header" href="#walkthrough">Walkthrough</a></h3>
+<ol>
+<li>
+<p><strong>Open the scaffold.</strong> It lives at the repository root in
+<code>research-report-template/</code>. Five files: <code>setup.R</code>,
+<code>manuscript.qmd</code>, <code>_quarto.yml</code>, <code>references.bib</code>, and <code>README.md</code>.
+Read the README first.</p>
+</li>
+<li>
+<p><strong>Read <code>setup.R</code> top to bottom.</strong> Six categories of content sit in
+this file:</p>
+<ul>
+<li><strong>Packages.</strong> Loaded conditionally so the script self-installs
+missing dependencies on a fresh machine.</li>
+<li><strong>Study constants.</strong> <code>name_exposure</code>, <code>name_outcome</code>, <code>study_n</code>,
+<code>study_seed</code>, <code>covariate_cols</code>, <code>adjustment_cols</code>. Change the
+first two and the entire manuscript updates.</li>
+<li><strong>Label mapping.</strong> A small named list that maps machine-readable
+variable names to human-readable labels for figures and tables.</li>
+<li><strong>Plot defaults.</strong> Palette and <code>theme_set()</code> so every figure
+shares a consistent style.</li>
+<li><strong>Data wrapper.</strong> <code>simulate_panel()</code> returns a tibble with
+<code>exposure</code>, <code>outcome</code>, and <code>tau_true</code> columns assembled from the
+three waves.</li>
+<li><strong>Helpers.</strong> <code>descriptives_table()</code> and <code>describe_exposure_text()</code>
+return objects the manuscript drops directly into a table or
+sentence.</li>
+</ul>
+</li>
+<li>
+<p><strong>Render <code>manuscript.qmd</code> once.</strong></p>
+<pre><code class="language-sh">cd research-report-template
+quarto render manuscript.qmd
+</code></pre>
+<p>Output appears in <code>_output/</code>. Read the rendered PDF alongside the
+<code>.qmd</code> source. Notice how the inline value
+<code>`r label_for(name_exposure)`</code> produces the human-readable
+exposure label in three different sections, and how
+<code>descriptives_table(panel)</code> produces a <code>kable</code> automatically.</p>
+</li>
+<li>
+<p><strong>Cross-reference the section headings.</strong> Open <code>manuscript.qmd</code> and
+<code>assessments.md</code> side by side. The eleven Option A assessment
+criteria (Stating the problem, Determining the outcome, ..., Model
+approach) become the eleven middle sections of <code>manuscript.qmd</code>. The
+criteria <em>are</em> the section headings.</p>
+</li>
+<li>
+<p><strong>Swap exercise.</strong> In <code>setup.R</code>, change</p>
+<pre><code class="language-r">name_exposure &lt;- "religious_service"
+</code></pre>
+<p>to</p>
+<pre><code class="language-r">name_exposure &lt;- "volunteer_work"
+</code></pre>
+<p>Re-render. Every inline value, table, and figure inside the body
+updates because nothing in the body hard-codes the exposure name.
+The YAML title at the top of <code>manuscript.qmd</code> stays fixed; YAML
+metadata is read before any R chunk runs, so titles are an
+exception. You edit them directly.</p>
+</li>
+</ol>
+<h3 id="what-to-take-away"><a class="header" href="#what-to-take-away">What to take away</a></h3>
+<p>This template is yours to copy, edit, and submit. The discipline it
+teaches matters more than the specific code: for any analysis that
+produces a written artefact, separate the <em>configuration</em> (what to
+study, what palette, what labels) from the <em>narrative</em> (what you are
+arguing). When the configuration lives in one file, you can change a
+single line and trust that the narrative remains correct.</p>
+<p>The R script for this part of the lab is <code>scripts/lab-10.R</code>, after the
+measurement-invariance content. It runs the walkthrough
+programmatically: it opens <code>setup.R</code>, exercises the helpers, and renders
+the manuscript.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="lab-09.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="test-1-study-sheet.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="lab-09.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="test-1-study-sheet.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

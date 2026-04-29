@@ -1,0 +1,858 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Lab 2: Install R and Set Up Your IDE - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lab-2-install-r-and-set-up-your-ide"><a class="header" href="#lab-2-install-r-and-set-up-your-ide">Lab 2: Install R and Set Up Your IDE</a></h1>
+<blockquote>
+<p><strong>Today's workflow</strong></p>
+<p>Complete this lab in a local RStudio project first. You can do all
+core exercises without git/GitHub, then connect to git/GitHub at the
+end.</p>
+</blockquote>
+<p>This session introduces R and RStudio, then builds your core R skills.</p>
+<h2 id="why-learn-r"><a class="header" href="#why-learn-r">Why learn R?</a></h2>
+<ul>
+<li>You will need it for your final report (if you choose the report
+option).</li>
+<li>It supports your psychology coursework.</li>
+<li>It enhances your coding skills, which will help you in many domains of
+work, including utilising AI (!).</li>
+</ul>
+<h2 id="installing-r"><a class="header" href="#installing-r">Installing R</a></h2>
+<ol>
+<li>Visit CRAN at <a href="https://cran.r-project.org/">https://cran.r-project.org/</a>.</li>
+<li>Select the version for your operating system (Windows, Mac, or
+Linux).</li>
+<li>Download and install by following the on-screen instructions.</li>
+</ol>
+<h2 id="installing-rstudio"><a class="header" href="#installing-rstudio">Installing RStudio</a></h2>
+<h3 id="step-1-install-rstudio"><a class="header" href="#step-1-install-rstudio">Step 1: Install RStudio</a></h3>
+<ol>
+<li>Go to <a href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop/</a>.</li>
+<li>Choose the free version of RStudio Desktop and download it for your
+operating system.</li>
+<li>Install RStudio Desktop.</li>
+<li>Open RStudio to begin setting up your project environment.</li>
+</ol>
+<h3 id="step-2-choose-your-working-folder-and-create-lab-folders"><a class="header" href="#step-2-choose-your-working-folder-and-create-lab-folders">Step 2: Choose your working folder and create lab folders</a></h3>
+<p>Use any folder you like for this lab. If you already have
+<code>labs-YOUR-USERNAME</code> from Lab 1, you can use that. If not, create a new
+folder:</p>
+<pre><code class="language-bash">mkdir -p ~/Documents/psy434/lab-02
+cd ~/Documents/psy434/lab-02
+mkdir -p diaries data R
+pwd
+ls -a
+</code></pre>
+<p>If you chose a different location, use that path instead.</p>
+<h3 id="step-3-open-your-folder-as-an-rstudio-project"><a class="header" href="#step-3-open-your-folder-as-an-rstudio-project">Step 3: Open your folder as an RStudio project</a></h3>
+<ol>
+<li>In RStudio, go to <code>File &gt; New Project</code>.</li>
+<li>Choose <strong>Existing Directory</strong>.</li>
+<li>Browse to your folder (e.g., <code>~/Documents/psy434/lab-02</code>).</li>
+<li>Click <strong>Create Project</strong>.</li>
+</ol>
+<p>RStudio creates a <code>.Rproj</code> file in your folder.</p>
+<blockquote>
+<p><strong>File naming</strong></p>
+<p>Use clear labels that anyone could understand. That "anyone" will be
+your future self. Prefer lowercase with hyphens: <code>lab-02-intro.R</code>, not
+<code>Lab 2 Intro.R</code>.</p>
+</blockquote>
+<h3 id="step-4-create-your-first-r-script"><a class="header" href="#step-4-create-your-first-r-script">Step 4: Create your first R script</a></h3>
+<p>Now that RStudio is installed, download the starter script:</p>
+<ol>
+<li><a href="scripts/lab-02.R">Download the R script for this lab</a>.</li>
+<li>Save it as <code>R/lab-02.R</code> inside your project folder.</li>
+<li>Open <code>R/lab-02.R</code> in RStudio.</li>
+</ol>
+<p>If downloading is inconvenient, create your own script via
+<code>File &gt; New File &gt; R Script</code> and save it as <code>R/lab-02.R</code>.</p>
+<h3 id="step-5-working-with-r-scripts"><a class="header" href="#step-5-working-with-r-scripts">Step 5: Working with R scripts</a></h3>
+<ol>
+<li>Write your R code in the script editor. Execute code by selecting
+lines and pressing <code>Ctrl + Enter</code> (Windows/Linux) or <code>Cmd + Enter</code>
+(Mac).</li>
+<li>Use comments (preceded by <code>#</code>) to document your code.</li>
+<li>Save your scripts regularly (<code>Ctrl + S</code> or <code>Cmd + S</code>).</li>
+</ol>
+<h3 id="step-6-when-you-exit-rstudio"><a class="header" href="#step-6-when-you-exit-rstudio">Step 6: When you exit RStudio</a></h3>
+<p>Before concluding your work, restart R (<code>Session &gt; Restart R</code>) and
+choose not to save the workspace image when prompted.</p>
+<blockquote>
+<p><strong>Workflow habits</strong></p>
+<ul>
+<li>Use clearly defined script names.</li>
+<li>Annotate your code.</li>
+<li>Save your scripts often (<code>Ctrl + S</code> or <code>Cmd + S</code>).</li>
+</ul>
+</blockquote>
+<h2 id="running-r-from-the-terminal"><a class="header" href="#running-r-from-the-terminal">Running R from the terminal</a></h2>
+<p>You can run R without opening RStudio.</p>
+<h3 id="interactive-console"><a class="header" href="#interactive-console">Interactive console</a></h3>
+<p>Open a terminal and type:</p>
+<pre><code class="language-bash">R
+</code></pre>
+<p>You will see the R prompt (<code>&gt;</code>). Try a quick calculation:</p>
+<pre><code class="language-r">1 + 1
+</code></pre>
+<p>Type <code>q()</code> to quit. When asked to save the workspace, type <code>n</code>.</p>
+<h3 id="running-a-script"><a class="header" href="#running-a-script">Running a script</a></h3>
+<p>If you have an R script saved in your project folder, run it directly:</p>
+<pre><code class="language-bash">Rscript R/lab-02.R
+</code></pre>
+<p>Output prints to the terminal. This is useful for running code without
+opening RStudio, and is how R scripts are run on servers and in
+automated pipelines.</p>
+<blockquote>
+<p><strong>RStudio vs terminal</strong></p>
+<p>RStudio is easier for interactive exploration (viewing plots,
+inspecting data). The terminal is useful for running finished scripts
+and for working on remote machines. Both use the same R installation.
+Use whichever suits the task.</p>
+</blockquote>
+<hr />
+<h2 id="basic-r-commands"><a class="header" href="#basic-r-commands">Basic R Commands</a></h2>
+<blockquote>
+<p><strong>How to copy code from this page</strong></p>
+<ul>
+<li>Open <code>File &gt; New File &gt; R Script</code> in RStudio.</li>
+<li>Name and save your new R script.</li>
+<li>Copy the code blocks below into your script.</li>
+<li>Save: <code>Ctrl + S</code> or <code>Cmd + S</code>.</li>
+</ul>
+</blockquote>
+<h2 id="assignment--"><a class="header" href="#assignment--">Assignment (<code>&lt;-</code>)</a></h2>
+<p>Assignment in R uses the <code>&lt;-</code> operator:</p>
+<pre><code class="language-r">x &lt;- 10 # assigns the value 10 to x
+y &lt;- 5  # assigns the value 5 to y
+</code></pre>
+<blockquote>
+<p><strong>RStudio shortcut for &lt;-</strong></p>
+<ul>
+<li><strong>macOS:</strong> <code>Option</code> + <code>-</code> (minus key)</li>
+<li><strong>Windows/Linux:</strong> <code>Alt</code> + <code>-</code> (minus key)</li>
+</ul>
+</blockquote>
+<h2 id="concatenation-c"><a class="header" href="#concatenation-c">Concatenation (<code>c()</code>)</a></h2>
+<p>The <code>c()</code> function combines multiple elements into a vector:</p>
+<pre><code class="language-r">numbers &lt;- c(1, 2, 3, 4, 5)
+print(numbers)
+</code></pre>
+<h2 id="operations---"><a class="header" href="#operations---">Operations (<code>+</code>, <code>-</code>)</a></h2>
+<pre><code class="language-r">x &lt;- 10
+y &lt;- 5
+
+total &lt;- x + y
+print(total)
+
+difference &lt;- x - y
+difference
+</code></pre>
+<blockquote>
+<p><strong>Executing code</strong></p>
+<p><code>Ctrl + Enter</code> (Windows/Linux) or <code>Cmd + Enter</code> (Mac).</p>
+</blockquote>
+<h2 id="multiplication--and-division-"><a class="header" href="#multiplication--and-division-">Multiplication (<code>*</code>) and Division (<code>/</code>)</a></h2>
+<pre><code class="language-r">product &lt;- x * y
+product
+
+quotient &lt;- x / y
+quotient
+
+# element-wise operations on vectors
+vector1 &lt;- c(1, 2, 3)
+vector2 &lt;- c(4, 5, 6)
+vector_product &lt;- vector1 * vector2
+vector_product
+
+vector_division &lt;- vector1 / vector2
+vector_division
+</code></pre>
+<p>Be mindful of division by zero: <code>10 / 0</code> returns <code>Inf</code>, and <code>0 / 0</code>
+returns <code>NaN</code>.</p>
+<pre><code class="language-r"># integer division and modulo
+integer_division &lt;- 10 %/% 3  # 3
+remainder &lt;- 10 %% 3          # 1
+</code></pre>
+<h2 id="rm-remove-object"><a class="header" href="#rm-remove-object"><code>rm()</code> Remove Object</a></h2>
+<pre><code class="language-r">devil_number &lt;- 666
+devil_number
+rm(devil_number)
+</code></pre>
+<h2 id="logic---"><a class="header" href="#logic---">Logic (<code>!</code>, <code>!=</code>, <code>==</code>)</a></h2>
+<pre><code class="language-r">x_not_y &lt;- x != y     # TRUE
+x_equal_10 &lt;- x == 10 # TRUE
+</code></pre>
+<h2 id="or--and-"><a class="header" href="#or--and-">OR (<code>|</code> and <code>||</code>)</a></h2>
+<pre><code class="language-r"># element-wise OR
+vector_or &lt;- c(TRUE, FALSE) | c(FALSE, TRUE) # c(TRUE, TRUE)
+
+# single OR (first element only)
+single_or &lt;- TRUE || FALSE # TRUE
+</code></pre>
+<h2 id="and--and-"><a class="header" href="#and--and-">AND (<code>&amp;</code> and <code>&amp;&amp;</code>)</a></h2>
+<pre><code class="language-r"># element-wise AND
+vector_and &lt;- c(TRUE, FALSE) &amp; c(FALSE, TRUE) # c(FALSE, FALSE)
+
+# single AND (first element only)
+single_and &lt;- TRUE &amp;&amp; FALSE # FALSE
+</code></pre>
+<blockquote>
+<p><strong>RStudio workflow shortcuts</strong></p>
+<ul>
+<li><strong>Execute code line:</strong> <code>Cmd + Return</code> (Mac) or <code>Ctrl + Enter</code>
+(Win/Linux)</li>
+<li><strong>Insert section heading:</strong> <code>Cmd + Shift + R</code> (Mac) or
+<code>Ctrl + Shift + R</code></li>
+<li><strong>Align code:</strong> <code>Cmd + Shift + A</code> (Mac) or <code>Ctrl + Shift + A</code></li>
+<li><strong>Comment/uncomment:</strong> <code>Cmd/Ctrl + Shift + C</code></li>
+<li><strong>Save all:</strong> <code>Cmd/Ctrl + Shift + S</code></li>
+<li><strong>Find/replace:</strong> <code>Cmd/Ctrl + F</code></li>
+<li><strong>New file:</strong> <code>Cmd/Ctrl + Shift + N</code></li>
+<li><strong>Auto-complete:</strong> <code>Tab</code></li>
+</ul>
+<p>For more, explore <code>Tools &gt; Command Palette</code> or <code>Shift + Cmd/Ctrl + P</code>.</p>
+</blockquote>
+<hr />
+<h2 id="data-types-in-r"><a class="header" href="#data-types-in-r">Data Types in R</a></h2>
+<h2 id="integers"><a class="header" href="#integers">Integers</a></h2>
+<pre><code class="language-r">x &lt;- 42L
+str(x)         # int 42
+
+y &lt;- as.numeric(x)
+str(y)         # num 42
+</code></pre>
+<p>Integers are useful for counts or indices that do not require fractional
+values.</p>
+<h2 id="characters"><a class="header" href="#characters">Characters</a></h2>
+<pre><code class="language-r">name &lt;- "Alice"
+</code></pre>
+<p>Characters represent text: names, labels, descriptions.</p>
+<h2 id="factors"><a class="header" href="#factors">Factors</a></h2>
+<pre><code class="language-r">colours &lt;- factor(c("red", "blue", "green"))
+</code></pre>
+<p>Factors represent categorical data with a limited set of levels.</p>
+<h3 id="ordered-factors"><a class="header" href="#ordered-factors">Ordered factors</a></h3>
+<pre><code class="language-r">education_levels &lt;- c("high school", "bachelor", "master", "ph.d.")
+
+# unordered
+education_factor_no_order &lt;- factor(education_levels, ordered = FALSE)
+
+# ordered
+education_factor &lt;- factor(education_levels, ordered = TRUE)
+education_factor
+</code></pre>
+<p>Ordered factors support logical comparisons based on level order:</p>
+<pre><code class="language-r">edu1 &lt;- ordered("bachelor", levels = education_levels)
+edu2 &lt;- ordered("master", levels = education_levels)
+edu2 &gt; edu1  # TRUE
+</code></pre>
+<hr />
+<h2 id="strings"><a class="header" href="#strings">Strings</a></h2>
+<pre><code class="language-r">you &lt;- "world!"
+greeting &lt;- paste("hello,", you)
+greeting  # "hello, world!"
+</code></pre>
+<h2 id="vectors"><a class="header" href="#vectors">Vectors</a></h2>
+<p>Vectors are homogeneous: all elements must be of the same type.</p>
+<pre><code class="language-r">numeric_vector &lt;- c(1, 2, 3, 4, 5)
+character_vector &lt;- c("apple", "banana", "cherry")
+logical_vector &lt;- c(TRUE, FALSE, TRUE, FALSE)
+</code></pre>
+<h2 id="manipulating-vectors"><a class="header" href="#manipulating-vectors">Manipulating vectors</a></h2>
+<pre><code class="language-r">vector_sum &lt;- numeric_vector + 10
+vector_multiplication &lt;- numeric_vector * 2
+vector_greater_than_three &lt;- numeric_vector &gt; 3
+</code></pre>
+<p>Accessing elements:</p>
+<pre><code class="language-r">first_element &lt;- numeric_vector[1]
+some_elements &lt;- numeric_vector[c(2, 4)]
+</code></pre>
+<h2 id="functions-with-vectors"><a class="header" href="#functions-with-vectors">Functions with vectors</a></h2>
+<pre><code class="language-r">mean(numeric_vector)
+sum(numeric_vector)
+sort(numeric_vector)
+unique(character_vector)
+</code></pre>
+<hr />
+<h2 id="data-frames"><a class="header" href="#data-frames">Data Frames</a></h2>
+<h2 id="creating-data-frames"><a class="header" href="#creating-data-frames">Creating data frames</a></h2>
+<pre><code class="language-r">df &lt;- data.frame(
+  name = c("alice", "bob", "charlie"),
+  age = c(25, 30, 35),
+  gender = c("female", "male", "male")
+)
+head(df)
+str(df)
+</code></pre>
+<h2 id="accessing-elements"><a class="header" href="#accessing-elements">Accessing elements</a></h2>
+<pre><code class="language-r"># by column name
+name_column &lt;- df$name
+
+# by row and column
+second_person &lt;- df[2, ]
+age_column &lt;- df[, "age"]
+
+# by condition
+very_old_people &lt;- subset(df, age &gt; 25)
+mean(very_old_people$age)
+</code></pre>
+<h2 id="exploring-data-frames"><a class="header" href="#exploring-data-frames">Exploring data frames</a></h2>
+<pre><code class="language-r">head(df)    # first six rows
+tail(df)    # last six rows
+str(df)     # structure
+summary(df) # summary statistics
+</code></pre>
+<h2 id="manipulating-data-frames"><a class="header" href="#manipulating-data-frames">Manipulating data frames</a></h2>
+<pre><code class="language-r"># adding columns
+df$employed &lt;- c(TRUE, TRUE, FALSE)
+
+# adding rows
+new_person &lt;- data.frame(name = "diana", age = 28, gender = "female", employed = TRUE)
+df &lt;- rbind(df, new_person)
+
+# modifying values
+df[4, "age"] &lt;- 26
+
+# removing columns
+df$employed &lt;- NULL
+
+# removing rows
+df &lt;- df[-4, ]
+</code></pre>
+<h2 id="rbind-and-cbind"><a class="header" href="#rbind-and-cbind"><code>rbind()</code> and <code>cbind()</code></a></h2>
+<p><code>rbind()</code> combines data frames by rows; <code>cbind()</code> combines by columns.
+When using these functions, column names (for <code>rbind</code>) or row counts
+(for <code>cbind</code>) must match. We will use <code>dplyr</code> for more flexible joining
+in later weeks.</p>
+<hr />
+<h2 id="summary-statistics"><a class="header" href="#summary-statistics">Summary statistics</a></h2>
+<pre><code class="language-r">set.seed(12345)
+vector &lt;- rnorm(n = 40, mean = 0, sd = 1)
+mean(vector)
+sd(vector)
+min(vector)
+max(vector)
+</code></pre>
+<h2 id="table-for-categorical-data"><a class="header" href="#table-for-categorical-data"><code>table()</code> for categorical data</a></h2>
+<pre><code class="language-r">set.seed(12345)
+gender &lt;- sample(c("male", "female"), size = 100, replace = TRUE, prob = c(0.5, 0.5))
+education_level &lt;- sample(c("high school", "bachelor", "master"), size = 100, replace = TRUE, prob = c(0.4, 0.4, 0.2))
+df_table &lt;- data.frame(gender, education_level)
+table(df_table)
+table(df_table$gender, df_table$education_level)  # cross-tabulation
+</code></pre>
+<hr />
+<h2 id="first-data-visualisation-with-ggplot2"><a class="header" href="#first-data-visualisation-with-ggplot2">First Data Visualisation with <code>ggplot2</code></a></h2>
+<p><code>ggplot2</code> is based on the Grammar of Graphics: you build plots layer by
+layer. Install it once if needed: <code>install.packages("ggplot2")</code>.</p>
+<pre><code class="language-r">library(ggplot2)
+
+set.seed(12345)
+student_data &lt;- data.frame(
+  name = c("alice", "bob", "charlie", "diana", "ethan", "fiona", "george", "hannah"),
+  score = sample(80:100, 8, replace = TRUE),
+  stringsAsFactors = FALSE
+)
+student_data$passed &lt;- ifelse(student_data$score &gt;= 90, "passed", "failed")
+student_data$passed &lt;- factor(student_data$passed, levels = c("failed", "passed"))
+student_data$study_hours &lt;- sample(5:15, 8, replace = TRUE)
+</code></pre>
+<h2 id="bar-plot"><a class="header" href="#bar-plot">Bar plot</a></h2>
+<pre><code class="language-r">ggplot(student_data, aes(x = name, y = score, fill = passed)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("failed" = "red", "passed" = "blue")) +
+  labs(title = "student scores", x = "student name", y = "score") +
+  theme_minimal()
+</code></pre>
+<h2 id="scatter-plot"><a class="header" href="#scatter-plot">Scatter plot</a></h2>
+<pre><code class="language-r">ggplot(student_data, aes(x = study_hours, y = score, color = passed)) +
+  geom_point(size = 4) +
+  scale_color_manual(values = c("failed" = "red", "passed" = "blue")) +
+  labs(title = "scores vs. study hours", x = "study hours", y = "score") +
+  theme_minimal()
+</code></pre>
+<h2 id="box-plot"><a class="header" href="#box-plot">Box plot</a></h2>
+<pre><code class="language-r">ggplot(student_data, aes(x = passed, y = score, fill = passed)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("failed" = "red", "passed" = "blue")) +
+  labs(title = "score distribution by pass/fail status", x = "status", y = "score") +
+  theme_minimal()
+</code></pre>
+<h2 id="histogram"><a class="header" href="#histogram">Histogram</a></h2>
+<pre><code class="language-r">ggplot(student_data, aes(x = score, fill = passed)) +
+  geom_histogram(binwidth = 5, color = "black", alpha = 0.7) +
+  scale_fill_manual(values = c("failed" = "red", "passed" = "blue")) +
+  labs(title = "histogram of scores", x = "score", y = "count") +
+  theme_minimal()
+</code></pre>
+<h2 id="line-plot-time-series"><a class="header" href="#line-plot-time-series">Line plot (time series)</a></h2>
+<pre><code class="language-r">months &lt;- factor(month.abb[1:8], levels = month.abb[1:8])
+study_hours &lt;- c(0, 3, 15, 30, 35, 120, 18, 15)
+study_data &lt;- data.frame(month = months, study_hours = study_hours)
+
+ggplot(study_data, aes(x = month, y = study_hours, group = 1)) +
+  geom_line(linewidth = 1, color = "blue") +
+  geom_point(color = "red", size = 1) +
+  labs(title = "monthly study hours", x = "month", y = "study hours") +
+  theme_minimal()
+</code></pre>
+<hr />
+<h2 id="summary-of-todays-lab"><a class="header" href="#summary-of-todays-lab">Summary of today's lab</a></h2>
+<p>This session covered:</p>
+<ul>
+<li>Installing and setting up R and RStudio</li>
+<li>Basic arithmetic operations</li>
+<li>Data structures: vectors, factors, data frames</li>
+<li>Data visualisation with <code>ggplot2</code></li>
+</ul>
+<h2 id="end-of-lab-gitgithub-check-in"><a class="header" href="#end-of-lab-gitgithub-check-in">End-of-lab git/GitHub check-in</a></h2>
+<p>After you finish the R tasks above, you can save this work to GitHub.</p>
+<p>If you already completed <a href="lab-01.html">Lab 1: Git and GitHub</a>, run:</p>
+<pre><code class="language-bash">git status
+git add R/lab-02.R
+git commit -m "add lab 2 r script and setup"
+git push
+</code></pre>
+<p>If git/GitHub is still new for you, stop here and return to this section
+after your Lab 1 workflow is working.</p>
+<h2 id="where-to-get-help"><a class="header" href="#where-to-get-help">Where to get help</a></h2>
+<ol>
+<li><strong>Large language models:</strong> LLMs are effective coding tutors. Help
+from LLMs for coding does not constitute a breach of academic
+integrity in this course. For your final report, cite all sources
+including LLMs.</li>
+<li><a href="https://stackoverflow.com/questions/tagged/r"><strong>Stack Overflow</strong></a>:
+outstanding community resource.</li>
+<li><a href="https://stats.stackexchange.com/"><strong>Cross Validated</strong></a>: best place
+for statistics advice.</li>
+<li><strong>Developer websites:</strong> <a href="https://www.tidyverse.org/">Tidyverse</a>.</li>
+<li>Your tutors and course coordinator.</li>
+</ol>
+<h2 id="recommended-reading"><a class="header" href="#recommended-reading">Recommended reading</a></h2>
+<ul>
+<li>Wickham, H., &amp; Grolemund, G. (2016). <em>R for Data Science.</em> O'Reilly
+Media. <a href="https://r4ds.had.co.nz">Available online</a></li>
+<li>Megan Hall's lecture: <a href="https://meghan.rbind.io/talk/neair/">https://meghan.rbind.io/talk/neair/</a></li>
+<li>RStudio learning materials: <a href="https://posit.cloud/learn/primers">https://posit.cloud/learn/primers</a></li>
+</ul>
+<hr />
+<h2 id="appendix-a-at-home-exercises"><a class="header" href="#appendix-a-at-home-exercises">Appendix A: At-home exercises</a></h2>
+<blockquote>
+<p><strong>Exercise 1: Install the tidyverse package</strong></p>
+<ol>
+<li>Open RStudio.</li>
+<li>Go to <code>Tools &gt; Install Packages...</code>.</li>
+<li>Type <code>tidyverse</code> and check <code>Install dependencies</code>.</li>
+<li>Click <code>Install</code>.</li>
+<li>Load with <code>library(tidyverse)</code>.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Exercise 2: Install the parameters and report packages</strong></p>
+<ol>
+<li>Go to <code>Tools &gt; Install Packages...</code>.</li>
+<li>Type <code>parameters, report</code>.</li>
+<li>Check <code>Install dependencies</code> and click <code>Install</code>.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Exercise 2b: Install the causalworkshop package</strong></p>
+<p>The <code>causalworkshop</code> package provides simulated data for your research
+report. Run the following in your R console:</p>
+<pre><code class="language-r">install.packages("pak")
+pak::pak("go-bayes/causalworkshop")
+</code></pre>
+<p>Verify the installation:</p>
+<pre><code class="language-r">library(causalworkshop)
+d &lt;- simulate_nzavs_data(n = 100, seed = 2026)
+head(d)
+</code></pre>
+</blockquote>
+<blockquote>
+<p><strong>Exercise 3: Basic operations</strong></p>
+<ol>
+<li>Create <code>vector_a &lt;- c(2, 4, 6, 8)</code> and
+<code>vector_b &lt;- c(1, 3, 5, 7)</code>.</li>
+<li>Add them, subtract them, multiply <code>vector_a</code> by 2, divide
+<code>vector_b</code> by 2.</li>
+<li>Calculate the mean and standard deviation of both.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Exercise 4: Working with data frames</strong></p>
+<ol>
+<li>Create a data frame with columns <code>id</code> (1–4), <code>name</code>, <code>score</code> (88,
+92, 85, 95).</li>
+<li>Add a <code>passed</code> column (pass mark = 90).</li>
+<li>Extract name and score of students who passed.</li>
+<li>Explore with <code>summary()</code>, <code>head()</code>, <code>str()</code>.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Exercise 5: Logical operations and subsetting</strong></p>
+<ol>
+<li>Subset <code>student_data</code> to find students who scored above the mean.</li>
+<li>Create an <code>attendance</code> vector and add it as a column.</li>
+<li>Subset to select only rows where students were present.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Exercise 6: Cross-tabulation</strong></p>
+<ol>
+<li>Create factor variables <code>fruit</code> and <code>colour</code>.</li>
+<li>Make a data frame and use <code>table()</code> for cross-tabulation.</li>
+<li>Which fruit has the most colour variety?</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>Exercise 7: Visualisation with ggplot2</strong></p>
+<ol>
+<li>Using <code>student_data</code>, create a bar plot of scores by name.</li>
+<li>Add a title, axis labels, and colour by pass/fail status.</li>
+</ol>
+</blockquote>
+<hr />
+<h2 id="appendix-b-solutions"><a class="header" href="#appendix-b-solutions">Appendix B: Solutions</a></h2>
+<h2 id="solution-3-basic-operations"><a class="header" href="#solution-3-basic-operations">Solution 3: Basic operations</a></h2>
+<pre><code class="language-r">vector_a &lt;- c(2, 4, 6, 8)
+vector_b &lt;- c(1, 3, 5, 7)
+
+sum_vector &lt;- vector_a + vector_b
+diff_vector &lt;- vector_a - vector_b
+double_vector_a &lt;- vector_a * 2
+half_vector_b &lt;- vector_b / 2
+
+mean(vector_a); sd(vector_a)
+mean(vector_b); sd(vector_b)
+</code></pre>
+<h2 id="solution-4-working-with-data-frames"><a class="header" href="#solution-4-working-with-data-frames">Solution 4: Working with data frames</a></h2>
+<pre><code class="language-r">student_data &lt;- data.frame(
+  id = 1:4,
+  name = c("alice", "bob", "charlie", "diana"),
+  score = c(88, 92, 85, 95),
+  stringsAsFactors = FALSE
+)
+student_data$passed &lt;- student_data$score &gt;= 90
+passed_students &lt;- student_data[student_data$passed == TRUE, ]
+summary(student_data)
+</code></pre>
+<h2 id="solution-5-logical-operations-and-subsetting"><a class="header" href="#solution-5-logical-operations-and-subsetting">Solution 5: Logical operations and subsetting</a></h2>
+<pre><code class="language-r">mean_score &lt;- mean(student_data$score)
+students_above_mean &lt;- student_data[student_data$score &gt; mean_score, ]
+
+attendance &lt;- c("present", "absent", "present", "present")
+student_data$attendance &lt;- attendance
+present_students &lt;- student_data[student_data$attendance == "present", ]
+</code></pre>
+<h2 id="solution-6-cross-tabulation"><a class="header" href="#solution-6-cross-tabulation">Solution 6: Cross-tabulation</a></h2>
+<pre><code class="language-r">fruit &lt;- factor(c("apple", "banana", "apple", "orange", "banana"))
+colour &lt;- factor(c("red", "yellow", "green", "orange", "green"))
+fruit_data &lt;- data.frame(fruit, colour)
+table(fruit_data$fruit, fruit_data$colour)
+# apple has the most colour variety (red, green)
+</code></pre>
+<h2 id="solution-7-visualisation"><a class="header" href="#solution-7-visualisation">Solution 7: Visualisation</a></h2>
+<pre><code class="language-r">library(ggplot2)
+ggplot(student_data, aes(x = name, y = score, fill = passed)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("TRUE" = "blue", "FALSE" = "red")) +
+  labs(title = "student scores", x = "name", y = "score") +
+  theme_minimal()
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="lab-01.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="lab-03.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="lab-01.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="lab-03.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

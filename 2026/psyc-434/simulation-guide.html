@@ -1,0 +1,473 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Simulation Guide - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="simulation-guide"><a class="header" href="#simulation-guide">Simulation Guide</a></h1>
+<p>Simulations are pedagogical tools that let us see what causal inference
+methods do when we know the truth. In observational research, we never
+know the true causal effect. In a simulation, we build the
+data-generating process ourselves, so we can compare each method's
+estimate against the ground-truth parameter. The four simulations in
+this guide illustrate distinct threats to valid causal inference and
+distinct strategies for addressing them.</p>
+<p>The data-generating helpers live in the <code>causalworkshop</code> package. Each
+section below shows the helper call followed by the analysis we apply to
+it, so you can see the reasoning step by step.</p>
+<blockquote>
+<p><strong>Required R packages</strong></p>
+<p><code>causalworkshop</code>, <code>tidyverse</code>, <code>stdReg</code>, <code>gtsummary</code>, <code>clarify</code>,
+<code>grf</code>. Install <code>causalworkshop</code> from GitHub with
+<code>pak::pak("go-bayes/causalworkshop")</code> (version $\geq$ 0.5.0); first
+run <code>install.packages("pak")</code> if you do not already have it.</p>
+</blockquote>
+<hr />
+<h2 id="generalisability-and-transportability"><a class="header" href="#generalisability-and-transportability">Generalisability and transportability</a></h2>
+<p><em>Connects to Week 4: external validity and selection bias.</em></p>
+<p>This simulation creates two populations that differ in the prevalence of
+an effect modifier $Z$. In the sample, $Z = 1$ is rare ($p =
+0.1$); in the target population, $Z = 1$ is common ($p = 0.5$). The
+treatment effect depends on $Z$: individuals with $Z = 1$ benefit
+more from treatment. Because the sample under-represents these
+high-benefit individuals, the naive sample Average Treatment Effect
+(ATE) underestimates the population ATE.</p>
+<pre><code class="language-r">library(causalworkshop)
+
+data &lt;- simulate_ate_data_with_weights(
+  n_sample      = 10000,
+  n_population  = 100000,
+  p_z_sample    = 0.1,
+  p_z_population = 0.5,
+  beta_a        = 1,
+  beta_z        = 2.5,
+  beta_az       = 0.5,
+  noise_sd      = 0.5,
+  seed          = 123
+)
+
+sample_data     &lt;- data$sample_data       # y_sample, a_sample, z_sample, weights
+population_data &lt;- data$population_data   # y_population, a_population, z_population
+</code></pre>
+<p>The simulation fits three models: an unweighted model on the sample, a
+weighted model on the sample (using inverse-probability-of-sampling
+weights), and an oracle model on the full population. The regression
+coefficients are nearly identical across all three models, yet the
+marginal ATEs differ. This dissociation is the central lesson: model
+coefficients describe conditional associations, but the ATE is a
+marginal quantity that depends on the distribution of effect modifiers
+in the target population. Weighting the sample to match the population
+distribution of $Z$ recovers the correct ATE.</p>
+<p>The legacy script also includes a manual calculation that shows exactly
+what <code>stdReg</code> does under the hood: create counterfactual datasets in
+which everyone receives $A = 0$ and everyone receives $A = 1$,
+predict outcomes under each scenario, and take the mean difference. This
+"g-computation" procedure makes the marginalisation step explicit.</p>
+<blockquote>
+<p><strong>Key takeaway</strong></p>
+<p>Regression coefficients can be correct and yet the ATE can still be
+wrong for the target population. External validity requires that the
+distribution of effect modifiers in the sample matches the target, or
+that we adjust for the mismatch.</p>
+</blockquote>
+<hr />
+<h2 id="cross-sectional-data-ambiguity"><a class="header" href="#cross-sectional-data-ambiguity">Cross-sectional data ambiguity</a></h2>
+<p><em>Connects to Week 3: confounding versus mediation.</em></p>
+<p>This simulation generates data in which $A$ causes $L$, and $L$
+causes $Y$. The variable $L$ is therefore a mediator, not a
+confounder.</p>
+<pre><code class="language-r">data_cross &lt;- simulate_mediation_example(
+  n     = 1000,
+  beta  = 2,      # effect of A on L
+  delta = 1.5,    # effect of L on Y
+  seed  = 123
+)
+
+fit_blocked &lt;- lm(Y ~ A + L, data = data_cross)   # incorrectly conditions on the mediator
+fit_total   &lt;- lm(Y ~ A,     data = data_cross)   # correctly recovers the total effect
+</code></pre>
+<p>The model that conditions on $L$ returns a near-zero estimate for the
+effect of $A$ on $Y$ because it blocks the very path through which
+$A$ operates. The model that omits $L$ correctly recovers the total
+effect (true value: <code>beta * delta = 3</code>).</p>
+<p>The crux of the problem is that with cross-sectional data alone, the
+investigator cannot distinguish a confounder from a mediator. Both the
+fork $A \leftarrow L \rightarrow Y$ and the chain $A \rightarrow L
+\rightarrow Y$ produce the same observed association between $A$,
+$L$, and $Y$. The correct modelling decision depends on the assumed
+causal structure, which the data themselves do not reveal.</p>
+<blockquote>
+<p><strong>Warning</strong></p>
+<p>Good model fit does not resolve this ambiguity. A model that
+conditions on a mediator can fit the data well while returning a
+biased causal estimate. Model fit is a statistical property;
+confounding is a structural (causal) property.</p>
+</blockquote>
+<hr />
+<h2 id="confounding-control-strategies"><a class="header" href="#confounding-control-strategies">Confounding control strategies</a></h2>
+<p><em>Connects to Weeks 3–4: conditioning choices and the backdoor
+criterion.</em></p>
+<p>This simulation builds a three-wave panel structure with a baseline
+covariate $L_0$, a prior outcome $Y_0$, a prior exposure $A_0$, an
+unmeasured confounder $U$, a treatment $A_1$, and an outcome
+$Y_2$. The true treatment effect is $\delta_{A_1} = 0.3$, and the
+outcome also depends on $Y_0$, $A_0$, $L_0$, their interaction,
+and $U$.</p>
+<pre><code class="language-r">data_panel &lt;- simulate_three_wave_panel(
+  n        = 10000,
+  delta_A1 = 0.3,
+  seed     = 123
+)
+
+fit_no_control  &lt;- lm(Y_2 ~ A_1,                          data = data_panel)
+fit_standard    &lt;- lm(Y_2 ~ A_1 + L_0,                    data = data_panel)
+fit_interaction &lt;- lm(Y_2 ~ A_1 * (L_0 + A_0 + Y_0),      data = data_panel)
+</code></pre>
+<p>Three models are compared. The "no control" model regresses $Y_2$ on
+$A_1$ alone and overestimates the effect because it leaves all
+backdoor paths open. The "standard" model adds $L_0$ but still omits
+$Y_0$ and $A_0$, leaving residual confounding. The "interaction"
+model conditions on $L_0$, $A_0$, $Y_0$, and their interactions
+with $A_1$, recovering an estimate close to the true value.</p>
+<p>The simulation uses the <code>clarify</code> package to obtain simulation-based
+confidence intervals for each ATE. The progressive improvement from no
+control to standard to interaction control illustrates that closing more
+backdoor paths moves the estimate closer to the truth, but only
+conditioning on the right set of variables eliminates confounding
+entirely.</p>
+<blockquote>
+<p><strong>Key takeaway</strong></p>
+<p>In a three-wave panel, conditioning on the prior exposure, prior
+outcome, and baseline covariates (along with their interactions) is
+ordinarily necessary to satisfy the backdoor criterion. Omitting any
+of these leaves residual confounding.</p>
+</blockquote>
+<hr />
+<h2 id="causal-forest-estimation"><a class="header" href="#causal-forest-estimation">Causal forest estimation</a></h2>
+<p><em>Connects to Week 8: machine learning for heterogeneous treatment
+effects.</em></p>
+<p>This simulation reuses <code>simulate_three_wave_panel()</code>, then fits a causal
+forest (from the <code>grf</code> package) with $L_0$, $A_0$, and $Y_0$ as
+covariates.</p>
+<pre><code class="language-r">library(grf)
+
+data_panel &lt;- simulate_three_wave_panel(seed = 123)
+
+W &lt;- as.matrix(data_panel$A_1)
+Y &lt;- as.matrix(data_panel$Y_2)
+X &lt;- as.matrix(data_panel[, c("L_0", "A_0", "Y_0")])
+
+fit_cf &lt;- causal_forest(X, Y, W)
+average_treatment_effect(fit_cf)
+</code></pre>
+<p>The causal forest is a non-parametric method that estimates
+individual-level treatment effects $\hat{\tau}(x)$ by partitioning the
+covariate space adaptively. Unlike the parametric models above, the
+causal forest does not require the investigator to specify interaction
+terms; it discovers them from the data.</p>
+<p>Comparing the causal forest estimate to the parametric interaction model
+illustrates two points. First, the causal forest can recover the ATE
+without requiring the analyst to guess the correct functional form.
+Second, the causal forest provides a standard error that accounts for
+the adaptive splitting, making valid inference possible even in the
+non-parametric setting.</p>
+<blockquote>
+<p><strong>Key takeaway</strong></p>
+<p>Causal forests automate the discovery of heterogeneous treatment
+effects but still require the investigator to supply the correct set
+of confounders. Machine learning solves the functional-form problem,
+not the identification problem.</p>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="presentation-rubric.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="glossary.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="presentation-rubric.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="glossary.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
