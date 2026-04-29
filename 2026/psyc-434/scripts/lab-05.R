@@ -20,14 +20,10 @@ required_causalworkshop_exports <- c("simulate_nzavs_data")
 # install or refresh causalworkshop only if the required export is missing
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
   !all(required_causalworkshop_exports %in% getNamespaceExports("causalworkshop"))) {
-  if (!requireNamespace("remotes", quietly = TRUE)) {
-    install.packages("remotes")
+  if (!requireNamespace("pak", quietly = TRUE)) {
+    install.packages("pak")
   }
-  if (dir.exists("/Users/joseph/GIT/causalworkshop")) {
-    remotes::install_local("/Users/joseph/GIT/causalworkshop", force = TRUE)
-  } else {
-    remotes::install_github("go-bayes/causalworkshop", force = TRUE)
-  }
+  pak::pak("go-bayes/causalworkshop")
 }
 
 library(causalworkshop)

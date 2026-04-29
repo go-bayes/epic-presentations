@@ -18,14 +18,10 @@ required_causalworkshop_exports <- c("simulate_measurement_items")
 
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
   !all(required_causalworkshop_exports %in% getNamespaceExports("causalworkshop"))) {
-  if (!requireNamespace("remotes", quietly = TRUE)) {
-    install.packages("remotes")
+  if (!requireNamespace("pak", quietly = TRUE)) {
+    install.packages("pak")
   }
-  if (dir.exists("/Users/joseph/GIT/causalworkshop")) {
-    remotes::install_local("/Users/joseph/GIT/causalworkshop", force = TRUE)
-  } else {
-    remotes::install_github("go-bayes/causalworkshop", force = TRUE)
-  }
+  pak::pak("go-bayes/causalworkshop")
 }
 
 library(causalworkshop)
@@ -183,9 +179,16 @@ print(fit_table)
 # manuscript updates on re-render.
 # ============================================================================
 
-# the scaffold lives at the repo root, not inside src/. find it from any
-# working directory by walking up to the 26-434 root.
-template_dir <- "/Users/joseph/GIT/26-434/research-report-template"
+# the scaffold lives at the repo root, not inside src/. set your R working
+# directory to wherever you keep the course materials, then this relative
+# path resolves to the scaffold.
+template_dir <- "research-report-template"
+if (!dir.exists(template_dir)) {
+  stop(
+    "could not find `", template_dir, "` from ", getwd(),
+    ". setwd() to the directory that contains it, then re-run."
+  )
+}
 
 # 1. orient: list the scaffold files
 list.files(template_dir)

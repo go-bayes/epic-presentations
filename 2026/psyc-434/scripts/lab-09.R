@@ -27,22 +27,20 @@
 
 # --- packages ---------------------------------------------------------------
 
-required_packages <- c("ggplot2", "dplyr", "tibble", "remotes", "qs", "googledrive")
+required_packages <- c("ggplot2", "dplyr", "tibble", "qs", "googledrive")
 missing <- required_packages[
   !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
 if (length(missing) > 0) install.packages(missing)
 
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+
 if (!requireNamespace("margot", quietly = TRUE)) {
-  remotes::install_github("go-bayes/margot")
+  pak::pak("go-bayes/margot")
 }
 
 if (!requireNamespace("causalworkshop", quietly = TRUE)) {
-  if (dir.exists("/Users/joseph/GIT/causalworkshop")) {
-    remotes::install_local("/Users/joseph/GIT/causalworkshop", force = TRUE)
-  } else {
-    remotes::install_github("go-bayes/causalworkshop", force = TRUE)
-  }
+  pak::pak("go-bayes/causalworkshop")
 }
 
 suppressPackageStartupMessages({

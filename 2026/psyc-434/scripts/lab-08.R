@@ -42,15 +42,13 @@ required_causalworkshop_exports <- c("simulate_nzavs_data")
 
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
   !all(required_causalworkshop_exports %in% getNamespaceExports("causalworkshop"))) {
-  if (!requireNamespace("remotes", quietly = TRUE)) {
-    install.packages("remotes")
+  if (!requireNamespace("pak", quietly = TRUE)) {
+    install.packages("pak")
   }
-  if (dir.exists("/Users/joseph/GIT/causalworkshop")) {
-    remotes::install_local("/Users/joseph/GIT/causalworkshop", force = TRUE)
-  } else {
-    remotes::install_github("go-bayes/causalworkshop", force = TRUE)
-  }
+  pak::pak("go-bayes/causalworkshop")
 }
+
+
 
 library(causalworkshop)
 library(grf)
@@ -85,9 +83,9 @@ covariate_cols <- c(
   "community_group", "purpose"
 )
 
-X <- as.matrix(d0[, covariate_cols])  # baseline covariates
-Y <- d2$purpose                      # outcome at wave 2
-W <- d1$community_group                # treatment at wave 1
+X <- as.matrix(d0[, covariate_cols]) # baseline covariates
+Y <- d2$purpose # outcome at wave 2
+W <- d1$community_group # treatment at wave 1
 
 # fit a causal forest. honesty splits the data so different observations
 # choose splits and estimate effects, which protects against overfitting.
@@ -113,8 +111,8 @@ tau_hat <- predict(cf)$predictions
 # ranking of the population, from highest predicted benefit to lowest.
 
 n <- length(tau_hat)
-tau_order <- order(tau_hat, decreasing = TRUE)  # indices sorted top to bottom
-tau_sorted <- tau_hat[tau_order]                # sorted CATE estimates
+tau_order <- order(tau_hat, decreasing = TRUE) # indices sorted top to bottom
+tau_sorted <- tau_hat[tau_order] # sorted CATE estimates
 
 # look at the extremes to get a feel for the spread. if the top and bottom
 # look almost identical, the forest sees little useful heterogeneity, and
