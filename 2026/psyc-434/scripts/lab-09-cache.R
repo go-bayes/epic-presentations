@@ -75,14 +75,12 @@ load_lab_09_cache <- function(
     "policy_workflow.qs"
   )
 
-  # if Joseph's local Google Drive cache is mounted (i.e., this is the
-  # author's machine), prefer those files. avoids the lag while Drive
-  # syncs replacement uploads to the cloud.
-  local_drive <- path.expand(file.path(
-    "~/Library/CloudStorage/GoogleDrive-joseph.bulbulia@gmail.com",
-    "My Drive/courses/psyc-434-2026/lab-09-cache"
-  ))
-  if (all(file.exists(file.path(local_drive, expected_files)))) {
+  # author shortcut: if PSYC434_LAB09_CACHE points at a directory holding
+  # the cache files locally, read from there instead of downloading. set
+  # this in your local ~/.Renviron; unset for students.
+  local_drive <- Sys.getenv("PSYC434_LAB09_CACHE", "")
+  if (nzchar(local_drive) &&
+    all(file.exists(file.path(local_drive, expected_files)))) {
     return(list(
       models_binary = qs::qread(file.path(local_drive, "models_binary.qs")),
       policy_tree_stability = qs::qread(file.path(local_drive, "policy_tree_stability.qs")),
