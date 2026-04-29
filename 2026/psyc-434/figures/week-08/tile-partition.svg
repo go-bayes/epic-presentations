@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 460" width="620" height="460" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <!-- Plot frame -->
+  <rect x="80" y="40" width="460" height="360" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
+
+  <!-- Tiles (leaves) defined by splits at X1 = 0.45 and X2 = 0.55 (split inside left tile only) -->
+  <!-- Left tile: split horizontally at X2 = 0.55 -->
+  <rect x="80" y="40" width="207" height="162" fill="#fef6e4" stroke="#333" stroke-width="1.0"/>
+  <rect x="80" y="202" width="207" height="198" fill="#dcebf3" stroke="#333" stroke-width="1.0"/>
+  <!-- Right tile: split horizontally at X2 = 0.35 -->
+  <rect x="287" y="40" width="253" height="234" fill="#e6f0e0" stroke="#333" stroke-width="1.0"/>
+  <rect x="287" y="274" width="253" height="126" fill="#f3d9d9" stroke="#333" stroke-width="1.0"/>
+
+  <!-- Leaf labels (tau values) -->
+  <text x="183" y="125" text-anchor="middle" font-size="14" fill="#222" font-weight="bold">&#964;&#770; = +0.5</text>
+  <text x="183" y="305" text-anchor="middle" font-size="14" fill="#222" font-weight="bold">&#964;&#770; = &#8722;0.1</text>
+  <text x="413" y="160" text-anchor="middle" font-size="14" fill="#222" font-weight="bold">&#964;&#770; = +0.2</text>
+  <text x="413" y="340" text-anchor="middle" font-size="14" fill="#222" font-weight="bold">&#964;&#770; = +0.8</text>
+
+  <!-- Treated points (filled circles) and control points (open triangles) -->
+  <!-- Tile 1: X1<0.45, X2>0.55 (top-left) -->
+  <circle cx="120" cy="80" r="5" fill="#222"/>
+  <circle cx="160" cy="100" r="5" fill="#222"/>
+  <circle cx="200" cy="65" r="5" fill="#222"/>
+  <circle cx="240" cy="115" r="5" fill="#222"/>
+  <polygon points="135,150 145,170 125,170" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="200,140 210,160 190,160" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="260,155 270,175 250,175" fill="#fff" stroke="#222" stroke-width="1.2"/>
+
+  <!-- Tile 2: X1<0.45, X2<0.55 (bottom-left) -->
+  <circle cx="120" cy="240" r="5" fill="#222"/>
+  <circle cx="180" cy="280" r="5" fill="#222"/>
+  <circle cx="240" cy="350" r="5" fill="#222"/>
+  <polygon points="115,310 125,330 105,330" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="170,360 180,380 160,380" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="220,250 230,270 210,270" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="260,300 270,320 250,320" fill="#fff" stroke="#222" stroke-width="1.2"/>
+
+  <!-- Tile 3: X1>0.45, X2>0.35 (top-right) -->
+  <circle cx="320" cy="100" r="5" fill="#222"/>
+  <circle cx="380" cy="160" r="5" fill="#222"/>
+  <circle cx="440" cy="80" r="5" fill="#222"/>
+  <circle cx="490" cy="200" r="5" fill="#222"/>
+  <polygon points="350,200 360,220 340,220" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="420,240 430,260 410,260" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="480,120 490,140 470,140" fill="#fff" stroke="#222" stroke-width="1.2"/>
+
+  <!-- Tile 4: X1>0.45, X2<0.35 (bottom-right) -->
+  <circle cx="330" cy="320" r="5" fill="#222"/>
+  <circle cx="380" cy="290" r="5" fill="#222"/>
+  <circle cx="430" cy="370" r="5" fill="#222"/>
+  <circle cx="490" cy="310" r="5" fill="#222"/>
+  <polygon points="370,365 380,385 360,385" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <polygon points="450,295 460,315 440,315" fill="#fff" stroke="#222" stroke-width="1.2"/>
+
+  <!-- Axis labels and ticks -->
+  <text x="310" y="430" text-anchor="middle" font-size="13" fill="#222" font-style="italic">X&#8321; (e.g. baseline purpose)</text>
+  <text x="30" y="220" text-anchor="middle" font-size="13" fill="#222" font-style="italic" transform="rotate(-90, 30, 220)">X&#8322; (e.g. extraversion)</text>
+
+  <text x="80" y="415" text-anchor="middle" font-size="11" fill="#444">low</text>
+  <text x="540" y="415" text-anchor="middle" font-size="11" fill="#444">high</text>
+  <text x="65" y="400" text-anchor="middle" font-size="11" fill="#444">low</text>
+  <text x="65" y="48" text-anchor="middle" font-size="11" fill="#444">high</text>
+
+  <!-- Legend -->
+  <rect x="80" y="20" width="460" height="0" fill="none"/>
+  <circle cx="380" cy="22" r="5" fill="#222"/>
+  <text x="392" y="26" font-size="11" fill="#222">treated</text>
+  <polygon points="445,17 455,32 435,32" fill="#fff" stroke="#222" stroke-width="1.2"/>
+  <text x="462" y="26" font-size="11" fill="#222">control</text>
+</svg>

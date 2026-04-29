@@ -1,0 +1,43 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{../preamble.tex}
+\begin{document}
+
+% arrow with a red tip, used to highlight problematic paths
+\tikzset{blackArrowRedTip/.style={
+  decoration={markings, mark=at position 1 with {\arrow[red, thick]{latex}}},
+  postaction={decorate},
+  shorten >=0.4pt}}
+
+\begin{tikzpicture}[{every node/.append style}=draw]
+\node [rectangle, draw=white] (ULAY) at (0, 5) {$U_{L}$};
+\node [rectangle, draw=white] (UA) at (5, 4) {$U_{A}$};
+\node [rectangle, draw=white] (UY) at (10, 5) {$U_{Y}$};
+
+\node [rectangle, draw=black] (L0) at (0, 2) {L$_{f(X_1\dots X_n)}^{t0}$};
+\node [rectangle, draw=black] (A1) at (5, 2) {A$_{f(X_1\dots X_n)}^{t1}$};
+\node [rectangle, draw=black] (Y2) at (10, 2) {Y$_{f(X_1\dots X_n)}^{t2}$};
+\node [rectangle, draw=white] (Leta0) at (0, 0) {$\eta_L^{t0}$};
+\node [rectangle, draw=white] (Aeta1) at (5, 0) {$\eta_A^{t1}$};
+\node [rectangle, draw=white] (Yeta2) at (10, 0) {$\eta_Y^{t2}$};
+
+\draw [-latex, draw=red] (ULAY) to (UA);
+\draw [-latex, draw=red] (ULAY) to (UY);
+
+\draw [-latex, draw=black] (UA) to (A1);
+\draw [-latex, draw=red] (UY) to (Y2);
+\draw [-latex, draw=black] (ULAY) to (L0);
+\draw [-latex, draw=black] (Leta0) to (L0);
+\draw [-latex, draw=black] (Leta0) to (Aeta1);
+\draw [-latex, draw=black, bend right=30] (Leta0) to (Yeta2);
+
+\draw [-latex, draw=black] (Aeta1) to (A1);
+\draw [-latex, draw=black] (Yeta2) to (Y2);
+
+\draw [-latex, draw=red] (Aeta1) to (UY);
+\draw [-latex, draw=red] (Leta0) to (UA);
+
+\draw [cor, draw=red, dashed, bend right=80] (ULAY) to (Leta0);
+\draw [cor, draw=red, dashed, bend right=80] (UA) to (Aeta1);
+\draw [cor, draw=red, dashed, bend left=80] (UY) to (Yeta2);
+\end{tikzpicture}
+\end{document}

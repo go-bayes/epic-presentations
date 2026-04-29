@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='468.00pt' height='259.20pt' viewBox='0 0 468.00 259.20'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw0NjguMDB8MC4wMHwyNTkuMjA='>
+    <rect x='0.00' y='0.00' width='468.00' height='259.20' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw0NjguMDB8MC4wMHwyNTkuMjA=)'>
+<rect x='0.00' y='0.000000000000057' width='468.00' height='259.20' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+</g>
+<defs>
+  <clipPath id='cpNDAuNDZ8NDYyLjUyfDM4Ljg1fDIyNy43MA=='>
+    <rect x='40.46' y='38.85' width='422.07' height='188.85' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpNDAuNDZ8NDYyLjUyfDM4Ljg1fDIyNy43MA==)'>
+<polyline points='40.46,219.12 462.52,219.12 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='40.46,156.51 462.52,156.51 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='40.46,93.90 462.52,93.90 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='51.81,227.70 51.81,38.85 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='149.69,227.70 149.69,38.85 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='247.57,227.70 247.57,38.85 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='345.45,227.70 345.45,38.85 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='443.34,227.70 443.34,38.85 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='59.64,47.44 67.47,59.29 75.30,67.23 83.13,73.38 90.96,78.58 98.79,83.09 106.62,87.19 114.45,91.06 122.28,94.61 130.11,97.86 137.95,101.03 145.78,104.04 153.61,106.89 161.44,109.62 169.27,112.32 177.10,114.98 184.93,117.56 192.76,120.11 200.59,122.64 208.42,125.16 216.25,127.71 224.08,130.29 231.91,132.89 239.74,135.52 247.57,138.22 255.40,140.98 263.23,143.80 271.06,146.76 278.89,149.87 286.73,153.15 294.56,156.53 302.39,159.99 310.22,163.46 318.05,166.92 325.88,170.34 333.71,173.70 341.54,177.03 349.37,180.30 357.20,183.52 365.03,186.72 372.86,189.89 380.69,193.03 388.52,196.15 396.35,199.26 404.18,202.39 412.01,205.54 419.84,208.73 427.67,212.00 435.51,215.39 443.34,219.12 ' style='stroke-width: 2.13; stroke: #E69F00; stroke-linecap: butt;' />
+<line x1='40.46' y1='219.12' x2='462.52' y2='219.12' style='stroke-width: 1.07; stroke: #666666; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
+</g>
+<g clip-path='url(#cpMC4wMHw0NjguMDB8MC4wMHwyNTkuMjA=)'>
+<text x='35.52' y='222.27' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.11px' lengthAdjust='spacingAndGlyphs'>0.00</text>
+<text x='35.52' y='159.66' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.11px' lengthAdjust='spacingAndGlyphs'>0.05</text>
+<text x='35.52' y='97.05' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.11px' lengthAdjust='spacingAndGlyphs'>0.10</text>
+<text x='51.81' y='238.94' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>0%</text>
+<text x='149.69' y='238.94' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.61px' lengthAdjust='spacingAndGlyphs'>25%</text>
+<text x='247.57' y='238.94' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.61px' lengthAdjust='spacingAndGlyphs'>50%</text>
+<text x='345.45' y='238.94' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.61px' lengthAdjust='spacingAndGlyphs'>75%</text>
+<text x='443.34' y='238.94' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='22.50px' lengthAdjust='spacingAndGlyphs'>100%</text>
+<text x='251.49' y='251.40' text-anchor='middle' style='font-size: 11.00px; font-family: "Arial";' textLength='176.84px' lengthAdjust='spacingAndGlyphs'>Targeting rate (proportion treated, q)</text>
+<text transform='translate(13.36,133.28) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: "Arial";' textLength='147.44px' lengthAdjust='spacingAndGlyphs'>Gain over random assignment</text>
+<text x='5.48' y='31.05' style='font-size: 11.00px;fill: #595959; font-family: "Arial";' textLength='404.52px' lengthAdjust='spacingAndGlyphs'>A steep early rise indicates concentrated heterogeneity; a flat curve indicates none.</text>
+<text x='5.48' y='14.93' style='font-size: 13.20px; font-weight: bold; font-family: "Arial";' textLength='388.00px' lengthAdjust='spacingAndGlyphs'>TOC curve: targeting gain falls toward zero as q approaches 1</text>
+</g>
+</g>
+</svg>

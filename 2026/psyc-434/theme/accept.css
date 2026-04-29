@@ -1,0 +1,65 @@
+/* accept theme for mdbook */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@400;450;500;600&display=swap");
+
+:root {
+  --content-font: "IBM Plex Sans", system-ui, sans-serif;
+  --heading-font: "IBM Plex Serif", Georgia, serif;
+}
+
+.content {
+  font-family: var(--content-font);
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+  font-family: var(--heading-font);
+  font-weight: 450;
+}
+
+/* keep embedded PDFs readable in dark themes */
+.pdf-embed {
+  color-scheme: light;
+  background: #fff;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.pdf-embed iframe {
+  border: none;
+  display: block;
+}
+
+/* lecture figures: full content width, readable on dark themes */
+.content img[src$=".svg"] {
+  background: #fff;
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5em auto;
+}
+
+/* callout blockquotes — replaces mdbook default top/bottom border style */
+blockquote {
+  padding: 0.75em 1.2em;
+  border-block-start: none;
+  border-block-end: none;
+  border-left: 4px solid #888;
+  border-radius: 0 4px 4px 0;
+}
+
+/* catppuccin latte (light) */
+.latte blockquote {
+  background-color: #e8edf8;
+  border-left-color: #1e66f5;
+}
+
+/* catppuccin mocha (dark) */
+.mocha blockquote {
+  background-color: #24253a;
+  border-left-color: #89b4fa;
+}

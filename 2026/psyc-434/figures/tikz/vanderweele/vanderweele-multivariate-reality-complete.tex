@@ -1,0 +1,20 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{../preamble.tex}
+\begin{document}
+\begin{tikzpicture}[{every node/.append style}=draw]
+\node [rectangle, draw=white] (R) at (0, 0 ) {$\mathcal{R}$};
+\node [rectangle, draw=white] (c) at (2, -1 ) {concepts};
+\node [rectangle, draw=white] (cs) at (4, -2 ) {constructs};
+\node [rectangle, draw=white] (eta) at (4, 0 ) {$\eta$};
+\node [rectangle, draw=white] (X) at (6, 0 ) {(X$_1 \dots$X$_n$)};
+\node [rectangle, draw=white] (A) at (8, 0 ) {A};
+\node [rectangle, draw=white] (Y) at (10, 0 ) {Y};
+
+\draw [-latex, draw=black, dashed] (R) to (c);
+\draw [-latex, draw=black, dashed] (c) to (cs);
+\draw [-latex, draw=black] (R) to (eta);
+\draw [-latex, draw=black] (eta) to (X);
+\draw [-latex, draw=black] (X) to (A);
+\draw [-latex, bend left=80, draw=red] (eta) to (Y);
+\end{tikzpicture}
+\end{document}

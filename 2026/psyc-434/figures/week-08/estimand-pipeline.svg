@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 220" width="820" height="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- Causal estimand -->
+  <rect x="20" y="60" width="220" height="110" rx="8" ry="8" fill="#fef6e4" stroke="#333" stroke-width="1.5"/>
+  <text x="130" y="88" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Causal estimand</text>
+  <text x="130" y="120" text-anchor="middle" font-size="14" fill="#222">&#964;(x) = E[Y(1) &#8722; Y(0) | X = x]</text>
+  <text x="130" y="148" text-anchor="middle" font-size="11" fill="#666" font-style="italic">unobservable contrast</text>
+
+  <!-- Arrow 1 -->
+  <line x1="245" y1="115" x2="305" y2="115" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="275" y="100" text-anchor="middle" font-size="11" fill="#444">identification</text>
+  <text x="275" y="135" text-anchor="middle" font-size="11" fill="#444">exch., cons., pos.</text>
+
+  <!-- Statistical estimand -->
+  <rect x="310" y="60" width="280" height="110" rx="8" ry="8" fill="#dcebf3" stroke="#333" stroke-width="1.5"/>
+  <text x="450" y="88" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Statistical estimand</text>
+  <text x="450" y="120" text-anchor="middle" font-size="13" fill="#222">E[Y | A = 1, X = x] &#8722; E[Y | A = 0, X = x]</text>
+  <text x="450" y="148" text-anchor="middle" font-size="11" fill="#666" font-style="italic">observable contrast</text>
+
+  <!-- Arrow 2 -->
+  <line x1="595" y1="115" x2="655" y2="115" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="625" y="100" text-anchor="middle" font-size="11" fill="#444">estimation</text>
+  <text x="625" y="135" text-anchor="middle" font-size="11" fill="#444">causal forest</text>
+
+  <!-- Estimate -->
+  <rect x="660" y="60" width="140" height="110" rx="8" ry="8" fill="#e6f0e0" stroke="#333" stroke-width="1.5"/>
+  <text x="730" y="88" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Estimate</text>
+  <text x="730" y="125" text-anchor="middle" font-size="20" fill="#222">&#964;&#770;(x)</text>
+  <text x="730" y="150" text-anchor="middle" font-size="11" fill="#666" font-style="italic">computed from data</text>
+
+  <!-- Bottom labels -->
+  <text x="130" y="195" text-anchor="middle" font-size="11" fill="#666">what we want to know</text>
+  <text x="450" y="195" text-anchor="middle" font-size="11" fill="#666">what we can identify from data</text>
+  <text x="730" y="195" text-anchor="middle" font-size="11" fill="#666">what the forest produces</text>
+</svg>

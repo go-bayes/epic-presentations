@@ -1,0 +1,12 @@
+% shared tikz preamble for generating svg figures
+% keep this file minimal; figure-specific styles can live in the figure .tex if needed
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations}
+\usetikzlibrary{decorations.markings}
+
+\tikzset{>=latex}
+\tikzstyle{Arrow} = [->, thin, preaction = {decorate}]
+\tikzstyle{cor} = [-, dotted, preaction = {decorate}]

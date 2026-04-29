@@ -1,0 +1,24 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{../preamble.tex}
+\begin{document}
+\begin{tikzpicture}[{every node/.append style}=draw]
+\node [draw=white] (eta1) at (0, 1) {$\eta_1$};
+\node [rectangle, draw=white] (eta2) at (0, 0) {$\vdots$};
+\node [rectangle, draw=white] (etan) at (0, -1) {$\eta_n$};
+\node [rectangle, draw=white] (X1) at (2, 1) {X$_1$};
+\node [rectangle, draw=white] (X2) at (2, 0) {$\vdots$};
+\node [rectangle, draw=white] (Xn) at (2, -1 ) {X$_n$};
+\node [rectangle, draw=white] (A) at (4, 0 ) {A};
+\node [rectangle, draw=white] (Y) at (6, 0 ) {Y};
+
+\draw [-latex, draw=black] (eta1) to (X1);
+\draw [-latex, draw=black] (eta2) to (X2);
+\draw [-latex, draw=black] (etan) to (Xn);
+
+\draw [-latex, draw=black] (X1) to (A);
+\draw [-latex, draw=black] (X2) to (A);
+\draw [-latex, draw=black] (Xn) to (A);
+\draw [-latex, bend left=80, draw=red] (eta1) to (Y);
+\draw [-latex, bend right=80, draw=red] (etan) to (Y);
+\end{tikzpicture}
+\end{document}

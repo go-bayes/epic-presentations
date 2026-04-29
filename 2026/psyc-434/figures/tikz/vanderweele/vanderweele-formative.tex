@@ -1,0 +1,17 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{../preamble.tex}
+\begin{document}
+\begin{tikzpicture}[{every node/.append style}=draw]
+
+\node [rectangle, draw=black] (X1) at (0, 1) {X$_1$};
+\node [rectangle, draw=white] (X2) at (0, 0) {$\vdots$};
+\node [rectangle, draw=black] (Xn) at (0, -1) {X$_n$};
+\node [rectangle, draw=white] (eta) at (6, 0) {$\eta$};
+
+
+\draw [-latex, draw=black] (X1) to (eta);
+\draw [-latex, draw=black] (X2) to (eta);
+\draw [-latex, draw=black] (Xn) to (eta);
+
+\end{tikzpicture}
+\end{document}
