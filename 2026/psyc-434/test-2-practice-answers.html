@@ -278,10 +278,12 @@ misspecification.</p>
 </li>
 <li>
 <p>RATE-AUTOC = 0.04 with CI $[0.01,0.07]$ suggests the forest's
-ranking identifies people who benefit more than average, with
-uncertainty still above zero. The same estimate with CI
-$[-0.02,0.10]$ is inconclusive: the point estimate is positive,
-but the data are compatible with no useful targeting signal.</p>
+ranking describes useful treatment-effect heterogeneity: people
+ranked higher appear to benefit more than people ranked lower. The
+same estimate with CI $[-0.02,0.10]$ is inconclusive: the point
+estimate is positive, but the data are compatible with no useful
+targeting signal. Neither result identifies the causal source of the
+heterogeneity or shows that any splitter is itself a cause.</p>
 </li>
 <li>
 <p>A Qini curve plots the treatment share targeted on the $x$-axis
@@ -332,7 +334,10 @@ whether there is an override or appeal pathway.</p>
 income, housing, neighbourhood resources, age, health, and sometimes
 ethnicity. A rule that uses deprivation may therefore allocate
 treatment unevenly across groups even if group membership is not in
-the tree.</p>
+the tree. The split is descriptive: deprivation may be the strongest
+measured marker even if the root causes of the heterogeneity lie
+upstream, for example in ethnic injustice, housing policy,
+labour-market exclusion, or other causes of deprivation.</p>
 </li>
 <li>
 <p>Statistical evidence can estimate expected benefits, uncertainty,

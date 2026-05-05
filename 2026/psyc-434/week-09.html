@@ -516,10 +516,38 @@ differences that matter. Sometimes they do; often they do not.
 Discovering where the forest finds meaningful splits can generate fresh
 hypotheses about who responds and why, even when no policy decision is
 on the table. A forest that splits on loneliness rather than age, for
-example, suggests the psychological mechanism operates through social
-connection, not biological ageing. This use of heterogeneity is
-exploratory, not confirmatory, and a follow-up study designed around the
-discovered subgroup is the proper test.</p>
+example, suggests a hypothesis about social connection; it does not
+prove that loneliness is the causal source of the heterogeneity. This
+use of heterogeneity is exploratory, not confirmatory, and a follow-up
+study designed around the discovered subgroup is the proper test.</p>
+<h2 id="appendix-why-effect-modifiers-are-descriptive"><a class="header" href="#appendix-why-effect-modifiers-are-descriptive">Appendix: why effect modifiers are descriptive</a></h2>
+<p>Heterogeneous treatment effect (HET) estimates are descriptions of how
+treatment contrasts vary across measured covariates. They are not causal
+effects of the covariates that appear in the forest or policy tree. A
+variable can be a useful effect modifier because it is correlated with a
+deeper cause, because it is downstream of a deeper cause, or because it
+is the best measured proxy available.</p>
+<p>Consider a simple randomised experiment. The exposure $A$ affects the
+outcome $Y$, and $Z$ is the variable that directly helps explain why
+the treatment effect differs. If $Z$ also affects $G$, then $G$
+can look like an effect modifier by proxy. The modifier describes where
+effects vary; it does not identify the root cause of that variation.</p>
+<p><img src="figures/dag-eff-mod-rel.svg" alt="A randomised experiment in which $Z$ is the direct effect modifier and $G$ is a proxy effect modifier because $Z$ affects $G$." /></p>
+<p>If investigators condition on $Z$, $G$ may no longer help describe
+effect heterogeneity. The apparent importance of a modifier is therefore
+relative to the other variables in the model.</p>
+<p><img src="figures/dag-effect-modification-b.svg" alt="Conditioning on $Z$ removes the association between $G$ and the outcome-relevant effect-modification path." /></p>
+<p>The same point matters for allocation rules. Suppose a policy tree
+splits on deprivation. That split may be useful for prediction and
+allocation, but it does not prove that deprivation is the causal source
+of the different treatment response. If ethnicity or other upstream
+causes affect deprivation, and deprivation is the strongest measured
+marker in the data, the tree may split on deprivation while the deeper
+causal explanation lies upstream.</p>
+<p><img src="figures/effect-mod-proxy.svg" alt="A proxy structure in which an upstream variable affects a downstream marker that helps describe effect heterogeneity." /></p>
+<p>The practical rule is: use HETs for description, targeting, and
+hypothesis generation. Do not read a splitter as a cause without a
+separate design that identifies the causal effect of that splitter.</p>
 <h2 id="equity-and-governance"><a class="header" href="#equity-and-governance">Equity and governance</a></h2>
 <p>Efficiency is not enough. A rule that maximises policy value can still
 be contested, opaque, or politically untenable. Three structural
@@ -623,7 +651,7 @@ deployment.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
