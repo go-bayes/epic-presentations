@@ -327,7 +327,7 @@ variation that is, by definition, beyond reach.</p>
 day-to-day workflow estimates the average treatment effect across
 several outcomes at once, then asks which estimates survive sensitivity
 analysis before drilling into heterogeneity for any single outcome.</p>
-<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (sense of purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. Estimates whose E-value bound is below 1.2 are flagged: a confounder of moderate strength could explain those rows away. The lab returns to this view in week 9 as the entry point to the policy question." /></p>
+<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (sense of purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. Estimates whose E-value bound is close to 1 are fragile: relatively modest unmeasured confounding could explain those rows away. The lab returns to this view in week 9 as the entry point to the policy question." /></p>
 <p>The CATE machinery for any single outcome below sits inside this larger
 workflow. We pick one outcome at a time only to make the heterogeneity
 story concrete; the lab itself runs the same machinery in parallel on
@@ -591,8 +591,8 @@ prediction in week 9, run early to avoid spending time on a flat
 forest).</li>
 <li>Estimate targeting value with RATE-AUTOC and RATE-Qini on held-out
 data.</li>
-<li>Run sensitivity analysis (E-values from week 4) on the underlying
-ATE before staking a policy on it.</li>
+<li>Run sensitivity analysis on the underlying ATE before staking a
+policy on it.</li>
 <li>Decide whether heterogeneity is large enough to inform allocation.
 If yes, week 9 turns the ranking into a transparent rule. If no,
 treat-everyone-equally is the simpler defensible policy.</li>
@@ -632,7 +632,7 @@ forests starts around the eighteen-minute mark.</p>
 <hr />
 <p>Lab materials: <a href="lab-08.html">Lab 8: RATE and QINI Curves</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-breiman2001random" class="csl-entry">
 <p>Breiman, L. (2001). Random forests. <em>Machine Learning</em>, <em>45</em>(1), 5–32.
 <a href="https://doi.org/10.1023/A:1010933404324">https://doi.org/10.1023/A:1010933404324</a></p>

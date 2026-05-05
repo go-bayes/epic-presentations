@@ -375,11 +375,11 @@ print(ate_plot$plot)
 <blockquote>
 <p><strong>Reading the forest plot</strong></p>
 <p>The dashed line at zero is the null. Estimates whose E-value bound is
-below 1.2 are flagged: a confounder of moderate strength could explain
-the effect away. Treat those rows with caution when you describe the
-result. The plot's <code>$interpretation</code> slot contains a one-sentence
-draft naming the outcomes most worth treating as causal. Read it as a
-draft, not a verdict.</p>
+close to 1 are fragile: a relatively modest unmeasured confounder
+could explain the effect away. Treat those rows with caution when you
+describe the result. The plot's <code>$interpretation</code> slot contains a
+one-sentence draft naming the outcomes most worth treating as causal.
+Read it as a draft, not a verdict.</p>
 </blockquote>
 <h2 id="step-2-omnibus-heterogeneity-test"><a class="header" href="#step-2-omnibus-heterogeneity-test">Step 2: omnibus heterogeneity test</a></h2>
 <p>The ATE asks "does it work on average?". The next question is "does it

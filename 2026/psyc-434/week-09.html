@@ -296,6 +296,42 @@ and cannot decide.</p>
 workflow across four outcomes (purpose, belonging, self-esteem, life
 satisfaction).</p>
 <p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The lab&#39;s day-to-day workflow estimates effects across many outcomes at once, then asks the policy question only for those whose effects survive sensitivity analysis." /></p>
+<h2 id="outcome-wide-evidence-before-targeting"><a class="header" href="#outcome-wide-evidence-before-targeting">Outcome-wide evidence before targeting</a></h2>
+<p>Before fitting a policy tree, ask whether the underlying average effects
+are credible enough to justify a targeting exercise. Lab 9 estimates one
+exposure across four outcomes: purpose, belonging, self-esteem, and life
+satisfaction. This is an <strong>outcome-wide</strong> design. The point is to read
+the pattern across outcomes, not to hunt for whichever row happens to
+look best.</p>
+<p>When a single exposure is tested against several outcomes, the chance
+that at least one confidence interval excludes zero by chance alone is
+higher than the nominal per-test error rate. A simple correction is
+<strong>Bonferroni</strong>:</p>
+<p>$$ \alpha_{\text{per outcome}} =
+\frac{\alpha_{\text{family-wise}}}{K}. $$</p>
+<p>With $K = 4$ outcomes and $\alpha_{\text{family-wise}} = 0.05$,
+each outcome is tested at $\alpha = 0.0125$. Equivalently, report a
+98.75% confidence interval for each outcome. This is conservative, but
+it is transparent and easy to explain.</p>
+<p>The second question is sensitivity to unmeasured confounding. The
+<strong>E-value</strong> is the minimum association strength, on the risk-ratio
+scale, that an unmeasured confounder would need to have with both the
+exposure and the outcome, above and beyond the measured covariates, to
+explain away the estimated effect (<a href="#ref-vanderweele2017">VanderWeele &amp; Ding,
+2017</a>). Larger E-values mean that a stronger
+unmeasured confounder would be needed.</p>
+<p>Do not treat E-values as a universal pass/fail rule. Whether an E-value
+is large enough depends on the study design, measured covariates,
+outcome, and the kinds of unmeasured confounding that remain plausible.
+In your report, state the E-value for the point estimate and for the
+confidence-limit closest to the null, then interpret it in context. The
+confidence-limit E-value is usually the more cautious summary because it
+asks how strong confounding would need to be to move the uncertainty
+interval to include no effect. VanderWeele and Mathur also recommend
+reporting E-values with enough context that readers can compare them
+with known covariate-outcome and covariate-exposure associations rather
+than reading them as standalone thresholds (<a href="#ref-vanderweele2020b">VanderWeele &amp; Mathur,
+2020</a>).</p>
 <h2 id="from-ranking-to-policy"><a class="header" href="#from-ranking-to-policy">From ranking to policy</a></h2>
 <p>Week 8 produced a ranked list: who is predicted to benefit most. A
 ranking is informative, but it is not a rule. A rule maps any covariate
@@ -443,8 +479,8 @@ unstable, even if any single fit looks reasonable. Second, the policy
 value's confidence interval reflects only sampling noise. Model
 misspecification, residual confounding, and measurement error sit
 outside the interval. Sensitivity analysis on the underlying causal
-estimates (E-values, week 8) and equity audits on the rule itself
-(below) carry the rest of the inferential burden.</p>
+estimates and equity audits on the rule itself (below) carry the rest of
+the inferential burden.</p>
 <p>If the held-out value is statistically reliably above the no-treatment
 baseline, the rule is worth considering for deployment. If the held-out
 value is indistinguishable from random allocation, the rule is not. The
@@ -587,7 +623,7 @@ deployment.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
@@ -609,6 +645,17 @@ Pitfalls and Tips. <em>Journal of Epidemiology</em>, <em>30</em>(4), 153–162.
 <em>Policytree: Policy learning via doubly robust empirical welfare
 maximization over trees</em>.
 <a href="https://CRAN.R-project.org/package=policytree">https://CRAN.R-project.org/package=policytree</a></p>
+</div>
+<div id="ref-vanderweele2017" class="csl-entry">
+<p>VanderWeele, T. J., &amp; Ding, P. (2017). Sensitivity analysis in
+observational research: Introducing the E-value. <em>Annals of Internal
+Medicine</em>, <em>167</em>(4), 268–274. <a href="https://doi.org/10.7326/M16-2607">https://doi.org/10.7326/M16-2607</a></p>
+</div>
+<div id="ref-vanderweele2020b" class="csl-entry">
+<p>VanderWeele, T. J., &amp; Mathur, M. B. (2020). Commentary: Developing
+best-practice guidelines for the reporting of e-values. <em>International
+Journal of Epidemiology</em>, <em>49</em>(5), 1495–1497.
+<a href="https://doi.org/10.1093/ije/dyaa094">https://doi.org/10.1093/ije/dyaa094</a></p>
 </div>
 <div id="ref-vanderweele2020" class="csl-entry">
 <p>VanderWeele, T. J., Mathur, M. B., &amp; Chen, Y. (2020). Outcome-wide
