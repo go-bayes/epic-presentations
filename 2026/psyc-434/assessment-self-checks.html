@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Reporting Guide - PSYC 434: Conducting Research Across Cultures</title>
+        <title>Assessment Self-Checks - PSYC 434: Conducting Research Across Cultures</title>
 
 
         <!-- Custom HTML head -->
@@ -244,232 +244,142 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="reporting-guide"><a class="header" href="#reporting-guide">Reporting Guide</a></h1>
-<p>This guide covers how to report results from causal inference analyses.
-It follows the ten-step causal workflow and demonstrates best practices
-for communicating average treatment effects, heterogeneous effects, and
-sensitivity analyses. This resource directly supports the research
-report assessment (40%).</p>
-<hr />
-<h2 id="the-ten-step-causal-inference-workflow"><a class="header" href="#the-ten-step-causal-inference-workflow">The ten-step causal inference workflow</a></h2>
-<p>Before reporting results, ensure each step has been addressed.</p>
-<h3 id="steps-03-problem-definition"><a class="header" href="#steps-03-problem-definition">Steps 0–3: problem definition</a></h3>
+                        <h1 id="assessment-self-checks"><a class="header" href="#assessment-self-checks">Assessment Self-Checks</a></h1>
+<p>Use these checks when preparing for Test 2, the presentation, and the
+research report. They are designed to keep your answers inside the
+causal framework taught in the course.</p>
+<p>Test 2 is in class, on paper, with no devices and no AI tools. The
+optional large language model (LLM) script below is for preparation
+before the test, and for drafting support before take-home assessment
+submissions. The important work is yours: state the target population,
+causal contrast, outcome, estimand, assumptions, and limits.</p>
+<h2 id="causal-question-check"><a class="header" href="#causal-question-check">Causal Question Check</a></h2>
+<p>Before estimating or interpreting anything, state:</p>
 <ol>
-<li><strong>Well-defined treatment.</strong> Specify the exposure precisely,
-including the contrast (e.g., "weekly religious service attendance
-vs. less than weekly").</li>
-<li><strong>Time zero.</strong> State when treatment assignment or initiation begins
-and when follow-up starts.</li>
-<li><strong>Well-defined outcome.</strong> State the outcome measure, its scale, and
-when it was assessed.</li>
-<li><strong>Target population.</strong> Define who the results apply to, including
-any weighting for population representativeness.</li>
+<li><strong>Target population:</strong> who the answer is meant to apply to.</li>
+<li><strong>Causal contrast:</strong> the intervention and comparator, with timing.</li>
+<li><strong>Outcome:</strong> what is measured, when it is measured, and how the
+score is constructed.</li>
+<li><strong>Causal estimand:</strong> average treatment effect (ATE), conditional
+average treatment effect (CATE), or another estimand.</li>
+<li><strong>Identification assumptions:</strong> consistency, exchangeability, and
+positivity.</li>
+<li><strong>Measurement assumptions:</strong> whether the measure represents the same
+outcome across people, groups, treatment states, and time.</li>
 </ol>
-<h3 id="steps-46-identification-strategy"><a class="header" href="#steps-46-identification-strategy">Steps 4–6: identification strategy</a></h3>
+<p>If you cannot state these pieces, the analysis is not yet interpretable.</p>
+<h2 id="hte-and-policy-tree-check"><a class="header" href="#hte-and-policy-tree-check">HTE and Policy Tree Check</a></h2>
+<p>Heterogeneous treatment effect (HTE) methods help describe how estimated
+treatment effects vary across measured covariates. Policy trees turn
+those estimates into simple allocation rules. They are useful, but easy
+to over-interpret.</p>
+<p>Before reporting HTE or policy tree results, check:</p>
 <ol>
-<li><strong>Exchangeability.</strong> Describe how conditional independence was
-achieved (e.g., "rich baseline covariate control including 32
-covariates").</li>
-<li><strong>Consistency.</strong> Explain why the treatment is well-defined and
-uniform across individuals.</li>
-<li><strong>Positivity.</strong> Report verification through transition tables
-showing exposure variation across covariate strata.</li>
+<li><strong>Outcome:</strong> which outcome the rule is for. A rule for one outcome
+may not be a rule for another.</li>
+<li><strong>Estimand:</strong> whether you are reporting CATEs, ranked heterogeneity,
+policy value, or an allocation rule.</li>
+<li><strong>Modifier status:</strong> whether a split variable is a measured
+descriptor, proxy, or downstream marker. Do not read a split
+variable as the causal source of effect modification.</li>
+<li><strong>Support:</strong> whether both treatment levels are represented in the
+relevant covariate regions. A policy tree cannot rescue poor
+positivity.</li>
+<li><strong>Parsimony:</strong> whether the depth-2 tree meaningfully improves on
+depth-1. Prefer the simpler rule unless the improvement is clear.</li>
+<li><strong>Uncertainty:</strong> whether the policy value and subgroup effects have
+confidence intervals.</li>
+<li><strong>Governance:</strong> what value judgement authorises the allocation rule.
+The model can estimate who appears to benefit more; it cannot decide
+what justice requires.</li>
 </ol>
-<h3 id="steps-79-implementation"><a class="header" href="#steps-79-implementation">Steps 7–9: implementation</a></h3>
-<ol>
-<li><strong>Measurement validity.</strong> Note the psychometric properties of
-outcome scales.</li>
-<li><strong>Attrition handling.</strong> Describe how panel dropout was addressed
-(e.g., inverse probability of censoring weights).</li>
-<li><strong>Transparent reporting.</strong> Document all analytical decisions and
-assumptions.</li>
-</ol>
+<p>Useful wording:</p>
 <blockquote>
-<p><strong>Target trial emulation</strong></p>
-<p>Frame your causal question as: "How would outcomes change if we
-intervened to set everyone's exposure to level $a=1$ rather than
-$a=0$, conditional on baseline characteristics?"</p>
+<p>The policy tree describes where estimated treatment benefits are
+largest in the measured data. The split variables should be
+interpreted as descriptors for targeting and hypothesis generation,
+not as identified causes of differential response.</p>
 </blockquote>
-<hr />
-<h2 id="reporting-average-treatment-effects"><a class="header" href="#reporting-average-treatment-effects">Reporting average treatment effects</a></h2>
-<h3 id="standard-ate-table-format"><a class="header" href="#standard-ate-table-format">Standard ATE table format</a></h3>
-<p>Include these elements for each outcome:</p>
-<div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>Estimate (SD units)</th><th>95% CI</th><th>E-value</th><th>Interpretation</th></tr></thead><tbody>
-<tr><td>Outcome A</td><td>0.12</td><td>[0.08, 0.16]</td><td>1.8</td><td>Small positive effect</td></tr>
-<tr><td>Outcome B</td><td>0.15</td><td>[0.11, 0.19]</td><td>2.1</td><td>Moderate positive effect</td></tr>
-</tbody></table>
-</div>
-<h3 id="key-reporting-elements"><a class="header" href="#key-reporting-elements">Key reporting elements</a></h3>
+<p>Avoid:</p>
+<blockquote>
+<p>The tree shows that deprivation causes the treatment to work better.</p>
+</blockquote>
+<p>Better:</p>
+<blockquote>
+<p>The tree split on deprivation, which may be a useful marker of
+differential response. The causal source of that heterogeneity could
+lie upstream, including in variables not directly measured in the
+tree.</p>
+</blockquote>
+<h2 id="measurement-check"><a class="header" href="#measurement-check">Measurement Check</a></h2>
+<p>For measurement questions, do not treat associational model output as
+evidence of causal structure. Regression coefficients, factor loadings,
+structural equation models, invariance tests, fit indices, and
+reliability statistics summarise patterns in the data. They do not
+identify the causal structure that produced those patterns.</p>
+<p>Ask:</p>
 <ol>
-<li><strong>Effect sizes</strong>: report in standard deviation units for continuous
-outcomes.</li>
-<li><strong>Confidence intervals</strong>: show uncertainty around each estimate.</li>
-<li><strong>E-values</strong>: indicate robustness to unmeasured confounding.</li>
-<li><strong>Sample size</strong>: total analysed after exclusions and weighting.</li>
+<li>Does the measured score represent the same outcome under the
+intervention and control conditions?</li>
+<li>Does the measure work the same way across the groups being compared?</li>
+<li>Could exposure, intervention, or group membership affect how people
+interpret or answer the items?</li>
+<li>Could missingness, translation, response style, or social
+desirability affect the measured outcome?</li>
+<li>If a statistic is used to support "validity", what causal or
+measurement assumption is it meant to support, and what alternative
+explanation does it fail to rule out?</li>
 </ol>
-<h3 id="example-results-text"><a class="header" href="#example-results-text">Example results text</a></h3>
+<h2 id="optional-llm-tutor-script"><a class="header" href="#optional-llm-tutor-script">Optional LLM Tutor Script</a></h2>
+<p>Copy and paste this script if you want an LLM to quiz you during
+preparation. Do not use it during in-class tests. Do not use it to write
+your final answer.</p>
 <blockquote>
-<p>"Weekly religious service attendance showed positive causal effects
-across all cooperation measures. The largest effects were observed for
-social outcomes: sense of belonging ($\beta = 0.18$, 95% CI:
-0.14–0.22) and social support ($\beta = 0.15$, 95% CI: 0.11–0.19).
-The E-values were above 1.6, meaning an unmeasured confounder would
-need to be associated with both attendance and these outcomes by a
-risk ratio of at least 1.6 each, above and beyond measured covariates,
-to explain away the estimates."</p>
-</blockquote>
-<hr />
-<h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
-<h3 id="rate-results-summary"><a class="header" href="#rate-results-summary">RATE results summary</a></h3>
-<p>When heterogeneity is detected, report it systematically:</p>
-<div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>RATE-AUTOC</th><th>p-value</th><th>RATE-Qini</th><th>p-value</th><th>Evidence</th></tr></thead><tbody>
-<tr><td>Social support</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
-<tr><td>Belonging</td><td>0.15</td><td>0.001</td><td>0.11</td><td>0.004</td><td>Strong</td></tr>
-<tr><td>Charitable donations</td><td>0.06</td><td>0.089</td><td>0.04</td><td>0.156</td><td>Moderate</td></tr>
-<tr><td>Volunteering</td><td>0.03</td><td>0.234</td><td>0.02</td><td>0.445</td><td>Weak</td></tr>
-</tbody></table>
-</div>
-<h3 id="example-heterogeneity-text"><a class="header" href="#example-heterogeneity-text">Example heterogeneity text</a></h3>
-<blockquote>
-<p>"We found substantial heterogeneity in treatment effects for social
-outcomes (RATE-Qini &gt; 0.08, $p &lt; 0.05$), but limited heterogeneity
-for behavioural outcomes. This suggests that while religious service
-benefits most people socially, individual responses vary considerably
-in magnitude."</p>
-</blockquote>
-<hr />
-<h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
-<p>Present policy trees with both standardised and original-scale
-interpretations.</p>
-<h3 id="subgroup-identification-with-data-scale-effects"><a class="header" href="#subgroup-identification-with-data-scale-effects">Subgroup identification with data-scale effects</a></h3>
-<p><strong>High-response subgroups for charitable donations:</strong></p>
+<p>You are my tutor for a causal inference assignment. Do not solve the
+problem for me. Ask one short question at a time and wait for my
+answer before continuing. If I skip a question, ask it again in
+simpler language.</p>
+<p>We are working in the potential outcomes framework. Treat causal
+claims as claims about interventions and potential outcomes. Do not
+treat associational model output (regression coefficients, factor
+analysis, structural equation models, invariance tests, fit indices,
+reliability statistics) as evidence of causal structure.</p>
+<p>Start by asking me to state these four items, one at a time:</p>
 <ol>
-<li><strong>Older adults with high agreeableness</strong> (age &gt; 45, agreeableness
-&gt; +1 SD)
-<ul>
-<li>Standardised effect: $\beta = 0.28$ (95% CI: 0.21–0.35)</li>
-<li>Data-scale effect: NZ$847 additional annual donations (95% CI:
-NZ$635–1,058)</li>
-<li>Sample proportion: 23%</li>
-</ul>
-</li>
-<li><strong>Parents with medium conscientiousness</strong> (parent = yes,
-conscientiousness &gt; 0)
-<ul>
-<li>Standardised effect: $\beta = 0.22$ (95% CI: 0.16–0.28)</li>
-<li>Data-scale effect: NZ$665 additional annual donations (95% CI:
-NZ$484–846)</li>
-<li>Sample proportion: 31%</li>
-</ul>
-</li>
-<li><strong>All others</strong>
-<ul>
-<li>Standardised effect: $\beta = 0.08$ (95% CI: 0.04–0.12)</li>
-<li>Data-scale effect: NZ$242 additional annual donations (95% CI:
-NZ$121–363)</li>
-<li>Sample proportion: 46%</li>
-</ul>
-</li>
+<li>The target population.</li>
+<li>The causal contrast (intervention vs control), with timing.</li>
+<li>The outcome, including exactly how it is measured.</li>
+<li>The causal estimand (ATE, CATE, policy value, etc.).</li>
 </ol>
-<h3 id="example-policy-tree-text"><a class="header" href="#example-policy-tree-text">Example policy tree text</a></h3>
-<blockquote>
-<p>"Policy tree analysis identified two subgroups with enhanced treatment
-response for charitable donations. Older adults (45+) with high
-agreeableness showed the largest increase ($\beta = 0.28$ SD,
-equivalent to NZ$847 additional annual donations), representing 23%
-of the sample. In practical terms, targeted interventions toward these
-subgroups could generate 2.8–3.5 times more charitable giving than
-population-wide approaches."</p>
+<p>Then ask me to list the identification assumptions: consistency,
+exchangeability, and positivity.</p>
+<p>Then ask me to list the measurement assumptions I am making.</p>
+<p>If I mention "validity", "reliability", "fit", "factor loadings",
+"SEM", or "invariance", ask: which causal or measurement assumption is
+this statistic meant to support? What causal alternative could still
+explain the same statistic?</p>
+<p>If I mention heterogeneous treatment effects, CATEs, RATE, Qini, or
+policy trees, ask: am I interpreting the split variables as
+descriptors, proxies, or causes? What evidence would be needed to
+treat a split variable as causal?</p>
+<p>Do not accept vague answers such as "the scale is validated", "the
+model fits well", or "the tree found the cause." Ask me to translate
+those claims into specific assumptions.</p>
+<p>After I answer, give brief feedback. Focus on whether my assumptions
+are explicit, plausible, and testable. Name one design improvement or
+additional data source that would reduce reliance on the weakest
+unsupported assumption. Do not write my final answer for me.</p>
 </blockquote>
-<hr />
-<h2 id="sensitivity-analysis-e-values"><a class="header" href="#sensitivity-analysis-e-values">Sensitivity analysis: E-values</a></h2>
-<h3 id="interpretation"><a class="header" href="#interpretation">Interpretation</a></h3>
-<p>E-values quantify robustness to unmeasured confounding. The E-value is
-the minimum strength of association, on the risk ratio scale, that an
-unmeasured confounder would need with both the treatment and the outcome
-to explain away the observed effect.</p>
-<p>There is no universal threshold at which an E-value becomes "safe".
-Interpret it against the study design, the covariates already measured,
-and plausible omitted causes in the setting. Report the E-value for the
-point estimate and for the confidence-limit closest to the null, and
-explain what kind of unmeasured confounder would be needed for the
-result to disappear.</p>
-<h3 id="example-sensitivity-text"><a class="header" href="#example-sensitivity-text">Example sensitivity text</a></h3>
-<blockquote>
-<p>"To assess robustness to unmeasured confounding, we calculated
-E-values for all estimates. The observed effect on sense of belonging
-(E-value = 2.4) would require an unmeasured confounder associated with
-both religious service and belonging by a risk ratio of 2.4 each to
-explain away the result."</p>
-</blockquote>
-<hr />
-<h2 id="methods-section-template"><a class="header" href="#methods-section-template">Methods section template</a></h2>
-<p>A complete methods section following the ten-step workflow should
-include:</p>
-<ol>
-<li><strong>Treatment definition</strong>: what the exposure is, how it is coded, and
-the contrast of interest.</li>
-<li><strong>Time zero and follow-up</strong>: when assignment occurs, when follow-up
-starts, and why that timing matches the intervention.</li>
-<li><strong>Outcome definition</strong>: measures used, timing of assessment, any
-transformations applied.</li>
-<li><strong>Target population</strong>: sampling frame, weighting strategy,
-eligibility criteria.</li>
-<li><strong>Causal identification</strong>: covariates conditioned on, justification
-for conditional exchangeability.</li>
-<li><strong>Statistical analysis</strong>: estimation method, key tuning parameters
-(e.g., number of trees, minimum node size).</li>
-<li><strong>Attrition handling</strong>: censoring weights, stages of dropout
-addressed.</li>
-<li><strong>Heterogeneity assessment</strong>: RATE metrics, false discovery rate
-correction, policy tree depth.</li>
-<li><strong>Sensitivity analysis</strong>: E-values for all primary estimates.</li>
-</ol>
-<hr />
-<h2 id="reporting-checklist"><a class="header" href="#reporting-checklist">Reporting checklist</a></h2>
-<h3 id="do-report"><a class="header" href="#do-report">Do report</a></h3>
-<ul>
-<li>Both standardised and data-scale effects</li>
-<li>Effect sizes with confidence intervals</li>
-<li>Sample sizes after exclusions and weighting</li>
-<li>E-values for sensitivity analysis</li>
-<li>Clear practical interpretation of effect magnitudes</li>
-<li>Subgroup sizes and effect magnifications</li>
-<li>Target trial framework and causal question</li>
-<li>Explicit treatment and outcome definitions</li>
-</ul>
-<h3 id="do-not-report"><a class="header" href="#do-not-report">Do not report</a></h3>
-<ul>
-<li>Model coefficients without interpretation</li>
-<li>p-values alone without effect sizes</li>
-<li>Only standardised effects for policy-relevant outcomes</li>
-<li>Technical details that obscure main findings</li>
-<li>Causal claims beyond your identification strategy</li>
-</ul>
-<hr />
-<h2 id="figure-presentation"><a class="header" href="#figure-presentation">Figure presentation</a></h2>
-<h3 id="ate-plots"><a class="header" href="#ate-plots">ATE plots</a></h3>
-<ul>
-<li>Use forest plots with confidence intervals.</li>
-<li>Order by effect magnitude or E-value.</li>
-<li>Include sample sizes.</li>
-</ul>
-<h3 id="policy-tree-plots"><a class="header" href="#policy-tree-plots">Policy tree plots</a></h3>
-<ul>
-<li>Show decision rules clearly.</li>
-<li>Include sample proportions in each node.</li>
-<li>Provide plain-language interpretation alongside the tree.</li>
-</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="assessment-self-checks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="causal-workflow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="presentation-rubric.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="reporting-guide.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -479,11 +389,11 @@ correction, policy tree depth.</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="assessment-self-checks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="causal-workflow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="presentation-rubric.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="reporting-guide.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

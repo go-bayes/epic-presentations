@@ -444,7 +444,12 @@ instrument.</p>
 <h2 id="assessment-3-in-class-test-2-20--20-may"><a class="header" href="#assessment-3-in-class-test-2-20--20-may">Assessment 3: In-Class Test 2 (20%) — 20 May</a></h2>
 <p>Covers material from weeks 8–10 (heterogeneous treatment effects,
 machine learning, resource allocation, policy trees, and classical
-measurement theory). Same format and conditions as test 1.</p>
+measurement theory). Same format and conditions as test 1: in class, on
+paper, with no devices and no AI tools.</p>
+<p>Use the <a href="assessment-self-checks.html">Assessment Self-Checks</a> before the
+test when preparing. They summarise what you should be able to state
+about causal questions, heterogeneous treatment effects, policy trees,
+and measurement assumptions.</p>
 <blockquote>
 <p><strong>Test Location</strong></p>
 <p>The test is in class. Come to the seminar room (EA120) with a writing
@@ -516,6 +521,10 @@ It predates the current criteria. For Option B, follow the 2026
 requirements below and the official RSNZ templates.</li>
 </ul>
 </blockquote>
+<p>Use the <a href="assessment-self-checks.html">Assessment Self-Checks</a> before
+drafting your report or presentation. In particular, check that policy
+tree splits are interpreted as descriptive targeting rules, not as
+identified causes of differential response.</p>
 <blockquote>
 <p><strong>Late Penalty</strong></p>
 <p>Late assignments, and assignments with extensions, may be subject to
@@ -4557,32 +4566,13 @@ analysis.</li>
 </ol>
 </blockquote>
 <h2 id="appendix-if-you-use-an-llm"><a class="header" href="#appendix-if-you-use-an-llm">Appendix: if you use an LLM</a></h2>
-<p>Copy/paste prompt (use the LLM as a tutor, not a replacement):</p>
-<blockquote>
-<p>You are my tutor. Do not solve the problem for me. Ask me short
-questions and wait for my answers.</p>
-<p>We are working in the potential outcomes framework. Do not treat any
-associational model output (regression, factor analysis, SEM,
-invariance tests, fit indices) as evidence of causal structure.</p>
-<p>Your job is to help me do the causal thinking. Start by asking me to
-state:</p>
-<ol>
-<li>The target population.</li>
-<li>The causal contrast (intervention vs control), with timing.</li>
-<li>The outcome, and how it is measured (what the questions/items
-are).</li>
-<li>The causal estimand (ATE, CATE, etc.).</li>
-</ol>
-<p>Then ask me to list the identification assumptions (consistency,
-exchangeability, positivity) and the measurement assumptions I am
-making. If I mention "validity", "reliability", "fit", or
-"invariance", ask me what causal assumption I think that statistic is
-meant to support, and what causal alternative it fails to rule out.</p>
-<p>Only after I answer should you give feedback. Keep feedback focused on
-whether my assumptions are explicit, plausible, and testable, and on
-what additional design or data would reduce reliance on unsupported
-causal assumptions.</p>
-</blockquote>
+<p>The optional LLM tutor script now lives with the assessment-support
+resources: <a href="assessment-self-checks.html">Assessment Self-Checks</a>.</p>
+<p>Use it only for preparation before the in-class test, or before drafting
+presentation notes or research-report sections. Its purpose is to help
+you state your target population, causal contrast, outcome, estimand,
+identification assumptions, and measurement assumptions before you ask
+for feedback.</p>
 <hr />
 <p>Lab materials: <a href="lab-10.html">Lab 10: Measurement Invariance</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
@@ -8481,7 +8471,133 @@ analyses. Transparent reasoning is a scientific result in its own right.</p>
 <tr><td>8</td><td>Representativeness</td><td>No selection bias</td></tr>
 <tr><td>9</td><td>Transparent documentation</td><td>Reproducibility</td></tr>
 </tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="reporting-guide"><a class="header" href="#reporting-guide">Reporting Guide</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="assessment-self-checks"><a class="header" href="#assessment-self-checks">Assessment Self-Checks</a></h1>
+<p>Use these checks when preparing for Test 2, the presentation, and the
+research report. They are designed to keep your answers inside the
+causal framework taught in the course.</p>
+<p>Test 2 is in class, on paper, with no devices and no AI tools. The
+optional large language model (LLM) script below is for preparation
+before the test, and for drafting support before take-home assessment
+submissions. The important work is yours: state the target population,
+causal contrast, outcome, estimand, assumptions, and limits.</p>
+<h2 id="causal-question-check"><a class="header" href="#causal-question-check">Causal Question Check</a></h2>
+<p>Before estimating or interpreting anything, state:</p>
+<ol>
+<li><strong>Target population:</strong> who the answer is meant to apply to.</li>
+<li><strong>Causal contrast:</strong> the intervention and comparator, with timing.</li>
+<li><strong>Outcome:</strong> what is measured, when it is measured, and how the
+score is constructed.</li>
+<li><strong>Causal estimand:</strong> average treatment effect (ATE), conditional
+average treatment effect (CATE), or another estimand.</li>
+<li><strong>Identification assumptions:</strong> consistency, exchangeability, and
+positivity.</li>
+<li><strong>Measurement assumptions:</strong> whether the measure represents the same
+outcome across people, groups, treatment states, and time.</li>
+</ol>
+<p>If you cannot state these pieces, the analysis is not yet interpretable.</p>
+<h2 id="hte-and-policy-tree-check"><a class="header" href="#hte-and-policy-tree-check">HTE and Policy Tree Check</a></h2>
+<p>Heterogeneous treatment effect (HTE) methods help describe how estimated
+treatment effects vary across measured covariates. Policy trees turn
+those estimates into simple allocation rules. They are useful, but easy
+to over-interpret.</p>
+<p>Before reporting HTE or policy tree results, check:</p>
+<ol>
+<li><strong>Outcome:</strong> which outcome the rule is for. A rule for one outcome
+may not be a rule for another.</li>
+<li><strong>Estimand:</strong> whether you are reporting CATEs, ranked heterogeneity,
+policy value, or an allocation rule.</li>
+<li><strong>Modifier status:</strong> whether a split variable is a measured
+descriptor, proxy, or downstream marker. Do not read a split
+variable as the causal source of effect modification.</li>
+<li><strong>Support:</strong> whether both treatment levels are represented in the
+relevant covariate regions. A policy tree cannot rescue poor
+positivity.</li>
+<li><strong>Parsimony:</strong> whether the depth-2 tree meaningfully improves on
+depth-1. Prefer the simpler rule unless the improvement is clear.</li>
+<li><strong>Uncertainty:</strong> whether the policy value and subgroup effects have
+confidence intervals.</li>
+<li><strong>Governance:</strong> what value judgement authorises the allocation rule.
+The model can estimate who appears to benefit more; it cannot decide
+what justice requires.</li>
+</ol>
+<p>Useful wording:</p>
+<blockquote>
+<p>The policy tree describes where estimated treatment benefits are
+largest in the measured data. The split variables should be
+interpreted as descriptors for targeting and hypothesis generation,
+not as identified causes of differential response.</p>
+</blockquote>
+<p>Avoid:</p>
+<blockquote>
+<p>The tree shows that deprivation causes the treatment to work better.</p>
+</blockquote>
+<p>Better:</p>
+<blockquote>
+<p>The tree split on deprivation, which may be a useful marker of
+differential response. The causal source of that heterogeneity could
+lie upstream, including in variables not directly measured in the
+tree.</p>
+</blockquote>
+<h2 id="measurement-check"><a class="header" href="#measurement-check">Measurement Check</a></h2>
+<p>For measurement questions, do not treat associational model output as
+evidence of causal structure. Regression coefficients, factor loadings,
+structural equation models, invariance tests, fit indices, and
+reliability statistics summarise patterns in the data. They do not
+identify the causal structure that produced those patterns.</p>
+<p>Ask:</p>
+<ol>
+<li>Does the measured score represent the same outcome under the
+intervention and control conditions?</li>
+<li>Does the measure work the same way across the groups being compared?</li>
+<li>Could exposure, intervention, or group membership affect how people
+interpret or answer the items?</li>
+<li>Could missingness, translation, response style, or social
+desirability affect the measured outcome?</li>
+<li>If a statistic is used to support "validity", what causal or
+measurement assumption is it meant to support, and what alternative
+explanation does it fail to rule out?</li>
+</ol>
+<h2 id="optional-llm-tutor-script"><a class="header" href="#optional-llm-tutor-script">Optional LLM Tutor Script</a></h2>
+<p>Copy and paste this script if you want an LLM to quiz you during
+preparation. Do not use it during in-class tests. Do not use it to write
+your final answer.</p>
+<blockquote>
+<p>You are my tutor for a causal inference assignment. Do not solve the
+problem for me. Ask one short question at a time and wait for my
+answer before continuing. If I skip a question, ask it again in
+simpler language.</p>
+<p>We are working in the potential outcomes framework. Treat causal
+claims as claims about interventions and potential outcomes. Do not
+treat associational model output (regression coefficients, factor
+analysis, structural equation models, invariance tests, fit indices,
+reliability statistics) as evidence of causal structure.</p>
+<p>Start by asking me to state these four items, one at a time:</p>
+<ol>
+<li>The target population.</li>
+<li>The causal contrast (intervention vs control), with timing.</li>
+<li>The outcome, including exactly how it is measured.</li>
+<li>The causal estimand (ATE, CATE, policy value, etc.).</li>
+</ol>
+<p>Then ask me to list the identification assumptions: consistency,
+exchangeability, and positivity.</p>
+<p>Then ask me to list the measurement assumptions I am making.</p>
+<p>If I mention "validity", "reliability", "fit", "factor loadings",
+"SEM", or "invariance", ask: which causal or measurement assumption is
+this statistic meant to support? What causal alternative could still
+explain the same statistic?</p>
+<p>If I mention heterogeneous treatment effects, CATEs, RATE, Qini, or
+policy trees, ask: am I interpreting the split variables as
+descriptors, proxies, or causes? What evidence would be needed to
+treat a split variable as causal?</p>
+<p>Do not accept vague answers such as "the scale is validated", "the
+model fits well", or "the tree found the cause." Ask me to translate
+those claims into specific assumptions.</p>
+<p>After I answer, give brief feedback. Focus on whether my assumptions
+are explicit, plausible, and testable. Name one design improvement or
+additional data source that would reduce reliance on the weakest
+unsupported assumption. Do not write my final answer for me.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reporting-guide"><a class="header" href="#reporting-guide">Reporting Guide</a></h1>
 <p>This guide covers how to report results from causal inference analyses.
 It follows the ten-step causal workflow and demonstrates best practices
 for communicating average treatment effects, heterogeneous effects, and
