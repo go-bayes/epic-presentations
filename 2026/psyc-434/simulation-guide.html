@@ -259,7 +259,7 @@ it, so you can see the reasoning step by step.</p>
 <p><strong>Required R packages</strong></p>
 <p><code>causalworkshop</code>, <code>tidyverse</code>, <code>stdReg</code>, <code>gtsummary</code>, <code>clarify</code>,
 <code>grf</code>. Install <code>causalworkshop</code> from GitHub with
-<code>pak::pak("go-bayes/causalworkshop")</code> (version $\geq$ 0.5.0); first
+<code>pak::pak("go-bayes/causalworkshop")</code> (version $\geq$ 0.6.0); first
 run <code>install.packages("pak")</code> if you do not already have it.</p>
 </blockquote>
 <hr />
@@ -400,6 +400,11 @@ X &lt;- as.matrix(data_panel[, c("L_0", "A_0", "Y_0")])
 fit_cf &lt;- causal_forest(X, Y, W)
 average_treatment_effect(fit_cf)
 </code></pre>
+<p>If <code>grf</code> warns that estimated treatment propensities are low for some
+observations, read that as a positivity warning, not as a broken
+simulation. The example still recovers the true effect closely, but the
+warning is a useful reminder that causal forests need overlap between
+treated and untreated observations.</p>
 <p>The causal forest is a non-parametric method that estimates
 individual-level treatment effects $\hat{\tau}(x)$ by partitioning the
 covariate space adaptively. Unlike the parametric models above, the

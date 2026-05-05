@@ -865,7 +865,8 @@ error and the potential outcomes framework, useful for the report).</p>
 <h3 id="week-9-resource-allocation-and-policy-trees"><a class="header" href="#week-9-resource-allocation-and-policy-trees">Week 9: Resource allocation and policy trees</a></h3>
 <p><strong>Required:</strong> <a href="https://grf-labs.github.io/grf/">GRF documentation</a> — the
 <em>Policy Learning</em> article and the <em>Qini curve</em> article. Read alongside
-the lab's worked example.</p>
+VanderWeele et al. (<a href="readings.html#ref-vanderweele2020">2020</a>) and the lab's worked
+example.</p>
 <p><strong>Optional:</strong> Background on equity audits and governance considerations
 as named in the <a href="week-09.html">Week 9 lecture</a>.</p>
 <h3 id="week-10-classical-measurement-theory-from-a-causal-perspective"><a class="header" href="#week-10-classical-measurement-theory-from-a-causal-perspective">Week 10: Classical measurement theory from a causal perspective</a></h3>
@@ -8907,7 +8908,7 @@ it, so you can see the reasoning step by step.</p>
 <p><strong>Required R packages</strong></p>
 <p><code>causalworkshop</code>, <code>tidyverse</code>, <code>stdReg</code>, <code>gtsummary</code>, <code>clarify</code>,
 <code>grf</code>. Install <code>causalworkshop</code> from GitHub with
-<code>pak::pak("go-bayes/causalworkshop")</code> (version $\geq$ 0.5.0); first
+<code>pak::pak("go-bayes/causalworkshop")</code> (version $\geq$ 0.6.0); first
 run <code>install.packages("pak")</code> if you do not already have it.</p>
 </blockquote>
 <hr />
@@ -9048,6 +9049,11 @@ X &lt;- as.matrix(data_panel[, c("L_0", "A_0", "Y_0")])
 fit_cf &lt;- causal_forest(X, Y, W)
 average_treatment_effect(fit_cf)
 </code></pre>
+<p>If <code>grf</code> warns that estimated treatment propensities are low for some
+observations, read that as a positivity warning, not as a broken
+simulation. The example still recovers the true effect closely, but the
+warning is a useful reminder that causal forests need overlap between
+treated and untreated observations.</p>
 <p>The causal forest is a non-parametric method that estimates
 individual-level treatment effects $\hat{\tau}(x)$ by partitioning the
 covariate space adaptively. Unlike the parametric models above, the
