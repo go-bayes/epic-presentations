@@ -269,14 +269,14 @@ outcome across people, groups, treatment states, and time.</li>
 <h2 id="hte-and-policy-tree-check"><a class="header" href="#hte-and-policy-tree-check">HTE and Policy Tree Check</a></h2>
 <p>Heterogeneous treatment effect (HTE) methods describe how estimated
 treatment effects vary across measured covariates. Policy trees turn
-those estimates into simple allocation rules. They are useful, and easy
-to over-read.</p>
+those estimates into simple rules or summaries of high-response regions.
+They are useful, and easy to over-read.</p>
 <p>Before reporting HTE or policy tree results, check:</p>
 <ol>
 <li><strong>Outcome:</strong> which outcome the rule is for. A rule for one outcome
 may not be a rule for another.</li>
 <li><strong>Estimand:</strong> whether you are reporting CATEs, ranked heterogeneity,
-policy value, or an allocation rule.</li>
+policy value, a high-response region, or an allocation rule.</li>
 <li><strong>Modifier status:</strong> whether a split variable is a measured
 descriptor, proxy, or downstream marker. Do not read a split
 variable as the causal source of effect modification.</li>
@@ -287,9 +287,9 @@ positivity.</li>
 depth-1. Prefer the simpler rule unless the improvement is clear.</li>
 <li><strong>Uncertainty:</strong> whether the policy value and subgroup effects have
 confidence intervals.</li>
-<li><strong>Oversight:</strong> what value judgement authorises the allocation rule.
-The model can estimate who appears to benefit more; it cannot decide
-which public value should win.</li>
+<li><strong>Oversight:</strong> what value judgement would authorise acting on the
+rule. The model can estimate who appears to benefit more; it cannot
+decide which public value should win.</li>
 </ol>
 <p>Useful wording:</p>
 <blockquote>

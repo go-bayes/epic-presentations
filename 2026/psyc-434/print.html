@@ -611,15 +611,19 @@ pattern as a whole, not outcome by outcome.</p>
 <p><strong>Subgroup identification with policy trees.</strong> This course studies
 comparative work. After estimating the four ATEs, fit a depth-2 policy
 tree per outcome using <code>margot</code> (Lab 9 walks through the steps).
-Identify the subgroup for which the estimated treatment effect is
-strongest. Translate the rule into plain language a non-specialist could
-repeat. Report the policy value with its 95% confidence interval, and
-note whether the depth-2 rule meaningfully improves on depth-1 (apply
-the parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a>).</p>
+Identify the subgroup or region for which the estimated treatment effect
+is strongest. Translate the region into plain language a non-specialist
+could repeat. Report its expected mean difference, uncertainty, and
+approximate sample proportion. Report the policy value with its 95%
+confidence interval, and note whether the depth-2 rule meaningfully
+improves on depth-1 (apply the parsimony rule from the <a href="reporting-guide.html">Reporting
+Guide</a>). The current <code>margot</code> workflow does not
+force a fixed percentage treated; if you discuss a budget cap, state it
+as an extra decision problem.</p>
 <p><strong>Ethics statement.</strong> Devote one paragraph (about 150 words) to what
 would need to be considered before acting on the policy tree. Address:
-(i) fairness — whether targeting those who benefit <em>most</em> leaves out
-those who benefit <em>somewhat</em>; (ii) proxy variables — whether splits on
+(i) fairness — if the rule were used to prioritise access, who might
+benefit less or be left out; (ii) proxy variables — whether splits on
 covariates such as deprivation, income, age, or baseline wellbeing could
 affect social groups differently; (iii) oversight — who would check the
 rule, what public objective would justify it, and when a community
@@ -3606,14 +3610,13 @@ defensible allocation rules, and asks how much of the underlying
 heterogeneity a short rule can recover.</p>
 <h2 id="seminar-6"><a class="header" href="#seminar-6">Seminar</a></h2>
 <h3 id="motivating-example-2"><a class="header" href="#motivating-example-2">Motivating example</a></h3>
-<p>A district health board can fund an intervention to enhance sense of
-purpose for only twenty percent of eligible residents. A causal forest
-suggests large heterogeneity. The top-ranked group appears to benefit
-most. The board now needs a rule that can be defended in public, not
-just a ranking inside a script. The rule must be short enough to fit on
-a single page, robust enough to survive scrutiny by people who did not
-fit the model, and accompanied by an honest account of what the data can
-and cannot decide.</p>
+<p>A district health board is considering an intervention to enhance sense
+of purpose. A causal forest suggests large heterogeneity: some residents
+appear to benefit more than others. The board now needs a rule that can
+be described in public, not just a ranking inside a script. The rule
+must be short enough to fit on a single page, clear enough for people
+who did not fit the model, and accompanied by an honest account of what
+the data can and cannot decide.</p>
 <p>We work through purpose for concreteness; lab 9 repeats the same
 workflow across four outcomes (purpose, belonging, self-esteem, life
 satisfaction).</p>
@@ -3665,16 +3668,23 @@ position drifts with sample size.</p>
 deliver, on average, if applied to the whole population. Call that
 number the rule's <strong>policy value</strong>, written $V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
-<p>A budget cap restricts the share of the population the rule may treat:</p>
+<p>The default <code>policytree</code> problem does <strong>not</strong> set a fixed percentage of
+people to treat. Instead, it asks which action has the highest estimated
+reward in each leaf. The share treated is an output of the fitted rule,
+not an input.</p>
+<p>If a project has a fixed budget, the policy problem can be written with
+a treatment-share cap:</p>
 <p>$$ \mathbb{E}[d(X)] \le q. $$</p>
-<p>Policy learning seeks the rule with the highest $V(d)$ subject to the
-cap. Two practical complications follow. First, $V(d)$ is a
-counterfactual quantity, since for any individual we observe at most one
-of $Y(0)$ or $Y(1)$. We need to evaluate candidate rules without
-assigning everyone to them. Second, the rule must be small enough to
-defend in front of a non-statistical audience. Both constraints push the
-analysis toward shallow, transparent decision trees evaluated with
-doubly-robust scores.</p>
+<p>That is useful to discuss, but it is not what the current <code>margot</code> lab
+pipeline enforces. In our workflow, policy trees identify regions where
+the estimated reward for treatment is higher than control, then report
+the expected mean differences and the size of those regions. Two
+practical complications remain. First, $V(d)$ is a counterfactual
+quantity, since for any individual we observe at most one of $Y(0)$ or
+$Y(1)$. We need to evaluate candidate rules without assigning everyone
+to them. Second, the rule must be small enough to defend in front of a
+non-statistical audience. Both constraints push the analysis toward
+shallow, transparent decision trees evaluated with doubly-robust scores.</p>
 <h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
 <p>A causal forest maps a high-dimensional covariate vector $X$ to a
 personalised score $\hat{\tau}(X)$. The function itself is too tangled
@@ -3712,20 +3722,26 @@ trees increase computational complexity faster than they improve
 payoffs; the gain from a depth-3 tree over a depth-2 tree is usually
 small relative to the loss in clarity.</p>
 <blockquote>
-<p><strong>Pair exercise: designing a depth-2 policy rule</strong></p>
-<p>A community programme can offer places to 20% of eligible residents.
-Suppose a simple rule can split on deprivation index (high/low),
-baseline loneliness (high/low), and age (under 40/40 or older).</p>
+<p><strong>Pair exercise: reading a simple policy rule</strong></p>
+<p>Suppose a depth-2 policy tree identifies a strong-response region:</p>
 <ol>
-<li>Sketch a depth-2 tree that treats about 20% of residents. Label
-each leaf "treat" or "do not treat."</li>
-<li>Write your rule as one sentence a community organiser could
-repeat.</li>
-<li>Explain how your tree stays within the 20% budget. Use simple
-assumptions such as "40% are high-deprivation and half of those
-are high-loneliness."</li>
-<li>Give two reasons this rule is easier to defend than a depth-4
-tree.</li>
+<li>First split on deprivation: high versus low.</li>
+<li>Among the high-deprivation group, split on baseline loneliness:
+high versus low.</li>
+<li>The largest estimated mean difference is in the high-deprivation,
+high-loneliness leaf.</li>
+</ol>
+<p>In pairs:</p>
+<ol>
+<li>Draw this tree and label the high-response leaf.</li>
+<li>Write the high-response region as one sentence a community
+organiser could repeat.</li>
+<li>Suppose 40% of residents are high-deprivation, and half of those
+are high-loneliness. What share of all eligible residents falls in
+the high-response region? Show the multiplication.</li>
+<li>The lab reports strong-response regions and expected mean
+differences; it does not force a 20% treatment cap. Why is it
+still useful to know the approximate size of the region?</li>
 </ol>
 </blockquote>
 <h2 id="reading-a-policy-tree"><a class="header" href="#reading-a-policy-tree">Reading a policy tree</a></h2>
@@ -3813,7 +3829,7 @@ both cases automatically.</p>
 identify causally privileged variables. If a depth-2 tree splits on
 openness and neuroticism, that does not mean these variables are deep
 causes of purpose; it means they help separate high-value and low-value
-treatment regions under the chosen objective and within the budget cap.
+treatment regions under the reward objective supplied to <code>policytree</code>.
 The same data with a different outcome could pick out an entirely
 different splitter.</p>
 <p>Conversely, a variable that does not appear in the tree is not
@@ -3911,8 +3927,8 @@ data." Counter this claim in two sentences.</li>
 <h2 id="workflow-for-this-week-1"><a class="header" href="#workflow-for-this-week-1">Workflow for this week</a></h2>
 <ol>
 <li>Estimate heterogeneity and targeting value (week 8 outputs).</li>
-<li>Fit shallow policy trees at multiple depths under explicit budget
-constraints.</li>
+<li>Fit shallow policy trees at multiple depths using the <code>policytree</code>
+default reward objective.</li>
 <li>Evaluate each policy out of sample with AIPW scores; report policy
 value with a confidence interval.</li>
 <li>Examine stability across train-test splits and reject unstable rules
@@ -3943,9 +3959,11 @@ compact grant style only; follow the current criteria in
 <h2 id="return-to-the-opening-example-6"><a class="header" href="#return-to-the-opening-example-6">Return to the opening example</a></h2>
 <p>Back to the district health board. The question is not only "what rule
 maximises sample gain?" The question is also whether the rule works out
-of sample, fits the budget, can be explained, and is acceptable to the
-people who would live with it. That is what moves a tree from a slide in
-a methods talk to a rule a clinic might actually use.</p>
+of sample, can be explained, and is acceptable to the people who would
+live with it. If there is a fixed budget, that constraint must be added
+explicitly; it is not supplied by the default <code>policytree</code> call. That is
+what moves a tree from a slide in a methods talk to a rule a clinic
+might actually use.</p>
 <p>The workflow from question to policy rule is now in place. One
 assumption has been present throughout but never examined: that our
 instruments measure the same construct across the groups we compare.
@@ -3953,9 +3971,10 @@ Week 10 asks whether that assumption holds.</p>
 <blockquote>
 <p><strong>Pair exercise: policy tree versus ranking</strong></p>
 <ol>
-<li>Strategy A ranks individuals by $\hat{\tau}(X_i)$ and treats the
-top 20%. Strategy B fits a depth-2 policy tree with a 20% budget
-constraint.</li>
+<li>Strategy A ranks individuals by $\hat{\tau}(X_i)$ and, if a
+budget is fixed, could treat the top 20%. Strategy B fits a
+depth-2 policy tree using the default reward objective, so the
+treated share is whatever the rule implies.</li>
 <li>Compare the two strategies on: (a) estimated policy value, (b)
 explainability to a non-technical audience, and (c) ability to
 answer "why was I selected?"</li>
@@ -7936,9 +7955,10 @@ itself decide whether an allocation rule is just.</li>
 <li>Describe one scenario in which a community organiser should override
 a policy tree recommendation. What information would they have that
 the model does not?</li>
-<li>State the difference between a ranking rule (treat the top 20% by
-$\hat{\tau}$) and a policy tree (depth 2 with a 20% budget). Give
-one scenario in which the ranking is preferable.</li>
+<li>State the difference between a ranking rule (for example, treat the
+top 20% by $\hat{\tau}$ when a budget is fixed) and a default
+depth-2 policy tree, where the treated share is whatever the fitted
+rule implies. Give one scenario in which the ranking is preferable.</li>
 </ol>
 <h2 id="outcome-wide-reporting"><a class="header" href="#outcome-wide-reporting">Outcome-Wide Reporting</a></h2>
 <ol>
@@ -7977,10 +7997,12 @@ invariance fails across groups.</li>
 four wellbeing outcomes using a causal forest. Set out the full
 causal workflow: estimands, identification assumptions, estimator,
 multiple-testing correction, sensitivity analysis, presentation.</li>
-<li>A community wellbeing programme has a fixed budget. Walk through the
-steps from conditional average treatment effect estimation to an
-allocation rule, naming the fairness check and one value judgement
-the model cannot settle.</li>
+<li>A community wellbeing programme wants to use heterogeneous treatment
+effect estimates. Walk through the steps from conditional average
+treatment effect estimation to a readable policy-tree summary,
+naming the fairness check and one value judgement the model cannot
+settle. State how the answer would change if the programme also had
+a fixed budget.</li>
 <li>A cross-cultural study uses the K6 to compare the effect of a
 school-based mindfulness intervention in two countries. Identify the
 measurement, treatment-version, and identification threats, and
@@ -8097,11 +8119,14 @@ baseline measurement. The organiser has current, relational, and
 contextual information that the model does not contain.</p>
 </li>
 <li>
-<p>A ranking rule treats the top 20% by $\hat{\tau}(x)$, using the
-full continuous score. A depth-2 policy tree with a 20% budget uses
-a few if-then splits to approximate a high-value allocation. Ranking
-may be preferable when trained staff can use a score safely and the
-extra policy value is large enough to justify lower transparency.</p>
+<p>A ranking rule can treat the top 20% by $\hat{\tau}(x)$ when a
+budget fixes the treatment share. It uses the full continuous score.
+A default depth-2 policy tree instead learns a few if-then splits
+that assign the action with the highest estimated reward in each
+leaf; the treated share is whatever the fitted rule implies. Ranking
+may be preferable when trained staff can use a score safely, a fixed
+budget must be met exactly, and the extra policy value is large
+enough to justify lower transparency.</p>
 </li>
 </ol>
 <h2 id="outcome-wide-reporting-1"><a class="header" href="#outcome-wide-reporting-1">Outcome-Wide Reporting</a></h2>
@@ -8198,13 +8223,17 @@ and presents a forest plot plus table.</p>
 </li>
 <li>
 <p>Estimate CATEs with a causal forest, check whether heterogeneity is
-real, choose a realistic budget, compare targeting value using
-held-out scores, fit shallow policy trees, evaluate held-out policy
-value and stability, and translate the rule into plain language. The
-fairness check should consider group treatment shares, proxy
-variables, need, and override procedures. The model cannot decide
-whether the allocation should prioritise total benefit, equal
-access, greatest need, cost control, or another public value.</p>
+real, compare targeting value using held-out scores, fit shallow
+policy trees, evaluate held-out policy value and stability, and
+translate the high-response regions into plain language. The
+fairness check should consider group treatment shares implied by the
+rule, proxy variables, need, and override procedures. The model
+cannot decide whether the allocation should prioritise total
+benefit, equal access, greatest need, cost control, or another
+public value. If a fixed budget is added, the analysis must also
+compare rules or rankings under that budget; the current default
+policy-tree workflow does not impose the percentage treated by
+itself.</p>
 </li>
 <li>
 <p>Measurement threat: the K6 may not be invariant across countries;
@@ -8497,14 +8526,14 @@ outcome across people, groups, treatment states, and time.</li>
 <h2 id="hte-and-policy-tree-check"><a class="header" href="#hte-and-policy-tree-check">HTE and Policy Tree Check</a></h2>
 <p>Heterogeneous treatment effect (HTE) methods describe how estimated
 treatment effects vary across measured covariates. Policy trees turn
-those estimates into simple allocation rules. They are useful, and easy
-to over-read.</p>
+those estimates into simple rules or summaries of high-response regions.
+They are useful, and easy to over-read.</p>
 <p>Before reporting HTE or policy tree results, check:</p>
 <ol>
 <li><strong>Outcome:</strong> which outcome the rule is for. A rule for one outcome
 may not be a rule for another.</li>
 <li><strong>Estimand:</strong> whether you are reporting CATEs, ranked heterogeneity,
-policy value, or an allocation rule.</li>
+policy value, a high-response region, or an allocation rule.</li>
 <li><strong>Modifier status:</strong> whether a split variable is a measured
 descriptor, proxy, or downstream marker. Do not read a split
 variable as the causal source of effect modification.</li>
@@ -8515,9 +8544,9 @@ positivity.</li>
 depth-1. Prefer the simpler rule unless the improvement is clear.</li>
 <li><strong>Uncertainty:</strong> whether the policy value and subgroup effects have
 confidence intervals.</li>
-<li><strong>Oversight:</strong> what value judgement authorises the allocation rule.
-The model can estimate who appears to benefit more; it cannot decide
-which public value should win.</li>
+<li><strong>Oversight:</strong> what value judgement would authorise acting on the
+rule. The model can estimate who appears to benefit more; it cannot
+decide which public value should win.</li>
 </ol>
 <p>Useful wording:</p>
 <blockquote>
@@ -8652,7 +8681,9 @@ causes of response."</p>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
 <p>Present policy trees with both standardised and original-scale
-interpretations.</p>
+interpretations. In the current lab workflow, the tree describes the
+action or high-response region implied by the supplied rewards; it does
+not force a fixed percentage treated.</p>
 <h3 id="subgroup-reporting-with-data-scale-effects"><a class="header" href="#subgroup-reporting-with-data-scale-effects">Subgroup reporting with data-scale effects</a></h3>
 <p><strong>High-response subgroups for life satisfaction:</strong></p>
 <ol>
@@ -9866,21 +9897,24 @@ criteria as capacity planning could capture most of the benefit without
 labelling individuals."</p>
 <hr />
 <h2 id="week-9"><a class="header" href="#week-9">Week 9</a></h2>
-<h3 id="designing-a-depth-2-policy-rule"><a class="header" href="#designing-a-depth-2-policy-rule">Designing a depth-2 policy rule</a></h3>
-<p>Example: split first on deprivation index (high vs low), then split the
-high-deprivation leaf on baseline loneliness (high vs low). Treat the
-"high deprivation, high loneliness" leaf and do not treat the other
-leaves.</p>
-<p>Plain-language rule: offer the programme to residents in
-high-deprivation areas who also report high baseline loneliness.</p>
+<h3 id="reading-a-simple-policy-rule"><a class="header" href="#reading-a-simple-policy-rule">Reading a simple policy rule</a></h3>
+<p>The supplied tree first splits on deprivation index, then splits the
+high-deprivation branch on baseline loneliness. The high-response leaf
+is "high deprivation, high loneliness".</p>
+<p>Plain-language summary: the strongest estimated response is among
+residents in high-deprivation areas who also report high baseline
+loneliness.</p>
 <p>If roughly 40% of the population is high-deprivation and half of that
-group is high-loneliness, the treated group is approximately $0.40
-\times 0.50 = 0.20$, or 20% of residents.</p>
-<p>Two reasons to prefer depth-2 over depth-4: (1) a depth-2 tree has at
-most 4 leaves and 3 yes/no questions, which a policy-maker or clinician
-can explain in a sentence; (2) deeper trees split the sample into
-smaller subgroups, reducing the number of observations per leaf and
-increasing the variance of the estimated policy value.</p>
+group is high-loneliness, the high-response region contains
+approximately:</p>
+<p>$$ 0.40 \times 0.50 = 0.20 $$</p>
+<p>That is about 20% of residents.</p>
+<p>This does not mean the analysis must treat exactly 20%. In our lab
+workflow, the policy tree helps describe where estimated responses are
+strongest, and the report should give the expected mean difference for
+that region. The size of the region is still useful because it tells
+readers whether the finding describes a small niche group or a sizeable
+part of the eligible population.</p>
 <h3 id="depth-1-versus-depth-2"><a class="header" href="#depth-1-versus-depth-2">Depth-1 versus depth-2</a></h3>
 <p>The depth-1 rule can be stated as: treat residents above the log-income
 threshold and do not treat residents at or below it. The depth-2 rule
@@ -9947,12 +9981,15 @@ continuous score derived from thousands of overlapping tree splits.</p>
 <p>(c) Ability to answer "why was I selected?": Strategy B can give a
 clear answer ("because your deprivation index is above 8 and your
 loneliness score is above the median"). Strategy A can only say "because
-your estimated benefit score was in the top 20%," which is opaque.</p>
+your estimated benefit score was in the top 20%," if a 20% budget was
+imposed, which is opaque.</p>
 <p>Strategy A is preferable when the decision is internal (e.g., a research
-team allocating limited follow-up resources) and does not require public
-justification. Strategy B is preferable when the rule must be defended
-publicly, contested by affected communities, or implemented by
-non-technical staff.</p>
+team allocating limited follow-up resources), a fixed treatment share
+must be met exactly, and public justification is less central. Strategy
+B is preferable when the rule must be defended publicly, contested by
+affected communities, or implemented by non-technical staff. Under the
+default <code>policytree</code> workflow, the percentage treated is an output of
+the fitted rule, not a fixed input.</p>
 <p>Both strategies must answer the same equity question: who is excluded
 under the rule, and does that exclusion worsen disparities for protected
 or structurally disadvantaged groups?</p>

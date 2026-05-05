@@ -293,9 +293,10 @@ itself decide whether an allocation rule is just.</li>
 <li>Describe one scenario in which a community organiser should override
 a policy tree recommendation. What information would they have that
 the model does not?</li>
-<li>State the difference between a ranking rule (treat the top 20% by
-$\hat{\tau}$) and a policy tree (depth 2 with a 20% budget). Give
-one scenario in which the ranking is preferable.</li>
+<li>State the difference between a ranking rule (for example, treat the
+top 20% by $\hat{\tau}$ when a budget is fixed) and a default
+depth-2 policy tree, where the treated share is whatever the fitted
+rule implies. Give one scenario in which the ranking is preferable.</li>
 </ol>
 <h2 id="outcome-wide-reporting"><a class="header" href="#outcome-wide-reporting">Outcome-Wide Reporting</a></h2>
 <ol>
@@ -334,10 +335,12 @@ invariance fails across groups.</li>
 four wellbeing outcomes using a causal forest. Set out the full
 causal workflow: estimands, identification assumptions, estimator,
 multiple-testing correction, sensitivity analysis, presentation.</li>
-<li>A community wellbeing programme has a fixed budget. Walk through the
-steps from conditional average treatment effect estimation to an
-allocation rule, naming the fairness check and one value judgement
-the model cannot settle.</li>
+<li>A community wellbeing programme wants to use heterogeneous treatment
+effect estimates. Walk through the steps from conditional average
+treatment effect estimation to a readable policy-tree summary,
+naming the fairness check and one value judgement the model cannot
+settle. State how the answer would change if the programme also had
+a fixed budget.</li>
 <li>A cross-cultural study uses the K6 to compare the effect of a
 school-based mindfulness intervention in two countries. Identify the
 measurement, treatment-version, and identification threats, and

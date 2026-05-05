@@ -492,15 +492,19 @@ pattern as a whole, not outcome by outcome.</p>
 <p><strong>Subgroup identification with policy trees.</strong> This course studies
 comparative work. After estimating the four ATEs, fit a depth-2 policy
 tree per outcome using <code>margot</code> (Lab 9 walks through the steps).
-Identify the subgroup for which the estimated treatment effect is
-strongest. Translate the rule into plain language a non-specialist could
-repeat. Report the policy value with its 95% confidence interval, and
-note whether the depth-2 rule meaningfully improves on depth-1 (apply
-the parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a>).</p>
+Identify the subgroup or region for which the estimated treatment effect
+is strongest. Translate the region into plain language a non-specialist
+could repeat. Report its expected mean difference, uncertainty, and
+approximate sample proportion. Report the policy value with its 95%
+confidence interval, and note whether the depth-2 rule meaningfully
+improves on depth-1 (apply the parsimony rule from the <a href="reporting-guide.html">Reporting
+Guide</a>). The current <code>margot</code> workflow does not
+force a fixed percentage treated; if you discuss a budget cap, state it
+as an extra decision problem.</p>
 <p><strong>Ethics statement.</strong> Devote one paragraph (about 150 words) to what
 would need to be considered before acting on the policy tree. Address:
-(i) fairness — whether targeting those who benefit <em>most</em> leaves out
-those who benefit <em>somewhat</em>; (ii) proxy variables — whether splits on
+(i) fairness — if the rule were used to prioritise access, who might
+benefit less or be left out; (ii) proxy variables — whether splits on
 covariates such as deprivation, income, age, or baseline wellbeing could
 affect social groups differently; (iii) oversight — who would check the
 rule, what public objective would justify it, and when a community

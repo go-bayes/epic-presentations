@@ -352,11 +352,14 @@ baseline measurement. The organiser has current, relational, and
 contextual information that the model does not contain.</p>
 </li>
 <li>
-<p>A ranking rule treats the top 20% by $\hat{\tau}(x)$, using the
-full continuous score. A depth-2 policy tree with a 20% budget uses
-a few if-then splits to approximate a high-value allocation. Ranking
-may be preferable when trained staff can use a score safely and the
-extra policy value is large enough to justify lower transparency.</p>
+<p>A ranking rule can treat the top 20% by $\hat{\tau}(x)$ when a
+budget fixes the treatment share. It uses the full continuous score.
+A default depth-2 policy tree instead learns a few if-then splits
+that assign the action with the highest estimated reward in each
+leaf; the treated share is whatever the fitted rule implies. Ranking
+may be preferable when trained staff can use a score safely, a fixed
+budget must be met exactly, and the extra policy value is large
+enough to justify lower transparency.</p>
 </li>
 </ol>
 <h2 id="outcome-wide-reporting"><a class="header" href="#outcome-wide-reporting">Outcome-Wide Reporting</a></h2>
@@ -453,13 +456,17 @@ and presents a forest plot plus table.</p>
 </li>
 <li>
 <p>Estimate CATEs with a causal forest, check whether heterogeneity is
-real, choose a realistic budget, compare targeting value using
-held-out scores, fit shallow policy trees, evaluate held-out policy
-value and stability, and translate the rule into plain language. The
-fairness check should consider group treatment shares, proxy
-variables, need, and override procedures. The model cannot decide
-whether the allocation should prioritise total benefit, equal
-access, greatest need, cost control, or another public value.</p>
+real, compare targeting value using held-out scores, fit shallow
+policy trees, evaluate held-out policy value and stability, and
+translate the high-response regions into plain language. The
+fairness check should consider group treatment shares implied by the
+rule, proxy variables, need, and override procedures. The model
+cannot decide whether the allocation should prioritise total
+benefit, equal access, greatest need, cost control, or another
+public value. If a fixed budget is added, the analysis must also
+compare rules or rankings under that budget; the current default
+policy-tree workflow does not impose the percentage treated by
+itself.</p>
 </li>
 <li>
 <p>Measurement threat: the K6 may not be invariant across countries;

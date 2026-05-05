@@ -284,14 +284,13 @@ defensible allocation rules, and asks how much of the underlying
 heterogeneity a short rule can recover.</p>
 <h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
 <h3 id="motivating-example"><a class="header" href="#motivating-example">Motivating example</a></h3>
-<p>A district health board can fund an intervention to enhance sense of
-purpose for only twenty percent of eligible residents. A causal forest
-suggests large heterogeneity. The top-ranked group appears to benefit
-most. The board now needs a rule that can be defended in public, not
-just a ranking inside a script. The rule must be short enough to fit on
-a single page, robust enough to survive scrutiny by people who did not
-fit the model, and accompanied by an honest account of what the data can
-and cannot decide.</p>
+<p>A district health board is considering an intervention to enhance sense
+of purpose. A causal forest suggests large heterogeneity: some residents
+appear to benefit more than others. The board now needs a rule that can
+be described in public, not just a ranking inside a script. The rule
+must be short enough to fit on a single page, clear enough for people
+who did not fit the model, and accompanied by an honest account of what
+the data can and cannot decide.</p>
 <p>We work through purpose for concreteness; lab 9 repeats the same
 workflow across four outcomes (purpose, belonging, self-esteem, life
 satisfaction).</p>
@@ -343,16 +342,23 @@ position drifts with sample size.</p>
 deliver, on average, if applied to the whole population. Call that
 number the rule's <strong>policy value</strong>, written $V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
-<p>A budget cap restricts the share of the population the rule may treat:</p>
+<p>The default <code>policytree</code> problem does <strong>not</strong> set a fixed percentage of
+people to treat. Instead, it asks which action has the highest estimated
+reward in each leaf. The share treated is an output of the fitted rule,
+not an input.</p>
+<p>If a project has a fixed budget, the policy problem can be written with
+a treatment-share cap:</p>
 <p>$$ \mathbb{E}[d(X)] \le q. $$</p>
-<p>Policy learning seeks the rule with the highest $V(d)$ subject to the
-cap. Two practical complications follow. First, $V(d)$ is a
-counterfactual quantity, since for any individual we observe at most one
-of $Y(0)$ or $Y(1)$. We need to evaluate candidate rules without
-assigning everyone to them. Second, the rule must be small enough to
-defend in front of a non-statistical audience. Both constraints push the
-analysis toward shallow, transparent decision trees evaluated with
-doubly-robust scores.</p>
+<p>That is useful to discuss, but it is not what the current <code>margot</code> lab
+pipeline enforces. In our workflow, policy trees identify regions where
+the estimated reward for treatment is higher than control, then report
+the expected mean differences and the size of those regions. Two
+practical complications remain. First, $V(d)$ is a counterfactual
+quantity, since for any individual we observe at most one of $Y(0)$ or
+$Y(1)$. We need to evaluate candidate rules without assigning everyone
+to them. Second, the rule must be small enough to defend in front of a
+non-statistical audience. Both constraints push the analysis toward
+shallow, transparent decision trees evaluated with doubly-robust scores.</p>
 <h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
 <p>A causal forest maps a high-dimensional covariate vector $X$ to a
 personalised score $\hat{\tau}(X)$. The function itself is too tangled
@@ -390,20 +396,26 @@ trees increase computational complexity faster than they improve
 payoffs; the gain from a depth-3 tree over a depth-2 tree is usually
 small relative to the loss in clarity.</p>
 <blockquote>
-<p><strong>Pair exercise: designing a depth-2 policy rule</strong></p>
-<p>A community programme can offer places to 20% of eligible residents.
-Suppose a simple rule can split on deprivation index (high/low),
-baseline loneliness (high/low), and age (under 40/40 or older).</p>
+<p><strong>Pair exercise: reading a simple policy rule</strong></p>
+<p>Suppose a depth-2 policy tree identifies a strong-response region:</p>
 <ol>
-<li>Sketch a depth-2 tree that treats about 20% of residents. Label
-each leaf "treat" or "do not treat."</li>
-<li>Write your rule as one sentence a community organiser could
-repeat.</li>
-<li>Explain how your tree stays within the 20% budget. Use simple
-assumptions such as "40% are high-deprivation and half of those
-are high-loneliness."</li>
-<li>Give two reasons this rule is easier to defend than a depth-4
-tree.</li>
+<li>First split on deprivation: high versus low.</li>
+<li>Among the high-deprivation group, split on baseline loneliness:
+high versus low.</li>
+<li>The largest estimated mean difference is in the high-deprivation,
+high-loneliness leaf.</li>
+</ol>
+<p>In pairs:</p>
+<ol>
+<li>Draw this tree and label the high-response leaf.</li>
+<li>Write the high-response region as one sentence a community
+organiser could repeat.</li>
+<li>Suppose 40% of residents are high-deprivation, and half of those
+are high-loneliness. What share of all eligible residents falls in
+the high-response region? Show the multiplication.</li>
+<li>The lab reports strong-response regions and expected mean
+differences; it does not force a 20% treatment cap. Why is it
+still useful to know the approximate size of the region?</li>
 </ol>
 </blockquote>
 <h2 id="reading-a-policy-tree"><a class="header" href="#reading-a-policy-tree">Reading a policy tree</a></h2>
@@ -491,7 +503,7 @@ both cases automatically.</p>
 identify causally privileged variables. If a depth-2 tree splits on
 openness and neuroticism, that does not mean these variables are deep
 causes of purpose; it means they help separate high-value and low-value
-treatment regions under the chosen objective and within the budget cap.
+treatment regions under the reward objective supplied to <code>policytree</code>.
 The same data with a different outcome could pick out an entirely
 different splitter.</p>
 <p>Conversely, a variable that does not appear in the tree is not
@@ -589,8 +601,8 @@ data." Counter this claim in two sentences.</li>
 <h2 id="workflow-for-this-week"><a class="header" href="#workflow-for-this-week">Workflow for this week</a></h2>
 <ol>
 <li>Estimate heterogeneity and targeting value (week 8 outputs).</li>
-<li>Fit shallow policy trees at multiple depths under explicit budget
-constraints.</li>
+<li>Fit shallow policy trees at multiple depths using the <code>policytree</code>
+default reward objective.</li>
 <li>Evaluate each policy out of sample with AIPW scores; report policy
 value with a confidence interval.</li>
 <li>Examine stability across train-test splits and reject unstable rules
@@ -621,9 +633,11 @@ compact grant style only; follow the current criteria in
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
 <p>Back to the district health board. The question is not only "what rule
 maximises sample gain?" The question is also whether the rule works out
-of sample, fits the budget, can be explained, and is acceptable to the
-people who would live with it. That is what moves a tree from a slide in
-a methods talk to a rule a clinic might actually use.</p>
+of sample, can be explained, and is acceptable to the people who would
+live with it. If there is a fixed budget, that constraint must be added
+explicitly; it is not supplied by the default <code>policytree</code> call. That is
+what moves a tree from a slide in a methods talk to a rule a clinic
+might actually use.</p>
 <p>The workflow from question to policy rule is now in place. One
 assumption has been present throughout but never examined: that our
 instruments measure the same construct across the groups we compare.
@@ -631,9 +645,10 @@ Week 10 asks whether that assumption holds.</p>
 <blockquote>
 <p><strong>Pair exercise: policy tree versus ranking</strong></p>
 <ol>
-<li>Strategy A ranks individuals by $\hat{\tau}(X_i)$ and treats the
-top 20%. Strategy B fits a depth-2 policy tree with a 20% budget
-constraint.</li>
+<li>Strategy A ranks individuals by $\hat{\tau}(X_i)$ and, if a
+budget is fixed, could treat the top 20%. Strategy B fits a
+depth-2 policy tree using the default reward objective, so the
+treated share is whatever the rule implies.</li>
 <li>Compare the two strategies on: (a) estimated policy value, (b)
 explainability to a non-technical audience, and (c) ability to
 answer "why was I selected?"</li>

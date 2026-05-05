@@ -548,21 +548,24 @@ criteria as capacity planning could capture most of the benefit without
 labelling individuals."</p>
 <hr />
 <h2 id="week-9"><a class="header" href="#week-9">Week 9</a></h2>
-<h3 id="designing-a-depth-2-policy-rule"><a class="header" href="#designing-a-depth-2-policy-rule">Designing a depth-2 policy rule</a></h3>
-<p>Example: split first on deprivation index (high vs low), then split the
-high-deprivation leaf on baseline loneliness (high vs low). Treat the
-"high deprivation, high loneliness" leaf and do not treat the other
-leaves.</p>
-<p>Plain-language rule: offer the programme to residents in
-high-deprivation areas who also report high baseline loneliness.</p>
+<h3 id="reading-a-simple-policy-rule"><a class="header" href="#reading-a-simple-policy-rule">Reading a simple policy rule</a></h3>
+<p>The supplied tree first splits on deprivation index, then splits the
+high-deprivation branch on baseline loneliness. The high-response leaf
+is "high deprivation, high loneliness".</p>
+<p>Plain-language summary: the strongest estimated response is among
+residents in high-deprivation areas who also report high baseline
+loneliness.</p>
 <p>If roughly 40% of the population is high-deprivation and half of that
-group is high-loneliness, the treated group is approximately $0.40
-\times 0.50 = 0.20$, or 20% of residents.</p>
-<p>Two reasons to prefer depth-2 over depth-4: (1) a depth-2 tree has at
-most 4 leaves and 3 yes/no questions, which a policy-maker or clinician
-can explain in a sentence; (2) deeper trees split the sample into
-smaller subgroups, reducing the number of observations per leaf and
-increasing the variance of the estimated policy value.</p>
+group is high-loneliness, the high-response region contains
+approximately:</p>
+<p>$$ 0.40 \times 0.50 = 0.20 $$</p>
+<p>That is about 20% of residents.</p>
+<p>This does not mean the analysis must treat exactly 20%. In our lab
+workflow, the policy tree helps describe where estimated responses are
+strongest, and the report should give the expected mean difference for
+that region. The size of the region is still useful because it tells
+readers whether the finding describes a small niche group or a sizeable
+part of the eligible population.</p>
 <h3 id="depth-1-versus-depth-2"><a class="header" href="#depth-1-versus-depth-2">Depth-1 versus depth-2</a></h3>
 <p>The depth-1 rule can be stated as: treat residents above the log-income
 threshold and do not treat residents at or below it. The depth-2 rule
@@ -629,12 +632,15 @@ continuous score derived from thousands of overlapping tree splits.</p>
 <p>(c) Ability to answer "why was I selected?": Strategy B can give a
 clear answer ("because your deprivation index is above 8 and your
 loneliness score is above the median"). Strategy A can only say "because
-your estimated benefit score was in the top 20%," which is opaque.</p>
+your estimated benefit score was in the top 20%," if a 20% budget was
+imposed, which is opaque.</p>
 <p>Strategy A is preferable when the decision is internal (e.g., a research
-team allocating limited follow-up resources) and does not require public
-justification. Strategy B is preferable when the rule must be defended
-publicly, contested by affected communities, or implemented by
-non-technical staff.</p>
+team allocating limited follow-up resources), a fixed treatment share
+must be met exactly, and public justification is less central. Strategy
+B is preferable when the rule must be defended publicly, contested by
+affected communities, or implemented by non-technical staff. Under the
+default <code>policytree</code> workflow, the percentage treated is an output of
+the fitted rule, not a fixed input.</p>
 <p>Both strategies must answer the same equity question: who is excluded
 under the rule, and does that exclusion worsen disparities for protected
 or structurally disadvantaged groups?</p>
