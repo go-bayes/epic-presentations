@@ -1,0 +1,532 @@
+<!DOCTYPE HTML>
+<html lang="en" class="latte sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Test 2 Practice Question Answers - PSYC 434: Conducting Research Across Cultures</title>
+
+
+        <!-- Custom HTML head -->
+        <!--
+          TODO: revisit math rendering. The current setup is client-side KaTeX (auto-render
+          in the browser). It works for simple inline math but is fragile for richer
+          display math because pulldown-cmark — which mdbook uses — processes the
+          markdown source BEFORE KaTeX ever runs. By the time KaTeX scans the DOM, the
+          math source has already been corrupted in several reproducible ways:
+        
+            1. Paired underscores inside math (e.g. \underbrace{X}_{...}\,\underbrace{Y}_{...})
+               are read as markdown emphasis, splicing <em>...</em> tags into the math.
+               Workaround in source: escape as }\_{...}.
+        
+            2. `\{` and `\}` lose their backslash (CommonMark eats the escape).
+               Workaround: write `\lbrace` and `\rbrace` (KaTeX synonyms).
+        
+            3. Backslash-punctuation spacing commands `\,`, `\;`, `\:`, `\!` lose their
+               backslash for the same reason. Workaround: `\thinspace`, `\medspace`,
+               `\thickspace`, `\negthinspace` (KaTeX-supported letter forms).
+        
+            4. Trailing `\\` at end of a source line triggers CommonMark's hard-line-break
+               rule and one backslash is consumed (becomes a <br>). Workaround: use
+               `\newline` for line breaks inside `aligned` and similar environments.
+        
+            5. Source lines that begin with `-` inside a `$$...$$` block are parsed as
+               markdown bullet items, wrapping each line in <li>...</li>.
+               Workaround: never start a math source line with `-`; prefix with
+               `&\quad {}-` or move the operator to the end of the previous line.
+        
+            6. `\color{X}{Y}` switch-style scoping is brittle inside brace labels.
+               Prefer `\textcolor{X}{Y}`.
+        
+          Source-level escapes only paper over the bug. The robust fix is to render math
+          at BUILD time, before pulldown-cmark touches the source. Three options, in
+          rough order of effort:
+        
+            (a) Re-add `mdbook-katex` as a preprocessor. We used it before and removed
+                it in commit be193de ("switch callouts to blockquotes; client-side katex
+                via head.hbs") without a documented reason. Worth checking whether the
+                original blocker still applies — if not, this is the cheapest fix.
+        
+            (b) Custom preprocessor that wraps `$$...$$` blocks in fenced HTML or some
+                sentinel pulldown-cmark will leave alone, then unwraps after parsing.
+                More work; full control.
+        
+            (c) Switch to MathJax via a custom config in this file rather than mdBook's
+                built-in `mathjax-support` flag (which has known delimiter limitations
+                per the mdBook docs). Larger renderer, broader LaTeX coverage, slightly
+                slower client-side render.
+        
+          Until one of these lands, every new lecture with non-trivial display math must
+          be authored with the workarounds above in mind. See `TODO.md` item 8.
+        -->
+        
+        <!-- katex client-side auto-render (replaces mdbook-katex preprocessor) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$',  right: '$',  display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+            ignoredClasses: ['no-katex'],
+            throwOnError: false,
+            strict: 'ignore',
+            output: 'htmlAndMathml',
+            trust: false,
+            macros: {
+              '\\E': '\\mathbb{E}',
+              '\\one': '\\mathbb{1}',
+              '\\indep': '\\mathrel{\\perp\\!\\!\\!\\perp}',
+              '\\given': '\\,\\vert\\,',
+              '\\ATE': '\\mathrm{ATE}',
+              '\\CATE': '\\mathrm{CATE}',
+              '\\RATE': '\\mathrm{RATE}',
+              '\\AUTOC': '\\mathrm{AUTOC}',
+              '\\Qini': '\\mathrm{Qini}'
+            }
+          });"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/accept.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "latte";
+            const default_dark_theme = "mocha";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('latte')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">PSYC 434: Conducting Research Across Cultures</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="test-2-practice-question-answers"><a class="header" href="#test-2-practice-question-answers">Test 2 Practice Question Answers</a></h1>
+<p>Use these answers to check your own work after you have tried the
+<a href="test-2-study-prompts.html">practice questions</a>. Strong answers can be
+phrased in different ways. The key is to show the causal logic clearly.</p>
+<h2 id="heterogeneous-treatment-effects"><a class="header" href="#heterogeneous-treatment-effects">Heterogeneous Treatment Effects</a></h2>
+<ol>
+<li>
+<p>The average treatment effect (ATE) is the mean contrast
+$\mathbb{E}[Y(1)-Y(0)]$ in the target population. The
+conditional average treatment effect (CATE) is
+$\mathbb{E}[Y(1)-Y(0)\mid X=x]$, the average contrast within
+people who share covariates $x$. The distinction matters when the
+average hides large differences in who benefits.</p>
+</li>
+<li>
+<p>No. Non-significant age and gender interactions only rule out those
+two pre-specified linear interactions with the available power and
+model form. Heterogeneity may involve other variables, non-linear
+patterns, or high-dimensional combinations.</p>
+</li>
+<li>
+<p>Honest splitting separates the data used to choose tree splits from
+the data used to estimate effects within leaves. It reduces
+overfitting and prevents the forest from exaggerating heterogeneity
+by using the same noise twice.</p>
+</li>
+<li>
+<p>A doubly robust estimator remains consistent if either the outcome
+model or the treatment/propensity model is correctly specified. The
+practical advantage is protection against one form of model
+misspecification.</p>
+</li>
+<li>
+<p>RATE-AUTOC = 0.04 with CI $[0.01,0.07]$ suggests the forest's
+ranking identifies people who benefit more than average, with
+uncertainty still above zero. The same estimate with CI
+$[-0.02,0.10]$ is inconclusive: the point estimate is positive,
+but the data are compatible with no useful targeting signal.</p>
+</li>
+<li>
+<p>A Qini curve plots the treatment share targeted on the $x$-axis
+and cumulative gain over a baseline allocation on the $y$-axis.
+When targeting helps, the curve rises steeply above the diagonal
+among the first people targeted. When targeting does not help, it
+stays close to the diagonal.</p>
+</li>
+<li>
+<p>Sparse regions have few comparable treated and untreated
+observations. The forest must extrapolate more, leaves contain less
+information, and the CATE estimate has higher variance.</p>
+</li>
+<li>
+<p>Regression only tests the interactions the investigator specifies. A
+causal forest can search for non-linear and high-dimensional
+heterogeneity that a small regression interaction set would miss,
+though the forest still needs validation.</p>
+</li>
+</ol>
+<h2 id="policy-trees-equity-and-democratic-judgement"><a class="header" href="#policy-trees-equity-and-democratic-judgement">Policy Trees, Equity, and Democratic Judgement</a></h2>
+<ol>
+<li>
+<p>A policy tree converts estimated treatment-effect heterogeneity into
+a simple allocation rule: for these covariates, treat; for those
+covariates, do not treat. A CATE estimate ranks or scores people,
+but it is not yet a deployable rule.</p>
+</li>
+<li>
+<p>Prefer the simpler tree unless the deeper tree gives a meaningfully
+larger held-out policy value and the uncertainty supports that gain.
+Simpler trees are easier to explain, more stable, and less likely to
+be misapplied.</p>
+</li>
+<li>
+<p>Offer the programme to residents whose deprivation index is above
+1.2 and who are aged 40 or younger.</p>
+</li>
+<li>
+<p>A strong equity audit could check: the treatment share across
+relevant social groups; whether split variables are proxies for
+sensitive characteristics; whether groups with similar need receive
+similar access; whether the rule is stable across resamples; and
+whether there is an override or appeal pathway.</p>
+</li>
+<li>
+<p>Deprivation is correlated with many social conditions, such as
+income, housing, neighbourhood resources, age, health, and sometimes
+ethnicity. A rule that uses deprivation may therefore allocate
+treatment unevenly across groups even if group membership is not in
+the tree.</p>
+</li>
+<li>
+<p>Statistical evidence can estimate expected benefits, uncertainty,
+and subgroup patterns. It cannot decide which public value should
+govern allocation: maximising total benefit, equal access, need,
+individual choice, cost control, or another principle.</p>
+</li>
+<li>
+<p>An organiser might override the rule for someone assigned "do not
+treat" who is in acute crisis or whose situation changed after
+baseline measurement. The organiser has current, relational, and
+contextual information that the model does not contain.</p>
+</li>
+<li>
+<p>A ranking rule treats the top 20% by $\hat{\tau}(x)$, using the
+full continuous score. A depth-2 policy tree with a 20% budget uses
+a few if-then splits to approximate a high-value allocation. Ranking
+may be preferable when trained staff can use a score safely and the
+extra policy value is large enough to justify lower transparency.</p>
+</li>
+</ol>
+<h2 id="outcome-wide-reporting"><a class="header" href="#outcome-wide-reporting">Outcome-Wide Reporting</a></h2>
+<ol>
+<li>
+<p>The four causal estimands are the effects of the same exposure on
+each outcome: purpose, belonging, self-esteem, and life
+satisfaction. Formally,
+$\mathrm{ATE}_k=\mathbb{E}[Y_k(1)-Y_k(0)]$ for
+$k=1,\ldots,4$.</p>
+</li>
+<li>
+<p>With four outcomes, the chance of at least one apparently positive
+result by chance is higher than 5%. Bonferroni controls the
+family-wise error rate by testing each outcome at
+$\alpha=0.05/4=0.0125$, equivalent to reporting 98.75% confidence
+intervals for each outcome.</p>
+</li>
+<li>
+<p>An E-value of 2.0 means that an unmeasured confounder would need to
+be associated with both the exposure and the outcome by a risk ratio
+of at least 2.0 each, above and beyond measured covariates, to
+explain away the estimated effect. It is a sensitivity summary, not
+proof that confounding is absent.</p>
+</li>
+<li>
+<p>The exposure shows its clearest evidence for the two outcomes whose
+Bonferroni-adjusted intervals exclude zero. The other two estimates
+point in the same direction but remain uncertain after correcting
+for the four-outcome family. A non-specialist summary should
+emphasise the overall pattern, the stronger outcomes, and the fact
+that some outcomes remain compatible with no effect.</p>
+</li>
+</ol>
+<h2 id="measurement"><a class="header" href="#measurement">Measurement</a></h2>
+<ol>
+<li>
+<p>In a reflective model, the latent construct causes the indicators.
+This is awkward for causal inference if the latent variable is
+treated as a real causal object without a clear intervention. In a
+formative model, the indicators compose the construct. This is
+awkward because intervening on the construct is not the same as
+intervening on each component item.</p>
+</li>
+<li>
+<p>Measurement invariance means that a scale relates to the underlying
+construct in the same way across groups. Scalar invariance fails
+when item intercepts or thresholds differ across cultures, so the
+same observed score can imply different latent levels. Mean
+comparisons may then mix real differences with measurement
+artefacts.</p>
+</li>
+<li>
+<p>"Mindfulness intervention" can bundle different versions: breathing
+exercises, meditation apps, classroom lessons, retreats, or
+teacher-led practice. Consistency is threatened because $Y(1)$ is
+not a single well-defined potential outcome if different people
+receive different versions.</p>
+</li>
+<li>
+<p>A suitable graph is $A \to Y^\ast \to Y$, with $U_Y \to Y$, and
+differential measurement error represented by $A \to U_Y \to Y$.
+The path $A \to U_Y \to Y$ means the exposure changes how the
+outcome is measured, so the observed effect on $Y$ may partly
+reflect measurement processes rather than the true outcome
+$Y^\ast$.</p>
+</li>
+<li>
+<p>Baseline outcome adjustment controls much of the stable prior
+difference between exposed and unexposed people. In a three-wave
+panel, a remaining unmeasured confounder would need to affect later
+exposure conditional on earlier exposure and earlier outcome, which
+is a stronger requirement.</p>
+</li>
+<li>
+<p>A design response is to adapt, translate, pilot, or replace items
+before data collection, ideally with cultural consultation. An
+analytic response is to test measurement invariance and use
+group-specific models, partial invariance, sensitivity analysis, or
+avoid mean comparisons where invariance fails.</p>
+</li>
+</ol>
+<h2 id="synthesis-questions"><a class="header" href="#synthesis-questions">Synthesis Questions</a></h2>
+<ol>
+<li>
+<p>A strong workflow states the four causal estimands for weekly
+volunteer work versus no weekly volunteer work; defines the target
+population and time horizon; states consistency, conditional
+exchangeability, and positivity; adjusts for baseline covariates,
+exposure, and outcomes; fits a causal forest; reports four ATEs with
+Bonferroni-adjusted intervals; reports E-values for point estimates
+and confidence limits; tests heterogeneity with RATE or calibration;
+and presents a forest plot plus table.</p>
+</li>
+<li>
+<p>Estimate CATEs with a causal forest, check whether heterogeneity is
+real, choose a realistic budget, compare targeting value using
+held-out scores, fit shallow policy trees, evaluate held-out policy
+value and stability, and translate the rule into plain language. The
+equity audit should check group treatment shares, proxy variables,
+need, and override procedures. The model cannot decide whether the
+allocation should prioritise total benefit, equal access, greatest
+need, cost control, or another public value.</p>
+</li>
+<li>
+<p>Measurement threat: the K6 may not be invariant across countries;
+test invariance, adapt items, or avoid direct mean comparisons if
+scalar invariance fails. Treatment-version threat: "school-based
+mindfulness" may differ across teachers, schools, and countries;
+define the intervention more precisely or analyse versions
+separately. Identification threat: treated and untreated students
+may differ in baseline distress, family background, school
+resources, or selection into the programme; use a clear DAG,
+baseline adjustment, and sensitivity analysis.</p>
+</li>
+<li>
+<p>A good reply is: "The corrected intervals mean we should not claim
+four separate effects. The evidence is strongest for the outcomes
+whose Bonferroni-adjusted intervals exclude zero. For the other
+outcomes, the estimates may still contribute to the overall pattern,
+but they remain compatible with no effect after family-wise
+correction. I would present the result as an outcome-wide pattern
+with graded uncertainty, not as four confirmed findings."</p>
+</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="test-2-study-prompts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="potential-outcomes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="test-2-study-prompts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="potential-outcomes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
