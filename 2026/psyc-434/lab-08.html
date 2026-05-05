@@ -272,17 +272,31 @@ forest fitted in those labs to evaluate whether targeting resources to
 the most responsive individuals is worthwhile.</p>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<pre><code class="language-r">library(causalworkshop)
-library(grf)
-library(tidyverse)
+<p>The script handles installation automatically. The block below mirrors
+what <code>scripts/lab-08.R</code> runs at the top: it installs anything missing
+and requires <code>causalworkshop &gt;= 0.6.0</code>, stopping with a clear restart-R
+message if a stale namespace is already loaded.</p>
+<pre><code class="language-r">required_packages &lt;- c("grf", "tidyverse")
+missing &lt;- required_packages[
+  !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+]
+if (length(missing) &gt; 0) install.packages(missing)
+
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("causalworkshop", quietly = TRUE) ||
+    packageVersion("causalworkshop") &lt; "0.6.0") {
+  pak::pak("go-bayes/causalworkshop")
+  if ("causalworkshop" %in% loadedNamespaces()) {
+    stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
+  }
+}
+
+suppressPackageStartupMessages({
+  library(causalworkshop)
+  library(grf)
+  library(tidyverse)
+})
 </code></pre>
-<blockquote>
-<p><strong>Install packages</strong></p>
-<p>If <code>simulate_nzavs_data()</code> is missing, upgrade <code>causalworkshop</code> and
-install <code>grf</code>: <code>install.packages("grf")</code>
-<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
-<code>pak::pak("go-bayes/causalworkshop")</code></p>
-</blockquote>
 <p>Re-fit the causal forest from Labs 5-6 (or copy the code from Lab 5):</p>
 <pre><code class="language-r"># simulate data
 d &lt;- simulate_nzavs_data(n = 5000, seed = 2026)

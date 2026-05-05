@@ -551,20 +551,52 @@ labelling individuals."</p>
 <h3 id="designing-a-depth-2-policy-rule"><a class="header" href="#designing-a-depth-2-policy-rule">Designing a depth-2 policy rule</a></h3>
 <p>Example: split first on deprivation index (high vs low), then split the
 high-deprivation leaf on baseline loneliness (high vs low). Treat the
-"high deprivation, high loneliness" leaf. If roughly 40% of the
-population is high-deprivation and 50% of those are high-loneliness, the
-treated group is approximately 20%.</p>
+"high deprivation, high loneliness" leaf and do not treat the other
+leaves.</p>
+<p>Plain-language rule: offer the programme to residents in
+high-deprivation areas who also report high baseline loneliness.</p>
+<p>If roughly 40% of the population is high-deprivation and half of that
+group is high-loneliness, the treated group is approximately $0.40
+\times 0.50 = 0.20$, or 20% of residents.</p>
 <p>Two reasons to prefer depth-2 over depth-4: (1) a depth-2 tree has at
 most 4 leaves and 3 yes/no questions, which a policy-maker or clinician
 can explain in a sentence; (2) deeper trees split the sample into
 smaller subgroups, reducing the number of observations per leaf and
 increasing the variance of the estimated policy value.</p>
+<h3 id="depth-1-versus-depth-2"><a class="header" href="#depth-1-versus-depth-2">Depth-1 versus depth-2</a></h3>
+<p>The depth-1 rule can be stated as: treat residents above the log-income
+threshold and do not treat residents at or below it. The depth-2 rule
+can be stated as: first split on openness; for those below the first
+threshold, split again on openness, and for those above it, split on
+neuroticism; treat only the leaves labelled "treat."</p>
+<p>A lift of $0.028$ standard-deviation units is small for any one
+person. Across $10,000$ eligible people, however, it is an average
+improvement applied many times. If the rule is implemented correctly and
+the estimate transports, the population-level gain could be meaningful
+even though the individual-level gain sounds modest.</p>
+<p>Deploy the depth-1 rule when implementation must be simple, when staff
+will apply the rule under time pressure, or when the depth-2 splits are
+unstable across resamples. Deploy the depth-2 rule when the intervention
+is high-stakes, the extra gain is meaningful, the confidence interval
+supports the improvement, and the implementing organisation can apply
+the rule reliably.</p>
+<p>The extra evidence that would support depth-2 is a held-out policy-value
+estimate whose uncertainty clearly favours depth-2, stable splits across
+resamples, and an equity audit showing that the added split does not
+worsen disparities.</p>
 <h3 id="equity-audit"><a class="header" href="#equity-audit">Equity audit</a></h3>
+<p>Plain-language rule: offer the programme to high-deprivation residents
+under 40.</p>
 <p>A deprivation split indirectly stratifies by ethnicity because in
 Aotearoa NZ, Māori and Pasifika populations are disproportionately
 represented in high-deprivation areas due to historical and structural
 inequities. A rule that targets high deprivation will differentially
 affect these groups.</p>
+<p>The first empirical check is a cross-tabulation of assigned action by
+ethnicity, ideally with uncertainty intervals for the treated share in
+each group. The analyst should also check the distribution of need and
+estimated benefit by ethnicity, because equal treatment shares can still
+hide unequal need.</p>
 <p>Applying governance checks: (1) "Who gains and who loses?" The
 high-deprivation-under-40 group gains access; everyone else is excluded.
 If the excluded group includes high-deprivation people over 40 who also
@@ -597,6 +629,9 @@ team allocating limited follow-up resources) and does not require public
 justification. Strategy B is preferable when the rule must be defended
 publicly, contested by affected communities, or implemented by
 non-technical staff.</p>
+<p>Both strategies must answer the same equity question: who is excluded
+under the rule, and does that exclusion worsen disparities for protected
+or structurally disadvantaged groups?</p>
 <hr />
 <h2 id="week-10"><a class="header" href="#week-10">Week 10</a></h2>
 <h3 id="interpreting-invariance-results"><a class="header" href="#interpreting-invariance-results">Interpreting invariance results</a></h3>

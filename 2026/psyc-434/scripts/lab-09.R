@@ -27,7 +27,7 @@
 
 # --- packages ---------------------------------------------------------------
 
-required_packages <- c("ggplot2", "dplyr", "tibble", "qs", "googledrive")
+required_packages <- c("ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive")
 missing <- required_packages[
   !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
@@ -39,8 +39,17 @@ if (!requireNamespace("margot", quietly = TRUE)) {
   pak::pak("go-bayes/margot")
 }
 
-if (!requireNamespace("causalworkshop", quietly = TRUE)) {
+# require causalworkshop >= 0.6.0 (provides load_lab_09_cache and the
+# arrow-based artefact reader). a stale install will be auto-upgraded.
+if (!requireNamespace("causalworkshop", quietly = TRUE) ||
+  packageVersion("causalworkshop") < "0.6.0") {
   pak::pak("go-bayes/causalworkshop")
+  if ("causalworkshop" %in% loadedNamespaces()) {
+    stop(
+      "causalworkshop was upgraded; please restart R and re-run this lab.",
+      call. = FALSE
+    )
+  }
 }
 
 suppressPackageStartupMessages({
@@ -61,11 +70,11 @@ suppressPackageStartupMessages({
 #   policy_workflow       — interpretive layer: depth recommendations,
 #                           plots, and auto-generated prose summaries.
 #
-# the cache is a public Google Drive file. the helper downloads it once
-# into a per-user cache directory, then reads from disk on every
-# subsequent run.
-source("scripts/lab-09-cache.R")
-cache <- load_lab_09_cache()
+# the cache is a public Google Drive file. the loader (in causalworkshop)
+# downloads it once into a per-user cache directory, then reads from
+# disk on every subsequent run. no `scripts/` folder is needed; this
+# works from any working directory.
+cache <- causalworkshop::load_lab_09_cache()
 
 models_binary <- cache$models_binary
 policy_tree_stability <- cache$policy_tree_stability
@@ -165,10 +174,19 @@ for (p in qini_plots) print(p)
 
 # --- step 6: RATE table -----------------------------------------------------
 
-# RATE summarises targeting value as a single number. AUTOC weights all
-# budgets equally; QINI weights mid-range budgets more. negative or
-# near-zero RATE means the ranking has little practical content.
-rate_table <- margot_plot_rate_batch(
+# RATE summarises targeting value as a single number per outcome.
+# AUTOC weights all budgets equally; QINI weights mid-range budgets
+# more. negative or near-zero RATE means the ranking has little
+# practical content. margot_plot_rate_batch() returns a list of
+# per-outcome plots; the numbers themselves come from margot_rate().
+rate_plots <- margot_plot_rate_batch(
+  models_binary,
+  target = "AUTOC",
+  label_mapping = label_mapping
+)
+for (p in rate_plots) print(p)
+
+rate_table <- margot::margot_rate(
   models_binary,
   target = "AUTOC",
   label_mapping = label_mapping

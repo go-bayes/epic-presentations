@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Potential Outcomes and Causal Inference - PSYC 434: Conducting Research Across Cultures</title>
+        <title>Test 2 Study Sheet - PSYC 434: Conducting Research Across Cultures</title>
 
 
         <!-- Custom HTML head -->
@@ -244,160 +244,21 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="potential-outcomes-and-causal-inference"><a class="header" href="#potential-outcomes-and-causal-inference">Potential Outcomes and Causal Inference</a></h1>
-<p>This page introduces the fundamental problem of causal inference, the
-potential outcomes framework, and the three identification assumptions
-needed to estimate causal effects from data. It draws on the Women's
-Health Initiative (WHI) hormone replacement therapy case study as a
-motivating example.</p>
-<hr />
-<h2 id="motivating-example-hormone-replacement-therapy"><a class="header" href="#motivating-example-hormone-replacement-therapy">Motivating example: hormone replacement therapy</a></h2>
-<h3 id="observational-evidence-1980s1990s"><a class="header" href="#observational-evidence-1980s1990s">Observational evidence (1980s–1990s)</a></h3>
-<p>Throughout the 1980s and 1990s, observational studies suggested that
-oestrogen therapy reduced all-cause mortality in postmenopausal women by
-roughly 30% (hazard ratio $\approx 0.68$ for current users vs. never
-users). Professional bodies endorsed hormone replacement therapy (HRT)
-on this basis:</p>
-<ul>
-<li>1992, American College of Physicians: "Women who have coronary heart
-disease or who are at increased risk ... are likely to benefit from
-hormone therapy."</li>
-<li>1996, American Heart Association: "ERT does look promising as a
-long-term protection against heart attack."</li>
-</ul>
-<h3 id="the-experiment-disagreed"><a class="header" href="#the-experiment-disagreed">The experiment disagreed</a></h3>
-<p>The Women's Health Initiative (WHI) was a large randomised,
-double-blind, placebo-controlled trial enrolling 16,000 women aged
-50–79. Participants were assigned to oestrogen plus progestin therapy
-and followed for up to eight years.</p>
-<p>The experimental hazard ratio for all-cause mortality was <strong>1.23</strong>
-(initiators vs. non-initiators), the opposite direction from the
-observational finding.</p>
-<h3 id="what-went-wrong"><a class="header" href="#what-went-wrong">What went wrong?</a></h3>
-<p>The discrepancy was not a failure of causal assumptions. It was a
-failure of study design: the observational studies did not correctly
-emulate a target trial. Specifically, they failed to align "time zero"
-(the start of follow-up) with the moment of treatment initiation,
-introducing survivor bias. When investigators re-analysed the
-observational data using a target trial emulation framework that matched
-treatment initiation to the start of follow-up, the observational
-estimates aligned with the experimental findings.</p>
-<blockquote>
-<p><strong>Lesson</strong></p>
-<p>If you want causal inferences from observational data, design the
-analysis as though you were running an experiment. Specify the target
-trial first.</p>
-</blockquote>
-<hr />
-<h2 id="the-fundamental-problem-of-causal-inference"><a class="header" href="#the-fundamental-problem-of-causal-inference">The fundamental problem of causal inference</a></h2>
-<p>Causality is never directly observed. To quantify a causal effect, we
-need to compare two states of the world for the same individual, but
-each individual can experience only one.</p>
-<h3 id="notation"><a class="header" href="#notation">Notation</a></h3>
-<p>Let $A$ denote a binary exposure ($A = 1$: treated, $A = 0$:
-untreated) and $Y$ denote the outcome.</p>
-<ul>
-<li>$Y_i(1)$: the potential outcome for individual $i$ under
-treatment.</li>
-<li>$Y_i(0)$: the potential outcome for individual $i$ under control.</li>
-</ul>
-<p>The individual causal effect is:</p>
-<p>$$\tau_i = Y_i(1) - Y_i(0)$$</p>
-<p>We say there is a causal effect when $Y_i(1) - Y_i(0) \neq 0$.</p>
-<h3 id="the-missing-data-problem"><a class="header" href="#the-missing-data-problem">The missing-data problem</a></h3>
-<p>At most one potential outcome is observed for each individual. The
-unobserved outcome is the <strong>counterfactual</strong>:</p>
-<ul>
-<li>If $A_i = 1$ is observed, then $Y_i(0)$ is counterfactual.</li>
-<li>If $A_i = 0$ is observed, then $Y_i(1)$ is counterfactual.</li>
-</ul>
-<p>Individual-level causal effects are therefore generally unidentifiable.
-However, under certain assumptions, we can identify <strong>average</strong> causal
-effects at the population level.</p>
-<hr />
-<h2 id="three-identification-assumptions"><a class="header" href="#three-identification-assumptions">Three identification assumptions</a></h2>
-<h3 id="1-causal-consistency"><a class="header" href="#1-causal-consistency">1. Causal consistency</a></h3>
-<p>The potential outcome corresponding to the exposure an individual
-actually receives equals their observed outcome:</p>
-<p>$$Y_i(a) = Y_i \mid A_i = a$$</p>
-<p>This assumption requires that treatment is well-defined (no hidden
-versions of treatment) and that there is no interference between units
-(one person's treatment does not affect another's outcome).</p>
-<h3 id="2-exchangeability"><a class="header" href="#2-exchangeability">2. Exchangeability</a></h3>
-<p>The potential outcomes are independent of treatment assignment. In a
-randomised experiment, this holds by design. In observational studies,
-we require <strong>conditional exchangeability</strong>: after conditioning on a set
-of measured covariates $L$, treatment assignment is independent of
-potential outcomes:</p>
-<p>$$Y(a) \coprod A \mid L$$</p>
-<p>When exchangeability holds, the Average Treatment Effect (ATE) is
-identified:</p>
-<p>$$\text{ATE} = \mathbb{E}[Y(1)] - \mathbb{E}[Y(0)] = \mathbb{E}(Y
-\mid A=1) - \mathbb{E}(Y \mid A=0)$$</p>
-<p>In observational settings with confounders $L$:</p>
-<p>$$\text{ATE} = \sum_{l} \Big[\mathbb{E}(Y \mid A=1, L=l) -
-\mathbb{E}(Y \mid A=0, L=l)\Big] \Pr(L=l)$$</p>
-<h3 id="3-positivity"><a class="header" href="#3-positivity">3. Positivity</a></h3>
-<p>Every individual has a non-zero probability of receiving each treatment
-level, conditional on their covariates:</p>
-<p>$$P(A = a \mid L = l) &gt; 0 \quad \text{for all } a \text{ and } l$$</p>
-<p>Positivity is the only assumption that can be verified with data.
-Violations occur when certain subgroups never receive a particular
-treatment level, making causal effect estimates for those subgroups
-extrapolations rather than identifiable quantities.</p>
-<blockquote>
-<p><strong>Observational challenges</strong></p>
-<p>In observational settings, all three assumptions face threats. Causal
-consistency may fail when treatment varies across individuals (e.g.,
-different forms of "religious service attendance"). Exchangeability is
-violated when unmeasured confounders exist. Positivity fails when
-certain subgroups have no access to treatment. These threats motivate
-the careful study designs and sensitivity analyses covered in later
-weeks.</p>
-</blockquote>
-<hr />
-<h2 id="from-experiments-to-observational-data"><a class="header" href="#from-experiments-to-observational-data">From experiments to observational data</a></h2>
-<p><strong>Randomised experiments</strong> address the fundamental problem by balancing
-confounders across treatment groups. Random assignment satisfies
-exchangeability by design, and controlled treatment administration
-satisfies consistency. Although individual causal effects remain
-unobservable, random assignment allows inference about <strong>average</strong>
-(marginal) causal effects.</p>
-<p>In <strong>observational data</strong>, we must satisfy these three assumptions
-through study design, covariate adjustment, and sensitivity analysis.
-The remainder of this course develops the tools for doing so: causal
-diagrams (weeks 2–4), estimation methods (weeks 5–6, 8–9), and
-measurement considerations (week 10).</p>
-<hr />
-<h2 id="discussion-questions"><a class="header" href="#discussion-questions">Discussion questions</a></h2>
-<ol>
-<li>Where in your own research would an average treatment effect be the
-right causal estimand, and when would it mask disparities that
-stakeholders care about?</li>
-<li>Which of the three identification assumptions is most fragile in
-your field, and what designs or measurements could strengthen it?</li>
-<li>What are examples of post-treatment variables you have been tempted
-to adjust for, and how would doing so bias the total effect?</li>
-</ol>
-<hr />
-<h2 id="further-reading"><a class="header" href="#further-reading">Further reading</a></h2>
-<ul>
-<li>Hernan MA, Robins JM. <em>Causal Inference: What If</em>. Chapman &amp;
-Hall/CRC, 2025. Chapters 1–3. <a href="https://miguelhernan.org/whatifbook">Book
-site</a></li>
-<li>See the <a href="readings.html">Course Readings</a> page for a chapter-by-week
-guide.</li>
-</ul>
+                        <h1 id="test-2-study-sheet"><a class="header" href="#test-2-study-sheet">Test 2 Study Sheet</a></h1>
+<p>Current study sheet for Test 2, covering weeks 8-10.</p>
+<iframe src="resources/psych-434-test-2-study-sheet.pdf" width="100%" height="800px">
+</iframe>
+<p><a href="resources/psych-434-test-2-study-sheet.pdf">Download the study sheet</a></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="test-2-study-prompts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="test-1-quiz-2025-answers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="causal-workflow.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="test-2-study-prompts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -407,11 +268,11 @@ guide.</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="test-2-study-prompts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="test-1-quiz-2025-answers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="causal-workflow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="test-2-study-prompts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

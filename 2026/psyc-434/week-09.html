@@ -292,6 +292,9 @@ just a ranking inside a script. The rule must be short enough to fit on
 a single page, robust enough to survive scrutiny by people who did not
 fit the model, and accompanied by an honest account of what the data can
 and cannot decide.</p>
+<p>We work through purpose for concreteness; lab 9 repeats the same
+workflow across four outcomes (purpose, belonging, self-esteem, life
+satisfaction).</p>
 <p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The lab&#39;s day-to-day workflow estimates effects across many outcomes at once, then asks the policy question only for those whose effects survive sensitivity analysis." /></p>
 <h2 id="from-ranking-to-policy"><a class="header" href="#from-ranking-to-policy">From ranking to policy</a></h2>
 <p>Week 8 produced a ranked list: who is predicted to benefit most. A
@@ -300,9 +303,9 @@ profile $x$ to an action $d(x) \in {0, 1}$, "treat" or "do not
 treat". Two profiles that are nearly identical should receive nearly
 identical decisions, and a ranking gives no such guarantee, because rank
 position drifts with sample size.</p>
-<p>Let $d(x) \in {0, 1}$ denote a treatment rule. Its <strong>policy value</strong> is
-the expected outcome if the rule were applied to every member of the
-target population:</p>
+<p>We need a way to score competing rules: how much benefit each would
+deliver, on average, if applied to the whole population. Call that
+number the rule's <strong>policy value</strong>, written $V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
 <p>A budget cap restricts the share of the population the rule may treat:</p>
 <p>$$ \mathbb{E}[d(X)] \le q. $$</p>
@@ -329,14 +332,19 @@ largest gain in policy value when each child receives the
 locally-optimal action. It then recurses into each child until the depth
 limit is reached. Because the rule must hold for the entire population,
 the search uses <strong>doubly-robust scores</strong> rather than raw outcomes. The
-score for individual $i$ under treatment $a$ is the <strong>augmented
+doubly-robust idea is plain: blend an outcome-model prediction with a
+propensity-weighted residual, so the resulting score stays unbiased as
+long as <em>either</em> model is right. The corresponding score for individual
+$i$ under treatment $a$ is the <strong>augmented
 inverse-propensity-weighted (AIPW)</strong> score:</p>
 <p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{W_i = a}}{\Pr(W = a
 \mid X_i)},\bigl(Y_i - \mu_a(X_i)\bigr), $$</p>
 <p>where $\mu_a(x)$ is the outcome model and $\Pr(W = a \mid x)$ is the
-propensity. AIPW scores are unbiased estimates of $Y_i(a)$ as long as
-<em>either</em> the outcome model <em>or</em> the propensity model is correct. The
-resulting rule is therefore robust to one form of misspecification.</p>
+propensity. The first term is the model's best guess at $Y_i(a)$; the
+second corrects that guess on the observed cases using
+inverse-propensity reweighting. A rule built on AIPW scores is therefore
+robust to one form of misspecification: as long as one of the two models
+is correct, the scores stay unbiased estimates of $Y_i(a)$.</p>
 <p>In this course we cap tree depth at two. Three reasons motivate the cap.
 First, at most three yes/no questions per rule means the logic fits on a
 slide for policy-makers or clinicians. Second, each leaf retains enough
@@ -344,20 +352,22 @@ observations to yield a stable effect estimate, and stability matters
 more than precision when the audience is non-technical. Third, deeper
 trees increase computational complexity faster than they improve
 payoffs; the gain from a depth-3 tree over a depth-2 tree is usually
-small relative to the added opacity.</p>
+small relative to the loss in clarity.</p>
 <blockquote>
 <p><strong>Pair exercise: designing a depth-2 policy rule</strong></p>
+<p>A community programme can offer places to 20% of eligible residents.
+Suppose a simple rule can split on deprivation index (high/low),
+baseline loneliness (high/low), and age (under 40/40 or older).</p>
 <ol>
-<li>You have a 20% treatment budget. From this list, choose two
-splitting variables: age, deprivation index, baseline loneliness,
-self-esteem, neuroticism.</li>
-<li>Sketch a depth-2 tree with your two variables. Label each leaf
-"treat" or "do not treat."</li>
-<li>Verify that approximately 20% of the population falls in the
-"treat" leaves (make plausible assumptions about the variable
-distributions).</li>
-<li>Give two reasons to prefer a depth-2 tree over a depth-4 tree for
-a public-health decision.</li>
+<li>Sketch a depth-2 tree that treats about 20% of residents. Label
+each leaf "treat" or "do not treat."</li>
+<li>Write your rule as one sentence a community organiser could
+repeat.</li>
+<li>Explain how your tree stays within the 20% budget. Use simple
+assumptions such as "40% are high-deprivation and half of those
+are high-loneliness."</li>
+<li>Give two reasons this rule is easier to defend than a depth-4
+tree.</li>
 </ol>
 </blockquote>
 <h2 id="reading-a-policy-tree"><a class="header" href="#reading-a-policy-tree">Reading a policy tree</a></h2>
@@ -385,9 +395,10 @@ from the parent's recommendation.</p>
 <p>Compare the two depths for community-group participation on purpose.</p>
 <p><img src="figures/lab-09/policy-tree-purpose-depth1.svg" alt="Depth-1 policy tree for the same outcome. A single split on log income at $-1.195$ partitions the population: those at or below the threshold are recommended for control, those above are recommended for treatment. The first split here differs from the depth-2 first split (openness), because the algorithm&#39;s greedy search optimises the whole tree at each depth, not just the root. A depth-1 tree can therefore choose a globally different splitter from the depth-2 tree&#39;s root." /></p>
 <p>On the same held-out sample, the depth-1 policy delivers an estimated
-policy value of $0.215$; the depth-2 policy delivers $0.243$, a lift
-of $0.028$ (about thirteen percent above depth-1). The lift is real
-but small relative to the additional complexity.</p>
+policy value of $0.215$ (the rule's expected outcome on the held-out
+fold, in the outcome's own units); the depth-2 policy delivers
+$0.243$, a lift of $0.028$ (about thirteen percent above depth-1).
+The lift is real but small relative to the additional complexity.</p>
 <p>A useful rule of thumb: prefer the shallower tree unless the lift is
 both statistically significant and practically meaningful. "Practically
 meaningful" depends on context. For a high-stakes clinical intervention,
@@ -407,12 +418,11 @@ the chosen depth in the methods section.</p>
 <li>Look at the depth-1 and depth-2 policy trees above. State each
 rule in one sentence of plain language.</li>
 <li>The depth-2 rule lifts policy value by $0.028$ over the depth-1
-rule. Estimate, in your own words, what an extra $0.028$
-standard-deviation units of purpose per person treated means at
-population scale. Use a hypothetical of $10,000$ people in your
-reasoning.</li>
-<li>Identify one practical scenario in which you would deploy the
-depth-1 rule despite the lift, and one in which you would deploy
+rule. For $10,000$ eligible people, describe what a small
+average lift can mean at population scale.</li>
+<li>Name one reason to deploy the depth-1 rule despite the lift.</li>
+<li>Name one reason to deploy the depth-2 rule.</li>
+<li>State what extra evidence would make you more comfortable choosing
 the depth-2 rule.</li>
 </ol>
 </blockquote>
@@ -452,7 +462,7 @@ different splitter.</p>
 necessarily causally irrelevant. The greedy search may have found a
 single composite that explains most of the heterogeneity, leaving
 secondary variables unused. Variable-importance summaries from the
-underlying causal forest (week 8's <code>variable_importance()</code>) give a
+underlying causal forest (e.g. <code>grf::variable_importance()</code>) give a
 complementary picture of what the forest used to estimate
 $\hat{\tau}(x)$, even if those variables do not appear at the top of
 any policy tree.</p>
@@ -460,6 +470,20 @@ any policy tree.</p>
 policy value with its confidence interval, and explicitly disclaim the
 causal interpretation of the splits. Readers who skim past those
 clarifications will otherwise treat the splitters as causes.</p>
+<h2 id="heterogeneity-as-scientific-discovery"><a class="header" href="#heterogeneity-as-scientific-discovery">Heterogeneity as scientific discovery</a></h2>
+<p>Conditional average treatment effect (CATE) machinery does more than
+power allocation decisions. It helps science move past a
+one-size-fits-all mindset. Mapping treatment effects across a
+high-dimensional covariate space tests whether our conventional
+categories (gender, age group, clinical severity) capture the
+differences that matter. Sometimes they do; often they do not.
+Discovering where the forest finds meaningful splits can generate fresh
+hypotheses about who responds and why, even when no policy decision is
+on the table. A forest that splits on loneliness rather than age, for
+example, suggests the psychological mechanism operates through social
+connection, not biological ageing. This use of heterogeneity is
+exploratory, not confirmatory, and a follow-up study designed around the
+discovered subgroup is the proper test.</p>
 <h2 id="equity-and-governance"><a class="header" href="#equity-and-governance">Equity and governance</a></h2>
 <p>Efficiency is not enough. A rule that maximises policy value can still
 be unjust, opaque, or politically untenable. Three structural concerns
@@ -487,16 +511,14 @@ populations is not legally or politically optimum.</p>
 </ol>
 <blockquote>
 <p><strong>Pair exercise: equity audit</strong></p>
+<p>A policy tree treats residents who are high-deprivation and under 40.</p>
 <ol>
-<li>A policy tree splits first on deprivation index, then on age. The
-rule treats high-deprivation residents under 40.</li>
-<li>Explain how a deprivation split indirectly stratifies by ethnicity
-in an Aotearoa New Zealand context (consider the correlation
-between deprivation and Māori/Pasifika populations).</li>
-<li>Apply two of the four governance checks above to this rule.</li>
-<li>Propose one modification informed by Te Tiriti o Waitangi
-obligations (e.g., guaranteed allocation floors, community
-consultation, or co-governance of the decision rule).</li>
+<li>Translate the rule into plain language.</li>
+<li>Explain how the deprivation split can indirectly stratify by
+ethnicity in Aotearoa New Zealand.</li>
+<li>Name the table you would compute to check this empirically.</li>
+<li>Apply two governance checks from the list above.</li>
+<li>Propose one Te Tiriti-informed modification.</li>
 <li>Your partner says "the algorithm is objective because it only uses
 data." Counter this claim in two sentences.</li>
 </ol>
@@ -513,20 +535,26 @@ even when any single fit looks reasonable.</li>
 <li>Conduct an equity audit before recommending deployment.</li>
 <li>Report trade-offs: value, fairness, transparency, and feasibility.</li>
 </ol>
-<h2 id="heterogeneity-as-scientific-discovery"><a class="header" href="#heterogeneity-as-scientific-discovery">Heterogeneity as scientific discovery</a></h2>
-<p>Conditional average treatment effect (CATE) machinery does more than
-power allocation decisions. It helps science move past a
-one-size-fits-all mindset. Mapping treatment effects across a
-high-dimensional covariate space tests whether our conventional
-categories (gender, age group, clinical severity) capture the
-differences that matter. Sometimes they do; often they do not.
-Discovering where the forest finds meaningful splits can generate fresh
-hypotheses about who responds and why, even when no policy decision is
-on the table. A forest that splits on loneliness rather than age, for
-example, suggests the psychological mechanism operates through social
-connection, not biological ageing. This use of heterogeneity is
-exploratory, not confirmatory, and a follow-up study designed around the
-discovered subgroup is the proper test.</p>
+<h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
+<p>We will reserve about 25 minutes today for the assessments.</p>
+<ol>
+<li><strong>Test 2, 5 minutes.</strong> The test covers weeks 8-10: heterogeneous
+treatment effects, policy trees, and measurement. Bring one A4 sheet
+of notes. No devices.</li>
+<li><strong>Test preparation, 10 minutes.</strong> The public study sheet and
+self-study prompts are linked from the resources section of the
+course book. Use them to practise short answers, not just
+definitions.</li>
+<li><strong>Research report and Marsden option, 10 minutes.</strong> Option A should
+follow the current <a href="resources/research-report-template.zip">research-report
+template</a>: choose
+<code>religious_service</code> or <code>volunteer_work</code>, then report effects on all
+four wellbeing outcomes. Historical examples can help you see tone
+and structure, but this year's report is narrower and uses simulated
+data. For Option B, the old Marsden example is a model of compact
+grant style only; follow the current criteria in
+<a href="assessments.html">Assessments</a>.</li>
+</ol>
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
 <p>Back to the district health board. The right question is not "what rule
 maximises sample gain?" The right question is "what rule performs
@@ -547,9 +575,10 @@ constraint.</li>
 <li>Compare the two strategies on: (a) estimated policy value, (b)
 explainability to a non-technical audience, and (c) ability to
 answer "why was I selected?"</li>
-<li>State one scenario where Strategy A (pure ranking) is preferable
-to Strategy B (policy tree).</li>
-<li>State one scenario where Strategy B is preferable.</li>
+<li>State one scenario where Strategy A (pure ranking) is preferable.</li>
+<li>State one scenario where Strategy B (policy tree) is preferable.</li>
+<li>State one equity question both strategies must answer before
+deployment.</li>
 </ol>
 </blockquote>
 <hr />

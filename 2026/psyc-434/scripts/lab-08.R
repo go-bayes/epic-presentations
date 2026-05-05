@@ -30,29 +30,31 @@
 
 # --- packages ---------------------------------------------------------------
 required_packages <- c("grf", "tidyverse")
-missing_packages <- required_packages[
-  !vapply(required_packages, \(pkg) requireNamespace(pkg, quietly = TRUE), logical(1))
+missing <- required_packages[
+  !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
+if (length(missing) > 0) install.packages(missing)
 
-if (length(missing_packages) > 0) {
-  install.packages(missing_packages)
-}
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 
-required_causalworkshop_exports <- c("simulate_nzavs_data")
-
+# require causalworkshop >= 0.6.0 (provides simulate_nzavs_data and the
+# course-wide cache loaders). a stale install will be auto-upgraded.
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
-  !all(required_causalworkshop_exports %in% getNamespaceExports("causalworkshop"))) {
-  if (!requireNamespace("pak", quietly = TRUE)) {
-    install.packages("pak")
-  }
+  packageVersion("causalworkshop") < "0.6.0") {
   pak::pak("go-bayes/causalworkshop")
+  if ("causalworkshop" %in% loadedNamespaces()) {
+    stop(
+      "causalworkshop was upgraded; please restart R and re-run this lab.",
+      call. = FALSE
+    )
+  }
 }
 
-
-
-library(causalworkshop)
-library(grf)
-library(tidyverse)
+suppressPackageStartupMessages({
+  library(causalworkshop)
+  library(grf)
+  library(tidyverse)
+})
 
 # --- step 1: refit the causal forest from labs 5-6 --------------------------
 

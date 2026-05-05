@@ -500,6 +500,22 @@ sessions support you in this assignment. We assume no statistical
 background.</p>
 </blockquote>
 <blockquote>
+<p><strong>Current template and historical examples</strong></p>
+<ul>
+<li>Start from the current <a href="resources/research-report-template.zip">research-report
+template</a>. It is the 2026
+scaffold for Option A.</li>
+<li>A historical report example is available here: <a href="resources/example-psyc434-report.pdf">Example PSYC434
+Report</a>. Use it to see tone
+and structure, not as a checklist for this year's narrower
+simulated-data assignment.</li>
+<li>A historical Marsden one-pager is available here: <a href="resources/marsden-one-page-example.pdf">Marsden one-page
+example</a>. It predates the
+current criteria. For Option B, follow the 2026 requirements below
+and the official RSNZ templates.</li>
+</ul>
+</blockquote>
+<blockquote>
 <p><strong>Late Penalty</strong></p>
 <p>Late assignments, and assignments with extensions, may be subject to
 delays in marking and may not receive comprehensive feedback.</p>
@@ -3571,6 +3587,9 @@ just a ranking inside a script. The rule must be short enough to fit on
 a single page, robust enough to survive scrutiny by people who did not
 fit the model, and accompanied by an honest account of what the data can
 and cannot decide.</p>
+<p>We work through purpose for concreteness; lab 9 repeats the same
+workflow across four outcomes (purpose, belonging, self-esteem, life
+satisfaction).</p>
 <p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The lab&#39;s day-to-day workflow estimates effects across many outcomes at once, then asks the policy question only for those whose effects survive sensitivity analysis." /></p>
 <h2 id="from-ranking-to-policy"><a class="header" href="#from-ranking-to-policy">From ranking to policy</a></h2>
 <p>Week 8 produced a ranked list: who is predicted to benefit most. A
@@ -3579,9 +3598,9 @@ profile $x$ to an action $d(x) \in {0, 1}$, "treat" or "do not
 treat". Two profiles that are nearly identical should receive nearly
 identical decisions, and a ranking gives no such guarantee, because rank
 position drifts with sample size.</p>
-<p>Let $d(x) \in {0, 1}$ denote a treatment rule. Its <strong>policy value</strong> is
-the expected outcome if the rule were applied to every member of the
-target population:</p>
+<p>We need a way to score competing rules: how much benefit each would
+deliver, on average, if applied to the whole population. Call that
+number the rule's <strong>policy value</strong>, written $V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
 <p>A budget cap restricts the share of the population the rule may treat:</p>
 <p>$$ \mathbb{E}[d(X)] \le q. $$</p>
@@ -3608,14 +3627,19 @@ largest gain in policy value when each child receives the
 locally-optimal action. It then recurses into each child until the depth
 limit is reached. Because the rule must hold for the entire population,
 the search uses <strong>doubly-robust scores</strong> rather than raw outcomes. The
-score for individual $i$ under treatment $a$ is the <strong>augmented
+doubly-robust idea is plain: blend an outcome-model prediction with a
+propensity-weighted residual, so the resulting score stays unbiased as
+long as <em>either</em> model is right. The corresponding score for individual
+$i$ under treatment $a$ is the <strong>augmented
 inverse-propensity-weighted (AIPW)</strong> score:</p>
 <p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{W_i = a}}{\Pr(W = a
 \mid X_i)},\bigl(Y_i - \mu_a(X_i)\bigr), $$</p>
 <p>where $\mu_a(x)$ is the outcome model and $\Pr(W = a \mid x)$ is the
-propensity. AIPW scores are unbiased estimates of $Y_i(a)$ as long as
-<em>either</em> the outcome model <em>or</em> the propensity model is correct. The
-resulting rule is therefore robust to one form of misspecification.</p>
+propensity. The first term is the model's best guess at $Y_i(a)$; the
+second corrects that guess on the observed cases using
+inverse-propensity reweighting. A rule built on AIPW scores is therefore
+robust to one form of misspecification: as long as one of the two models
+is correct, the scores stay unbiased estimates of $Y_i(a)$.</p>
 <p>In this course we cap tree depth at two. Three reasons motivate the cap.
 First, at most three yes/no questions per rule means the logic fits on a
 slide for policy-makers or clinicians. Second, each leaf retains enough
@@ -3623,20 +3647,22 @@ observations to yield a stable effect estimate, and stability matters
 more than precision when the audience is non-technical. Third, deeper
 trees increase computational complexity faster than they improve
 payoffs; the gain from a depth-3 tree over a depth-2 tree is usually
-small relative to the added opacity.</p>
+small relative to the loss in clarity.</p>
 <blockquote>
 <p><strong>Pair exercise: designing a depth-2 policy rule</strong></p>
+<p>A community programme can offer places to 20% of eligible residents.
+Suppose a simple rule can split on deprivation index (high/low),
+baseline loneliness (high/low), and age (under 40/40 or older).</p>
 <ol>
-<li>You have a 20% treatment budget. From this list, choose two
-splitting variables: age, deprivation index, baseline loneliness,
-self-esteem, neuroticism.</li>
-<li>Sketch a depth-2 tree with your two variables. Label each leaf
-"treat" or "do not treat."</li>
-<li>Verify that approximately 20% of the population falls in the
-"treat" leaves (make plausible assumptions about the variable
-distributions).</li>
-<li>Give two reasons to prefer a depth-2 tree over a depth-4 tree for
-a public-health decision.</li>
+<li>Sketch a depth-2 tree that treats about 20% of residents. Label
+each leaf "treat" or "do not treat."</li>
+<li>Write your rule as one sentence a community organiser could
+repeat.</li>
+<li>Explain how your tree stays within the 20% budget. Use simple
+assumptions such as "40% are high-deprivation and half of those
+are high-loneliness."</li>
+<li>Give two reasons this rule is easier to defend than a depth-4
+tree.</li>
 </ol>
 </blockquote>
 <h2 id="reading-a-policy-tree"><a class="header" href="#reading-a-policy-tree">Reading a policy tree</a></h2>
@@ -3664,9 +3690,10 @@ from the parent's recommendation.</p>
 <p>Compare the two depths for community-group participation on purpose.</p>
 <p><img src="figures/lab-09/policy-tree-purpose-depth1.svg" alt="Depth-1 policy tree for the same outcome. A single split on log income at $-1.195$ partitions the population: those at or below the threshold are recommended for control, those above are recommended for treatment. The first split here differs from the depth-2 first split (openness), because the algorithm&#39;s greedy search optimises the whole tree at each depth, not just the root. A depth-1 tree can therefore choose a globally different splitter from the depth-2 tree&#39;s root." /></p>
 <p>On the same held-out sample, the depth-1 policy delivers an estimated
-policy value of $0.215$; the depth-2 policy delivers $0.243$, a lift
-of $0.028$ (about thirteen percent above depth-1). The lift is real
-but small relative to the additional complexity.</p>
+policy value of $0.215$ (the rule's expected outcome on the held-out
+fold, in the outcome's own units); the depth-2 policy delivers
+$0.243$, a lift of $0.028$ (about thirteen percent above depth-1).
+The lift is real but small relative to the additional complexity.</p>
 <p>A useful rule of thumb: prefer the shallower tree unless the lift is
 both statistically significant and practically meaningful. "Practically
 meaningful" depends on context. For a high-stakes clinical intervention,
@@ -3686,12 +3713,11 @@ the chosen depth in the methods section.</p>
 <li>Look at the depth-1 and depth-2 policy trees above. State each
 rule in one sentence of plain language.</li>
 <li>The depth-2 rule lifts policy value by $0.028$ over the depth-1
-rule. Estimate, in your own words, what an extra $0.028$
-standard-deviation units of purpose per person treated means at
-population scale. Use a hypothetical of $10,000$ people in your
-reasoning.</li>
-<li>Identify one practical scenario in which you would deploy the
-depth-1 rule despite the lift, and one in which you would deploy
+rule. For $10,000$ eligible people, describe what a small
+average lift can mean at population scale.</li>
+<li>Name one reason to deploy the depth-1 rule despite the lift.</li>
+<li>Name one reason to deploy the depth-2 rule.</li>
+<li>State what extra evidence would make you more comfortable choosing
 the depth-2 rule.</li>
 </ol>
 </blockquote>
@@ -3731,7 +3757,7 @@ different splitter.</p>
 necessarily causally irrelevant. The greedy search may have found a
 single composite that explains most of the heterogeneity, leaving
 secondary variables unused. Variable-importance summaries from the
-underlying causal forest (week 8's <code>variable_importance()</code>) give a
+underlying causal forest (e.g. <code>grf::variable_importance()</code>) give a
 complementary picture of what the forest used to estimate
 $\hat{\tau}(x)$, even if those variables do not appear at the top of
 any policy tree.</p>
@@ -3739,6 +3765,20 @@ any policy tree.</p>
 policy value with its confidence interval, and explicitly disclaim the
 causal interpretation of the splits. Readers who skim past those
 clarifications will otherwise treat the splitters as causes.</p>
+<h2 id="heterogeneity-as-scientific-discovery"><a class="header" href="#heterogeneity-as-scientific-discovery">Heterogeneity as scientific discovery</a></h2>
+<p>Conditional average treatment effect (CATE) machinery does more than
+power allocation decisions. It helps science move past a
+one-size-fits-all mindset. Mapping treatment effects across a
+high-dimensional covariate space tests whether our conventional
+categories (gender, age group, clinical severity) capture the
+differences that matter. Sometimes they do; often they do not.
+Discovering where the forest finds meaningful splits can generate fresh
+hypotheses about who responds and why, even when no policy decision is
+on the table. A forest that splits on loneliness rather than age, for
+example, suggests the psychological mechanism operates through social
+connection, not biological ageing. This use of heterogeneity is
+exploratory, not confirmatory, and a follow-up study designed around the
+discovered subgroup is the proper test.</p>
 <h2 id="equity-and-governance"><a class="header" href="#equity-and-governance">Equity and governance</a></h2>
 <p>Efficiency is not enough. A rule that maximises policy value can still
 be unjust, opaque, or politically untenable. Three structural concerns
@@ -3766,16 +3806,14 @@ populations is not legally or politically optimum.</p>
 </ol>
 <blockquote>
 <p><strong>Pair exercise: equity audit</strong></p>
+<p>A policy tree treats residents who are high-deprivation and under 40.</p>
 <ol>
-<li>A policy tree splits first on deprivation index, then on age. The
-rule treats high-deprivation residents under 40.</li>
-<li>Explain how a deprivation split indirectly stratifies by ethnicity
-in an Aotearoa New Zealand context (consider the correlation
-between deprivation and Māori/Pasifika populations).</li>
-<li>Apply two of the four governance checks above to this rule.</li>
-<li>Propose one modification informed by Te Tiriti o Waitangi
-obligations (e.g., guaranteed allocation floors, community
-consultation, or co-governance of the decision rule).</li>
+<li>Translate the rule into plain language.</li>
+<li>Explain how the deprivation split can indirectly stratify by
+ethnicity in Aotearoa New Zealand.</li>
+<li>Name the table you would compute to check this empirically.</li>
+<li>Apply two governance checks from the list above.</li>
+<li>Propose one Te Tiriti-informed modification.</li>
 <li>Your partner says "the algorithm is objective because it only uses
 data." Counter this claim in two sentences.</li>
 </ol>
@@ -3792,20 +3830,26 @@ even when any single fit looks reasonable.</li>
 <li>Conduct an equity audit before recommending deployment.</li>
 <li>Report trade-offs: value, fairness, transparency, and feasibility.</li>
 </ol>
-<h2 id="heterogeneity-as-scientific-discovery"><a class="header" href="#heterogeneity-as-scientific-discovery">Heterogeneity as scientific discovery</a></h2>
-<p>Conditional average treatment effect (CATE) machinery does more than
-power allocation decisions. It helps science move past a
-one-size-fits-all mindset. Mapping treatment effects across a
-high-dimensional covariate space tests whether our conventional
-categories (gender, age group, clinical severity) capture the
-differences that matter. Sometimes they do; often they do not.
-Discovering where the forest finds meaningful splits can generate fresh
-hypotheses about who responds and why, even when no policy decision is
-on the table. A forest that splits on loneliness rather than age, for
-example, suggests the psychological mechanism operates through social
-connection, not biological ageing. This use of heterogeneity is
-exploratory, not confirmatory, and a follow-up study designed around the
-discovered subgroup is the proper test.</p>
+<h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
+<p>We will reserve about 25 minutes today for the assessments.</p>
+<ol>
+<li><strong>Test 2, 5 minutes.</strong> The test covers weeks 8-10: heterogeneous
+treatment effects, policy trees, and measurement. Bring one A4 sheet
+of notes. No devices.</li>
+<li><strong>Test preparation, 10 minutes.</strong> The public study sheet and
+self-study prompts are linked from the resources section of the
+course book. Use them to practise short answers, not just
+definitions.</li>
+<li><strong>Research report and Marsden option, 10 minutes.</strong> Option A should
+follow the current <a href="resources/research-report-template.zip">research-report
+template</a>: choose
+<code>religious_service</code> or <code>volunteer_work</code>, then report effects on all
+four wellbeing outcomes. Historical examples can help you see tone
+and structure, but this year's report is narrower and uses simulated
+data. For Option B, the old Marsden example is a model of compact
+grant style only; follow the current criteria in
+<a href="assessments.html">Assessments</a>.</li>
+</ol>
 <h2 id="return-to-the-opening-example-6"><a class="header" href="#return-to-the-opening-example-6">Return to the opening example</a></h2>
 <p>Back to the district health board. The right question is not "what rule
 maximises sample gain?" The right question is "what rule performs
@@ -3826,9 +3870,10 @@ constraint.</li>
 <li>Compare the two strategies on: (a) estimated policy value, (b)
 explainability to a non-technical audience, and (c) ability to
 answer "why was I selected?"</li>
-<li>State one scenario where Strategy A (pure ranking) is preferable
-to Strategy B (policy tree).</li>
-<li>State one scenario where Strategy B is preferable.</li>
+<li>State one scenario where Strategy A (pure ranking) is preferable.</li>
+<li>State one scenario where Strategy B (policy tree) is preferable.</li>
+<li>State one equity question both strategies must answer before
+deployment.</li>
 </ol>
 </blockquote>
 <hr />
@@ -6735,17 +6780,31 @@ forest fitted in those labs to evaluate whether targeting resources to
 the most responsive individuals is worthwhile.</p>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<pre><code class="language-r">library(causalworkshop)
-library(grf)
-library(tidyverse)
+<p>The script handles installation automatically. The block below mirrors
+what <code>scripts/lab-08.R</code> runs at the top: it installs anything missing
+and requires <code>causalworkshop &gt;= 0.6.0</code>, stopping with a clear restart-R
+message if a stale namespace is already loaded.</p>
+<pre><code class="language-r">required_packages &lt;- c("grf", "tidyverse")
+missing &lt;- required_packages[
+  !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+]
+if (length(missing) &gt; 0) install.packages(missing)
+
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("causalworkshop", quietly = TRUE) ||
+    packageVersion("causalworkshop") &lt; "0.6.0") {
+  pak::pak("go-bayes/causalworkshop")
+  if ("causalworkshop" %in% loadedNamespaces()) {
+    stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
+  }
+}
+
+suppressPackageStartupMessages({
+  library(causalworkshop)
+  library(grf)
+  library(tidyverse)
+})
 </code></pre>
-<blockquote>
-<p><strong>Install packages</strong></p>
-<p>If <code>simulate_nzavs_data()</code> is missing, upgrade <code>causalworkshop</code> and
-install <code>grf</code>: <code>install.packages("grf")</code>
-<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
-<code>pak::pak("go-bayes/causalworkshop")</code></p>
-</blockquote>
 <p>Re-fit the causal forest from Labs 5-6 (or copy the code from Lab 5):</p>
 <pre><code class="language-r"># simulate data
 d &lt;- simulate_nzavs_data(n = 5000, seed = 2026)
@@ -6987,8 +7046,9 @@ would be more useful for a policy-maker.</p>
 <blockquote>
 <p><strong>R script</strong></p>
 <p><a href="scripts/lab-09.R">Download the R script for this lab</a></p>
-<p>The lab also requires the cache helper, which the script sources
-automatically: <a href="scripts/lab-09-cache.R"><code>scripts/lab-09-cache.R</code></a>.</p>
+<p>The script auto-installs every package it needs (including
+<code>causalworkshop</code>, which holds the cache loader) and downloads the ~80
+MB cache on first run. You do not need any other files.</p>
 </blockquote>
 <p>This lab moves from evaluating heterogeneity (Lab 8) to making decisions
 across several outcomes at once. You will run the lab's actual research
@@ -7036,28 +7096,44 @@ outcome's depth-1 and depth-2 policy trees.</li>
 plots, and auto-generated prose summaries.</li>
 </ul>
 <p>The fit script that produced the cache is at
-<code>scripts/fit-lab-09-cache.R</code>. You do not need to run it; the helper
-downloads the result.</p>
+<code>scripts/fit-lab-09-cache.R</code>. You do not need to run it; the loader
+(<code>causalworkshop::load_lab_09_cache()</code>) downloads the result on first
+use and caches it locally for every subsequent run.</p>
 </blockquote>
 <h2 id="setup-1"><a class="header" href="#setup-1">Setup</a></h2>
-<pre><code class="language-r">library(causalworkshop)
-library(margot)
-library(ggplot2)
-library(dplyr)
+<p>The script handles installation automatically. The block below mirrors
+what <code>scripts/lab-09.R</code> runs at the top: it installs anything missing,
+requires <code>causalworkshop &gt;= 0.6.0</code> (the version that ships the cache
+loader), and stops with a clear restart-R message if a stale namespace
+is already loaded.</p>
+<pre><code class="language-r">required_packages &lt;- c(
+  "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive"
+)
+missing &lt;- required_packages[
+  !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+]
+if (length(missing) &gt; 0) install.packages(missing)
+
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("margot", quietly = TRUE)) pak::pak("go-bayes/margot")
+if (!requireNamespace("causalworkshop", quietly = TRUE) ||
+    packageVersion("causalworkshop") &lt; "0.6.0") {
+  pak::pak("go-bayes/causalworkshop")
+  if ("causalworkshop" %in% loadedNamespaces()) {
+    stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
+  }
+}
+
+suppressPackageStartupMessages({
+  library(causalworkshop)
+  library(margot)
+  library(ggplot2)
+  library(dplyr)
+})
 </code></pre>
-<blockquote>
-<p><strong>Install packages</strong></p>
-<p>If needed, run:</p>
-<pre><code class="language-r">install.packages(c("googledrive", "qs", "pak", "tibble", "dplyr"))
-pak::pak("go-bayes/margot")
-pak::pak("go-bayes/causalworkshop")
-</code></pre>
-</blockquote>
-<p>Source the cache helper and load the fits. The first call downloads
-roughly 80 MB into a per-user cache directory; subsequent calls read
-from disk.</p>
-<pre><code class="language-r">source("scripts/lab-09-cache.R")
-cache &lt;- load_lab_09_cache()
+<p>Load the cached fits. The first call downloads roughly 80 MB into a
+per-user cache directory; subsequent calls read from disk.</p>
+<pre><code class="language-r">cache &lt;- causalworkshop::load_lab_09_cache()
 
 models_binary &lt;- cache$models_binary
 policy_tree_stability &lt;- cache$policy_tree_stability
@@ -7127,23 +7203,28 @@ honest move.</p>
 allocation rule: "treat people in this leaf, do not treat in this leaf".
 The lab caps depth at two, so each rule asks at most three yes/no
 questions before committing.</p>
-<p>The <code>policy_workflow</code> object returns one combined plot per outcome,
-bundling the tree diagram with a scatter of who lands in each leaf.
-Print one per outcome:</p>
-<pre><code class="language-r">for (m in names(wf$plots)) {
+<p>Two functions render each outcome's policy tree.
+<code>margot_plot_decision_tree()</code> returns the tree diagram alone — the rule
+as a slide-ready flowchart. <code>margot_plot_policy_tree()</code> returns the
+prediction-points scatter — the same rule shown as a partition of the
+underlying covariate space, with each individual coloured by the
+assigned action. Print both for every outcome:</p>
+<pre><code class="language-r">model_ids &lt;- names(label_mapping)
+for (m in model_ids) {
   cat("\n=== ", label_mapping[[m]], " ===\n", sep = "")
-  print(wf$plots[[m]])
+  print(margot_plot_decision_tree(
+    policy_tree_stability,
+    model_name = m,
+    max_depth = 2,
+    label_mapping = label_mapping
+  ))
+  print(margot_plot_policy_tree(
+    policy_tree_stability,
+    model_name = m,
+    max_depth = 2,
+    label_mapping = label_mapping
+  ))
 }
-</code></pre>
-<p>When slide real estate is tight, <code>margot_plot_decision_tree()</code> returns
-the tree diagram alone:</p>
-<pre><code class="language-r">tree_only &lt;- margot_plot_decision_tree(
-  policy_tree_stability,
-  model_name = "model_t2_purpose",
-  max_depth = 2,
-  label_mapping = label_mapping
-)
-print(tree_only)
 </code></pre>
 <blockquote>
 <p><strong>Reading a policy tree</strong></p>
@@ -7169,8 +7250,17 @@ for (p in qini_plots) print(p)
 is worth it at that budget. A curve hugging the diagonal says targeting
 is no better than random.</p>
 <h2 id="step-5-rate-table"><a class="header" href="#step-5-rate-table">Step 5: RATE table</a></h2>
-<p>RATE summarises targeting value as a single number per outcome.</p>
-<pre><code class="language-r">rate_table &lt;- margot_plot_rate_batch(
+<p>RATE summarises targeting value as a single number per outcome.
+<code>margot_plot_rate_batch()</code> returns a list of per-outcome plots;
+<code>margot::margot_rate()</code> returns the underlying numbers as a table.</p>
+<pre><code class="language-r">rate_plots &lt;- margot_plot_rate_batch(
+  models_binary,
+  target = "AUTOC",
+  label_mapping = label_mapping
+)
+for (p in rate_plots) print(p)
+
+rate_table &lt;- margot::margot_rate(
   models_binary,
   target = "AUTOC",
   label_mapping = label_mapping
@@ -7674,6 +7764,25 @@ single line and trust that the narrative remains correct.</p>
 measurement-invariance content. It runs the walkthrough
 programmatically: it opens <code>setup.R</code>, exercises the helpers, and renders
 the manuscript.</p>
+<h2 id="assessment-support-for-week-10"><a class="header" href="#assessment-support-for-week-10">Assessment support for Week 10</a></h2>
+<p>Use the remaining time this week to turn the assessment requirements
+into files you can work on.</p>
+<ol>
+<li><strong>Test 2 notes sheet.</strong> Build one A4 page around the workflow:
+estimand, identification assumptions, heterogeneity test, policy
+tree, equity audit, measurement check. Practise from the <a href="test-2-study-prompts.html">Test 2
+self-study prompts</a>.</li>
+<li><strong>Option A report.</strong> Copy the <a href="resources/research-report-template.zip">research-report
+template</a>, choose
+<code>religious_service</code> or <code>volunteer_work</code>, and keep all four wellbeing
+outcomes in the analysis. The template is the 2026 source of truth.</li>
+<li><strong>Option B Marsden EOI.</strong> Use the official RSNZ forms linked in
+<a href="assessments.html">Assessments</a>. The old example shows compact grant
+prose, but the criteria have changed.</li>
+<li><strong>Final check.</strong> Historical examples are useful for tone. The
+marking criteria on the assessments page decide what your 2026
+submission must contain.</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="test-1-study-sheet"><a class="header" href="#test-1-study-sheet">Test 1: Study Sheet</a></h1>
 <p>Current study sheet for Test 1, covering lectures 1–6.</p>
 <div class="pdf-embed">
@@ -7703,6 +7812,114 @@ with more than one correct answer). Part 2 is short answer (choose 4 of
 <iframe src="https://go-bayes.github.io/epic-presentations/2026/psych-434-practice-test-2025-answers.pdf" width="100%" height="800px"></iframe>
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psych-434-practice-test-2025-answers.pdf">Download the answers</a></p>
 </div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="test-2-study-sheet"><a class="header" href="#test-2-study-sheet">Test 2 Study Sheet</a></h1>
+<p>Current study sheet for Test 2, covering weeks 8-10.</p>
+<iframe src="resources/psych-434-test-2-study-sheet.pdf" width="100%" height="800px">
+</iframe>
+<p><a href="resources/psych-434-test-2-study-sheet.pdf">Download the study sheet</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="test-2-self-study-prompts"><a class="header" href="#test-2-self-study-prompts">Test 2 Self-Study Prompts</a></h1>
+<p>Use these prompts to practise for Test 2. They cover the same topic
+blocks as the test: heterogeneous treatment effects, policy trees and
+equity, outcome-wide reporting, and measurement.</p>
+<p>Write short answers without notes first. Then check your answer against
+the relevant lecture, lab, <a href="reporting-guide.html">Reporting Guide</a>, and
+<a href="test-2-study-sheet.html">Test 2 Study Sheet</a>.</p>
+<h2 id="heterogeneous-treatment-effects-week-8"><a class="header" href="#heterogeneous-treatment-effects-week-8">Heterogeneous Treatment Effects (Week 8)</a></h2>
+<ol>
+<li>State the difference between the average treatment effect and the
+conditional average treatment effect. When is the distinction
+substantively important?</li>
+<li>A regression model with treatment-by-age and treatment-by-gender
+interactions reports both interactions as non-significant. Does this
+rule out heterogeneous treatment effects? Why or why not?</li>
+<li>Explain honest splitting in a causal forest. What problem is it
+designed to prevent?</li>
+<li>What does it mean for an estimator to be doubly robust? Give one
+practical advantage.</li>
+<li>A causal forest reports RATE-AUTOC = 0.04 with a 95% CI of $[0.01,
+0.07]$. State, in plain language, what this tells you about
+heterogeneity. Compare with RATE-AUTOC = 0.04 with CI $[-0.02,
+0.10]$.</li>
+<li>Sketch a Qini curve. Label the axes. Describe the shape of the curve
+when targeting helps and when it does not.</li>
+<li>Why do we expect causal forest estimates of $\hat{\tau}(x)$ to be
+noisy in regions of the covariate space with little data?</li>
+<li>A reviewer says "If the heterogeneity is real, a regression with the
+right interaction terms will find it." Reply in two sentences.</li>
+</ol>
+<h2 id="policy-trees-equity-and-te-tiriti-week-9"><a class="header" href="#policy-trees-equity-and-te-tiriti-week-9">Policy Trees, Equity, and Te Tiriti (Week 9)</a></h2>
+<ol>
+<li>State, in one or two sentences, what a policy tree does that a
+conditional average treatment effect estimate alone does not.</li>
+<li>Explain the parsimony rule for choosing tree depth. Why is the
+simpler rule often preferable even when the more complex rule has a
+slightly larger policy value?</li>
+<li>A depth-2 policy tree treats the leaf "deprivation index $&gt; 1.2$
+and age $\leq 40$". Translate this into a sentence a community
+organiser could repeat.</li>
+<li>Name three things you would check in an equity audit before
+deploying a policy tree.</li>
+<li>Explain how a split on deprivation can indirectly stratify by
+ethnicity even when ethnicity does not appear in the tree.</li>
+<li>State, in one or two sentences, what Te Tiriti o Waitangi requires
+of an investigator proposing to deploy an algorithmic targeting rule
+in Aotearoa New Zealand.</li>
+<li>Describe one scenario in which a community organiser should override
+a policy tree recommendation. What information would they have that
+the model does not?</li>
+<li>State the difference between a ranking rule (treat the top 20% by
+$\hat{\tau}$) and a policy tree (depth 2 with a 20% budget). Give
+one scenario in which the ranking is preferable.</li>
+</ol>
+<h2 id="outcome-wide-reporting"><a class="header" href="#outcome-wide-reporting">Outcome-Wide Reporting</a></h2>
+<ol>
+<li>State the four causal estimands an outcome-wide design implies for
+one exposure and four outcomes.</li>
+<li>Why is multiple-testing correction necessary in an outcome-wide
+design? Describe the Bonferroni correction at $\alpha_{FW} =
+0.05$ for four outcomes.</li>
+<li>Explain, in plain language, what an E-value of 2.0 means.</li>
+<li>A forest plot orders four outcomes by effect magnitude. The largest
+two effects survive Bonferroni; the smaller two do not. Write a
+one-paragraph interpretation suitable for a non-specialist audience.</li>
+</ol>
+<h2 id="measurement-week-10"><a class="header" href="#measurement-week-10">Measurement (Week 10)</a></h2>
+<ol>
+<li>Briefly distinguish reflective and formative measurement models.
+State one reason each is awkward for causal inference.</li>
+<li>Define measurement invariance. Describe how scalar invariance can
+fail across cultures, and why this threatens cross-cultural causal
+comparisons.</li>
+<li>Why is "mindfulness intervention" vulnerable to the
+multiple-versions-of-treatment problem? What does this imply for
+consistency?</li>
+<li>Draw a causal directed acyclic graph with $A$, $Y^\ast$, $Y$,
+and $U_Y$ representing differential measurement error. Explain how
+the path $A \to U_Y \to Y$ threatens identification.</li>
+<li>Explain why including the baseline measurement of the outcome
+($Y_0$) in the adjustment set provides strong confounding control
+in a three-wave panel.</li>
+<li>State one design response and one analytic response when measurement
+invariance fails across groups.</li>
+</ol>
+<h2 id="synthesis-prompts"><a class="header" href="#synthesis-prompts">Synthesis Prompts</a></h2>
+<ol>
+<li>An investigator estimates the effect of weekly volunteer work on
+four wellbeing outcomes using a causal forest. Set out the full
+causal workflow: estimands, identification assumptions, estimator,
+multiple-testing correction, sensitivity analysis, presentation.</li>
+<li>A community wellbeing programme has a fixed budget. Walk through the
+steps from conditional average treatment effect estimation to
+deployable allocation rule, naming the equity audit and one Te
+Tiriti consideration.</li>
+<li>A cross-cultural study uses the K6 to compare the effect of a
+school-based mindfulness intervention in two countries. Identify the
+measurement, treatment-version, and identification threats, and
+propose one response to each.</li>
+<li>A reviewer challenges your outcome-wide forest plot with: "Three of
+these confidence intervals cross zero after Bonferroni. Are you sure
+your story holds?" Reply in one paragraph.</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="potential-outcomes-and-causal-inference"><a class="header" href="#potential-outcomes-and-causal-inference">Potential Outcomes and Causal Inference</a></h1>
 <p>This page introduces the fundamental problem of causal inference, the
 potential outcomes framework, and the three identification assumptions
@@ -9251,20 +9468,52 @@ labelling individuals."</p>
 <h3 id="designing-a-depth-2-policy-rule"><a class="header" href="#designing-a-depth-2-policy-rule">Designing a depth-2 policy rule</a></h3>
 <p>Example: split first on deprivation index (high vs low), then split the
 high-deprivation leaf on baseline loneliness (high vs low). Treat the
-"high deprivation, high loneliness" leaf. If roughly 40% of the
-population is high-deprivation and 50% of those are high-loneliness, the
-treated group is approximately 20%.</p>
+"high deprivation, high loneliness" leaf and do not treat the other
+leaves.</p>
+<p>Plain-language rule: offer the programme to residents in
+high-deprivation areas who also report high baseline loneliness.</p>
+<p>If roughly 40% of the population is high-deprivation and half of that
+group is high-loneliness, the treated group is approximately $0.40
+\times 0.50 = 0.20$, or 20% of residents.</p>
 <p>Two reasons to prefer depth-2 over depth-4: (1) a depth-2 tree has at
 most 4 leaves and 3 yes/no questions, which a policy-maker or clinician
 can explain in a sentence; (2) deeper trees split the sample into
 smaller subgroups, reducing the number of observations per leaf and
 increasing the variance of the estimated policy value.</p>
+<h3 id="depth-1-versus-depth-2"><a class="header" href="#depth-1-versus-depth-2">Depth-1 versus depth-2</a></h3>
+<p>The depth-1 rule can be stated as: treat residents above the log-income
+threshold and do not treat residents at or below it. The depth-2 rule
+can be stated as: first split on openness; for those below the first
+threshold, split again on openness, and for those above it, split on
+neuroticism; treat only the leaves labelled "treat."</p>
+<p>A lift of $0.028$ standard-deviation units is small for any one
+person. Across $10,000$ eligible people, however, it is an average
+improvement applied many times. If the rule is implemented correctly and
+the estimate transports, the population-level gain could be meaningful
+even though the individual-level gain sounds modest.</p>
+<p>Deploy the depth-1 rule when implementation must be simple, when staff
+will apply the rule under time pressure, or when the depth-2 splits are
+unstable across resamples. Deploy the depth-2 rule when the intervention
+is high-stakes, the extra gain is meaningful, the confidence interval
+supports the improvement, and the implementing organisation can apply
+the rule reliably.</p>
+<p>The extra evidence that would support depth-2 is a held-out policy-value
+estimate whose uncertainty clearly favours depth-2, stable splits across
+resamples, and an equity audit showing that the added split does not
+worsen disparities.</p>
 <h3 id="equity-audit"><a class="header" href="#equity-audit">Equity audit</a></h3>
+<p>Plain-language rule: offer the programme to high-deprivation residents
+under 40.</p>
 <p>A deprivation split indirectly stratifies by ethnicity because in
 Aotearoa NZ, Māori and Pasifika populations are disproportionately
 represented in high-deprivation areas due to historical and structural
 inequities. A rule that targets high deprivation will differentially
 affect these groups.</p>
+<p>The first empirical check is a cross-tabulation of assigned action by
+ethnicity, ideally with uncertainty intervals for the treated share in
+each group. The analyst should also check the distribution of need and
+estimated benefit by ethnicity, because equal treatment shares can still
+hide unequal need.</p>
 <p>Applying governance checks: (1) "Who gains and who loses?" The
 high-deprivation-under-40 group gains access; everyone else is excluded.
 If the excluded group includes high-deprivation people over 40 who also
@@ -9297,6 +9546,9 @@ team allocating limited follow-up resources) and does not require public
 justification. Strategy B is preferable when the rule must be defended
 publicly, contested by affected communities, or implemented by
 non-technical staff.</p>
+<p>Both strategies must answer the same equity question: who is excluded
+under the rule, and does that exclusion worsen disparities for protected
+or structurally disadvantaged groups?</p>
 <hr />
 <h2 id="week-10"><a class="header" href="#week-10">Week 10</a></h2>
 <h3 id="interpreting-invariance-results"><a class="header" href="#interpreting-invariance-results">Interpreting invariance results</a></h3>

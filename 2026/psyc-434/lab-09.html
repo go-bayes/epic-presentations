@@ -248,8 +248,9 @@
 <blockquote>
 <p><strong>R script</strong></p>
 <p><a href="scripts/lab-09.R">Download the R script for this lab</a></p>
-<p>The lab also requires the cache helper, which the script sources
-automatically: <a href="scripts/lab-09-cache.R"><code>scripts/lab-09-cache.R</code></a>.</p>
+<p>The script auto-installs every package it needs (including
+<code>causalworkshop</code>, which holds the cache loader) and downloads the ~80
+MB cache on first run. You do not need any other files.</p>
 </blockquote>
 <p>This lab moves from evaluating heterogeneity (Lab 8) to making decisions
 across several outcomes at once. You will run the lab's actual research
@@ -297,28 +298,44 @@ outcome's depth-1 and depth-2 policy trees.</li>
 plots, and auto-generated prose summaries.</li>
 </ul>
 <p>The fit script that produced the cache is at
-<code>scripts/fit-lab-09-cache.R</code>. You do not need to run it; the helper
-downloads the result.</p>
+<code>scripts/fit-lab-09-cache.R</code>. You do not need to run it; the loader
+(<code>causalworkshop::load_lab_09_cache()</code>) downloads the result on first
+use and caches it locally for every subsequent run.</p>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<pre><code class="language-r">library(causalworkshop)
-library(margot)
-library(ggplot2)
-library(dplyr)
+<p>The script handles installation automatically. The block below mirrors
+what <code>scripts/lab-09.R</code> runs at the top: it installs anything missing,
+requires <code>causalworkshop &gt;= 0.6.0</code> (the version that ships the cache
+loader), and stops with a clear restart-R message if a stale namespace
+is already loaded.</p>
+<pre><code class="language-r">required_packages &lt;- c(
+  "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive"
+)
+missing &lt;- required_packages[
+  !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+]
+if (length(missing) &gt; 0) install.packages(missing)
+
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("margot", quietly = TRUE)) pak::pak("go-bayes/margot")
+if (!requireNamespace("causalworkshop", quietly = TRUE) ||
+    packageVersion("causalworkshop") &lt; "0.6.0") {
+  pak::pak("go-bayes/causalworkshop")
+  if ("causalworkshop" %in% loadedNamespaces()) {
+    stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
+  }
+}
+
+suppressPackageStartupMessages({
+  library(causalworkshop)
+  library(margot)
+  library(ggplot2)
+  library(dplyr)
+})
 </code></pre>
-<blockquote>
-<p><strong>Install packages</strong></p>
-<p>If needed, run:</p>
-<pre><code class="language-r">install.packages(c("googledrive", "qs", "pak", "tibble", "dplyr"))
-pak::pak("go-bayes/margot")
-pak::pak("go-bayes/causalworkshop")
-</code></pre>
-</blockquote>
-<p>Source the cache helper and load the fits. The first call downloads
-roughly 80 MB into a per-user cache directory; subsequent calls read
-from disk.</p>
-<pre><code class="language-r">source("scripts/lab-09-cache.R")
-cache &lt;- load_lab_09_cache()
+<p>Load the cached fits. The first call downloads roughly 80 MB into a
+per-user cache directory; subsequent calls read from disk.</p>
+<pre><code class="language-r">cache &lt;- causalworkshop::load_lab_09_cache()
 
 models_binary &lt;- cache$models_binary
 policy_tree_stability &lt;- cache$policy_tree_stability
@@ -388,23 +405,28 @@ honest move.</p>
 allocation rule: "treat people in this leaf, do not treat in this leaf".
 The lab caps depth at two, so each rule asks at most three yes/no
 questions before committing.</p>
-<p>The <code>policy_workflow</code> object returns one combined plot per outcome,
-bundling the tree diagram with a scatter of who lands in each leaf.
-Print one per outcome:</p>
-<pre><code class="language-r">for (m in names(wf$plots)) {
+<p>Two functions render each outcome's policy tree.
+<code>margot_plot_decision_tree()</code> returns the tree diagram alone — the rule
+as a slide-ready flowchart. <code>margot_plot_policy_tree()</code> returns the
+prediction-points scatter — the same rule shown as a partition of the
+underlying covariate space, with each individual coloured by the
+assigned action. Print both for every outcome:</p>
+<pre><code class="language-r">model_ids &lt;- names(label_mapping)
+for (m in model_ids) {
   cat("\n=== ", label_mapping[[m]], " ===\n", sep = "")
-  print(wf$plots[[m]])
+  print(margot_plot_decision_tree(
+    policy_tree_stability,
+    model_name = m,
+    max_depth = 2,
+    label_mapping = label_mapping
+  ))
+  print(margot_plot_policy_tree(
+    policy_tree_stability,
+    model_name = m,
+    max_depth = 2,
+    label_mapping = label_mapping
+  ))
 }
-</code></pre>
-<p>When slide real estate is tight, <code>margot_plot_decision_tree()</code> returns
-the tree diagram alone:</p>
-<pre><code class="language-r">tree_only &lt;- margot_plot_decision_tree(
-  policy_tree_stability,
-  model_name = "model_t2_purpose",
-  max_depth = 2,
-  label_mapping = label_mapping
-)
-print(tree_only)
 </code></pre>
 <blockquote>
 <p><strong>Reading a policy tree</strong></p>
@@ -430,8 +452,17 @@ for (p in qini_plots) print(p)
 is worth it at that budget. A curve hugging the diagonal says targeting
 is no better than random.</p>
 <h2 id="step-5-rate-table"><a class="header" href="#step-5-rate-table">Step 5: RATE table</a></h2>
-<p>RATE summarises targeting value as a single number per outcome.</p>
-<pre><code class="language-r">rate_table &lt;- margot_plot_rate_batch(
+<p>RATE summarises targeting value as a single number per outcome.
+<code>margot_plot_rate_batch()</code> returns a list of per-outcome plots;
+<code>margot::margot_rate()</code> returns the underlying numbers as a table.</p>
+<pre><code class="language-r">rate_plots &lt;- margot_plot_rate_batch(
+  models_binary,
+  target = "AUTOC",
+  label_mapping = label_mapping
+)
+for (p in rate_plots) print(p)
+
+rate_table &lt;- margot::margot_rate(
   models_binary,
   target = "AUTOC",
   label_mapping = label_mapping
