@@ -1,0 +1,19 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{preamble}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\tikzset{
+  emod/.style={rectangle, fill=blue!10, draw=blue, thick, minimum size=6mm},
+  emoddot/.style={circle, fill=blue!10, draw=blue, dotted, thick, minimum size=6mm}
+}
+\begin{tikzpicture}
+\node [draw=none] (A) at (0, 0) {$A_1$};
+\node [draw=none] (Y) at (2, 0) {$Y_2$};
+\node [emoddot] (Z) at (-3, 0) {$Z$};
+\node [emod] (G) at (-1, 0) {$G$};
+
+\draw [-latex, draw=black] (A) to (Y);
+\draw [-{Circle[open, fill=none]}, line width=0.25pt, draw=blue, bend left=40] (Z) to (Y);
+\draw [-latex, draw=blue] (Z) to (G);
+\end{tikzpicture}
+\end{document}
