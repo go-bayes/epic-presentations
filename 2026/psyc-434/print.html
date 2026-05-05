@@ -7187,9 +7187,8 @@ outcome's depth-1 and depth-2 policy trees.</li>
 plots, and auto-generated prose summaries.</li>
 </ul>
 <p>The fit script that produced the cache is at
-<code>scripts/fit-lab-09-cache.R</code>. You do not need to run it; the loader
-(<code>causalworkshop::load_lab_09_cache()</code>) downloads the result on first
-use and caches it locally for every subsequent run.</p>
+<code>scripts/fit-lab-09-cache.R</code>. You do not need to run it during the
+lab; it is there so you can see exactly what was fitted.</p>
 </blockquote>
 <h2 id="setup-1"><a class="header" href="#setup-1">Setup</a></h2>
 <p>The script handles installation automatically. The block below mirrors
@@ -7230,6 +7229,30 @@ models_binary &lt;- cache$models_binary
 policy_tree_stability &lt;- cache$policy_tree_stability
 wf &lt;- cache$policy_workflow
 </code></pre>
+<p>For reference, the cache was produced by the following sequence:</p>
+<pre><code class="language-r"># models_binary &lt;- margot::margot_causal_forest(...)
+# full call shown in the R script; it is abbreviated here because it is long
+
+policy_tree_stability &lt;- margot::margot_policy_tree_stability(
+  model_results = models_binary,
+  depth = 2,
+  n_iterations = 100,
+  vary_type = "split_only",
+  label_mapping = label_mapping,
+  seed = 2026
+)
+
+wf &lt;- margot::margot_policy_workflow(
+  stability = policy_tree_stability,
+  original_df = df_grf,
+  label_mapping = label_mapping,
+  audience = "policy",
+  interpret_models = "recommended",
+  plot_models = "recommended"
+)
+</code></pre>
+<p>The first line is abbreviated because fitting the four causal forests
+takes too long for the lab. The full call is commented in the R script.</p>
 <p>The four outcomes are purpose, belonging, self-esteem, and life
 satisfaction at wave 2. The exposure is community-group participation at
 wave 1. We pass a label mapping to every plot and table call so the
@@ -7366,10 +7389,12 @@ fixed; QINI suits a real budget question with a known share treated.</p>
 </blockquote>
 <h2 id="step-6-read-the-auto-generated-prose"><a class="header" href="#step-6-read-the-auto-generated-prose">Step 6: read the auto-generated prose</a></h2>
 <p><code>margot</code> synthesises a draft narrative from the policy-workflow object.
-The prose is generated from the same numbers you saw above; it does not
-bring new information. Its value is structural: it forces an <em>assumption
-→ finding → caveat</em> shape that you can imitate when you write your own
-results section.</p>
+In the cached fit, that object was created with
+<code>margot_policy_workflow()</code> from the policy-tree stability output, the
+original analysis data, and the label mapping. The prose is generated
+from the same numbers you saw above; it does not bring new information.
+Its value is structural: it forces an <em>assumption → finding → caveat</em>
+shape that you can imitate when you write your own results section.</p>
 <pre><code class="language-r">cat(wf$report_prose)
 </code></pre>
 <p>The <code>policy_brief_df</code> is a tabular one-pager for the same content:</p>

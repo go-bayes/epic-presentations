@@ -70,10 +70,82 @@ suppressPackageStartupMessages({
 #   policy_workflow       — interpretive layer: depth recommendations,
 #                           plots, and auto-generated prose summaries.
 #
-# the cache is a public Google Drive file. the loader (in causalworkshop)
-# downloads it once into a per-user cache directory, then reads from
-# disk on every subsequent run. no `scripts/` folder is needed; this
-# works from any working directory.
+# what was run to make the cache (shown for transparency; do not run in lab):
+#
+# d <- causalworkshop::simulate_nzavs_data(n = 5000, seed = 2026)
+# d0 <- d |> dplyr::filter(wave == 0)
+# d1 <- d |> dplyr::filter(wave == 1)
+# d2 <- d |> dplyr::filter(wave == 2)
+#
+# covariate_cols <- c(
+#   "age", "male", "nz_european", "education", "partner", "employed",
+#   "log_income", "nz_dep", "agreeableness", "conscientiousness",
+#   "extraversion", "neuroticism", "openness",
+#   "community_group", "purpose"
+# )
+#
+# df_grf <- dplyr::bind_cols(
+#   d0 |> dplyr::select(dplyr::all_of(covariate_cols)),
+#   tibble::tibble(
+#     community_group_t1 = d1$community_group,
+#     t2_purpose = d2$purpose,
+#     t2_belonging = d2$belonging,
+#     t2_self_esteem = d2$self_esteem,
+#     t2_life_satisfaction = d2$life_satisfaction
+#   )
+# )
+#
+# X <- as.matrix(df_grf[, covariate_cols])
+# W <- df_grf$community_group_t1
+# weights <- rep(1, nrow(df_grf))
+# outcome_vars <- c(
+#   "t2_purpose", "t2_belonging", "t2_self_esteem", "t2_life_satisfaction"
+# )
+# label_mapping <- list(
+#   model_t2_purpose = "Sense of Purpose",
+#   model_t2_belonging = "Belonging",
+#   model_t2_self_esteem = "Self-esteem",
+#   model_t2_life_satisfaction = "Life satisfaction"
+# )
+# grf_defaults <- list(num.trees = 1000, honesty = TRUE, tune.parameters = "all")
+#
+# models_binary <- margot::margot_causal_forest(
+#   data = df_grf,
+#   outcome_vars = outcome_vars,
+#   covariates = X,
+#   W = W,
+#   weights = weights,
+#   grf_defaults = grf_defaults,
+#   top_n_vars = 12,
+#   save_models = TRUE,
+#   save_data = TRUE,
+#   compute_conditional_means = TRUE,
+#   train_proportion = 0.5,
+#   use_train_test_split = TRUE,
+#   seed = 2026
+# )
+#
+# policy_tree_stability <- margot::margot_policy_tree_stability(
+#   model_results = models_binary,
+#   depth = 2,
+#   n_iterations = 100,
+#   vary_type = "split_only",
+#   parallel = FALSE,
+#   label_mapping = label_mapping,
+#   seed = 2026
+# )
+#
+# wf <- margot::margot_policy_workflow(
+#   stability = policy_tree_stability,
+#   original_df = df_grf,
+#   label_mapping = label_mapping,
+#   audience = "policy",
+#   interpret_models = "recommended",
+#   plot_models = "recommended"
+# )
+#
+# load the pre-fitted results. the first run may take a moment while the
+# cache downloads; later runs should be faster.
 cache <- causalworkshop::load_lab_09_cache()
 
 models_binary <- cache$models_binary
