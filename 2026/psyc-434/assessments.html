@@ -281,9 +281,9 @@ end of the lab session.</p>
 <li>One thing you found useful, surprising, or challenging.</li>
 </ol>
 <p>Several labs have focussed exercises.</p>
-<p>The labs are marked either full-credit/no-credit. If your reflection
-shows reflection and engagement you will get full credit (even if you do
-not get the exercises correct).</p>
+<p>The labs are marked full-credit/no-credit. If your diary shows that you
+engaged with the lab, you will get full credit, even if some exercises
+are wrong.</p>
 <h3 id="format"><a class="header" href="#format">Format</a></h3>
 <p>Write each diary as a plain markdown (<code>.md</code>) file named by week number:
 <code>lab-01.md</code>, <code>lab-02.md</code>, …, <code>lab-10.md</code> (there is no <code>lab-07.md</code>). Use
@@ -327,10 +327,10 @@ instrument.</p>
 machine learning, resource allocation, policy trees, and classical
 measurement theory). Same format and conditions as test 1: in class, on
 paper, with no devices and no AI tools.</p>
-<p>Use the <a href="assessment-self-checks.html">Assessment Self-Checks</a> before the
-test when preparing. They summarise what you should be able to state
-about causal questions, heterogeneous treatment effects, policy trees,
-and measurement assumptions.</p>
+<p>Use the <a href="assessment-self-checks.html">Assessment Self-Checks</a> while
+preparing. They list the things you should be able to state clearly: the
+causal question, heterogeneous treatment effects, policy trees, and
+measurement assumptions.</p>
 <blockquote>
 <p><strong>Test Location</strong></p>
 <p>The test is in class. Come to the seminar room (EA120) with a writing
@@ -339,7 +339,7 @@ instrument.</p>
 <h2 id="assessment-4-in-class-presentation-10--27-may"><a class="header" href="#assessment-4-in-class-presentation-10--27-may">Assessment 4: In-Class Presentation (10%) — 27 May</a></h2>
 <p>You will present your research report (Option A) or your Marsden EOI
 concept (Option B). Your job is to answer two questions for a
-non-specialist audience: what is it, and so what.</p>
+non-specialist audience: what is it, and why should anyone care?</p>
 <p>The presentation is 10 minutes, followed by one question from the panel.
 You must answer the question after your talk. You may ask one brief
 clarifying question before answering.</p>
@@ -434,14 +434,14 @@ outcome-wide interpretation).</li>
 <li>APA style. Submit as a single PDF with R code appendix.</li>
 </ul>
 <h4 id="assessment-criteria-option-a"><a class="header" href="#assessment-criteria-option-a">Assessment Criteria (Option A)</a></h4>
-<p><strong>Stating the problem.</strong> State your question clearly. Explain its
-scientific importance. Frame it as a causal question for a defined
-target population. Note that the question is outcome-wide: you ask how
-the exposure affects four wellbeing outcomes jointly, not one
-cherry-picked outcome. Explain the causal inference framework for
-non-specialists. Describe ethics or policy relevance. Confirm data are
-from the NZAVS-style simulator distributed in <code>causalworkshop</code> and that
-you use three waves.</p>
+<p><strong>Stating the problem.</strong> State your question clearly. Explain why it
+matters. Frame it as a causal question for a defined target population.
+Note that the question is outcome-wide: you ask how the exposure affects
+four wellbeing outcomes jointly, rather than picking one favourite
+outcome after looking at the results. Explain the causal inference
+framework for non-specialists. Describe any practical or ethical
+relevance. Confirm data are from the NZAVS-style simulator distributed
+in <code>causalworkshop</code> and that you use three waves.</p>
 <p><strong>Determining the outcomes.</strong> Define each outcome $Y_k$ for $k = 1,
 \dots, 4$. State the scale (continuous, z-scored), the timing (wave 2,
 post-exposure), and how each outcome relates to the question. Explain
@@ -491,23 +491,22 @@ accompanying table. Order outcomes by effect magnitude. Interpret the
 pattern as a whole, not outcome by outcome.</p>
 <p><strong>Subgroup identification with policy trees.</strong> This course studies
 comparative work. After estimating the four ATEs, fit a depth-2 policy
-tree per outcome using <code>margot</code> (Lab 9 walks through the workflow).
-Identify the subgroup for which the treatment effect is strongest.
-Translate the rule into plain language a non-specialist could repeat.
-Report the policy value with its 95% confidence interval, and note
-whether the depth-2 rule meaningfully improves on depth-1 (apply the
-parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a>).</p>
-<p><strong>Ethics statement.</strong> Devote one paragraph (about 150 words) to the
-ethical implications of acting on the policy tree. Address: (i) equity —
-whether targeting those who benefit <em>most</em> leaves out those who benefit
-<em>somewhat</em>; (ii) proxy variables — whether splits on covariates such as
-deprivation, income, age, or baseline wellbeing could affect social
-groups differently; (iii) governance — who would oversee deployment,
-what public objective would authorise the rule, and what override
-conditions a community organiser, clinician, or teacher would invoke.
-The model cannot decide what justice requires. State one value judgement
-the analysis depends on, then explain what evidence the model can and
-cannot provide.</p>
+tree per outcome using <code>margot</code> (Lab 9 walks through the steps).
+Identify the subgroup for which the estimated treatment effect is
+strongest. Translate the rule into plain language a non-specialist could
+repeat. Report the policy value with its 95% confidence interval, and
+note whether the depth-2 rule meaningfully improves on depth-1 (apply
+the parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a>).</p>
+<p><strong>Ethics statement.</strong> Devote one paragraph (about 150 words) to what
+would need to be considered before acting on the policy tree. Address:
+(i) fairness — whether targeting those who benefit <em>most</em> leaves out
+those who benefit <em>somewhat</em>; (ii) proxy variables — whether splits on
+covariates such as deprivation, income, age, or baseline wellbeing could
+affect social groups differently; (iii) oversight — who would check the
+rule, what public objective would justify it, and when a community
+organiser, clinician, or teacher should override it. The model cannot
+settle public values. State one value judgement the analysis depends on,
+then explain what evidence the model can and cannot provide.</p>
 <h3 id="option-b-marsden-fund-expression-of-interest-eoi"><a class="header" href="#option-b-marsden-fund-expression-of-interest-eoi">Option B: Marsden Fund Expression of Interest (EOI)</a></h3>
 <p>Write a first-round Marsden Fund Expression of Interest (EOI) following
 the RSNZ 2026 guidelines. Your research question must use the causal
@@ -582,45 +581,40 @@ This criterion carries substantial weight.</p>
 <p>For the full Marsden Fund assessment criteria, see the <a href="resources/MF-2026-EOI-Guidelines.pdf">RSNZ 2026 EOI
 Guidelines (pdf)</a>.</p>
 <h1 id="ai-use-in-this-course"><a class="header" href="#ai-use-in-this-course">AI use in this course</a></h1>
-<p>Students may use AI tools in this course. AI use is permitted, but not
-required.</p>
+<p>You may use AI tools in this course. You do not have to.</p>
 <blockquote>
 <p><strong>AI use policy</strong></p>
 <ul>
-<li>You may use AI for coding help, brainstorming, and editing for
-clarity.</li>
-<li>The best use of AI is to challenge your reasoning: ask it to find
-holes in your argument, push you to clearer thinking and writing,
-then push back when its suggestions are wrong or generic.</li>
+<li>You may use AI for coding help, brainstorming, and clearer writing.</li>
+<li>Use it as a critical reader: ask it to find holes in your argument,
+push you to clearer thinking, and point out vague wording. Push back
+when it gives bland or wrong advice.</li>
 <li>You are responsible for all submitted work. Verify all claims, code,
 and references.</li>
 <li>You must be able to explain your work in your own words.</li>
 <li>For lab diaries and the final report, add a short note if AI use is
 substantial (tool, date, and how it was used).</li>
-<li>If AI output materially shaped your submission, acknowledge it as a
-source.</li>
+<li>If AI output shaped your submission in an important way, acknowledge
+it as a source.</li>
 <li>AI tools are not permitted in in-class tests.</li>
 <li>Do not upload confidential, identifiable, or sensitive information.</li>
 </ul>
 </blockquote>
-<p>Good uses of AI while studying:</p>
+<p>Useful AI uses while studying:</p>
 <ol>
 <li>Ask for a plain-language explanation of a concept after you have
 checked the lecture notes.</li>
-<li>Ask for feedback on whether your answer states the target
-population, causal contrast, outcome, estimand, and assumptions.</li>
-<li>Ask it to identify places where your wording sounds associational
-when you mean causal.</li>
-<li>Ask it to generate a similar practice question, then answer that
-question yourself.</li>
+<li>Ask whether your answer states the target population, causal
+contrast, outcome, estimand, and assumptions.</li>
+<li>Ask where your wording sounds associational when you mean causal.</li>
+<li>Ask for a similar practice question, then answer that question
+yourself.</li>
 </ol>
-<p>Poor uses:</p>
+<p>Poor AI uses:</p>
 <ol>
 <li>Asking it to write an answer you have not attempted.</li>
-<li>Treating its answer as authoritative without checking the course
-materials.</li>
-<li>Letting it replace the causal workflow with generic statistics
-language.</li>
+<li>Trusting its answer without checking the course materials.</li>
+<li>Letting it swap the causal steps for vague statistics language.</li>
 <li>Using it to memorise phrases rather than understand the logic.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"

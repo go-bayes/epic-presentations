@@ -528,24 +528,21 @@ rank are an honest measure of how much information the forest extracted
 from a finite sample.</p>
 <h2 id="ethical-considerations"><a class="header" href="#ethical-considerations">Ethical considerations</a></h2>
 <blockquote>
-<p><strong>Statistical optimality is not social optimality</strong></p>
-<p>A policy tree maximises expected treatment benefit, but it does not
-account for:</p>
+<p><strong>A high-value rule still needs judgement</strong></p>
+<p>A policy tree maximises expected treatment benefit under the objective
+you give it. Before anyone acts on it, ask:</p>
 <ul>
-<li><strong>Fairness.</strong> The tree may split on variables correlated with
-protected characteristics (ethnicity, gender, socioeconomic status).
-Even if a variable is not in the covariate set, proxy variables may
-reproduce discriminatory patterns.</li>
-<li><strong>Equity.</strong> Targeting resources to those who benefit <em>most</em> may mean
-those who benefit <em>somewhat</em> receive nothing. A policy that is
-statistically optimal may be socially unjust.</li>
-<li><strong>Transparency.</strong> A depth-2 tree is interpretable; a depth-5 tree is
-not. Policy-makers and the public need to understand the rule.</li>
-<li><strong>Override.</strong> A clinician or social worker should always be able to
-override an algorithmic recommendation based on individual context
-the model cannot see.</li>
+<li><strong>Proxy variables.</strong> Does the tree split on variables correlated
+with protected characteristics such as ethnicity, gender, or
+socioeconomic status?</li>
+<li><strong>Fairness.</strong> Does targeting those who benefit <em>most</em> leave out
+people who would still benefit?</li>
+<li><strong>Transparency.</strong> Can a community organiser, teacher, clinician, or
+member of the public understand the rule?</li>
+<li><strong>Override.</strong> When should someone override the rule because they
+know relevant context the model cannot see?</li>
 </ul>
-<p>When presenting policy tree results, always discuss these trade-offs.</p>
+<p>When presenting policy tree results, discuss these trade-offs plainly.</p>
 </blockquote>
 <h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
 <blockquote>
@@ -563,7 +560,7 @@ discrepancy.</p>
 <li>
 <p><strong>Read a single policy tree.</strong> Pick one of the four outcomes.
 Translate its depth-2 policy tree into a plain-language rule a
-non-technical reader could follow. Then state one substantive
+non-technical reader could follow. Then state one practical
 limitation of that rule.</p>
 </li>
 <li>

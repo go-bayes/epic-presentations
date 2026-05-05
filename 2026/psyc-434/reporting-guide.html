@@ -245,14 +245,12 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="reporting-guide"><a class="header" href="#reporting-guide">Reporting Guide</a></h1>
-<p>This guide covers how to report results from causal inference analyses.
-It follows the ten-step causal workflow and demonstrates best practices
-for communicating average treatment effects, heterogeneous effects, and
-sensitivity analyses. This resource directly supports the research
-report assessment (40%).</p>
+<p>This guide shows what to report in the research report. Use it as a
+checklist for average treatment effects, heterogeneous effects, policy
+trees, and sensitivity analyses.</p>
 <hr />
-<h2 id="the-ten-step-causal-inference-workflow"><a class="header" href="#the-ten-step-causal-inference-workflow">The ten-step causal inference workflow</a></h2>
-<p>Before reporting results, ensure each step has been addressed.</p>
+<h2 id="the-ten-step-causal-inference-checklist"><a class="header" href="#the-ten-step-causal-inference-checklist">The ten-step causal inference checklist</a></h2>
+<p>Before reporting results, check that each piece is in place.</p>
 <h3 id="steps-03-problem-definition"><a class="header" href="#steps-03-problem-definition">Steps 0–3: problem definition</a></h3>
 <ol>
 <li><strong>Well-defined treatment.</strong> Specify the exposure precisely,
@@ -267,21 +265,22 @@ any weighting for population representativeness.</li>
 </ol>
 <h3 id="steps-46-identification-strategy"><a class="header" href="#steps-46-identification-strategy">Steps 4–6: identification strategy</a></h3>
 <ol>
-<li><strong>Exchangeability.</strong> Describe how conditional independence was
-achieved (e.g., "rich baseline covariate control including 32
-covariates").</li>
+<li><strong>Exchangeability.</strong> Describe the baseline covariates you adjust for
+and why they are enough, under your causal directed acyclic graph
+(causal DAG).</li>
 <li><strong>Consistency.</strong> Explain why the treatment is well-defined and
 uniform across individuals.</li>
-<li><strong>Positivity.</strong> Report verification through transition tables
-showing exposure variation across covariate strata.</li>
+<li><strong>Positivity.</strong> Report checks showing that both exposure levels
+appear across the relevant covariate patterns.</li>
 </ol>
 <h3 id="steps-79-implementation"><a class="header" href="#steps-79-implementation">Steps 7–9: implementation</a></h3>
 <ol>
-<li><strong>Measurement validity.</strong> Note the psychometric properties of
-outcome scales.</li>
+<li><strong>Measurement.</strong> Explain how the outcome is measured and any
+assumptions needed for the measure to mean the same thing across
+people, groups, and time.</li>
 <li><strong>Attrition handling.</strong> Describe how panel dropout was addressed
 (e.g., inverse probability of censoring weights).</li>
-<li><strong>Transparent reporting.</strong> Document all analytical decisions and
+<li><strong>Transparent reporting.</strong> Document the analysis choices and
 assumptions.</li>
 </ol>
 <blockquote>
@@ -304,24 +303,24 @@ $a=0$, conditional on baseline characteristics?"</p>
 <li><strong>Effect sizes</strong>: report in standard deviation units for continuous
 outcomes.</li>
 <li><strong>Confidence intervals</strong>: show uncertainty around each estimate.</li>
-<li><strong>E-values</strong>: indicate robustness to unmeasured confounding.</li>
+<li><strong>E-values</strong>: show how strong an unmeasured confounder would need to
+be to explain away the estimate.</li>
 <li><strong>Sample size</strong>: total analysed after exclusions and weighting.</li>
 </ol>
 <h3 id="example-results-text"><a class="header" href="#example-results-text">Example results text</a></h3>
 <blockquote>
-<p>"Weekly religious service attendance showed positive causal effects
-across all cooperation measures. The largest effects were observed for
-social outcomes: sense of belonging ($\beta = 0.18$, 95% CI:
-0.14–0.22) and social support ($\beta = 0.15$, 95% CI: 0.11–0.19).
-The E-values were above 1.6, meaning an unmeasured confounder would
-need to be associated with both attendance and these outcomes by a
-risk ratio of at least 1.6 each, above and beyond measured covariates,
-to explain away the estimates."</p>
+<p>"Weekly religious service attendance was estimated to improve all four
+wellbeing outcomes. The largest estimates were for sense of belonging
+($\beta = 0.18$, 95% CI: 0.14–0.22) and life satisfaction ($\beta =
+0.15$, 95% CI: 0.11–0.19). The E-values were above 1.6, meaning an
+unmeasured confounder would need to be associated with both attendance
+and these outcomes by a risk ratio of at least 1.6 each, above and
+beyond measured covariates, to explain away the estimates."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
 <h3 id="rate-results-summary"><a class="header" href="#rate-results-summary">RATE results summary</a></h3>
-<p>When heterogeneity is detected, report it systematically:</p>
+<p>When there is evidence of heterogeneity, report it plainly:</p>
 <div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>RATE-AUTOC</th><th>p-value</th><th>RATE-Qini</th><th>p-value</th><th>Evidence</th></tr></thead><tbody>
 <tr><td>Social support</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
 <tr><td>Belonging</td><td>0.15</td><td>0.001</td><td>0.11</td><td>0.004</td><td>Strong</td></tr>
@@ -331,63 +330,62 @@ to explain away the estimates."</p>
 </div>
 <h3 id="example-heterogeneity-text"><a class="header" href="#example-heterogeneity-text">Example heterogeneity text</a></h3>
 <blockquote>
-<p>"We found substantial heterogeneity in treatment effects for social
-outcomes (RATE-Qini &gt; 0.08, $p &lt; 0.05$), but limited heterogeneity
-for behavioural outcomes. This suggests that while religious service
-benefits most people socially, individual responses vary considerably
-in magnitude."</p>
+<p>"The RATE results suggest that treatment effects vary across people
+for belonging and life satisfaction. The evidence is weaker for the
+other outcomes. This means the average effect is not the whole story:
+some people appear to benefit more than others, though the split
+variables should be read as descriptive markers, not as identified
+causes of response."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
 <p>Present policy trees with both standardised and original-scale
 interpretations.</p>
-<h3 id="subgroup-identification-with-data-scale-effects"><a class="header" href="#subgroup-identification-with-data-scale-effects">Subgroup identification with data-scale effects</a></h3>
-<p><strong>High-response subgroups for charitable donations:</strong></p>
+<h3 id="subgroup-reporting-with-data-scale-effects"><a class="header" href="#subgroup-reporting-with-data-scale-effects">Subgroup reporting with data-scale effects</a></h3>
+<p><strong>High-response subgroups for life satisfaction:</strong></p>
 <ol>
-<li><strong>Older adults with high agreeableness</strong> (age &gt; 45, agreeableness
-&gt; +1 SD)
+<li><strong>Older adults with high baseline belonging</strong> (age &gt; 45, baseline
+belonging &gt; +1 SD)
 <ul>
 <li>Standardised effect: $\beta = 0.28$ (95% CI: 0.21–0.35)</li>
-<li>Data-scale effect: NZ$847 additional annual donations (95% CI:
-NZ$635–1,058)</li>
+<li>Data-scale effect: 0.42 points on a 1–7 life satisfaction scale
+(95% CI: 0.31–0.53)</li>
 <li>Sample proportion: 23%</li>
 </ul>
 </li>
-<li><strong>Parents with medium conscientiousness</strong> (parent = yes,
-conscientiousness &gt; 0)
+<li><strong>Younger adults with lower baseline purpose</strong> (age &lt;= 45, baseline
+purpose &lt; 0)
 <ul>
 <li>Standardised effect: $\beta = 0.22$ (95% CI: 0.16–0.28)</li>
-<li>Data-scale effect: NZ$665 additional annual donations (95% CI:
-NZ$484–846)</li>
+<li>Data-scale effect: 0.33 points on a 1–7 life satisfaction scale
+(95% CI: 0.24–0.42)</li>
 <li>Sample proportion: 31%</li>
 </ul>
 </li>
 <li><strong>All others</strong>
 <ul>
 <li>Standardised effect: $\beta = 0.08$ (95% CI: 0.04–0.12)</li>
-<li>Data-scale effect: NZ$242 additional annual donations (95% CI:
-NZ$121–363)</li>
+<li>Data-scale effect: 0.12 points on a 1–7 life satisfaction scale
+(95% CI: 0.06–0.18)</li>
 <li>Sample proportion: 46%</li>
 </ul>
 </li>
 </ol>
 <h3 id="example-policy-tree-text"><a class="header" href="#example-policy-tree-text">Example policy tree text</a></h3>
 <blockquote>
-<p>"Policy tree analysis identified two subgroups with enhanced treatment
-response for charitable donations. Older adults (45+) with high
-agreeableness showed the largest increase ($\beta = 0.28$ SD,
-equivalent to NZ$847 additional annual donations), representing 23%
-of the sample. In practical terms, targeted interventions toward these
-subgroups could generate 2.8–3.5 times more charitable giving than
-population-wide approaches."</p>
+<p>"The policy tree identified two subgroups with larger estimated gains
+in life satisfaction. Older adults (45+) with high baseline belonging
+had the largest estimate ($\beta = 0.28$ SD, about 0.42 points on a
+1–7 scale), representing 23% of the sample. This is a targeting
+result, not a claim that age or baseline belonging causes the
+treatment to work better."</p>
 </blockquote>
 <hr />
 <h2 id="sensitivity-analysis-e-values"><a class="header" href="#sensitivity-analysis-e-values">Sensitivity analysis: E-values</a></h2>
 <h3 id="interpretation"><a class="header" href="#interpretation">Interpretation</a></h3>
-<p>E-values quantify robustness to unmeasured confounding. The E-value is
-the minimum strength of association, on the risk ratio scale, that an
-unmeasured confounder would need with both the treatment and the outcome
-to explain away the observed effect.</p>
+<p>An E-value says how strong an unmeasured confounder would need to be, on
+the risk ratio scale, with both the treatment and the outcome to explain
+away the observed effect.</p>
 <p>There is no universal threshold at which an E-value becomes "safe".
 Interpret it against the study design, the covariates already measured,
 and plausible omitted causes in the setting. Report the E-value for the
@@ -396,16 +394,14 @@ explain what kind of unmeasured confounder would be needed for the
 result to disappear.</p>
 <h3 id="example-sensitivity-text"><a class="header" href="#example-sensitivity-text">Example sensitivity text</a></h3>
 <blockquote>
-<p>"To assess robustness to unmeasured confounding, we calculated
-E-values for all estimates. The observed effect on sense of belonging
-(E-value = 2.4) would require an unmeasured confounder associated with
-both religious service and belonging by a risk ratio of 2.4 each to
-explain away the result."</p>
+<p>"For sense of belonging, the E-value was 2.4. An unmeasured confounder
+would need to be associated with both religious service attendance and
+belonging by a risk ratio of 2.4 each, above and beyond the measured
+covariates, to explain away the estimate."</p>
 </blockquote>
 <hr />
 <h2 id="methods-section-template"><a class="header" href="#methods-section-template">Methods section template</a></h2>
-<p>A complete methods section following the ten-step workflow should
-include:</p>
+<p>A complete methods section should include:</p>
 <ol>
 <li><strong>Treatment definition</strong>: what the exposure is, how it is coded, and
 the contrast of interest.</li>
@@ -415,14 +411,14 @@ starts, and why that timing matches the intervention.</li>
 transformations applied.</li>
 <li><strong>Target population</strong>: sampling frame, weighting strategy,
 eligibility criteria.</li>
-<li><strong>Causal identification</strong>: covariates conditioned on, justification
-for conditional exchangeability.</li>
+<li><strong>Causal identification</strong>: covariates adjusted for, with a
+justification for conditional exchangeability.</li>
 <li><strong>Statistical analysis</strong>: estimation method, key tuning parameters
 (e.g., number of trees, minimum node size).</li>
 <li><strong>Attrition handling</strong>: censoring weights, stages of dropout
 addressed.</li>
-<li><strong>Heterogeneity assessment</strong>: RATE metrics, false discovery rate
-correction, policy tree depth.</li>
+<li><strong>Heterogeneity assessment</strong>: RATE metrics, policy tree depth,
+policy value, and uncertainty.</li>
 <li><strong>Sensitivity analysis</strong>: E-values for all primary estimates.</li>
 </ol>
 <hr />
@@ -433,8 +429,8 @@ correction, policy tree depth.</li>
 <li>Effect sizes with confidence intervals</li>
 <li>Sample sizes after exclusions and weighting</li>
 <li>E-values for sensitivity analysis</li>
-<li>Clear practical interpretation of effect magnitudes</li>
-<li>Subgroup sizes and effect magnifications</li>
+<li>Clear practical interpretation of effect sizes</li>
+<li>Subgroup sizes and subgroup estimates</li>
 <li>Target trial framework and causal question</li>
 <li>Explicit treatment and outcome definitions</li>
 </ul>

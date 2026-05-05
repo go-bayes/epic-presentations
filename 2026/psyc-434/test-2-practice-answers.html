@@ -304,13 +304,13 @@ heterogeneity that a small regression interaction set would miss,
 though the forest still needs validation.</p>
 </li>
 </ol>
-<h2 id="policy-trees-equity-and-democratic-judgement"><a class="header" href="#policy-trees-equity-and-democratic-judgement">Policy Trees, Equity, and Democratic Judgement</a></h2>
+<h2 id="policy-trees-fairness-and-judgement"><a class="header" href="#policy-trees-fairness-and-judgement">Policy Trees, Fairness, and Judgement</a></h2>
 <ol>
 <li>
 <p>A policy tree converts estimated treatment-effect heterogeneity into
 a simple allocation rule: for these covariates, treat; for those
 covariates, do not treat. A CATE estimate ranks or scores people,
-but it is not yet a deployable rule.</p>
+but it is not yet a rule someone can use.</p>
 </li>
 <li>
 <p>Prefer the simpler tree unless the deeper tree gives a meaningfully
@@ -323,11 +323,11 @@ be misapplied.</p>
 1.2 and who are aged 40 or younger.</p>
 </li>
 <li>
-<p>A strong equity audit could check: the treatment share across
-relevant social groups; whether split variables are proxies for
-sensitive characteristics; whether groups with similar need receive
-similar access; whether the rule is stable across resamples; and
-whether there is an override or appeal pathway.</p>
+<p>A strong fairness check could ask: what share of each relevant
+social group receives the programme; whether split variables are
+proxies for sensitive characteristics; whether people with similar
+need receive similar access; whether the rule is stable across
+resamples; and whether there is an override or appeal pathway.</p>
 </li>
 <li>
 <p>Deprivation is correlated with many social conditions, such as
@@ -336,8 +336,8 @@ ethnicity. A rule that uses deprivation may therefore allocate
 treatment unevenly across groups even if group membership is not in
 the tree. The split is descriptive: deprivation may be the strongest
 measured marker even if the root causes of the heterogeneity lie
-upstream, for example in ethnic injustice, housing policy,
-labour-market exclusion, or other causes of deprivation.</p>
+upstream, for example in housing policy, labour-market exclusion,
+discrimination, or other causes of deprivation.</p>
 </li>
 <li>
 <p>Statistical evidence can estimate expected benefits, uncertainty,
@@ -456,10 +456,10 @@ and presents a forest plot plus table.</p>
 real, choose a realistic budget, compare targeting value using
 held-out scores, fit shallow policy trees, evaluate held-out policy
 value and stability, and translate the rule into plain language. The
-equity audit should check group treatment shares, proxy variables,
-need, and override procedures. The model cannot decide whether the
-allocation should prioritise total benefit, equal access, greatest
-need, cost control, or another public value.</p>
+fairness check should consider group treatment shares, proxy
+variables, need, and override procedures. The model cannot decide
+whether the allocation should prioritise total benefit, equal
+access, greatest need, cost control, or another public value.</p>
 </li>
 <li>
 <p>Measurement threat: the K6 may not be invariant across countries;

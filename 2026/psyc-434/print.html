@@ -400,9 +400,9 @@ end of the lab session.</p>
 <li>One thing you found useful, surprising, or challenging.</li>
 </ol>
 <p>Several labs have focussed exercises.</p>
-<p>The labs are marked either full-credit/no-credit. If your reflection
-shows reflection and engagement you will get full credit (even if you do
-not get the exercises correct).</p>
+<p>The labs are marked full-credit/no-credit. If your diary shows that you
+engaged with the lab, you will get full credit, even if some exercises
+are wrong.</p>
 <h3 id="format"><a class="header" href="#format">Format</a></h3>
 <p>Write each diary as a plain markdown (<code>.md</code>) file named by week number:
 <code>lab-01.md</code>, <code>lab-02.md</code>, …, <code>lab-10.md</code> (there is no <code>lab-07.md</code>). Use
@@ -446,10 +446,10 @@ instrument.</p>
 machine learning, resource allocation, policy trees, and classical
 measurement theory). Same format and conditions as test 1: in class, on
 paper, with no devices and no AI tools.</p>
-<p>Use the <a href="assessment-self-checks.html">Assessment Self-Checks</a> before the
-test when preparing. They summarise what you should be able to state
-about causal questions, heterogeneous treatment effects, policy trees,
-and measurement assumptions.</p>
+<p>Use the <a href="assessment-self-checks.html">Assessment Self-Checks</a> while
+preparing. They list the things you should be able to state clearly: the
+causal question, heterogeneous treatment effects, policy trees, and
+measurement assumptions.</p>
 <blockquote>
 <p><strong>Test Location</strong></p>
 <p>The test is in class. Come to the seminar room (EA120) with a writing
@@ -458,7 +458,7 @@ instrument.</p>
 <h2 id="assessment-4-in-class-presentation-10--27-may"><a class="header" href="#assessment-4-in-class-presentation-10--27-may">Assessment 4: In-Class Presentation (10%) — 27 May</a></h2>
 <p>You will present your research report (Option A) or your Marsden EOI
 concept (Option B). Your job is to answer two questions for a
-non-specialist audience: what is it, and so what.</p>
+non-specialist audience: what is it, and why should anyone care?</p>
 <p>The presentation is 10 minutes, followed by one question from the panel.
 You must answer the question after your talk. You may ask one brief
 clarifying question before answering.</p>
@@ -553,14 +553,14 @@ outcome-wide interpretation).</li>
 <li>APA style. Submit as a single PDF with R code appendix.</li>
 </ul>
 <h4 id="assessment-criteria-option-a"><a class="header" href="#assessment-criteria-option-a">Assessment Criteria (Option A)</a></h4>
-<p><strong>Stating the problem.</strong> State your question clearly. Explain its
-scientific importance. Frame it as a causal question for a defined
-target population. Note that the question is outcome-wide: you ask how
-the exposure affects four wellbeing outcomes jointly, not one
-cherry-picked outcome. Explain the causal inference framework for
-non-specialists. Describe ethics or policy relevance. Confirm data are
-from the NZAVS-style simulator distributed in <code>causalworkshop</code> and that
-you use three waves.</p>
+<p><strong>Stating the problem.</strong> State your question clearly. Explain why it
+matters. Frame it as a causal question for a defined target population.
+Note that the question is outcome-wide: you ask how the exposure affects
+four wellbeing outcomes jointly, rather than picking one favourite
+outcome after looking at the results. Explain the causal inference
+framework for non-specialists. Describe any practical or ethical
+relevance. Confirm data are from the NZAVS-style simulator distributed
+in <code>causalworkshop</code> and that you use three waves.</p>
 <p><strong>Determining the outcomes.</strong> Define each outcome $Y_k$ for $k = 1,
 \dots, 4$. State the scale (continuous, z-scored), the timing (wave 2,
 post-exposure), and how each outcome relates to the question. Explain
@@ -610,23 +610,22 @@ accompanying table. Order outcomes by effect magnitude. Interpret the
 pattern as a whole, not outcome by outcome.</p>
 <p><strong>Subgroup identification with policy trees.</strong> This course studies
 comparative work. After estimating the four ATEs, fit a depth-2 policy
-tree per outcome using <code>margot</code> (Lab 9 walks through the workflow).
-Identify the subgroup for which the treatment effect is strongest.
-Translate the rule into plain language a non-specialist could repeat.
-Report the policy value with its 95% confidence interval, and note
-whether the depth-2 rule meaningfully improves on depth-1 (apply the
-parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a>).</p>
-<p><strong>Ethics statement.</strong> Devote one paragraph (about 150 words) to the
-ethical implications of acting on the policy tree. Address: (i) equity —
-whether targeting those who benefit <em>most</em> leaves out those who benefit
-<em>somewhat</em>; (ii) proxy variables — whether splits on covariates such as
-deprivation, income, age, or baseline wellbeing could affect social
-groups differently; (iii) governance — who would oversee deployment,
-what public objective would authorise the rule, and what override
-conditions a community organiser, clinician, or teacher would invoke.
-The model cannot decide what justice requires. State one value judgement
-the analysis depends on, then explain what evidence the model can and
-cannot provide.</p>
+tree per outcome using <code>margot</code> (Lab 9 walks through the steps).
+Identify the subgroup for which the estimated treatment effect is
+strongest. Translate the rule into plain language a non-specialist could
+repeat. Report the policy value with its 95% confidence interval, and
+note whether the depth-2 rule meaningfully improves on depth-1 (apply
+the parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a>).</p>
+<p><strong>Ethics statement.</strong> Devote one paragraph (about 150 words) to what
+would need to be considered before acting on the policy tree. Address:
+(i) fairness — whether targeting those who benefit <em>most</em> leaves out
+those who benefit <em>somewhat</em>; (ii) proxy variables — whether splits on
+covariates such as deprivation, income, age, or baseline wellbeing could
+affect social groups differently; (iii) oversight — who would check the
+rule, what public objective would justify it, and when a community
+organiser, clinician, or teacher should override it. The model cannot
+settle public values. State one value judgement the analysis depends on,
+then explain what evidence the model can and cannot provide.</p>
 <h3 id="option-b-marsden-fund-expression-of-interest-eoi"><a class="header" href="#option-b-marsden-fund-expression-of-interest-eoi">Option B: Marsden Fund Expression of Interest (EOI)</a></h3>
 <p>Write a first-round Marsden Fund Expression of Interest (EOI) following
 the RSNZ 2026 guidelines. Your research question must use the causal
@@ -701,45 +700,40 @@ This criterion carries substantial weight.</p>
 <p>For the full Marsden Fund assessment criteria, see the <a href="resources/MF-2026-EOI-Guidelines.pdf">RSNZ 2026 EOI
 Guidelines (pdf)</a>.</p>
 <h1 id="ai-use-in-this-course"><a class="header" href="#ai-use-in-this-course">AI use in this course</a></h1>
-<p>Students may use AI tools in this course. AI use is permitted, but not
-required.</p>
+<p>You may use AI tools in this course. You do not have to.</p>
 <blockquote>
 <p><strong>AI use policy</strong></p>
 <ul>
-<li>You may use AI for coding help, brainstorming, and editing for
-clarity.</li>
-<li>The best use of AI is to challenge your reasoning: ask it to find
-holes in your argument, push you to clearer thinking and writing,
-then push back when its suggestions are wrong or generic.</li>
+<li>You may use AI for coding help, brainstorming, and clearer writing.</li>
+<li>Use it as a critical reader: ask it to find holes in your argument,
+push you to clearer thinking, and point out vague wording. Push back
+when it gives bland or wrong advice.</li>
 <li>You are responsible for all submitted work. Verify all claims, code,
 and references.</li>
 <li>You must be able to explain your work in your own words.</li>
 <li>For lab diaries and the final report, add a short note if AI use is
 substantial (tool, date, and how it was used).</li>
-<li>If AI output materially shaped your submission, acknowledge it as a
-source.</li>
+<li>If AI output shaped your submission in an important way, acknowledge
+it as a source.</li>
 <li>AI tools are not permitted in in-class tests.</li>
 <li>Do not upload confidential, identifiable, or sensitive information.</li>
 </ul>
 </blockquote>
-<p>Good uses of AI while studying:</p>
+<p>Useful AI uses while studying:</p>
 <ol>
 <li>Ask for a plain-language explanation of a concept after you have
 checked the lecture notes.</li>
-<li>Ask for feedback on whether your answer states the target
-population, causal contrast, outcome, estimand, and assumptions.</li>
-<li>Ask it to identify places where your wording sounds associational
-when you mean causal.</li>
-<li>Ask it to generate a similar practice question, then answer that
-question yourself.</li>
+<li>Ask whether your answer states the target population, causal
+contrast, outcome, estimand, and assumptions.</li>
+<li>Ask where your wording sounds associational when you mean causal.</li>
+<li>Ask for a similar practice question, then answer that question
+yourself.</li>
 </ol>
-<p>Poor uses:</p>
+<p>Poor AI uses:</p>
 <ol>
 <li>Asking it to write an answer you have not attempted.</li>
-<li>Treating its answer as authoritative without checking the course
-materials.</li>
-<li>Letting it replace the causal workflow with generic statistics
-language.</li>
+<li>Trusting its answer without checking the course materials.</li>
+<li>Letting it swap the causal steps for vague statistics language.</li>
 <li>Using it to memorise phrases rather than understand the logic.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
@@ -865,11 +859,9 @@ Study Sheet</a>.</p>
 heterogeneity in clinical trials</em> article. These are the operational
 references for the analysis workflow used in Labs 8–10 and the research
 report.</p>
-<p><strong>Optional:</strong> (<a href="readings.html#ref-athey2019grf"><strong>athey2019grf?</strong></a>) (the original
-Generalised Random Forests paper); Wager &amp; Athey
-(<a href="readings.html#ref-wager2018">2018</a>) (causal forests theory); VanderWeele et al.
-(<a href="readings.html#ref-vanderweele2020">2020</a>) (measurement error and the potential
-outcomes framework — useful for the report).</p>
+<p><strong>Optional:</strong> Wager &amp; Athey (<a href="readings.html#ref-wager2018">2018</a>) (causal forests
+theory); VanderWeele et al. (<a href="readings.html#ref-vanderweele2020">2020</a>) (measurement
+error and the potential outcomes framework, useful for the report).</p>
 <h3 id="week-9-resource-allocation-and-policy-trees"><a class="header" href="#week-9-resource-allocation-and-policy-trees">Week 9: Resource allocation and policy trees</a></h3>
 <p><strong>Required:</strong> <a href="https://grf-labs.github.io/grf/">GRF documentation</a> — the
 <em>Policy Learning</em> article and the <em>Qini curve</em> article. Read alongside
@@ -3487,7 +3479,7 @@ the Qini curve around plausible coverage levels.</li>
 Week 9 fits and validates a shallow policy tree to answer this
 question.</li>
 </ol>
-<p>The pipeline below operationalises these questions:</p>
+<p>The pipeline below turns these questions into steps:</p>
 <ol>
 <li>Specify the causal estimand: treatment, time zero, target
 population, outcome, and identification assumptions.</li>
@@ -3522,7 +3514,8 @@ a budget of $q = 0.3$ (treating 30% of the population).</li>
 <li>State the causal estimand that the Qini addresses (what question
 does it answer beyond the ATE?).</li>
 <li>List two non-statistical reasons a decision-maker might choose not
-to target (consider ethics, logistics, or governance).</li>
+to target (for example, stigma, logistics, cost, or who gets to
+decide).</li>
 <li>A colleague argues "targeting lonely students for a socialising
 programme is stigmatising." Draft a two-sentence response that
 takes the concern seriously while explaining what the evidence
@@ -3784,8 +3777,8 @@ rule in one sentence of plain language.</li>
 <li>The depth-2 rule lifts policy value by $0.028$ over the depth-1
 rule. For $10,000$ eligible people, describe what a small
 average lift can mean at population scale.</li>
-<li>Name one reason to deploy the depth-1 rule despite the lift.</li>
-<li>Name one reason to deploy the depth-2 rule.</li>
+<li>Name one reason to use the depth-1 rule despite the lift.</li>
+<li>Name one reason to use the depth-2 rule.</li>
 <li>State what extra evidence would make you more comfortable choosing
 the depth-2 rule.</li>
 </ol>
@@ -3807,11 +3800,11 @@ unstable, even if any single fit looks reasonable. Second, the policy
 value's confidence interval reflects only sampling noise. Model
 misspecification, residual confounding, and measurement error sit
 outside the interval. Sensitivity analysis on the underlying causal
-estimates and equity audits on the rule itself (below) carry the rest of
-the inferential burden.</p>
+estimates and checks on the rule itself (below) carry the rest of the
+inferential burden.</p>
 <p>If the held-out value is statistically reliably above the no-treatment
-baseline, the rule is worth considering for deployment. If the held-out
-value is indistinguishable from random allocation, the rule is not. The
+baseline, the rule is worth considering. If the held-out value is
+indistinguishable from random allocation, the rule is not. The
 <strong>policy_value_audit</strong> that <code>margot_policy_workflow()</code> returns flags
 both cases automatically.</p>
 <h2 id="practical-interpretation"><a class="header" href="#practical-interpretation">Practical interpretation</a></h2>
@@ -3875,10 +3868,10 @@ causal explanation lies upstream.</p>
 <p>The practical rule is: use HETs for description, targeting, and
 hypothesis generation. Do not read a splitter as a cause without a
 separate design that identifies the causal effect of that splitter.</p>
-<h2 id="equity-and-governance"><a class="header" href="#equity-and-governance">Equity and governance</a></h2>
-<p>Efficiency is not enough. A rule that maximises policy value can still
-be contested, opaque, or politically untenable. Three structural
-concerns recur.</p>
+<h2 id="fairness-and-public-judgement"><a class="header" href="#fairness-and-public-judgement">Fairness and public judgement</a></h2>
+<p>Efficiency is not the only consideration. A rule that maximises policy
+value can still be hard to explain, hard to apply, or unacceptable to
+the people affected by it. Three concerns recur.</p>
 <p>Proxy variables can affect social groups differently. A split on
 deprivation, income, postcode, age, or baseline wellbeing may reproduce
 group differences even when group membership is not used explicitly.
@@ -3886,17 +3879,14 @@ Removing an explicit variable does not remove its proxies.</p>
 <p>Targeting concentrates resources on those who benefit most, by design.
 People who would benefit <em>somewhat</em> from the intervention receive
 nothing under a tight budget. That trade-off may be defensible, but it
-is a value choice made on behalf of the affected community, and it
-should be acknowledged in the writeup rather than concealed inside an
+is a value choice. State it plainly rather than hiding it inside an
 objective function.</p>
-<p>Statistical evidence can inform public judgement; it cannot replace it.
-Statisticians and psychologists can estimate benefits, harms,
-uncertainty, and subgroup patterns. They do not get to legislate
-justice. In a democracy, citizens and institutions debate and vote about
-the values that govern public allocation. The analyst's job is to make
-the trade-offs visible and to avoid presenting an objective function as
-a public decision.</p>
-<p>Before deployment, investigators should check:</p>
+<p>Statistical evidence can inform public judgement. It cannot make the
+judgement for us. Statisticians and psychologists can estimate benefits,
+harms, uncertainty, and subgroup patterns. Public allocation also
+depends on values that citizens and institutions debate and decide. The
+analyst's job is to make the trade-offs visible.</p>
+<p>Before recommending a rule, investigators should check:</p>
 <ol>
 <li>Who gains and who loses?</li>
 <li>Are protected groups differentially affected through proxies?</li>
@@ -3904,14 +3894,14 @@ a public decision.</p>
 <li>Can affected communities understand and contest the rule?</li>
 </ol>
 <blockquote>
-<p><strong>Pair exercise: equity audit</strong></p>
+<p><strong>Pair exercise: fairness check</strong></p>
 <p>A policy tree treats residents who are high-deprivation and under 40.</p>
 <ol>
 <li>Translate the rule into plain language.</li>
 <li>Explain how the deprivation split can affect social groups
 differently even when group membership is not used.</li>
 <li>Name the table you would compute to check this empirically.</li>
-<li>Apply two governance checks from the list above.</li>
+<li>Apply two checks from the list above.</li>
 <li>Name one value judgement the model cannot settle.</li>
 <li>Your partner says "the algorithm is objective because it only uses
 data." Counter this claim in two sentences.</li>
@@ -3926,7 +3916,7 @@ constraints.</li>
 value with a confidence interval.</li>
 <li>Examine stability across train-test splits and reject unstable rules
 even when any single fit looks reasonable.</li>
-<li>Conduct an equity audit before recommending deployment.</li>
+<li>Conduct a fairness check before recommending a rule.</li>
 <li>Report trade-offs: value, fairness, transparency, and feasibility.</li>
 </ol>
 <h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
@@ -3950,12 +3940,11 @@ compact grant style only; follow the current criteria in
 <a href="assessments.html">Assessments</a>.</li>
 </ol>
 <h2 id="return-to-the-opening-example-6"><a class="header" href="#return-to-the-opening-example-6">Return to the opening example</a></h2>
-<p>Back to the district health board. The right question is not "what rule
-maximises sample gain?" The right question is "what rule performs
-robustly out of sample, under realistic budget constraints, and remains
-acceptable under equity and governance standards?" Those four conditions
-are what move a tree from a slide in a methods talk to a deployable rule
-in a clinic.</p>
+<p>Back to the district health board. The question is not only "what rule
+maximises sample gain?" The question is also whether the rule works out
+of sample, fits the budget, can be explained, and is acceptable to the
+people who would live with it. That is what moves a tree from a slide in
+a methods talk to a rule a clinic might actually use.</p>
 <p>The workflow from question to policy rule is now in place. One
 assumption has been present throughout but never examined: that our
 instruments measure the same construct across the groups we compare.
@@ -3971,8 +3960,8 @@ explainability to a non-technical audience, and (c) ability to
 answer "why was I selected?"</li>
 <li>State one scenario where Strategy A (pure ranking) is preferable.</li>
 <li>State one scenario where Strategy B (policy tree) is preferable.</li>
-<li>State one equity question both strategies must answer before
-deployment.</li>
+<li>State one fairness question both strategies must answer before
+anyone uses them.</li>
 </ol>
 </blockquote>
 <hr />
@@ -7408,24 +7397,21 @@ rank are an honest measure of how much information the forest extracted
 from a finite sample.</p>
 <h2 id="ethical-considerations"><a class="header" href="#ethical-considerations">Ethical considerations</a></h2>
 <blockquote>
-<p><strong>Statistical optimality is not social optimality</strong></p>
-<p>A policy tree maximises expected treatment benefit, but it does not
-account for:</p>
+<p><strong>A high-value rule still needs judgement</strong></p>
+<p>A policy tree maximises expected treatment benefit under the objective
+you give it. Before anyone acts on it, ask:</p>
 <ul>
-<li><strong>Fairness.</strong> The tree may split on variables correlated with
-protected characteristics (ethnicity, gender, socioeconomic status).
-Even if a variable is not in the covariate set, proxy variables may
-reproduce discriminatory patterns.</li>
-<li><strong>Equity.</strong> Targeting resources to those who benefit <em>most</em> may mean
-those who benefit <em>somewhat</em> receive nothing. A policy that is
-statistically optimal may be socially unjust.</li>
-<li><strong>Transparency.</strong> A depth-2 tree is interpretable; a depth-5 tree is
-not. Policy-makers and the public need to understand the rule.</li>
-<li><strong>Override.</strong> A clinician or social worker should always be able to
-override an algorithmic recommendation based on individual context
-the model cannot see.</li>
+<li><strong>Proxy variables.</strong> Does the tree split on variables correlated
+with protected characteristics such as ethnicity, gender, or
+socioeconomic status?</li>
+<li><strong>Fairness.</strong> Does targeting those who benefit <em>most</em> leave out
+people who would still benefit?</li>
+<li><strong>Transparency.</strong> Can a community organiser, teacher, clinician, or
+member of the public understand the rule?</li>
+<li><strong>Override.</strong> When should someone override the rule because they
+know relevant context the model cannot see?</li>
 </ul>
-<p>When presenting policy tree results, always discuss these trade-offs.</p>
+<p>When presenting policy tree results, discuss these trade-offs plainly.</p>
 </blockquote>
 <h2 id="exercises-3"><a class="header" href="#exercises-3">Exercises</a></h2>
 <blockquote>
@@ -7443,7 +7429,7 @@ discrepancy.</p>
 <li>
 <p><strong>Read a single policy tree.</strong> Pick one of the four outcomes.
 Translate its depth-2 policy tree into a plain-language rule a
-non-technical reader could follow. Then state one substantive
+non-technical reader could follow. Then state one practical
 limitation of that rule.</p>
 </li>
 <li>
@@ -7852,7 +7838,7 @@ into files you can work on.</p>
 <ol>
 <li><strong>Test 2 notes sheet.</strong> Build one A4 page around the workflow:
 estimand, identification assumptions, heterogeneity test, policy
-tree, equity audit, measurement check. Practise from the <a href="test-2-study-prompts.html">Test 2
+tree, fairness check, measurement check. Practise from the <a href="test-2-study-prompts.html">Test 2
 practice questions</a>.</li>
 <li><strong>Option A report.</strong> Copy the <a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-assets/research-report-template.zip">research-report
 template</a>,
@@ -7903,7 +7889,7 @@ with more than one correct answer). Part 2 is short answer (choose 4 of
 <div style="break-before: page; page-break-before: always;"></div><h1 id="test-2-practice-questions"><a class="header" href="#test-2-practice-questions">Test 2 Practice Questions</a></h1>
 <p>Use these questions to practise for Test 2. They cover the same topic
 blocks as the test: heterogeneous treatment effects, policy trees and
-equity, outcome-wide reporting, and measurement.</p>
+judgement, outcome-wide reporting, and measurement.</p>
 <p>Write short answers without notes first. Then check your answer against
 the relevant lecture, lab, <a href="reporting-guide.html">Reporting Guide</a>, and
 <a href="test-2-study-sheet.html">Test 2 Study Sheet</a>.</p>
@@ -7930,7 +7916,7 @@ noisy in regions of the covariate space with little data?</li>
 <li>A reviewer says "If the heterogeneity is real, a regression with the
 right interaction terms will find it." Reply in two sentences.</li>
 </ol>
-<h2 id="policy-trees-equity-and-democratic-judgement-week-9"><a class="header" href="#policy-trees-equity-and-democratic-judgement-week-9">Policy Trees, Equity, and Democratic Judgement (Week 9)</a></h2>
+<h2 id="policy-trees-fairness-and-judgement-week-9"><a class="header" href="#policy-trees-fairness-and-judgement-week-9">Policy Trees, Fairness, and Judgement (Week 9)</a></h2>
 <ol>
 <li>State, in one or two sentences, what a policy tree does that a
 conditional average treatment effect estimate alone does not.</li>
@@ -7940,8 +7926,8 @@ slightly larger policy value?</li>
 <li>A depth-2 policy tree treats the leaf "deprivation index $&gt; 1.2$
 and age $\leq 40$". Translate this into a sentence a community
 organiser could repeat.</li>
-<li>Name three things you would check in an equity audit before
-deploying a policy tree.</li>
+<li>Name three things you would check before using a policy tree to
+allocate a programme.</li>
 <li>Explain how a split on deprivation can affect social groups
 differently even when group membership does not appear in the tree.</li>
 <li>State, in one or two sentences, why statistical evidence cannot by
@@ -7991,9 +7977,9 @@ four wellbeing outcomes using a causal forest. Set out the full
 causal workflow: estimands, identification assumptions, estimator,
 multiple-testing correction, sensitivity analysis, presentation.</li>
 <li>A community wellbeing programme has a fixed budget. Walk through the
-steps from conditional average treatment effect estimation to
-deployable allocation rule, naming the equity audit and one value
-judgement the model cannot settle.</li>
+steps from conditional average treatment effect estimation to an
+allocation rule, naming the fairness check and one value judgement
+the model cannot settle.</li>
 <li>A cross-cultural study uses the K6 to compare the effect of a
 school-based mindfulness intervention in two countries. Identify the
 measurement, treatment-version, and identification threats, and
@@ -8062,13 +8048,13 @@ heterogeneity that a small regression interaction set would miss,
 though the forest still needs validation.</p>
 </li>
 </ol>
-<h2 id="policy-trees-equity-and-democratic-judgement"><a class="header" href="#policy-trees-equity-and-democratic-judgement">Policy Trees, Equity, and Democratic Judgement</a></h2>
+<h2 id="policy-trees-fairness-and-judgement"><a class="header" href="#policy-trees-fairness-and-judgement">Policy Trees, Fairness, and Judgement</a></h2>
 <ol>
 <li>
 <p>A policy tree converts estimated treatment-effect heterogeneity into
 a simple allocation rule: for these covariates, treat; for those
 covariates, do not treat. A CATE estimate ranks or scores people,
-but it is not yet a deployable rule.</p>
+but it is not yet a rule someone can use.</p>
 </li>
 <li>
 <p>Prefer the simpler tree unless the deeper tree gives a meaningfully
@@ -8081,11 +8067,11 @@ be misapplied.</p>
 1.2 and who are aged 40 or younger.</p>
 </li>
 <li>
-<p>A strong equity audit could check: the treatment share across
-relevant social groups; whether split variables are proxies for
-sensitive characteristics; whether groups with similar need receive
-similar access; whether the rule is stable across resamples; and
-whether there is an override or appeal pathway.</p>
+<p>A strong fairness check could ask: what share of each relevant
+social group receives the programme; whether split variables are
+proxies for sensitive characteristics; whether people with similar
+need receive similar access; whether the rule is stable across
+resamples; and whether there is an override or appeal pathway.</p>
 </li>
 <li>
 <p>Deprivation is correlated with many social conditions, such as
@@ -8094,8 +8080,8 @@ ethnicity. A rule that uses deprivation may therefore allocate
 treatment unevenly across groups even if group membership is not in
 the tree. The split is descriptive: deprivation may be the strongest
 measured marker even if the root causes of the heterogeneity lie
-upstream, for example in ethnic injustice, housing policy,
-labour-market exclusion, or other causes of deprivation.</p>
+upstream, for example in housing policy, labour-market exclusion,
+discrimination, or other causes of deprivation.</p>
 </li>
 <li>
 <p>Statistical evidence can estimate expected benefits, uncertainty,
@@ -8214,10 +8200,10 @@ and presents a forest plot plus table.</p>
 real, choose a realistic budget, compare targeting value using
 held-out scores, fit shallow policy trees, evaluate held-out policy
 value and stability, and translate the rule into plain language. The
-equity audit should check group treatment shares, proxy variables,
-need, and override procedures. The model cannot decide whether the
-allocation should prioritise total benefit, equal access, greatest
-need, cost control, or another public value.</p>
+fairness check should consider group treatment shares, proxy
+variables, need, and override procedures. The model cannot decide
+whether the allocation should prioritise total benefit, equal
+access, greatest need, cost control, or another public value.</p>
 </li>
 <li>
 <p>Measurement threat: the K6 may not be invariant across countries;
@@ -8487,8 +8473,8 @@ analyses. Transparent reasoning is a scientific result in its own right.</p>
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="assessment-self-checks"><a class="header" href="#assessment-self-checks">Assessment Self-Checks</a></h1>
 <p>Use these checks when preparing for Test 2, the presentation, and the
-research report. They are designed to keep your answers inside the
-causal framework taught in the course.</p>
+research report. They keep you focused on the causal framework taught in
+the course.</p>
 <p>Test 2 is in class, on paper, with no devices and no AI tools. The
 important work is yours: state the target population, causal contrast,
 outcome, estimand, assumptions, and limits.</p>
@@ -8508,10 +8494,10 @@ outcome across people, groups, treatment states, and time.</li>
 </ol>
 <p>If you cannot state these pieces, the analysis is not yet interpretable.</p>
 <h2 id="hte-and-policy-tree-check"><a class="header" href="#hte-and-policy-tree-check">HTE and Policy Tree Check</a></h2>
-<p>Heterogeneous treatment effect (HTE) methods help describe how estimated
+<p>Heterogeneous treatment effect (HTE) methods describe how estimated
 treatment effects vary across measured covariates. Policy trees turn
-those estimates into simple allocation rules. They are useful, but easy
-to over-interpret.</p>
+those estimates into simple allocation rules. They are useful, and easy
+to over-read.</p>
 <p>Before reporting HTE or policy tree results, check:</p>
 <ol>
 <li><strong>Outcome:</strong> which outcome the rule is for. A rule for one outcome
@@ -8528,9 +8514,9 @@ positivity.</li>
 depth-1. Prefer the simpler rule unless the improvement is clear.</li>
 <li><strong>Uncertainty:</strong> whether the policy value and subgroup effects have
 confidence intervals.</li>
-<li><strong>Governance:</strong> what value judgement authorises the allocation rule.
+<li><strong>Oversight:</strong> what value judgement authorises the allocation rule.
 The model can estimate who appears to benefit more; it cannot decide
-what justice requires.</li>
+which public value should win.</li>
 </ol>
 <p>Useful wording:</p>
 <blockquote>
@@ -8570,14 +8556,12 @@ measurement assumption is it meant to support, and what alternative
 explanation does it fail to rule out?</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reporting-guide"><a class="header" href="#reporting-guide">Reporting Guide</a></h1>
-<p>This guide covers how to report results from causal inference analyses.
-It follows the ten-step causal workflow and demonstrates best practices
-for communicating average treatment effects, heterogeneous effects, and
-sensitivity analyses. This resource directly supports the research
-report assessment (40%).</p>
+<p>This guide shows what to report in the research report. Use it as a
+checklist for average treatment effects, heterogeneous effects, policy
+trees, and sensitivity analyses.</p>
 <hr />
-<h2 id="the-ten-step-causal-inference-workflow"><a class="header" href="#the-ten-step-causal-inference-workflow">The ten-step causal inference workflow</a></h2>
-<p>Before reporting results, ensure each step has been addressed.</p>
+<h2 id="the-ten-step-causal-inference-checklist"><a class="header" href="#the-ten-step-causal-inference-checklist">The ten-step causal inference checklist</a></h2>
+<p>Before reporting results, check that each piece is in place.</p>
 <h3 id="steps-03-problem-definition"><a class="header" href="#steps-03-problem-definition">Steps 0–3: problem definition</a></h3>
 <ol>
 <li><strong>Well-defined treatment.</strong> Specify the exposure precisely,
@@ -8592,21 +8576,22 @@ any weighting for population representativeness.</li>
 </ol>
 <h3 id="steps-46-identification-strategy"><a class="header" href="#steps-46-identification-strategy">Steps 4–6: identification strategy</a></h3>
 <ol>
-<li><strong>Exchangeability.</strong> Describe how conditional independence was
-achieved (e.g., "rich baseline covariate control including 32
-covariates").</li>
+<li><strong>Exchangeability.</strong> Describe the baseline covariates you adjust for
+and why they are enough, under your causal directed acyclic graph
+(causal DAG).</li>
 <li><strong>Consistency.</strong> Explain why the treatment is well-defined and
 uniform across individuals.</li>
-<li><strong>Positivity.</strong> Report verification through transition tables
-showing exposure variation across covariate strata.</li>
+<li><strong>Positivity.</strong> Report checks showing that both exposure levels
+appear across the relevant covariate patterns.</li>
 </ol>
 <h3 id="steps-79-implementation"><a class="header" href="#steps-79-implementation">Steps 7–9: implementation</a></h3>
 <ol>
-<li><strong>Measurement validity.</strong> Note the psychometric properties of
-outcome scales.</li>
+<li><strong>Measurement.</strong> Explain how the outcome is measured and any
+assumptions needed for the measure to mean the same thing across
+people, groups, and time.</li>
 <li><strong>Attrition handling.</strong> Describe how panel dropout was addressed
 (e.g., inverse probability of censoring weights).</li>
-<li><strong>Transparent reporting.</strong> Document all analytical decisions and
+<li><strong>Transparent reporting.</strong> Document the analysis choices and
 assumptions.</li>
 </ol>
 <blockquote>
@@ -8629,24 +8614,24 @@ $a=0$, conditional on baseline characteristics?"</p>
 <li><strong>Effect sizes</strong>: report in standard deviation units for continuous
 outcomes.</li>
 <li><strong>Confidence intervals</strong>: show uncertainty around each estimate.</li>
-<li><strong>E-values</strong>: indicate robustness to unmeasured confounding.</li>
+<li><strong>E-values</strong>: show how strong an unmeasured confounder would need to
+be to explain away the estimate.</li>
 <li><strong>Sample size</strong>: total analysed after exclusions and weighting.</li>
 </ol>
 <h3 id="example-results-text"><a class="header" href="#example-results-text">Example results text</a></h3>
 <blockquote>
-<p>"Weekly religious service attendance showed positive causal effects
-across all cooperation measures. The largest effects were observed for
-social outcomes: sense of belonging ($\beta = 0.18$, 95% CI:
-0.14–0.22) and social support ($\beta = 0.15$, 95% CI: 0.11–0.19).
-The E-values were above 1.6, meaning an unmeasured confounder would
-need to be associated with both attendance and these outcomes by a
-risk ratio of at least 1.6 each, above and beyond measured covariates,
-to explain away the estimates."</p>
+<p>"Weekly religious service attendance was estimated to improve all four
+wellbeing outcomes. The largest estimates were for sense of belonging
+($\beta = 0.18$, 95% CI: 0.14–0.22) and life satisfaction ($\beta =
+0.15$, 95% CI: 0.11–0.19). The E-values were above 1.6, meaning an
+unmeasured confounder would need to be associated with both attendance
+and these outcomes by a risk ratio of at least 1.6 each, above and
+beyond measured covariates, to explain away the estimates."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
 <h3 id="rate-results-summary"><a class="header" href="#rate-results-summary">RATE results summary</a></h3>
-<p>When heterogeneity is detected, report it systematically:</p>
+<p>When there is evidence of heterogeneity, report it plainly:</p>
 <div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>RATE-AUTOC</th><th>p-value</th><th>RATE-Qini</th><th>p-value</th><th>Evidence</th></tr></thead><tbody>
 <tr><td>Social support</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
 <tr><td>Belonging</td><td>0.15</td><td>0.001</td><td>0.11</td><td>0.004</td><td>Strong</td></tr>
@@ -8656,63 +8641,62 @@ to explain away the estimates."</p>
 </div>
 <h3 id="example-heterogeneity-text"><a class="header" href="#example-heterogeneity-text">Example heterogeneity text</a></h3>
 <blockquote>
-<p>"We found substantial heterogeneity in treatment effects for social
-outcomes (RATE-Qini &gt; 0.08, $p &lt; 0.05$), but limited heterogeneity
-for behavioural outcomes. This suggests that while religious service
-benefits most people socially, individual responses vary considerably
-in magnitude."</p>
+<p>"The RATE results suggest that treatment effects vary across people
+for belonging and life satisfaction. The evidence is weaker for the
+other outcomes. This means the average effect is not the whole story:
+some people appear to benefit more than others, though the split
+variables should be read as descriptive markers, not as identified
+causes of response."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
 <p>Present policy trees with both standardised and original-scale
 interpretations.</p>
-<h3 id="subgroup-identification-with-data-scale-effects"><a class="header" href="#subgroup-identification-with-data-scale-effects">Subgroup identification with data-scale effects</a></h3>
-<p><strong>High-response subgroups for charitable donations:</strong></p>
+<h3 id="subgroup-reporting-with-data-scale-effects"><a class="header" href="#subgroup-reporting-with-data-scale-effects">Subgroup reporting with data-scale effects</a></h3>
+<p><strong>High-response subgroups for life satisfaction:</strong></p>
 <ol>
-<li><strong>Older adults with high agreeableness</strong> (age &gt; 45, agreeableness
-&gt; +1 SD)
+<li><strong>Older adults with high baseline belonging</strong> (age &gt; 45, baseline
+belonging &gt; +1 SD)
 <ul>
 <li>Standardised effect: $\beta = 0.28$ (95% CI: 0.21–0.35)</li>
-<li>Data-scale effect: NZ$847 additional annual donations (95% CI:
-NZ$635–1,058)</li>
+<li>Data-scale effect: 0.42 points on a 1–7 life satisfaction scale
+(95% CI: 0.31–0.53)</li>
 <li>Sample proportion: 23%</li>
 </ul>
 </li>
-<li><strong>Parents with medium conscientiousness</strong> (parent = yes,
-conscientiousness &gt; 0)
+<li><strong>Younger adults with lower baseline purpose</strong> (age &lt;= 45, baseline
+purpose &lt; 0)
 <ul>
 <li>Standardised effect: $\beta = 0.22$ (95% CI: 0.16–0.28)</li>
-<li>Data-scale effect: NZ$665 additional annual donations (95% CI:
-NZ$484–846)</li>
+<li>Data-scale effect: 0.33 points on a 1–7 life satisfaction scale
+(95% CI: 0.24–0.42)</li>
 <li>Sample proportion: 31%</li>
 </ul>
 </li>
 <li><strong>All others</strong>
 <ul>
 <li>Standardised effect: $\beta = 0.08$ (95% CI: 0.04–0.12)</li>
-<li>Data-scale effect: NZ$242 additional annual donations (95% CI:
-NZ$121–363)</li>
+<li>Data-scale effect: 0.12 points on a 1–7 life satisfaction scale
+(95% CI: 0.06–0.18)</li>
 <li>Sample proportion: 46%</li>
 </ul>
 </li>
 </ol>
 <h3 id="example-policy-tree-text"><a class="header" href="#example-policy-tree-text">Example policy tree text</a></h3>
 <blockquote>
-<p>"Policy tree analysis identified two subgroups with enhanced treatment
-response for charitable donations. Older adults (45+) with high
-agreeableness showed the largest increase ($\beta = 0.28$ SD,
-equivalent to NZ$847 additional annual donations), representing 23%
-of the sample. In practical terms, targeted interventions toward these
-subgroups could generate 2.8–3.5 times more charitable giving than
-population-wide approaches."</p>
+<p>"The policy tree identified two subgroups with larger estimated gains
+in life satisfaction. Older adults (45+) with high baseline belonging
+had the largest estimate ($\beta = 0.28$ SD, about 0.42 points on a
+1–7 scale), representing 23% of the sample. This is a targeting
+result, not a claim that age or baseline belonging causes the
+treatment to work better."</p>
 </blockquote>
 <hr />
 <h2 id="sensitivity-analysis-e-values"><a class="header" href="#sensitivity-analysis-e-values">Sensitivity analysis: E-values</a></h2>
 <h3 id="interpretation"><a class="header" href="#interpretation">Interpretation</a></h3>
-<p>E-values quantify robustness to unmeasured confounding. The E-value is
-the minimum strength of association, on the risk ratio scale, that an
-unmeasured confounder would need with both the treatment and the outcome
-to explain away the observed effect.</p>
+<p>An E-value says how strong an unmeasured confounder would need to be, on
+the risk ratio scale, with both the treatment and the outcome to explain
+away the observed effect.</p>
 <p>There is no universal threshold at which an E-value becomes "safe".
 Interpret it against the study design, the covariates already measured,
 and plausible omitted causes in the setting. Report the E-value for the
@@ -8721,16 +8705,14 @@ explain what kind of unmeasured confounder would be needed for the
 result to disappear.</p>
 <h3 id="example-sensitivity-text"><a class="header" href="#example-sensitivity-text">Example sensitivity text</a></h3>
 <blockquote>
-<p>"To assess robustness to unmeasured confounding, we calculated
-E-values for all estimates. The observed effect on sense of belonging
-(E-value = 2.4) would require an unmeasured confounder associated with
-both religious service and belonging by a risk ratio of 2.4 each to
-explain away the result."</p>
+<p>"For sense of belonging, the E-value was 2.4. An unmeasured confounder
+would need to be associated with both religious service attendance and
+belonging by a risk ratio of 2.4 each, above and beyond the measured
+covariates, to explain away the estimate."</p>
 </blockquote>
 <hr />
 <h2 id="methods-section-template"><a class="header" href="#methods-section-template">Methods section template</a></h2>
-<p>A complete methods section following the ten-step workflow should
-include:</p>
+<p>A complete methods section should include:</p>
 <ol>
 <li><strong>Treatment definition</strong>: what the exposure is, how it is coded, and
 the contrast of interest.</li>
@@ -8740,14 +8722,14 @@ starts, and why that timing matches the intervention.</li>
 transformations applied.</li>
 <li><strong>Target population</strong>: sampling frame, weighting strategy,
 eligibility criteria.</li>
-<li><strong>Causal identification</strong>: covariates conditioned on, justification
-for conditional exchangeability.</li>
+<li><strong>Causal identification</strong>: covariates adjusted for, with a
+justification for conditional exchangeability.</li>
 <li><strong>Statistical analysis</strong>: estimation method, key tuning parameters
 (e.g., number of trees, minimum node size).</li>
 <li><strong>Attrition handling</strong>: censoring weights, stages of dropout
 addressed.</li>
-<li><strong>Heterogeneity assessment</strong>: RATE metrics, false discovery rate
-correction, policy tree depth.</li>
+<li><strong>Heterogeneity assessment</strong>: RATE metrics, policy tree depth,
+policy value, and uncertainty.</li>
 <li><strong>Sensitivity analysis</strong>: E-values for all primary estimates.</li>
 </ol>
 <hr />
@@ -8758,8 +8740,8 @@ correction, policy tree depth.</li>
 <li>Effect sizes with confidence intervals</li>
 <li>Sample sizes after exclusions and weighting</li>
 <li>E-values for sensitivity analysis</li>
-<li>Clear practical interpretation of effect magnitudes</li>
-<li>Subgroup sizes and effect magnifications</li>
+<li>Clear practical interpretation of effect sizes</li>
+<li>Subgroup sizes and subgroup estimates</li>
 <li>Target trial framework and causal question</li>
 <li>Explicit treatment and outcome definitions</li>
 </ul>
@@ -8786,71 +8768,76 @@ correction, policy tree depth.</li>
 <li>Provide plain-language interpretation alongside the tree.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="presentation-rubric-10"><a class="header" href="#presentation-rubric-10">Presentation Rubric (10%)</a></h1>
-<p>This rubric grades the in-class presentation in Week 12. The
-presentation is 10 minutes, with one panel question afterwards. You may
-use the whiteboard and paper notes; no slides, handouts, or devices.</p>
-<p>The talk is judged on four criteria, each weighted equally (2.5% per
-criterion). Each criterion is scored in one of four bands:</p>
+<p>This rubric is for the in-class presentation in Week 12. You have 10
+minutes, followed by one panel question. You may use the whiteboard and
+paper notes. No slides, handouts, or devices.</p>
+<p>The talk is marked on four criteria, each worth 2.5%. Each criterion is
+scored in one of four bands:</p>
 <ul>
 <li><strong>A range</strong> — 80–100% of the criterion mark.</li>
 <li><strong>B range</strong> — 65–79%.</li>
 <li><strong>C range</strong> — 50–64% (the pass band).</li>
 <li><strong>D / E</strong> — below 50% (fail).</li>
 </ul>
-<p>These bands map to Te Herenga Waka — Victoria University of Wellington's
-grade letters. For the full schedule, see the <a href="https://www.wgtn.ac.nz/students/study/progress/grades">VUW grades and grade
-point average
+<p>These bands map to Victoria Uni's grade letters. For the full schedule,
+see the <a href="https://www.wgtn.ac.nz/students/study/progress/grades">VUW grades and grade point average
 page</a>.</p>
-<p>The four criteria are independent: a talk can be excellent on causal
-reasoning and developing on "so what".</p>
+<p>The four criteria are marked separately. A talk can be strong on causal
+reasoning and still need work on the "so what".</p>
 <h2 id="what-we-look-for"><a class="header" href="#what-we-look-for">What we look for</a></h2>
-<p>A good presentation makes a non-specialist audience walk out
-understanding (i) what causal question you asked, (ii) how you propose
-to answer it, and (iii) why the answer would matter. The rubric below
-operationalises that.</p>
+<p>A good presentation leaves the audience clear on three things:</p>
+<ol>
+<li>What causal question did you ask?</li>
+<li>How would you answer it?</li>
+<li>Why would the answer matter?</li>
+</ol>
+<p>That is the job. No need to sound like a visiting professor from a
+conference dinner.</p>
 <hr />
 <h2 id="rubric"><a class="header" href="#rubric">Rubric</a></h2>
 <h3 id="1-clarity-and-structure-25"><a class="header" href="#1-clarity-and-structure-25">1. Clarity and structure (2.5%)</a></h3>
-<p>How readable is the talk? The criterion covers pacing, whiteboard work,
+<p>Can we follow the talk? This criterion covers pacing, whiteboard work,
 and signposting.</p>
 <div class="table-wrapper"><table><thead><tr><th>Band</th><th>Descriptor</th></tr></thead><tbody>
-<tr><td><strong>A range</strong></td><td>Opens with a one-sentence motivation a non-specialist can follow. Whiteboard work is uncluttered, legible, and used purposefully (not as a backdrop). Pacing fits the 10-minute window with time to spare. Each section flows into the next without backtracking.</td></tr>
-<tr><td><strong>B range</strong></td><td>Structure is followed; the audience can track where you are. Whiteboard work supports the talk but contains some clutter or unclear notation. Pacing slips slightly (under-time or rushing the close).</td></tr>
-<tr><td><strong>C range</strong></td><td>Audience can mostly follow but has to reconstruct the order. Whiteboard work is hard to read or under-used. Pacing forces the speaker to skip sections or run over.</td></tr>
-<tr><td><strong>D / E</strong></td><td>Talk is hard to follow. Whiteboard is a wall of text or barely used. Speaker runs out of time before reaching the answer.</td></tr>
+<tr><td><strong>A range</strong></td><td>Opens with a plain one-sentence motivation. The whiteboard is tidy, legible, and useful. The talk fits the 10-minute slot with a little room to breathe. Each part follows naturally from the last.</td></tr>
+<tr><td><strong>B range</strong></td><td>The structure is clear enough to follow. The whiteboard helps, though it has some clutter or unclear notation. Pacing slips a little, usually by rushing the end.</td></tr>
+<tr><td><strong>C range</strong></td><td>The audience can mostly follow, but has to do some of the organising. The whiteboard is hard to read or not used enough. Timing causes important parts to be skipped or crammed.</td></tr>
+<tr><td><strong>D / E</strong></td><td>The talk is hard to follow. The whiteboard is a wall of text, or almost empty. The speaker runs out of time before reaching the answer.</td></tr>
 </tbody></table>
 </div>
 <h3 id="2-causal-reasoning-25"><a class="header" href="#2-causal-reasoning-25">2. Causal reasoning (2.5%)</a></h3>
-<p>Does the talk handle the causal logic correctly? This criterion is
-course-specific and carries weight equal to clarity.</p>
+<p>Does the talk get the causal logic right? This is the course-specific
+part of the mark.</p>
 <div class="table-wrapper"><table><thead><tr><th>Band</th><th>Descriptor</th></tr></thead><tbody>
-<tr><td><strong>A range</strong></td><td>Causal question is well-defined: target population, exposure with a clear contrast, and outcome(s) all named precisely. The causal estimand is stated (e.g. average treatment effect) and distinguished from the statistical estimand. The DAG identifies a sufficient adjustment set; identification assumptions (consistency, positivity, conditional exchangeability) are named and defended.</td></tr>
-<tr><td><strong>B range</strong></td><td>Question, exposure, and outcome are clear. DAG is present and largely correct. Identification assumptions are mentioned; one assumption is glossed or imprecise. Estimand is stated but not always distinguished from the statistical quantity.</td></tr>
-<tr><td><strong>C range</strong></td><td>Causal question is implicit rather than stated. DAG is present but missing key edges or confounders. Identification language is inconsistent (e.g. "predicts" used for a causal claim).</td></tr>
-<tr><td><strong>D / E</strong></td><td>Question is conflated with the statistical model. DAG is missing or incorrect. Causal language is undisciplined throughout.</td></tr>
+<tr><td><strong>A range</strong></td><td>States the causal question clearly: target population, exposure contrast, and outcome(s). Names the causal estimand, such as the average treatment effect, and keeps it separate from the statistical estimate. Uses the directed acyclic graph (DAG) to justify the adjustment set. Names and defends consistency, positivity, and conditional exchangeability.</td></tr>
+<tr><td><strong>B range</strong></td><td>The question, exposure, and outcome are clear. The DAG is present and mostly right. Identification assumptions are mentioned, though one is a bit thin or vague. The estimand is stated but sometimes blurred with the estimate.</td></tr>
+<tr><td><strong>C range</strong></td><td>The causal question is implied rather than stated. The DAG is there, but misses important arrows or confounders. Causal language slips, for example using "predicts" when the claim is causal.</td></tr>
+<tr><td><strong>D / E</strong></td><td>The causal question is treated as if it were just a statistical model. The DAG is missing or wrong. Causal language is loose throughout.</td></tr>
 </tbody></table>
 </div>
 <h3 id="3-so-what--including-subgroup-and-ethics-25"><a class="header" href="#3-so-what--including-subgroup-and-ethics-25">3. So what — including subgroup and ethics (2.5%)</a></h3>
-<p>Why should anyone outside the room care? This is the criterion most
-talks under-serve. Because the course studies comparative work, your "so
-what" should also identify the subgroup for which the treatment effect
-is strongest (from your policy tree) and one ethical consideration that
-would shape deployment.</p>
+<p>Why should anyone outside the room care? This is the bit students most
+often leave too late. Because this course studies differences across
+people and groups, your "so what" should name the subgroup with the
+strongest estimated treatment effect (from your policy tree) and one
+practical or ethical issue that would matter before anyone acted on the
+result.</p>
 <div class="table-wrapper"><table><thead><tr><th>Band</th><th>Descriptor</th></tr></thead><tbody>
-<tr><td><strong>A range</strong></td><td>Names the population the result speaks to, the magnitude that would count as decision-relevant, the decision-maker who could act on it, and the assumption that, if false, would change the recommendation. Identifies the strongest-response subgroup in plain language and notes one equity, proxy-variable, or governance consideration that bears on deployment.</td></tr>
-<tr><td><strong>B range</strong></td><td>Names a plausible audience and decision. Magnitude is mentioned but not anchored to a real-world unit. The strongest-response subgroup is named but the ethical consideration is gestured at rather than spelled out.</td></tr>
-<tr><td><strong>C range</strong></td><td>Asserts importance without naming who acts on the result. Subgroup or ethics treated as an aside. "So what" is generic ("this is important for wellbeing") rather than specific.</td></tr>
-<tr><td><strong>D / E</strong></td><td>"So what" is absent or replaced by a statement that the topic is interesting. No subgroup or ethics content.</td></tr>
+<tr><td><strong>A range</strong></td><td>Names the population, the size of effect that would matter in practice, who might act on the result, and the assumption that would change the conclusion if it failed. Describes the strongest-response subgroup in plain language. Names one issue such as fairness, proxy variables, consent, cost, or who gets to decide.</td></tr>
+<tr><td><strong>B range</strong></td><td>Names a plausible audience and decision. Mentions the size of the effect, but does not anchor it well. Names the strongest-response subgroup. The practical or ethical issue is present, but needs more detail.</td></tr>
+<tr><td><strong>C range</strong></td><td>Says the result is important without saying who would use it. Subgroup or ethics is tacked on at the end. The "so what" is generic, for example "this matters for wellbeing".</td></tr>
+<tr><td><strong>D / E</strong></td><td>The "so what" is missing, or just says the topic is interesting. No subgroup content and no practical or ethical issue.</td></tr>
 </tbody></table>
 </div>
 <h3 id="4-response-to-the-panel-question-25"><a class="header" href="#4-response-to-the-panel-question-25">4. Response to the panel question (2.5%)</a></h3>
-<p>How well does the speaker handle one challenge after the talk? You may
-ask one brief clarifying question before answering.</p>
+<p>How well does the speaker handle one question after the talk? You may
+ask one brief clarifying question before answering. This is not a trap;
+it is a chance to show you understand your own argument.</p>
 <div class="table-wrapper"><table><thead><tr><th>Band</th><th>Descriptor</th></tr></thead><tbody>
-<tr><td><strong>A range</strong></td><td>Listens to the question, restates it briefly to check understanding, and gives a direct answer. Where the answer is uncertain, the speaker says so and names what evidence would resolve it. The response engages the substance of the challenge rather than restating prepared material.</td></tr>
-<tr><td><strong>B range</strong></td><td>Answers the question asked. Some restating of prepared material; some hedging. Acknowledges uncertainty where present.</td></tr>
-<tr><td><strong>C range</strong></td><td>Partially answers; speaker drifts into adjacent prepared material. Uncertainty is hidden rather than acknowledged.</td></tr>
-<tr><td><strong>D / E</strong></td><td>Cannot engage the question. Repeats earlier slides without addressing the challenge, or answers a different question.</td></tr>
+<tr><td><strong>A range</strong></td><td>Listens to the question, checks understanding briefly, and answers directly. If the answer is uncertain, says so and names what evidence would help. The response deals with the question rather than replaying the talk.</td></tr>
+<tr><td><strong>B range</strong></td><td>Answers the question asked. Some prepared material comes back in, but the answer still lands. Acknowledges uncertainty where needed.</td></tr>
+<tr><td><strong>C range</strong></td><td>Partly answers, then drifts into nearby prepared material. Uncertainty is hidden or talked around.</td></tr>
+<tr><td><strong>D / E</strong></td><td>Does not really answer the question. Repeats earlier material or answers a different question.</td></tr>
 </tbody></table>
 </div>
 <hr />
@@ -8871,7 +8858,7 @@ E-values say a confounder would need to be associated with both
 attendance and the outcomes by a risk ratio of at least 1.6 to do
 that."</p>
 </blockquote>
-<p>This answer names: the population (adults who currently attend less
+<p>This answer names the population (adults who currently attend less
 often), the magnitude (a tenth of a standard deviation, four outcomes),
 the decision-maker (a public-health body), the decision (whether to fund
 community programmes), and the assumption that would change the answer
@@ -8882,17 +8869,19 @@ community programmes), and the assumption that would change the answer
 <li>Spending the first three minutes on background and never reaching the
 estimand.</li>
 <li>Drawing the DAG without naming the adjustment set it implies.</li>
-<li>Reporting only standardised effects with no anchor to a decision.</li>
-<li>Reading from notes verbatim instead of using them as a prompt.</li>
-<li>Treating the panel question as a hostile attack rather than an
-invitation to clarify.</li>
+<li>Reporting only standardised effects, with no sense of whether the
+effect is big enough to matter.</li>
+<li>Reading from notes word for word. Notes are allowed; karaoke is not
+the goal.</li>
+<li>Treating the panel question as a personal attack. It is just part of
+the assessment.</li>
 </ul>
 <hr />
 <h2 id="practical-checklist-1"><a class="header" href="#practical-checklist-1">Practical checklist</a></h2>
 <blockquote>
 <p><strong>Preparation</strong></p>
 <ul>
-<li>Rehearse the opening sentence until it lands cleanly.</li>
+<li>Rehearse the opening sentence until it is short and clear.</li>
 <li>Plan the whiteboard layout in advance (left third for the DAG,
 centre for the estimand, right for the result).</li>
 <li>Time yourself: aim for eight minutes, leaving two for breathing

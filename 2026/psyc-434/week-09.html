@@ -456,8 +456,8 @@ rule in one sentence of plain language.</li>
 <li>The depth-2 rule lifts policy value by $0.028$ over the depth-1
 rule. For $10,000$ eligible people, describe what a small
 average lift can mean at population scale.</li>
-<li>Name one reason to deploy the depth-1 rule despite the lift.</li>
-<li>Name one reason to deploy the depth-2 rule.</li>
+<li>Name one reason to use the depth-1 rule despite the lift.</li>
+<li>Name one reason to use the depth-2 rule.</li>
 <li>State what extra evidence would make you more comfortable choosing
 the depth-2 rule.</li>
 </ol>
@@ -479,11 +479,11 @@ unstable, even if any single fit looks reasonable. Second, the policy
 value's confidence interval reflects only sampling noise. Model
 misspecification, residual confounding, and measurement error sit
 outside the interval. Sensitivity analysis on the underlying causal
-estimates and equity audits on the rule itself (below) carry the rest of
-the inferential burden.</p>
+estimates and checks on the rule itself (below) carry the rest of the
+inferential burden.</p>
 <p>If the held-out value is statistically reliably above the no-treatment
-baseline, the rule is worth considering for deployment. If the held-out
-value is indistinguishable from random allocation, the rule is not. The
+baseline, the rule is worth considering. If the held-out value is
+indistinguishable from random allocation, the rule is not. The
 <strong>policy_value_audit</strong> that <code>margot_policy_workflow()</code> returns flags
 both cases automatically.</p>
 <h2 id="practical-interpretation"><a class="header" href="#practical-interpretation">Practical interpretation</a></h2>
@@ -547,10 +547,10 @@ causal explanation lies upstream.</p>
 <p>The practical rule is: use HETs for description, targeting, and
 hypothesis generation. Do not read a splitter as a cause without a
 separate design that identifies the causal effect of that splitter.</p>
-<h2 id="equity-and-governance"><a class="header" href="#equity-and-governance">Equity and governance</a></h2>
-<p>Efficiency is not enough. A rule that maximises policy value can still
-be contested, opaque, or politically untenable. Three structural
-concerns recur.</p>
+<h2 id="fairness-and-public-judgement"><a class="header" href="#fairness-and-public-judgement">Fairness and public judgement</a></h2>
+<p>Efficiency is not the only consideration. A rule that maximises policy
+value can still be hard to explain, hard to apply, or unacceptable to
+the people affected by it. Three concerns recur.</p>
 <p>Proxy variables can affect social groups differently. A split on
 deprivation, income, postcode, age, or baseline wellbeing may reproduce
 group differences even when group membership is not used explicitly.
@@ -558,17 +558,14 @@ Removing an explicit variable does not remove its proxies.</p>
 <p>Targeting concentrates resources on those who benefit most, by design.
 People who would benefit <em>somewhat</em> from the intervention receive
 nothing under a tight budget. That trade-off may be defensible, but it
-is a value choice made on behalf of the affected community, and it
-should be acknowledged in the writeup rather than concealed inside an
+is a value choice. State it plainly rather than hiding it inside an
 objective function.</p>
-<p>Statistical evidence can inform public judgement; it cannot replace it.
-Statisticians and psychologists can estimate benefits, harms,
-uncertainty, and subgroup patterns. They do not get to legislate
-justice. In a democracy, citizens and institutions debate and vote about
-the values that govern public allocation. The analyst's job is to make
-the trade-offs visible and to avoid presenting an objective function as
-a public decision.</p>
-<p>Before deployment, investigators should check:</p>
+<p>Statistical evidence can inform public judgement. It cannot make the
+judgement for us. Statisticians and psychologists can estimate benefits,
+harms, uncertainty, and subgroup patterns. Public allocation also
+depends on values that citizens and institutions debate and decide. The
+analyst's job is to make the trade-offs visible.</p>
+<p>Before recommending a rule, investigators should check:</p>
 <ol>
 <li>Who gains and who loses?</li>
 <li>Are protected groups differentially affected through proxies?</li>
@@ -576,14 +573,14 @@ a public decision.</p>
 <li>Can affected communities understand and contest the rule?</li>
 </ol>
 <blockquote>
-<p><strong>Pair exercise: equity audit</strong></p>
+<p><strong>Pair exercise: fairness check</strong></p>
 <p>A policy tree treats residents who are high-deprivation and under 40.</p>
 <ol>
 <li>Translate the rule into plain language.</li>
 <li>Explain how the deprivation split can affect social groups
 differently even when group membership is not used.</li>
 <li>Name the table you would compute to check this empirically.</li>
-<li>Apply two governance checks from the list above.</li>
+<li>Apply two checks from the list above.</li>
 <li>Name one value judgement the model cannot settle.</li>
 <li>Your partner says "the algorithm is objective because it only uses
 data." Counter this claim in two sentences.</li>
@@ -598,7 +595,7 @@ constraints.</li>
 value with a confidence interval.</li>
 <li>Examine stability across train-test splits and reject unstable rules
 even when any single fit looks reasonable.</li>
-<li>Conduct an equity audit before recommending deployment.</li>
+<li>Conduct a fairness check before recommending a rule.</li>
 <li>Report trade-offs: value, fairness, transparency, and feasibility.</li>
 </ol>
 <h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
@@ -622,12 +619,11 @@ compact grant style only; follow the current criteria in
 <a href="assessments.html">Assessments</a>.</li>
 </ol>
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
-<p>Back to the district health board. The right question is not "what rule
-maximises sample gain?" The right question is "what rule performs
-robustly out of sample, under realistic budget constraints, and remains
-acceptable under equity and governance standards?" Those four conditions
-are what move a tree from a slide in a methods talk to a deployable rule
-in a clinic.</p>
+<p>Back to the district health board. The question is not only "what rule
+maximises sample gain?" The question is also whether the rule works out
+of sample, fits the budget, can be explained, and is acceptable to the
+people who would live with it. That is what moves a tree from a slide in
+a methods talk to a rule a clinic might actually use.</p>
 <p>The workflow from question to policy rule is now in place. One
 assumption has been present throughout but never examined: that our
 instruments measure the same construct across the groups we compare.
@@ -643,8 +639,8 @@ explainability to a non-technical audience, and (c) ability to
 answer "why was I selected?"</li>
 <li>State one scenario where Strategy A (pure ranking) is preferable.</li>
 <li>State one scenario where Strategy B (policy tree) is preferable.</li>
-<li>State one equity question both strategies must answer before
-deployment.</li>
+<li>State one fairness question both strategies must answer before
+anyone uses them.</li>
 </ol>
 </blockquote>
 <hr />
