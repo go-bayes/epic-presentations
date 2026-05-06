@@ -489,8 +489,8 @@ Expression of Interest using the causal inference framework.</li>
 date, Option A is assumed.</p>
 <p>Generate your data using the <code>causalworkshop</code> package:</p>
 <pre><code class="language-r"># install (once)
-install.packages("pak")
-pak::pak("go-bayes/causalworkshop")
+install.packages("remotes")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 
 # generate data
 library(causalworkshop)
@@ -3029,8 +3029,8 @@ not remove confounding by design.</p>
 <p>There is no confounding.</p>
 <p>The challenge is functional form.</p>
 <pre><code class="language-r"># install once
-# install.packages("pak")
-# pak::pak("go-bayes/causalworkshop")
+# install.packages("remotes")
+# remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 library(causalworkshop)
 
 # simulate data with non-linear heterogeneous effects
@@ -4709,6 +4709,112 @@ breathing room.</li>
 <p>The research report is due <strong>Friday 30 May</strong> (end of Week 12). Submit
 one PDF with an R code appendix via Nuku.</p>
 </blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="lab-setup-r-packages-and-build-tools"><a class="header" href="#lab-setup-r-packages-and-build-tools">Lab Setup: R Packages and Build Tools</a></h1>
+<p>Set up your computer before the lab. Package installation can take time,
+and some errors require system tools that cannot be fixed quickly during
+class.</p>
+<h2 id="what-you-need"><a class="header" href="#what-you-need">What You Need</a></h2>
+<p>You need four things, in this order:</p>
+<ol>
+<li>R and RStudio.</li>
+<li>System build tools for your operating system.</li>
+<li>Core course packages from CRAN.</li>
+<li>Course packages from GitHub.</li>
+</ol>
+<p>Restart RStudio after installing system build tools or GitHub packages.</p>
+<h2 id="step-1-install-r-and-rstudio"><a class="header" href="#step-1-install-r-and-rstudio">Step 1: Install R and RStudio</a></h2>
+<p>Install R first, then install RStudio.</p>
+<ul>
+<li>R: <a href="https://cran.r-project.org/">https://cran.r-project.org/</a></li>
+<li>RStudio Desktop: <a href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop/</a></li>
+</ul>
+<p>Use the current release unless you have been told otherwise.</p>
+<h2 id="step-2-install-system-build-tools"><a class="header" href="#step-2-install-system-build-tools">Step 2: Install System Build Tools</a></h2>
+<p>Some R packages need to compile code. If your error mentions <code>make</code>,
+<code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation, this step is probably missing.</p>
+<blockquote>
+<p><strong>macOS</strong></p>
+<p>Install Xcode Command Line Tools (Xcode CLT). In Terminal, run:</p>
+<pre><code class="language-sh">xcode-select --install
+</code></pre>
+<p>Follow the prompts, then restart RStudio. You do not need the full
+Xcode app.</p>
+</blockquote>
+<blockquote>
+<p><strong>Windows</strong></p>
+<p>Install Rtools for your version of R:</p>
+<p><a href="https://cran.r-project.org/bin/windows/Rtools/">https://cran.r-project.org/bin/windows/Rtools/</a></p>
+<p>Restart RStudio, then check:</p>
+<pre><code class="language-r">Sys.which("make")
+</code></pre>
+<p>If this returns a path, R can find the build tools.</p>
+</blockquote>
+<blockquote>
+<p><strong>Linux</strong></p>
+<p>Install the usual build tools. On Ubuntu or Debian:</p>
+<pre><code class="language-sh">sudo apt install build-essential
+</code></pre>
+<p>Restart RStudio afterwards.</p>
+</blockquote>
+<h2 id="step-3-install-cran-packages"><a class="header" href="#step-3-install-cran-packages">Step 3: Install CRAN Packages</a></h2>
+<p>Run this in R:</p>
+<pre><code class="language-r">cran_packages &lt;- c(
+  "ggplot2", "dplyr", "tibble", "tidyr", "purrr", "grf",
+  "arrow", "qs2", "googledrive", "remotes"
+)
+
+missing_cran &lt;- cran_packages[
+  !vapply(cran_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+]
+
+if (length(missing_cran) &gt; 0) {
+  install.packages(missing_cran)
+}
+</code></pre>
+<h2 id="step-4-install-github-packages"><a class="header" href="#step-4-install-github-packages">Step 4: Install GitHub Packages</a></h2>
+<p>You may use either <code>remotes</code> or <code>pak</code>. Try <code>remotes</code> first because it is
+simpler to explain.</p>
+<h3 id="option-a-remotes"><a class="header" href="#option-a-remotes">Option A: remotes</a></h3>
+<pre><code class="language-r">remotes::install_github("go-bayes/margot", upgrade = "never")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+</code></pre>
+<h3 id="option-b-pak"><a class="header" href="#option-b-pak">Option B: pak</a></h3>
+<pre><code class="language-r">install.packages("pak")
+pak::pak("go-bayes/margot")
+pak::pak("go-bayes/causalworkshop")
+</code></pre>
+<p><code>pak</code> can be faster and better at resolving dependencies. It still needs
+the same system build tools when packages must be built from source.</p>
+<h2 id="step-5-check-the-installation"><a class="header" href="#step-5-check-the-installation">Step 5: Check the Installation</a></h2>
+<p>Restart RStudio, then run:</p>
+<pre><code class="language-r">packages &lt;- c(
+  "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive",
+  "grf", "margot", "causalworkshop"
+)
+
+status &lt;- vapply(packages, requireNamespace, quietly = TRUE, logical(1))
+print(status)
+</code></pre>
+<p>Every entry should be <code>TRUE</code>.</p>
+<p>Check the course package version:</p>
+<pre><code class="language-r">packageVersion("causalworkshop")
+</code></pre>
+<p>You need version <code>0.6.0</code> or later for Labs 8-10.</p>
+<h2 id="if-installation-fails"><a class="header" href="#if-installation-fails">If Installation Fails</a></h2>
+<p>Read the first real error message, not only the final line. Common
+meanings:</p>
+<ul>
+<li><code>make: command not found</code>: install Xcode CLT on macOS or Rtools on
+Windows.</li>
+<li><code>gcc</code>, <code>g++</code>, or <code>clang</code> missing: install system build tools.</li>
+<li><code>cannot open URL</code> or timeout: check the internet connection, then try
+again.</li>
+<li><code>causalworkshop</code> was upgraded while loaded: restart RStudio, then
+rerun the lab.</li>
+</ul>
+<p>If the GitHub package installation still fails, use the course lab
+machine or the pre-installed lab environment. Do not spend class time
+debugging compilers.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lab-1-git-and-github"><a class="header" href="#lab-1-git-and-github">Lab 1: Git and GitHub</a></h1>
 <p>This session introduces version control with Git and GitHub. Setting up
 these tools first means you can track your work from day one.</p>
@@ -5938,9 +6044,11 @@ Media. <a href="https://r4ds.had.co.nz">Available online</a></li>
 <p><strong>Exercise 2b: Install the causalworkshop package</strong></p>
 <p>The <code>causalworkshop</code> package provides simulated data for your research
 report. Run the following in your R console:</p>
-<pre><code class="language-r">install.packages("pak")
-pak::pak("go-bayes/causalworkshop")
+<pre><code class="language-r">install.packages("remotes")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 </code></pre>
+<p>If this fails with an error about <code>make</code> or compilation, follow <a href="lab-setup.html">Lab
+Setup: R Packages and Build Tools</a>, then try again.</p>
 <p>Verify the installation:</p>
 <pre><code class="language-r">library(causalworkshop)
 d &lt;- simulate_nzavs_data(n = 100, seed = 2026)
@@ -6360,8 +6468,8 @@ before proceeding if you haven't already.</p>
 <p>Install and load the required packages:</p>
 <pre><code class="language-r"># install packages if needed
 # install.packages("grf")
-# if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
-# pak::pak("go-bayes/causalworkshop")
+# if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+# remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 
 library(causalworkshop)
 library(grf)
@@ -6875,20 +6983,21 @@ forest fitted in those labs to evaluate whether targeting resources to
 the most responsive individuals is worthwhile.</p>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<p>The script handles installation automatically. The block below mirrors
-what <code>scripts/lab-08.R</code> runs at the top: it installs anything missing
-and requires <code>causalworkshop &gt;= 0.6.0</code>, stopping with a clear restart-R
-message if a stale namespace is already loaded.</p>
+<p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
+Packages and Build Tools</a> first. The block below mirrors
+what <code>scripts/lab-08.R</code> runs at the top: it installs missing CRAN
+packages and requires <code>causalworkshop &gt;= 0.6.0</code>, stopping with a clear
+restart-R message if a stale namespace is already loaded.</p>
 <pre><code class="language-r">required_packages &lt;- c("grf", "tidyverse")
 missing &lt;- required_packages[
   !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
 if (length(missing) &gt; 0) install.packages(missing)
 
-if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
     packageVersion("causalworkshop") &lt; "0.6.0") {
-  pak::pak("go-bayes/causalworkshop")
+  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
   }
@@ -7205,25 +7314,11 @@ is designed to teach the sequence of decisions, not to reproduce the
 full employer-gratitude analysis workflow.</p>
 </blockquote>
 <h2 id="setup-1"><a class="header" href="#setup-1">Setup</a></h2>
-<p>Install packages before class, then restart R. The lab script no longer
+<p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
+Packages and Build Tools</a> first. The lab script no longer
 tries to build GitHub packages while the lab is running, because this
 failed on some student laptops and can take a long time even when it
 works.</p>
-<p>GitHub packages may need system build tools. If installation fails with
-a message about <code>make</code>, <code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation, install
-the build tools for your operating system first:</p>
-<blockquote>
-<p><strong>Build tools</strong></p>
-<ul>
-<li><strong>macOS:</strong> install Xcode Command Line Tools (Xcode CLT). In
-Terminal, run <code>xcode-select --install</code>, then restart R. You do not
-need the full Xcode app.</li>
-<li><strong>Windows:</strong> install Rtools for your version of R from
-<a href="https://cran.r-project.org/bin/windows/Rtools/">https://cran.r-project.org/bin/windows/Rtools/</a>, then restart R.</li>
-<li><strong>Linux:</strong> install the usual build tools, for example
-<code>sudo apt install build-essential</code> on Ubuntu/Debian, then restart R.</li>
-</ul>
-</blockquote>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive"
 )
@@ -7558,10 +7653,11 @@ library(tidyverse)
 </code></pre>
 <blockquote>
 <p><strong>Install packages</strong></p>
-<p>If you haven't installed these packages, run:
+<p>If you haven't installed these packages, follow <a href="lab-setup.html">Lab Setup: R Packages
+and Build Tools</a>, then run:
 <code>install.packages(c("psych", "lavaan"))</code>
-<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
-<code>pak::pak("go-bayes/causalworkshop")</code></p>
+<code>if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")</code>
+<code>remotes::install_github("go-bayes/causalworkshop", upgrade = "never")</code></p>
 </blockquote>
 <h2 id="generate-data"><a class="header" href="#generate-data">Generate data</a></h2>
 <p>The <code>simulate_measurement_items()</code> function generates a 6-item
@@ -8997,9 +9093,10 @@ it, so you can see the reasoning step by step.</p>
 <blockquote>
 <p><strong>Required R packages</strong></p>
 <p><code>causalworkshop</code>, <code>tidyverse</code>, <code>stdReg</code>, <code>gtsummary</code>, <code>clarify</code>,
-<code>grf</code>. Install <code>causalworkshop</code> from GitHub with
-<code>pak::pak("go-bayes/causalworkshop")</code> (version $\geq$ 0.6.0); first
-run <code>install.packages("pak")</code> if you do not already have it.</p>
+<code>grf</code>. Follow <a href="lab-setup.html">Lab Setup: R Packages and Build Tools</a>,
+then install <code>causalworkshop</code> from GitHub with
+<code>remotes::install_github("go-bayes/causalworkshop", upgrade = "never")</code>
+(version $\geq$ 0.6.0).</p>
 </blockquote>
 <hr />
 <h2 id="generalisability-and-transportability"><a class="header" href="#generalisability-and-transportability">Generalisability and transportability</a></h2>

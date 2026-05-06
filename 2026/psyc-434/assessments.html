@@ -370,8 +370,8 @@ Expression of Interest using the causal inference framework.</li>
 date, Option A is assumed.</p>
 <p>Generate your data using the <code>causalworkshop</code> package:</p>
 <pre><code class="language-r"># install (once)
-install.packages("pak")
-pak::pak("go-bayes/causalworkshop")
+install.packages("remotes")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 
 # generate data
 library(causalworkshop)

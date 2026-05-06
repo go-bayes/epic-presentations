@@ -35,13 +35,13 @@ missing <- required_packages[
 ]
 if (length(missing) > 0) install.packages(missing)
 
-if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 
 # require causalworkshop >= 0.6.0 (provides simulate_nzavs_data and the
 # course-wide cache loaders). a stale install will be auto-upgraded.
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
   packageVersion("causalworkshop") < "0.6.0") {
-  pak::pak("go-bayes/causalworkshop")
+  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop(
       "causalworkshop was upgraded; please restart R and re-run this lab.",

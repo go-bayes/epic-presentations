@@ -275,8 +275,8 @@ before proceeding if you haven't already.</p>
 <p>Install and load the required packages:</p>
 <pre><code class="language-r"># install packages if needed
 # install.packages("grf")
-# if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
-# pak::pak("go-bayes/causalworkshop")
+# if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+# remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 
 library(causalworkshop)
 library(grf)

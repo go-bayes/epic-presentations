@@ -703,9 +703,11 @@ Media. <a href="https://r4ds.had.co.nz">Available online</a></li>
 <p><strong>Exercise 2b: Install the causalworkshop package</strong></p>
 <p>The <code>causalworkshop</code> package provides simulated data for your research
 report. Run the following in your R console:</p>
-<pre><code class="language-r">install.packages("pak")
-pak::pak("go-bayes/causalworkshop")
+<pre><code class="language-r">install.packages("remotes")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 </code></pre>
+<p>If this fails with an error about <code>make</code> or compilation, follow <a href="lab-setup.html">Lab
+Setup: R Packages and Build Tools</a>, then try again.</p>
 <p>Verify the installation:</p>
 <pre><code class="language-r">library(causalworkshop)
 d &lt;- simulate_nzavs_data(n = 100, seed = 2026)

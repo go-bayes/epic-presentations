@@ -479,8 +479,8 @@ not remove confounding by design.</p>
 <p>There is no confounding.</p>
 <p>The challenge is functional form.</p>
 <pre><code class="language-r"># install once
-# install.packages("pak")
-# pak::pak("go-bayes/causalworkshop")
+# install.packages("remotes")
+# remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
 library(causalworkshop)
 
 # simulate data with non-linear heterogeneous effects

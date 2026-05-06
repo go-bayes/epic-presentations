@@ -312,25 +312,11 @@ is designed to teach the sequence of decisions, not to reproduce the
 full employer-gratitude analysis workflow.</p>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<p>Install packages before class, then restart R. The lab script no longer
+<p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
+Packages and Build Tools</a> first. The lab script no longer
 tries to build GitHub packages while the lab is running, because this
 failed on some student laptops and can take a long time even when it
 works.</p>
-<p>GitHub packages may need system build tools. If installation fails with
-a message about <code>make</code>, <code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation, install
-the build tools for your operating system first:</p>
-<blockquote>
-<p><strong>Build tools</strong></p>
-<ul>
-<li><strong>macOS:</strong> install Xcode Command Line Tools (Xcode CLT). In
-Terminal, run <code>xcode-select --install</code>, then restart R. You do not
-need the full Xcode app.</li>
-<li><strong>Windows:</strong> install Rtools for your version of R from
-<a href="https://cran.r-project.org/bin/windows/Rtools/">https://cran.r-project.org/bin/windows/Rtools/</a>, then restart R.</li>
-<li><strong>Linux:</strong> install the usual build tools, for example
-<code>sudo apt install build-essential</code> on Ubuntu/Debian, then restart R.</li>
-</ul>
-</blockquote>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive"
 )

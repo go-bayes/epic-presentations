@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Week 12: Student Presentations - PSYC 434: Conducting Research Across Cultures</title>
+        <title>Lab Setup: R Packages and Build Tools - PSYC 434: Conducting Research Across Cultures</title>
 
 
         <!-- Custom HTML head -->
@@ -244,60 +244,122 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="week-12-student-presentations-10"><a class="header" href="#week-12-student-presentations-10">Week 12: Student Presentations (10%)</a></h1>
-<p><strong>27 May 2026</strong></p>
-<h2 id="this-week"><a class="header" href="#this-week">This week</a></h2>
-<p>Each student presents a concise summary of their research report.</p>
-<p>The objective is clear causal communication: question, design,
-assumptions, findings, limits.</p>
-<h2 id="format"><a class="header" href="#format">Format</a></h2>
-<ul>
-<li>10 minutes per presentation.</li>
-<li>One panel question afterwards. You may ask one brief clarifying
-question before answering.</li>
-<li>Whiteboard and paper notes only. No slides, handouts, or devices.</li>
-<li>Location: EA120.</li>
-</ul>
-<h2 id="required-structure"><a class="header" href="#required-structure">Required structure</a></h2>
+                        <h1 id="lab-setup-r-packages-and-build-tools"><a class="header" href="#lab-setup-r-packages-and-build-tools">Lab Setup: R Packages and Build Tools</a></h1>
+<p>Set up your computer before the lab. Package installation can take time,
+and some errors require system tools that cannot be fixed quickly during
+class.</p>
+<h2 id="what-you-need"><a class="header" href="#what-you-need">What You Need</a></h2>
+<p>You need four things, in this order:</p>
 <ol>
-<li>Title and motivation (what is it, so what).</li>
-<li>Causal question, target population, exposure, and outcomes.</li>
-<li>A simple causal diagram showing your identification strategy.</li>
-<li>Causal estimand and analysis plan (what you will estimate, and how).</li>
-<li>One key limitation or risk, and how you will address it.</li>
+<li>R and RStudio.</li>
+<li>System build tools for your operating system.</li>
+<li>Core course packages from CRAN.</li>
+<li>Course packages from GitHub.</li>
 </ol>
-<h2 id="grading"><a class="header" href="#grading">Grading</a></h2>
-<p>The talk is graded against the <a href="presentation-rubric.html">Presentation
-Rubric</a>, which sets out four equally weighted
-criteria — clarity and structure, causal reasoning, "so what", and
-response to the panel question — each scored in one of four bands.</p>
-<h2 id="practical-checklist"><a class="header" href="#practical-checklist">Practical checklist</a></h2>
-<blockquote>
-<p><strong>Preparation</strong></p>
+<p>Restart RStudio after installing system build tools or GitHub packages.</p>
+<h2 id="step-1-install-r-and-rstudio"><a class="header" href="#step-1-install-r-and-rstudio">Step 1: Install R and RStudio</a></h2>
+<p>Install R first, then install RStudio.</p>
 <ul>
-<li>Plan the whiteboard layout before the talk; treat the board as three
-columns (DAG, estimand, result).</li>
-<li>Define every acronym at first use.</li>
-<li>Rehearse timing. Ten minutes is short. Aim for eight to leave
-breathing room.</li>
-<li>Prepare a one-sentence "so what" you can deliver from memory.</li>
+<li>R: <a href="https://cran.r-project.org/">https://cran.r-project.org/</a></li>
+<li>RStudio Desktop: <a href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop/</a></li>
 </ul>
+<p>Use the current release unless you have been told otherwise.</p>
+<h2 id="step-2-install-system-build-tools"><a class="header" href="#step-2-install-system-build-tools">Step 2: Install System Build Tools</a></h2>
+<p>Some R packages need to compile code. If your error mentions <code>make</code>,
+<code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation, this step is probably missing.</p>
+<blockquote>
+<p><strong>macOS</strong></p>
+<p>Install Xcode Command Line Tools (Xcode CLT). In Terminal, run:</p>
+<pre><code class="language-sh">xcode-select --install
+</code></pre>
+<p>Follow the prompts, then restart RStudio. You do not need the full
+Xcode app.</p>
 </blockquote>
 <blockquote>
-<p><strong>Research report due</strong></p>
-<p>The research report is due <strong>Friday 30 May</strong> (end of Week 12). Submit
-one PDF with an R code appendix via Nuku.</p>
+<p><strong>Windows</strong></p>
+<p>Install Rtools for your version of R:</p>
+<p><a href="https://cran.r-project.org/bin/windows/Rtools/">https://cran.r-project.org/bin/windows/Rtools/</a></p>
+<p>Restart RStudio, then check:</p>
+<pre><code class="language-r">Sys.which("make")
+</code></pre>
+<p>If this returns a path, R can find the build tools.</p>
 </blockquote>
+<blockquote>
+<p><strong>Linux</strong></p>
+<p>Install the usual build tools. On Ubuntu or Debian:</p>
+<pre><code class="language-sh">sudo apt install build-essential
+</code></pre>
+<p>Restart RStudio afterwards.</p>
+</blockquote>
+<h2 id="step-3-install-cran-packages"><a class="header" href="#step-3-install-cran-packages">Step 3: Install CRAN Packages</a></h2>
+<p>Run this in R:</p>
+<pre><code class="language-r">cran_packages &lt;- c(
+  "ggplot2", "dplyr", "tibble", "tidyr", "purrr", "grf",
+  "arrow", "qs2", "googledrive", "remotes"
+)
+
+missing_cran &lt;- cran_packages[
+  !vapply(cran_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+]
+
+if (length(missing_cran) &gt; 0) {
+  install.packages(missing_cran)
+}
+</code></pre>
+<h2 id="step-4-install-github-packages"><a class="header" href="#step-4-install-github-packages">Step 4: Install GitHub Packages</a></h2>
+<p>You may use either <code>remotes</code> or <code>pak</code>. Try <code>remotes</code> first because it is
+simpler to explain.</p>
+<h3 id="option-a-remotes"><a class="header" href="#option-a-remotes">Option A: remotes</a></h3>
+<pre><code class="language-r">remotes::install_github("go-bayes/margot", upgrade = "never")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+</code></pre>
+<h3 id="option-b-pak"><a class="header" href="#option-b-pak">Option B: pak</a></h3>
+<pre><code class="language-r">install.packages("pak")
+pak::pak("go-bayes/margot")
+pak::pak("go-bayes/causalworkshop")
+</code></pre>
+<p><code>pak</code> can be faster and better at resolving dependencies. It still needs
+the same system build tools when packages must be built from source.</p>
+<h2 id="step-5-check-the-installation"><a class="header" href="#step-5-check-the-installation">Step 5: Check the Installation</a></h2>
+<p>Restart RStudio, then run:</p>
+<pre><code class="language-r">packages &lt;- c(
+  "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive",
+  "grf", "margot", "causalworkshop"
+)
+
+status &lt;- vapply(packages, requireNamespace, quietly = TRUE, logical(1))
+print(status)
+</code></pre>
+<p>Every entry should be <code>TRUE</code>.</p>
+<p>Check the course package version:</p>
+<pre><code class="language-r">packageVersion("causalworkshop")
+</code></pre>
+<p>You need version <code>0.6.0</code> or later for Labs 8-10.</p>
+<h2 id="if-installation-fails"><a class="header" href="#if-installation-fails">If Installation Fails</a></h2>
+<p>Read the first real error message, not only the final line. Common
+meanings:</p>
+<ul>
+<li><code>make: command not found</code>: install Xcode CLT on macOS or Rtools on
+Windows.</li>
+<li><code>gcc</code>, <code>g++</code>, or <code>clang</code> missing: install system build tools.</li>
+<li><code>cannot open URL</code> or timeout: check the internet connection, then try
+again.</li>
+<li><code>causalworkshop</code> was upgraded while loaded: restart RStudio, then
+rerun the lab.</li>
+</ul>
+<p>If the GitHub package installation still fails, use the course lab
+machine or the pre-installed lab environment. Do not spend class time
+debugging compilers.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="week-11.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="week-12.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="lab-setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="lab-01.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -307,11 +369,11 @@ one PDF with an R code appendix via Nuku.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="week-11.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="week-12.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="lab-setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="lab-01.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

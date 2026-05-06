@@ -272,20 +272,21 @@ forest fitted in those labs to evaluate whether targeting resources to
 the most responsive individuals is worthwhile.</p>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<p>The script handles installation automatically. The block below mirrors
-what <code>scripts/lab-08.R</code> runs at the top: it installs anything missing
-and requires <code>causalworkshop &gt;= 0.6.0</code>, stopping with a clear restart-R
-message if a stale namespace is already loaded.</p>
+<p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
+Packages and Build Tools</a> first. The block below mirrors
+what <code>scripts/lab-08.R</code> runs at the top: it installs missing CRAN
+packages and requires <code>causalworkshop &gt;= 0.6.0</code>, stopping with a clear
+restart-R message if a stale namespace is already loaded.</p>
 <pre><code class="language-r">required_packages &lt;- c("grf", "tidyverse")
 missing &lt;- required_packages[
   !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
 if (length(missing) &gt; 0) install.packages(missing)
 
-if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
     packageVersion("causalworkshop") &lt; "0.6.0") {
-  pak::pak("go-bayes/causalworkshop")
+  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
   }
