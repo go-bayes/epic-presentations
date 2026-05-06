@@ -47,7 +47,8 @@ if (length(missing) > 0) {
     "Missing package(s): ", paste(missing, collapse = ", "), "\n\n",
     "Run the setup block in Lab 9 first, restart R, then run this script again.\n",
     "If GitHub package installation fails, use the course lab machine or ask for ",
-    "the pre-installed lab environment; do not spend class time compiling packages.",
+    "the pre-installed lab environment. Errors mentioning make, gcc, g++, clang, ",
+    "or compilation usually mean your system build tools are missing.",
     call. = FALSE
   )
 }
