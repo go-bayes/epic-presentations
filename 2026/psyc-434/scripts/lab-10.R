@@ -203,7 +203,8 @@ file.show(file.path(template_dir, "setup.R"))
 source(file.path(template_dir, "setup.R"))
 panel <- simulate_panel()
 print(descriptives_table(panel))
-cat(describe_exposure_text(), "\n")
+cat("Exposure:", label_for(name_exposure), "\n")
+cat("Outcomes:", paste(vapply(outcome_names, label_for, character(1)), collapse = ", "), "\n")
 
 # 4. render the manuscript once. students should run this from the
 #    research-report-template directory in their own copy.
@@ -212,9 +213,17 @@ if (requireNamespace("quarto", quietly = TRUE)) {
     file.path(template_dir, "manuscript.qmd"),
     output_format = "html"
   )
+} else if (nzchar(Sys.which("quarto"))) {
+  old_wd <- getwd()
+  on.exit(setwd(old_wd), add = TRUE)
+  setwd(template_dir)
+  quarto_status <- system2("quarto", args = c("render", "manuscript.qmd", "--to", "html"))
+  if (!identical(quarto_status, 0L)) {
+    stop("quarto render failed with exit status ", quarto_status, call. = FALSE)
+  }
 } else {
   message(
-    "install the quarto R package, or run from the shell:\n",
+    "install Quarto from https://quarto.org/docs/get-started/, then run:\n",
     "  cd ", template_dir, " && quarto render manuscript.qmd"
   )
 }
