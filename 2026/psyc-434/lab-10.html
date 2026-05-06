@@ -549,14 +549,17 @@ take before reporting cross-group differences?</p>
 </li>
 </ol>
 <hr />
-<h2 id="part-b-quarto-research-report-walkthrough"><a class="header" href="#part-b-quarto-research-report-walkthrough">Part B: Quarto research-report walkthrough</a></h2>
-<p>The research report (Option A) asks you to estimate an average treatment
-effect on the simulated NZAVS panel and write it up in a structured
-format. Part B of this lab walks through the manuscript scaffold you
-copy for that report. The scaffold mirrors the lab's actual research
-workflow: a <code>setup.R</code> script that holds every constant, helper, label,
-and plotting default, alongside a <code>manuscript.qmd</code> Quarto document that
-sources <code>setup.R</code> and renders end-to-end.</p>
+<h2 id="part-b-end-to-end-research-report-workflow"><a class="header" href="#part-b-end-to-end-research-report-workflow">Part B: End-to-end research-report workflow</a></h2>
+<p>The research report (Option A) asks you to estimate the effect of one
+exposure on all four wellbeing outcomes and write the results in a
+Quarto document. Part B of this lab gives you the plan for doing that
+end to end: set the study decisions once, estimate the average treatment
+effects, fit policy trees, place ranking diagnostics in an appendix, and
+render a single PDF.</p>
+<p>The course assessment page is the source of truth. Historical lab
+manuscripts show how an analysis can be organised, but they are more
+complex than this course requires. For this assignment, follow the 2026
+research-report template and the Option A criteria.</p>
 <h3 id="why-split-a-manuscript-into-two-files"><a class="header" href="#why-split-a-manuscript-into-two-files">Why split a manuscript into two files</a></h3>
 <p>Putting the manuscript in one big <code>.qmd</code> file works for a one-off
 report. It does not work when you need to swap the exposure, change the
@@ -565,79 +568,126 @@ scatters across the document. The lab's solution is to keep <code>setup.R</code>
 the single source of truth for study-level decisions and to keep
 <code>manuscript.qmd</code> thin: prose, headings, and chunks that read from
 <code>setup.R</code>.</p>
-<p>You will see this pattern in every published manuscript from the lab.</p>
-<h3 id="walkthrough"><a class="header" href="#walkthrough">Walkthrough</a></h3>
+<p>You will see this pattern in published manuscripts from the lab. Use the
+pattern, not the full production workflow.</p>
+<h3 id="files-to-create"><a class="header" href="#files-to-create">Files to create</a></h3>
+<p>Start from the <a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-assets/research-report-template.zip">research-report
+template</a>.
+Your folder should look like this:</p>
+<pre><code class="language-text">research-report/
+  setup.R
+  manuscript.qmd
+  _quarto.yml
+  references.bib
+  README.md
+  figures/
+  appendix/
+</code></pre>
+<p><code>setup.R</code> holds decisions and reusable code. <code>manuscript.qmd</code> holds
+headings, prose, tables, figures, and the final interpretation.</p>
+<h3 id="study-decisions"><a class="header" href="#study-decisions">Study decisions</a></h3>
+<p>Make these decisions before estimating models:</p>
+<pre><code class="language-r">study_seed &lt;- 2026
+study_n &lt;- 5000
+
+name_exposure &lt;- "religious_service" # or "volunteer_work"
+outcomes &lt;- c("purpose", "belonging", "self_esteem", "life_satisfaction")
+
+alpha_family_wise &lt;- 0.05
+min_gain_for_depth_switch &lt;- 0.01
+</code></pre>
+<p>The parsimony rule matters. Prefer a depth-1 policy tree unless the
+depth-2 tree improves policy value by at least
+<code>min_gain_for_depth_switch</code> in outcome units. State this threshold
+before reporting results. If you use a different threshold, justify it
+in words.</p>
+<h3 id="analysis-plan"><a class="header" href="#analysis-plan">Analysis plan</a></h3>
+<p>Work in this order.</p>
 <ol>
 <li>
-<p><strong>Open the scaffold.</strong> It lives at the repository root in
-<code>research-report-template/</code>. Five files: <code>setup.R</code>,
-<code>manuscript.qmd</code>, <code>_quarto.yml</code>, <code>references.bib</code>, and <code>README.md</code>.
-Read the README first.</p>
+<p><strong>Choose the exposure.</strong> Use <code>religious_service</code> or
+<code>volunteer_work</code>. Do not use <code>community_group</code>; Lab 9 uses it as the
+worked example.</p>
 </li>
 <li>
-<p><strong>Read <code>setup.R</code> top to bottom.</strong> Six categories of content sit in
-this file:</p>
-<ul>
-<li><strong>Packages.</strong> Loaded conditionally so the script self-installs
-missing dependencies on a fresh machine.</li>
-<li><strong>Study constants.</strong> <code>name_exposure</code>, <code>name_outcome</code>, <code>study_n</code>,
-<code>study_seed</code>, <code>covariate_cols</code>, <code>adjustment_cols</code>. Change the
-first two and the entire manuscript updates.</li>
-<li><strong>Label mapping.</strong> A small named list that maps machine-readable
-variable names to human-readable labels for figures and tables.</li>
-<li><strong>Plot defaults.</strong> Palette and <code>theme_set()</code> so every figure
-shares a consistent style.</li>
-<li><strong>Data wrapper.</strong> <code>simulate_panel()</code> returns a tibble with
-<code>exposure</code>, <code>outcome</code>, and <code>tau_true</code> columns assembled from the
-three waves.</li>
-<li><strong>Helpers.</strong> <code>descriptives_table()</code> and <code>describe_exposure_text()</code>
-return objects the manuscript drops directly into a table or
-sentence.</li>
-</ul>
+<p><strong>Simulate and prepare the panel.</strong> Generate the synthetic NZAVS
+data with <code>causalworkshop::simulate_nzavs_data()</code>. Build the
+exposure from wave 1, the outcomes from wave 2, and the adjustment
+set from baseline variables. Include baseline values of the exposure
+and all four outcomes in the adjustment set.</p>
 </li>
 <li>
-<p><strong>Render <code>manuscript.qmd</code> once.</strong></p>
-<pre><code class="language-sh">cd research-report-template
-quarto render manuscript.qmd
-</code></pre>
-<p>Output appears in <code>_output/</code>. Read the rendered PDF alongside the
-<code>.qmd</code> source. Notice how the inline value
-<code>`r label_for(name_exposure)`</code> produces the human-readable
-exposure label in three different sections, and how
-<code>descriptives_table(panel)</code> produces a <code>kable</code> automatically.</p>
+<p><strong>Describe the sample.</strong> Report baseline demographics, exposure
+prevalence, and outcome distributions. Remind readers that the data
+are simulated.</p>
 </li>
 <li>
-<p><strong>Cross-reference the section headings.</strong> Open <code>manuscript.qmd</code> and
-<code>assessments.md</code> side by side. The eleven Option A assessment
-criteria (Stating the problem, Determining the outcome, ..., Model
-approach) become the eleven middle sections of <code>manuscript.qmd</code>. The
-criteria <em>are</em> the section headings.</p>
+<p><strong>State the causal estimand.</strong> The causal estimand is the vector of
+four average treatment effects:</p>
+<p>$$ \left( \mathrm{ATE}<em>{\text{purpose}},
+\mathrm{ATE}</em>{\text{belonging}}, \mathrm{ATE}<em>{\text{self-esteem}},
+\mathrm{ATE}</em>{\text{life-satisfaction}} \right). $$</p>
 </li>
 <li>
-<p><strong>Swap exercise.</strong> In <code>setup.R</code>, change</p>
-<pre><code class="language-r">name_exposure &lt;- "religious_service"
-</code></pre>
-<p>to</p>
-<pre><code class="language-r">name_exposure &lt;- "volunteer_work"
-</code></pre>
-<p>Re-render. Every inline value, table, and figure inside the body
-updates because nothing in the body hard-codes the exposure name.
-The YAML title at the top of <code>manuscript.qmd</code> stays fixed; YAML
-metadata is read before any R chunk runs, so titles are an
-exception. You edit them directly.</p>
+<p><strong>Estimate the average treatment effects.</strong> Use the course workflow
+for doubly robust estimation with <code>grf::causal_forest()</code> and
+<code>average_treatment_effect()</code>. Report all four outcomes, not a
+selected subset.</p>
+</li>
+<li>
+<p><strong>Correct for multiple testing.</strong> Apply the Bonferroni correction
+for four outcomes at $\alpha_{FW} = 0.05$. Present
+multiplicity-adjusted confidence intervals.</p>
+</li>
+<li>
+<p><strong>Report sensitivity.</strong> Add E-values for the point estimate and the
+relevant multiplicity-adjusted confidence-limit for each outcome.</p>
+</li>
+<li>
+<p><strong>Fit policy trees.</strong> For each outcome, fit depth-1 and depth-2
+policy trees with <code>margot</code>. Use the parsimony rule to decide which
+tree belongs in the main text. Translate the selected rule into
+plain language and report the expected mean difference, uncertainty,
+policy value, and approximate sample proportion.</p>
+</li>
+<li>
+<p><strong>Place RATE and QINI plots in the appendix.</strong> Use RATE and QINI as
+supporting diagnostics for treatment-effect ranking. They should not
+replace the main average treatment effect results or the policy-tree
+summary.</p>
+</li>
+<li>
+<p><strong>Write the ethics paragraph.</strong> Explain what would need to be
+considered before acting on a policy rule: fairness, proxy
+variables, oversight, and one value judgement the model cannot
+settle.</p>
 </li>
 </ol>
+<h3 id="main-text-and-appendix"><a class="header" href="#main-text-and-appendix">Main text and appendix</a></h3>
+<p>Keep the main text aligned with the assessment criteria.</p>
+<div class="table-wrapper"><table><thead><tr><th>Location</th><th>Include</th></tr></thead><tbody>
+<tr><td>Main text</td><td>causal question, exposure, four outcomes, adjustment set, DAG, causal estimand vector, sample description, ATE forest plot and table, Bonferroni correction, E-values, selected policy tree, parsimony decision, ethics paragraph</td></tr>
+<tr><td>Appendix</td><td>code appendix, extra descriptive tables, RATE plots, QINI plots, full depth-comparison table, extra policy-tree figures</td></tr>
+</tbody></table>
+</div>
+<h3 id="quarto-workflow"><a class="header" href="#quarto-workflow">Quarto workflow</a></h3>
+<p>Render early and often.</p>
+<pre><code class="language-sh">cd research-report
+quarto render manuscript.qmd
+</code></pre>
+<p>Output appears in <code>_output/</code>. Read the rendered PDF alongside the <code>.qmd</code>
+source. Check that every table, figure, and inline estimate updates from
+<code>setup.R</code>; do not hard-code numerical results in the prose.</p>
 <h3 id="what-to-take-away"><a class="header" href="#what-to-take-away">What to take away</a></h3>
 <p>This template is yours to copy, edit, and submit. The discipline it
-teaches matters more than the specific code: for any analysis that
-produces a written artefact, separate the <em>configuration</em> (what to
-study, what palette, what labels) from the <em>narrative</em> (what you are
-arguing). When the configuration lives in one file, you can change a
-single line and trust that the narrative remains correct.</p>
+teaches matters more than the specific code: separate the
+<em>configuration</em> (what to study, what labels, what parsimony threshold)
+from the <em>narrative</em> (what you are arguing). When the configuration
+lives in one file, you can change a single line and trust that the
+narrative remains correct.</p>
 <p>The R script for this part of the lab is <code>scripts/lab-10.R</code>, after the
-measurement-invariance content. It runs the walkthrough
-programmatically: it opens <code>setup.R</code>, exercises the helpers, and renders
-the manuscript.</p>
+measurement-invariance content. It checks the scaffold, exercises the
+helpers, and renders the manuscript.</p>
 <h2 id="assessment-support-for-week-10"><a class="header" href="#assessment-support-for-week-10">Assessment support for Week 10</a></h2>
 <p>Use the remaining time this week to turn the assessment requirements
 into files you can work on.</p>

@@ -169,14 +169,15 @@ fit_table <- map_dfr(names(models), function(name) {
 print(fit_table)
 
 # ============================================================================
-# Part B: Quarto research-report walkthrough
+# Part B: end-to-end research-report workflow
 # ----------------------------------------------------------------------------
 # the rest of this script demonstrates the manuscript scaffold students
-# copy for the research report (Option A). it mirrors the lab's actual
-# workflow: a setup.R script that holds every constant, helper, and
-# label, plus a manuscript.qmd that sources setup.R and renders end-to-
-# end. change the exposure or outcome in setup.R and every value in the
-# manuscript updates on re-render.
+# copy for the research report (Option A). the course assessment page is
+# the source of truth: students choose one exposure, keep all four
+# wellbeing outcomes, estimate the ATE vector, fit policy trees, and place
+# RATE/QINI diagnostics in an appendix. setup.R holds the constants,
+# helpers, labels, and parsimony rule; manuscript.qmd sources setup.R and
+# renders the report end-to-end.
 # ============================================================================
 
 # the scaffold lives at the repo root, not inside src/. set your R working
@@ -193,8 +194,8 @@ if (!dir.exists(template_dir)) {
 # 1. orient: list the scaffold files
 list.files(template_dir)
 
-# 2. read setup.R end to end so students see the six categories:
-#    packages -> study constants -> labels -> palette -> data wrapper -> helpers
+# 2. read setup.R end to end so students see the main categories:
+#    packages -> study decisions -> labels -> palette -> data wrapper -> helpers
 file.show(file.path(template_dir, "setup.R"))
 
 # 3. source setup.R and exercise the helpers without rendering. this lets
@@ -219,5 +220,6 @@ if (requireNamespace("quarto", quietly = TRUE)) {
 }
 
 # 5. swap exercise: edit setup.R so name_exposure becomes "volunteer_work"
-#    and re-render. every inline value, table, and figure updates because
-#    nothing in manuscript.qmd hard-codes the exposure name.
+#    and re-render. the four outcomes stay fixed; every inline value,
+#    table, and figure should update because manuscript.qmd reads from
+#    setup.R rather than hard-coding the exposure name.

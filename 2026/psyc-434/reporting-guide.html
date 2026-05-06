@@ -320,6 +320,9 @@ beyond measured covariates, to explain away the estimates."</p>
 <hr />
 <h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
 <h3 id="rate-results-summary"><a class="header" href="#rate-results-summary">RATE results summary</a></h3>
+<p>For Option A, use RATE and QINI as supporting diagnostics. Put the plots
+and detailed ranking results in the appendix, then refer to them briefly
+from the main text if they help interpret the policy-tree results.</p>
 <p>When there is evidence of heterogeneity, report it plainly:</p>
 <div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>RATE-AUTOC</th><th>p-value</th><th>RATE-Qini</th><th>p-value</th><th>Evidence</th></tr></thead><tbody>
 <tr><td>Social support</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
@@ -343,6 +346,15 @@ causes of response."</p>
 interpretations. In the current lab workflow, the tree describes the
 action or high-response region implied by the supplied rewards; it does
 not force a fixed percentage treated.</p>
+<h3 id="parsimony-rule"><a class="header" href="#parsimony-rule">Parsimony rule</a></h3>
+<p>Fit both depth-1 and depth-2 policy trees. Prefer the depth-1 tree
+unless the depth-2 tree improves policy value by at least
+<code>min_gain_for_depth_switch</code>. The course default is:</p>
+<pre><code class="language-r">min_gain_for_depth_switch &lt;- 0.01
+</code></pre>
+<p>State the threshold before reporting the selected tree. If depth-2 does
+not clear the threshold, report the simpler tree in the main text and
+place the full depth comparison in the appendix.</p>
 <h3 id="subgroup-reporting-with-data-scale-effects"><a class="header" href="#subgroup-reporting-with-data-scale-effects">Subgroup reporting with data-scale effects</a></h3>
 <p><strong>High-response subgroups for life satisfaction:</strong></p>
 <ol>
