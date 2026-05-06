@@ -313,12 +313,14 @@ system build tools above when packages must be built from source.</p>
 <h3 id="recommended-pak"><a class="header" href="#recommended-pak">Recommended: pak</a></h3>
 <pre><code class="language-r">pak::pak("go-bayes/margot")
 pak::pak("go-bayes/causalworkshop")
+pak::pak("go-bayes/boilerplate")
 </code></pre>
 <h3 id="fallback-remotes"><a class="header" href="#fallback-remotes">Fallback: remotes</a></h3>
 <p>If <code>pak</code> itself fails, try <code>remotes</code>:</p>
 <pre><code class="language-r">install.packages("remotes")
 remotes::install_github("go-bayes/margot", upgrade = "never")
 remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+remotes::install_github("go-bayes/boilerplate", upgrade = "never")
 </code></pre>
 <p>If the error mentions <code>make</code>, <code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation,
 changing installers will not solve the problem. Install the system build
@@ -327,7 +329,7 @@ tools in Step 2, restart RStudio, then rerun the <code>pak</code> commands.</p>
 <p>Restart RStudio, then run:</p>
 <pre><code class="language-r">packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive",
-  "grf", "margot", "causalworkshop"
+  "grf", "margot", "causalworkshop", "boilerplate"
 )
 
 status &lt;- vapply(packages, requireNamespace, quietly = TRUE, logical(1))
