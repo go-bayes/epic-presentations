@@ -252,22 +252,19 @@
 downloads the ~80 MB cache on first run. Run the setup block below
 before class, restart R, then run the script.</p>
 </blockquote>
-<p>This lab moves from evaluating heterogeneity (Lab 8) to making decisions
-across several outcomes at once. You will run a simplified teaching
-version of the lab's <code>margot</code> workflow on a four-outcome batch: estimate
-average treatment effects with E-values, test for genuine heterogeneity,
-fit depth-2 policy trees, evaluate targeting value with QINI and RATE,
-and read margot's auto-generated prose summary.</p>
+<p>This lab moves from a CATE ranking to an explicit allocation rule. Lab 8
+asked whether targeting has value using RATE and QINI curves. Lab 9 asks
+how to turn that information into a short rule someone could read,
+explain, and contest.</p>
 <blockquote>
 <p><strong>What you will learn</strong></p>
 <ol>
-<li>How to read an outcome-wide average treatment effect (ATE) forest
-plot with E-values.</li>
-<li>How to test for genuine heterogeneity per outcome.</li>
-<li>How to read a depth-2 policy tree and the auto-generated prose
-that describes it.</li>
-<li>How to compare per-outcome QINI curves and RATE-AUTOC summaries.</li>
-<li>How to audit the workflow against simulator ground truth.</li>
+<li>How to read depth-1 and depth-2 policy trees.</li>
+<li>How to compare tree depth using policy value and interpretability.</li>
+<li>How to interpret policy coverage: the share of people the rule
+treats.</li>
+<li>How to translate one tree into plain language.</li>
+<li>How to state the limits of a policy-tree rule.</li>
 </ol>
 </blockquote>
 <blockquote>
@@ -275,20 +272,17 @@ that describes it.</li>
 <p>Lab 5 introduced the average treatment effect. Lab 6 introduced the
 conditional average treatment effect (CATE). Lab 8 evaluated whether
 targeting based on a CATE ranking has practical value. This lab adds
-two new ideas: estimating across multiple outcomes at once and turning
-a CATE into a transparent allocation rule.</p>
+the next idea: turning a CATE ranking into a transparent allocation
+rule.</p>
 </blockquote>
 <h2 id="how-this-lab-is-different"><a class="header" href="#how-this-lab-is-different">How this lab is different</a></h2>
-<p>Earlier labs fit one causal forest at a time, on one outcome, using
-<code>grf</code> directly. Today's lab uses <code>margot</code> to fit a <em>batch</em> of forests at
-once, attach E-values for sensitivity analysis, and produce
-decision-tree allocation rules with auto-generated prose. The script is
-a teaching analogue, not a reproduction of the full manuscript workflow.
-Production scripts add further steps: more outcomes, sample weights,
-adverse-outcome flipping, cross-validated heterogeneity interpretation,
-depth comparison, policy-value audits, and larger stability runs.
-Today's lab loads pre-fitted models from a cache (about 80 MB) so the
-exercise fits inside one session.</p>
+<p>Earlier labs fitted causal forests directly with <code>grf</code>. Today's lab uses
+cached <code>margot</code> fits so we can spend the session on policy trees rather
+than waiting for models. The script is a teaching analogue, not a
+reproduction of the full manuscript workflow. Production scripts add
+further steps: more outcomes, sample weights, adverse-outcome flipping,
+cross-validated heterogeneity interpretation, larger stability runs, and
+sensitivity checks.</p>
 <blockquote>
 <p><strong>Cached fits</strong></p>
 <p>The cache holds three artefacts:</p>
@@ -390,13 +384,11 @@ figures are legible.</p>
   model_t2_life_satisfaction = "Life satisfaction"
 )
 </code></pre>
-<h2 id="step-1-outcome-wide-ate-forest-plot"><a class="header" href="#step-1-outcome-wide-ate-forest-plot">Step 1: outcome-wide ATE forest plot</a></h2>
+<h2 id="step-1-quick-evidence-check"><a class="header" href="#step-1-quick-evidence-check">Step 1: quick evidence check</a></h2>
 <p>The combined ATE table holds one row per outcome with the
-risk-difference effect, a 95% confidence interval, and two E-values. The
-E-value of the point estimate measures how strong an unmeasured
-confounder would need to be, on the relative-risk scale, to explain the
-result away. The E-value bound applies the same calculation to the
-confidence-interval limit closest to the null.</p>
+risk-difference effect, a 95% confidence interval, and two E-values.
+This is a quick check before reading policy trees. Do not spend the lab
+reinterpreting RATE or QINI; that was Lab 8.</p>
 <pre><code class="language-r">print(models_binary$combined_table)
 </code></pre>
 <p>Convert the table into a forest plot:</p>
@@ -419,7 +411,7 @@ describe the result. The plot's <code>$interpretation</code> slot contains a
 one-sentence draft naming the outcomes most worth treating as causal.
 Read it as a draft, not a verdict.</p>
 </blockquote>
-<h2 id="step-2-omnibus-heterogeneity-test"><a class="header" href="#step-2-omnibus-heterogeneity-test">Step 2: omnibus heterogeneity test</a></h2>
+<h2 id="step-2-quick-heterogeneity-check"><a class="header" href="#step-2-quick-heterogeneity-check">Step 2: quick heterogeneity check</a></h2>
 <p>The ATE asks "does it work on average?". The next question is "does it
 work the same for everyone?". <code>margot_omnibus_hetero_test()</code> wraps
 <code>grf::test_calibration()</code>. The output's "Differential prediction"
@@ -438,94 +430,113 @@ prediction, the forest is telling you that targeting will not beat
 random allocation for that outcome. Reporting only the ATE is the
 honest move.</p>
 </blockquote>
-<h2 id="step-3-per-outcome-policy-trees"><a class="header" href="#step-3-per-outcome-policy-trees">Step 3: per-outcome policy trees</a></h2>
+<h2 id="step-3-policy-tree-summary-tables"><a class="header" href="#step-3-policy-tree-summary-tables">Step 3: policy-tree summary tables</a></h2>
+<p>Start with the policy-tree summary. <code>Coverage</code> is the share of
+participants the learned rule recommends for treatment. This is an
+output of the tree, not a fixed budget chosen by the analyst.</p>
+<pre><code class="language-r">cat("\n=== policy-tree one-page summary ===\n")
+print(wf$policy_brief_df)
+</code></pre>
+<p>Then compare depth-1 and depth-2. A deeper tree is useful only if the
+gain is worth the extra complexity.</p>
+<pre><code class="language-r">cat("\n=== depth comparison ===\n")
+print(wf$best$depth_summary_df)
+</code></pre>
+<blockquote>
+<p><strong>Coverage matters</strong></p>
+<p>If a policy tree recommends treatment for 90-97% of people, it is
+mostly saying "treat nearly everyone". That can be a valid learned
+rule, but it is not a scarce-budget allocation policy. If a real
+programme can only treat 20% of people, the budget constraint must be
+added separately.</p>
+</blockquote>
+<h2 id="step-4-render-policy-trees"><a class="header" href="#step-4-render-policy-trees">Step 4: render policy trees</a></h2>
 <p>A policy tree converts the personalised CATE into a transparent
 allocation rule: "treat people in this leaf, do not treat in this leaf".
 The lab caps depth at two, so each rule asks at most three yes/no
 questions before committing.</p>
 <p>Two functions render each outcome's policy tree.
-<code>margot_plot_decision_tree()</code> returns the tree diagram alone — the rule
+<code>margot_plot_decision_tree()</code> returns the tree diagram alone, the rule
 as a slide-ready flowchart. <code>margot_plot_policy_tree()</code> returns the
-prediction-points scatter — the same rule shown as a partition of the
-underlying covariate space, with each individual coloured by the
-assigned action. Print both for every outcome:</p>
+prediction-points scatter, the same rule shown as a partition of the
+underlying covariate space. The script saves every plot to
+<code>lab-09-policy-tree-plots/</code> so you can inspect the trees outside the
+RStudio plot pane.</p>
 <pre><code class="language-r">model_ids &lt;- names(label_mapping)
+
+plot_dir &lt;- file.path(getwd(), "lab-09-policy-tree-plots")
+dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
+
+policy_tree_plots &lt;- list()
 for (m in model_ids) {
   cat("\n=== ", label_mapping[[m]], " ===\n", sep = "")
-  print(margot_plot_decision_tree(
+  depth1_tree &lt;- margot_plot_decision_tree(
+    policy_tree_stability,
+    model_name = m,
+    max_depth = 1,
+    label_mapping = label_mapping
+  )
+  depth2_tree &lt;- margot_plot_decision_tree(
     policy_tree_stability,
     model_name = m,
     max_depth = 2,
     label_mapping = label_mapping
-  ))
-  print(margot_plot_policy_tree(
+  )
+  depth2_scatter &lt;- margot_plot_policy_tree(
     policy_tree_stability,
     model_name = m,
     max_depth = 2,
     label_mapping = label_mapping
-  ))
+  )
+
+  print(depth1_tree)
+  print(depth2_tree)
+  print(depth2_scatter)
+
+  ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth1-tree.png")),
+    depth1_tree, width = 8, height = 5, dpi = 150
+  )
+  ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth2-tree.png")),
+    depth2_tree, width = 8, height = 5, dpi = 150
+  )
+  ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth2-scatter.png")),
+    depth2_scatter, width = 8, height = 5, dpi = 150
+  )
+
+  policy_tree_plots[[m]] &lt;- list(
+    depth1_tree = depth1_tree,
+    depth2_tree = depth2_tree,
+    depth2_scatter = depth2_scatter
+  )
 }
 </code></pre>
 <blockquote>
 <p><strong>Reading a policy tree</strong></p>
 <p>Each non-leaf node names a covariate and a threshold. Branches go left
 if the condition is true and right otherwise. Each leaf says "treat"
-or "do not treat". A leaf labelled "treat" with covariates that read
-like a real-world subgroup is what makes a policy tree useful: the
-rule can be defended in front of a clinician, teacher, or community
-organiser.</p>
+or "do not treat". A useful policy tree can be repeated by a
+clinician, teacher, or community organiser without opening the model.</p>
 </blockquote>
-<h2 id="step-4-qini-curves"><a class="header" href="#step-4-qini-curves">Step 4: QINI curves</a></h2>
-<p>QINI curves answer: if only a share of the population could be treated,
-would ranking people by estimated benefit beat random allocation? The
-vertical lines mark example treatment shares. This is a targeting
-diagnostic, not a budget-constrained policy-tree fit.</p>
-<pre><code class="language-r">qini_plots &lt;- margot_plot_qini_batch(
-  models_binary,
-  label_mapping = label_mapping,
-  spend_levels = c(0.1, 0.4)
-)
-for (p in qini_plots) print(p)
+<h2 id="step-5-translate-one-rule"><a class="header" href="#step-5-translate-one-rule">Step 5: translate one rule</a></h2>
+<p>Use the Purpose tree as the worked example:</p>
+<pre><code class="language-r">worked_model &lt;- "model_t2_purpose"
+file.path(plot_dir, paste0(worked_model, "-depth2-tree.png"))
 </code></pre>
-<p>A curve that bows above the diagonal at a 30% treatment share says the
-ranking has practical value at that share. A curve hugging the diagonal
-says targeting is no better than random.</p>
-<h2 id="step-5-rate-table"><a class="header" href="#step-5-rate-table">Step 5: RATE table</a></h2>
-<p>RATE summarises targeting value as a single number per outcome.
-<code>margot_plot_rate_batch()</code> returns a list of per-outcome plots;
-<code>margot::margot_rate()</code> returns the underlying numbers as a table.</p>
-<pre><code class="language-r">rate_plots &lt;- margot_plot_rate_batch(
-  models_binary,
-  target = "AUTOC",
-  label_mapping = label_mapping
-)
-for (p in rate_plots) print(p)
-
-rate_table &lt;- margot::margot_rate(
-  models_binary,
-  target = "AUTOC",
-  label_mapping = label_mapping
-)
-print(rate_table)
-</code></pre>
+<p>Open that file. Write the rule as a sentence:</p>
 <blockquote>
-<p><strong>AUTOC versus QINI</strong></p>
-<p>AUTOC weights all targeting rates equally. QINI weights mid-range
-rates more. AUTOC suits exploratory work where the budget is not
-fixed; QINI suits a real budget question with a known share treated.</p>
+<p>If [condition], recommend treatment; otherwise [condition].</p>
 </blockquote>
+<p>Then add one sentence about coverage: what share of people would be
+treated under the rule?</p>
+<p>Finally, add one limitation. For example: the splitters are not causes,
+the rule may rely on proxy variables, the coverage may be too broad for
+a scarce programme, or the threshold cases may be fragile.</p>
 <h2 id="step-6-read-the-auto-generated-prose"><a class="header" href="#step-6-read-the-auto-generated-prose">Step 6: read the auto-generated prose</a></h2>
 <p><code>margot</code> synthesises a draft narrative from the policy-workflow object.
-In the cached fit, that object was created with
-<code>margot_policy_workflow()</code> from the policy-tree stability output, the
-original analysis data, and the label mapping. The prose is generated
-from the same numbers you saw above; it does not bring new information.
-Its value is structural: it forces an <em>assumption → finding → caveat</em>
-shape that you can imitate when you write your own results section.</p>
+Read it after you have inspected the trees yourself. The prose is
+generated from the same numbers you saw above; it does not bring new
+information.</p>
 <pre><code class="language-r">cat(wf$report_prose)
-</code></pre>
-<p>The <code>policy_brief_df</code> is a tabular one-pager for the same content:</p>
-<pre><code class="language-r">print(wf$policy_brief_df)
 </code></pre>
 <blockquote>
 <p><strong>Read the prose critically</strong></p>
@@ -563,10 +574,8 @@ print(true_tau_table)
 </code></pre>
 <p>The <code>true_sd_tau</code> column is the headroom for targeting: it tells you
 whether even a perfect ranking would deliver appreciable extra benefit
-beyond the average. Compare this ranking with the order in
-<code>margot_plot()</code>'s ATE forest. Discrepancies between estimated and true
-rank are an honest measure of how much information the forest extracted
-from a finite sample.</p>
+beyond the average. Use this table to keep the policy trees honest. A
+tree cannot recover heterogeneity that is weak, noisy, or absent.</p>
 <h2 id="ethical-considerations"><a class="header" href="#ethical-considerations">Ethical considerations</a></h2>
 <blockquote>
 <p><strong>A high-value rule still needs judgement</strong></p>
@@ -592,17 +601,18 @@ know relevant context the model cannot see?</li>
 </blockquote>
 <ol>
 <li>
-<p><strong>Compare estimated and true rankings.</strong> The simulator stores the
-true per-outcome ATE. Compare the four-outcome ATE order in
-<code>margot_plot()</code> with <code>true_tau_table</code>. Where do the two rankings
-agree and where do they disagree? Suggest one reason for any
-discrepancy.</p>
+<p><strong>Translate a policy tree.</strong> Pick one outcome. Translate its depth-2
+policy tree into a rule a non-technical reader could follow.</p>
 </li>
 <li>
-<p><strong>Read a single policy tree.</strong> Pick one of the four outcomes.
-Translate its depth-2 policy tree into a plain-language rule a
-non-technical reader could follow. Then state one practical
-limitation of that rule.</p>
+<p><strong>Compare depth.</strong> For the same outcome, compare the depth-1 and
+depth-2 rules. Does the extra depth seem worth the extra complexity?
+Use the depth summary table and the plots.</p>
+</li>
+<li>
+<p><strong>Coverage and budget.</strong> Use <code>wf$policy_brief_df</code>. If the rule
+treats more than 80% of people, explain why that is not a
+scarce-budget policy.</p>
 </li>
 <li>
 <p><strong>Discuss override.</strong> In one paragraph, describe a scenario in which

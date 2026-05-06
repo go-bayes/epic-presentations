@@ -4,24 +4,17 @@
 # ============================================================================
 
 # learning aims for this lab:
-#   1. read an outcome-wide ATE forest plot with E-values, the lab's
-#      day-to-day way of asking "what works, on average, across several
-#      outcomes at once?"
-#   2. test whether each outcome shows real heterogeneity, using the
-#      grf::test_calibration omnibus test wrapped by margot.
-#   3. read a depth-2 policy tree, the kind of allocation rule you can
-#      defend in front of a non-technical audience.
-#   4. compare per-outcome QINI curves and RATE-AUTOC tables, the
-#      diagnostics that decide whether targeting is worth it at all.
-#   5. read margot's auto-generated prose summary and learn to treat it
-#      as a draft, not a final answer.
+#   1. move from a CATE ranking to an explicit policy rule.
+#   2. read depth-1 and depth-2 policy trees.
+#   3. compare tree depth using policy value and interpretability.
+#   4. check policy coverage: what share of people would the rule treat?
+#   5. translate one tree into plain language and state its limitations.
 #
 # how this lab differs from earlier labs:
 #   labs 5-8 fit one causal forest at a time, by hand, on a single
-#   outcome. this lab uses a simplified `margot` teaching workflow to
-#   fit a *batch* of forests at once, attach E-values for sensitivity
-#   analysis, and produce decision-tree allocation rules with auto-
-#   generated prose. it is not the full production workflow used in
+#   outcome. this lab uses a simplified `margot` teaching workflow with
+#   a pre-fitted batch of forests, then focuses on decision-tree
+#   allocation rules. it is not the full production workflow used in
 #   manuscript projects: those scripts include many more outcomes,
 #   sample weights, adverse-outcome flipping, cross-validated
 #   heterogeneity interpretation, deeper policy-value audits, and
@@ -174,7 +167,7 @@ label_mapping <- list(
   model_t2_life_satisfaction = "Life satisfaction"
 )
 
-# --- step 2: outcome-wide ATE forest plot -----------------------------------
+# --- step 2: quick evidence check -------------------------------------------
 
 # margot's combined_table holds, in one row per outcome:
 #   the ATE on the risk-difference scale (E[Y(1)] - E[Y(0)]),
@@ -184,9 +177,8 @@ label_mapping <- list(
 #     scale, to explain the result away.
 print(models_binary$combined_table)
 
-# margot_plot() turns that table into a forest-style figure. the dashed
-# line at zero is the null; estimates whose E-value bound is below 1.2
-# are flagged as easily explained away by mild unmeasured confounding.
+# This is a quick check only. Lab 8 already covered ranking, RATE, and
+# QINI. Today we use the fitted models to read policy trees.
 ate_plot <- margot_plot(
   models_binary$combined_table,
   type = "RD",
@@ -197,12 +189,7 @@ ate_plot <- margot_plot(
 )
 print(ate_plot$plot)
 
-# the plot's $interpretation slot is a draft sentence that names the
-# outcomes most worth treating as causal. read it as a draft, not a
-# verdict.
-cat("\nautomatic interpretation:\n", ate_plot$interpretation, "\n", sep = "")
-
-# --- step 3: omnibus heterogeneity test -------------------------------------
+# --- step 3: quick heterogeneity check ---------------------------------------
 
 # the ATE asks "does it work on average?". the next question is "does
 # it work the same for everyone?". margot_omnibus_hetero_test() wraps
@@ -215,7 +202,21 @@ omnibus <- margot_omnibus_hetero_test(
 )
 print(omnibus)
 
-# --- step 4: per-outcome policy trees ---------------------------------------
+# --- step 4: policy tree summary tables --------------------------------------
+
+# This table is the first policy-tree result to read. Coverage is the
+# share of participants the learned rule recommends for treatment. Notice
+# that coverage is an output of the tree, not a fixed budget set by the
+# analyst.
+cat("\n=== policy-tree one-page summary ===\n")
+print(wf$policy_brief_df)
+
+# Compare depth-1 and depth-2. A deeper tree is only useful if the gain
+# is worth the extra complexity.
+cat("\n=== depth comparison ===\n")
+print(wf$best$depth_summary_df)
+
+# --- step 5: render and save policy trees ------------------------------------
 
 # a policy tree converts the personalised CATE into a transparent
 # allocation rule: "treat people in this leaf, do not treat in this
@@ -224,57 +225,88 @@ print(omnibus)
 #
 # margot_plot_decision_tree() returns the tree diagram alone;
 # margot_plot_policy_tree() returns the prediction-points scatter.
-# render both per outcome.
+# render both per outcome and save them so you can inspect them outside
+# the RStudio plot pane.
 model_ids <- names(label_mapping)
+
+plot_dir <- file.path(getwd(), "lab-09-policy-tree-plots")
+dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
+
+policy_tree_plots <- list()
 for (m in model_ids) {
   cat("\n=== ", label_mapping[[m]], " ===\n", sep = "")
-  print(margot_plot_decision_tree(
+  depth1_tree <- margot_plot_decision_tree(
+    policy_tree_stability,
+    model_name = m,
+    max_depth = 1,
+    label_mapping = label_mapping
+  )
+  depth2_tree <- margot_plot_decision_tree(
     policy_tree_stability,
     model_name = m,
     max_depth = 2,
     label_mapping = label_mapping
-  ))
-  print(margot_plot_policy_tree(
+  )
+  depth2_scatter <- margot_plot_policy_tree(
     policy_tree_stability,
     model_name = m,
     max_depth = 2,
     label_mapping = label_mapping
-  ))
+  )
+
+  print(depth1_tree)
+  print(depth2_tree)
+  print(depth2_scatter)
+
+  ggplot2::ggsave(
+    filename = file.path(plot_dir, paste0(m, "-depth1-tree.png")),
+    plot = depth1_tree,
+    width = 8,
+    height = 5,
+    dpi = 150
+  )
+  ggplot2::ggsave(
+    filename = file.path(plot_dir, paste0(m, "-depth2-tree.png")),
+    plot = depth2_tree,
+    width = 8,
+    height = 5,
+    dpi = 150
+  )
+  ggplot2::ggsave(
+    filename = file.path(plot_dir, paste0(m, "-depth2-scatter.png")),
+    plot = depth2_scatter,
+    width = 8,
+    height = 5,
+    dpi = 150
+  )
+
+  policy_tree_plots[[m]] <- list(
+    depth1_tree = depth1_tree,
+    depth2_tree = depth2_tree,
+    depth2_scatter = depth2_scatter
+  )
 }
 
-# --- step 5: QINI curves ---------------------------------------------------
+cat("\nPolicy-tree plots saved to:\n  ", plot_dir, "\n", sep = "")
 
-# QINI curves answer: if only a share of the population could be
-# treated, would ranking people by estimated benefit beat random
-# allocation? the vertical lines mark example treatment shares. this is
-# a targeting diagnostic, not a budget-constrained policy-tree fit.
-qini_plots <- margot_plot_qini_batch(
-  models_binary,
-  label_mapping = label_mapping,
-  spend_levels = c(0.1, 0.4)
+# --- step 6: translate one policy tree ---------------------------------------
+
+# Use the Purpose tree for the worked example. Open the saved depth-2
+# tree and write the rule as ordinary language. Then compare the rule's
+# coverage with the policy brief above.
+worked_model <- "model_t2_purpose"
+cat("\n=== worked tree for plain-language translation ===\n")
+cat("Outcome: ", label_mapping[[worked_model]], "\n", sep = "")
+cat("Open this file:\n  ",
+  file.path(plot_dir, paste0(worked_model, "-depth2-tree.png")),
+  "\n",
+  sep = ""
 )
-for (p in qini_plots) print(p)
-
-# --- step 6: RATE table -----------------------------------------------------
-
-# RATE summarises targeting value as a single number per outcome.
-# AUTOC weights all budgets equally; QINI weights mid-range budgets
-# more. negative or near-zero RATE means the ranking has little
-# practical content. margot_plot_rate_batch() returns a list of
-# per-outcome plots; the numbers themselves come from margot_rate().
-rate_plots <- margot_plot_rate_batch(
-  models_binary,
-  target = "AUTOC",
-  label_mapping = label_mapping
+cat(
+  "Write the rule as: if [condition], recommend treatment; otherwise ...\n",
+  "Then state one limitation of using this rule for real allocation.\n",
+  sep = ""
 )
-for (p in rate_plots) print(p)
-
-rate_table <- margot::margot_rate(
-  models_binary,
-  target = "AUTOC",
-  label_mapping = label_mapping
-)
-print(rate_table)
 
 # --- step 7: read the auto-generated prose ----------------------------------
 
@@ -285,11 +317,6 @@ print(rate_table)
 # can imitate when they write their own results.
 cat("\n=========== auto-generated prose ===========\n\n")
 cat(wf$report_prose)
-
-# the policy_brief_df is a tabular one-pager: one row per outcome with
-# the recommended depth, the wins/losses against random, and a short
-# label.
-print(wf$policy_brief_df)
 
 # --- step 8: ground truth from the simulator -------------------------------
 
@@ -330,16 +357,16 @@ print(true_tau_table)
 # --- where this leads -------------------------------------------------------
 #
 # you have just walked the full lab pipeline, end to end:
-# data -> batch causal forest -> ATE forest plot with E-values
-#      -> omnibus heterogeneity tests
-#      -> depth-2 policy trees with auto-generated prose
-#      -> QINI and RATE diagnostics
+# data -> batch causal forest
+#      -> quick ATE and heterogeneity checks
+#      -> policy-value and coverage summary
+#      -> depth-1 and depth-2 policy trees
+#      -> plain-language rule translation
 #      -> ground-truth audit.
 #
-# this is the same workflow used to write papers in the lab. the
-# difference between today's lab and a manuscript is mostly volume: a
-# real study runs the same calls on twenty outcomes, then writes the
-# paper around the resulting figures and tables.
+# this is a teaching analogue of the lab workflow. a manuscript adds
+# more outcomes, stronger diagnostics, sensitivity checks, and more
+# careful prose.
 #
 # week 10 returns to a different question entirely: are the things we
 # *measured* the same things across the groups we are comparing? if
