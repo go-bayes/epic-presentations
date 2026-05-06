@@ -7280,13 +7280,19 @@ the next idea: turning a CATE ranking into a transparent allocation
 rule.</p>
 </blockquote>
 <h2 id="how-this-lab-is-different"><a class="header" href="#how-this-lab-is-different">How this lab is different</a></h2>
-<p>Earlier labs fitted causal forests directly with <code>grf</code>. Today's lab uses
-cached <code>margot</code> fits so we can spend the session on policy trees rather
-than waiting for models. The script is a teaching analogue, not a
-reproduction of the full manuscript workflow. Production scripts add
-further steps: more outcomes, sample weights, adverse-outcome flipping,
-cross-validated heterogeneity interpretation, larger stability runs, and
-sensitivity checks.</p>
+<p>Earlier labs taught the pieces separately: average treatment effects,
+conditional average treatment effects (CATEs), causal forests, RATE, and
+QINI. Today's lab uses a cached <code>margot</code> workflow so we can put those
+pieces together and spend the session reading policy trees. The cache is
+a teaching object: it gives us fitted forests, depth comparisons,
+policy-tree plots, and prose summaries without asking every laptop to
+refit the models during class.</p>
+<p>Use the course workflow as normative. The full manuscript workflows are
+more complex because they answer different questions, use real data, and
+add extra diagnostics. This lab teaches the sequence of decisions
+students need for the course: estimate effects, inspect heterogeneity,
+state a parsimony rule, read the allocation rule, and explain its
+limits.</p>
 <blockquote>
 <p><strong>Cached fits</strong></p>
 <p>The cache holds three artefacts:</p>
@@ -7548,6 +7554,9 @@ for (m in model_ids) {
     depth2_scatter = depth2_scatter
   )
 }
+
+saved_policy_plots &lt;- list.files(plot_dir, pattern = "\\.png$", full.names = TRUE)
+print(saved_policy_plots)
 </code></pre>
 <blockquote>
 <p><strong>Reading a policy tree</strong></p>
@@ -7556,8 +7565,16 @@ if the condition is true and right otherwise. Each leaf says "treat"
 or "do not treat". A useful policy tree can be repeated by a
 clinician, teacher, or community organiser without opening the model.</p>
 </blockquote>
+<blockquote>
+<p><strong>Inspect every graph</strong></p>
+<p>Open every file printed in <code>saved_policy_plots</code>. For each outcome,
+compare the depth-1 tree, the depth-2 tree, and the depth-2 scatter
+plot. Ask three questions: what rule is being learned, whether the
+extra depth changes the rule in a useful way, and whether the scatter
+plot suggests a stable separation or a fragile threshold.</p>
+</blockquote>
 <h2 id="step-5-translate-one-rule"><a class="header" href="#step-5-translate-one-rule">Step 5: translate one rule</a></h2>
-<p>Use the Purpose tree as the worked example:</p>
+<p>After inspecting all graphs, use the Purpose tree as the worked example:</p>
 <pre><code class="language-r">worked_model &lt;- "model_t2_purpose"
 file.path(plot_dir, paste0(worked_model, "-depth2-tree.png"))
 </code></pre>

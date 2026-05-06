@@ -11,15 +11,14 @@
 #   5. translate one tree into plain language and state its limitations.
 #
 # how this lab differs from earlier labs:
-#   labs 5-8 fit one causal forest at a time, by hand, on a single
-#   outcome. this lab uses a simplified `margot` teaching workflow with
-#   a pre-fitted batch of forests, then focuses on decision-tree
-#   allocation rules. it is not the full production workflow used in
-#   manuscript projects: those scripts include many more outcomes,
-#   sample weights, adverse-outcome flipping, cross-validated
-#   heterogeneity interpretation, deeper policy-value audits, and
-#   larger stability runs. this lab loads pre-fitted models from a
-#   cache (~80 MB) so the workflow fits inside one session.
+#   earlier labs taught the pieces separately: average effects,
+#   conditional average effects, causal forests, RATE, and QINI. this
+#   lab uses a cached `margot` teaching workflow to put those pieces
+#   together and focus on decision-tree allocation rules. use the course
+#   workflow as normative. manuscript workflows are more complex because
+#   they answer different questions, use real data, and add extra
+#   diagnostics. this lab loads pre-fitted models from a cache (~80 MB)
+#   so the workflow fits inside one session.
 # ============================================================================
 
 # --- packages ---------------------------------------------------------------
@@ -318,6 +317,9 @@ for (m in model_ids) {
 }
 
 cat("\nPolicy-tree plots saved to:\n  ", plot_dir, "\n", sep = "")
+saved_policy_plots <- list.files(plot_dir, pattern = "\\.png$", full.names = TRUE)
+cat("\nOpen and inspect every saved graph:\n")
+print(saved_policy_plots)
 
 # --- step 7: translate one policy tree ---------------------------------------
 
