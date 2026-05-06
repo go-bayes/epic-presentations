@@ -18,38 +18,46 @@
 #
 # how this lab differs from earlier labs:
 #   labs 5-8 fit one causal forest at a time, by hand, on a single
-#   outcome. real lab-bench work uses the lab's `margot` package to fit
-#   a *batch* of forests at once, attach E-values for sensitivity
+#   outcome. this lab uses a simplified `margot` teaching workflow to
+#   fit a *batch* of forests at once, attach E-values for sensitivity
 #   analysis, and produce decision-tree allocation rules with auto-
-#   generated prose. this lab loads pre-fitted models from a cache
-#   (~80 MB) so the workflow fits inside one session.
+#   generated prose. it is not the full production workflow used in
+#   manuscript projects: those scripts include many more outcomes,
+#   sample weights, adverse-outcome flipping, cross-validated
+#   heterogeneity interpretation, deeper policy-value audits, and
+#   larger stability runs. this lab loads pre-fitted models from a
+#   cache (~80 MB) so the workflow fits inside one session.
 # ============================================================================
 
 # --- packages ---------------------------------------------------------------
 
-required_packages <- c("ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive")
+# This lab uses pre-fitted models. Do not build GitHub packages during
+# class: that is slow and fragile on student laptops. Run the setup block
+# in the lab notes before class, then restart R and run this script.
+required_packages <- c(
+  "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive",
+  "margot", "causalworkshop"
+)
 missing <- required_packages[
   !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
-if (length(missing) > 0) install.packages(missing)
 
-if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
-
-if (!requireNamespace("margot", quietly = TRUE)) {
-  pak::pak("go-bayes/margot")
+if (length(missing) > 0) {
+  stop(
+    "Missing package(s): ", paste(missing, collapse = ", "), "\n\n",
+    "Run the setup block in Lab 9 first, restart R, then run this script again.\n",
+    "If GitHub package installation fails, use the course lab machine or ask for ",
+    "the pre-installed lab environment; do not spend class time compiling packages.",
+    call. = FALSE
+  )
 }
 
-# require causalworkshop >= 0.6.0 (provides load_lab_09_cache and the
-# arrow-based artefact reader). a stale install will be auto-upgraded.
-if (!requireNamespace("causalworkshop", quietly = TRUE) ||
-  packageVersion("causalworkshop") < "0.6.0") {
-  pak::pak("go-bayes/causalworkshop")
-  if ("causalworkshop" %in% loadedNamespaces()) {
-    stop(
-      "causalworkshop was upgraded; please restart R and re-run this lab.",
-      call. = FALSE
-    )
-  }
+if (packageVersion("causalworkshop") < "0.6.0") {
+  stop(
+    "causalworkshop >= 0.6.0 is required. Run the setup block in Lab 9, ",
+    "restart R, then run this script again.",
+    call. = FALSE
+  )
 }
 
 suppressPackageStartupMessages({
@@ -71,6 +79,8 @@ suppressPackageStartupMessages({
 #                           plots, and auto-generated prose summaries.
 #
 # what was run to make the cache (shown for transparency; do not run in lab):
+# this is a teaching cache, not a reproduction of the employer-gratitude
+# manuscript workflow.
 #
 # d <- causalworkshop::simulate_nzavs_data(n = 5000, seed = 2026)
 # d0 <- d |> dplyr::filter(wave == 0)
@@ -233,10 +243,10 @@ for (m in model_ids) {
 
 # --- step 5: QINI curves ---------------------------------------------------
 
-# QINI curves answer: at a moderate, realistic budget (say 10-40% of
-# the population treated), does targeting beat random allocation? the
-# vertical lines mark the spend levels where standard policy questions
-# are usually asked.
+# QINI curves answer: if only a share of the population could be
+# treated, would ranking people by estimated benefit beat random
+# allocation? the vertical lines mark example treatment shares. this is
+# a targeting diagnostic, not a budget-constrained policy-tree fit.
 qini_plots <- margot_plot_qini_batch(
   models_binary,
   label_mapping = label_mapping,

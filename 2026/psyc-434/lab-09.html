@@ -248,16 +248,16 @@
 <blockquote>
 <p><strong>R script</strong></p>
 <p><a href="scripts/lab-09.R">Download the R script for this lab</a></p>
-<p>The script auto-installs every package it needs (including
-<code>causalworkshop</code>, which holds the cache loader) and downloads the ~80
-MB cache on first run. You do not need any other files.</p>
+<p>The script checks that the required packages are already installed and
+downloads the ~80 MB cache on first run. Run the setup block below
+before class, restart R, then run the script.</p>
 </blockquote>
 <p>This lab moves from evaluating heterogeneity (Lab 8) to making decisions
-across several outcomes at once. You will run the lab's actual research
-workflow on a four-outcome batch: estimate average treatment effects
-with E-values, test for genuine heterogeneity, fit depth-2 policy trees,
-evaluate targeting value with QINI and RATE, and read margot's
-auto-generated prose summary.</p>
+across several outcomes at once. You will run a simplified teaching
+version of the lab's <code>margot</code> workflow on a four-outcome batch: estimate
+average treatment effects with E-values, test for genuine heterogeneity,
+fit depth-2 policy trees, evaluate targeting value with QINI and RATE,
+and read margot's auto-generated prose summary.</p>
 <blockquote>
 <p><strong>What you will learn</strong></p>
 <ol>
@@ -280,11 +280,15 @@ a CATE into a transparent allocation rule.</p>
 </blockquote>
 <h2 id="how-this-lab-is-different"><a class="header" href="#how-this-lab-is-different">How this lab is different</a></h2>
 <p>Earlier labs fit one causal forest at a time, on one outcome, using
-<code>grf</code> directly. Real lab-bench work uses the lab's <code>margot</code> package to
-fit a <em>batch</em> of forests at once, attach E-values for sensitivity
-analysis, and produce decision-tree allocation rules with auto-generated
-prose. Today's lab loads pre-fitted models from a cache (about 80 MB) so
-the full workflow fits inside one session.</p>
+<code>grf</code> directly. Today's lab uses <code>margot</code> to fit a <em>batch</em> of forests at
+once, attach E-values for sensitivity analysis, and produce
+decision-tree allocation rules with auto-generated prose. The script is
+a teaching analogue, not a reproduction of the full manuscript workflow.
+Production scripts add further steps: more outcomes, sample weights,
+adverse-outcome flipping, cross-validated heterogeneity interpretation,
+depth comparison, policy-value audits, and larger stability runs.
+Today's lab loads pre-fitted models from a cache (about 80 MB) so the
+exercise fits inside one session.</p>
 <blockquote>
 <p><strong>Cached fits</strong></p>
 <p>The cache holds three artefacts:</p>
@@ -301,25 +305,32 @@ plots, and auto-generated prose summaries.</li>
 <code>scripts/fit-lab-09-cache.R</code>. You do not need to run it during the
 lab; it is there so you can see exactly what was fitted.</p>
 </blockquote>
+<blockquote>
+<p><strong>Teaching simplification</strong></p>
+<p>The cache is deliberately smaller than the lab's research scripts. It
+is designed to teach the sequence of decisions, not to reproduce the
+full employer-gratitude analysis workflow.</p>
+</blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<p>The script handles installation automatically. The block below mirrors
-what <code>scripts/lab-09.R</code> runs at the top: it installs anything missing,
-requires <code>causalworkshop &gt;= 0.6.0</code> (the version that ships the cache
-loader), and stops with a clear restart-R message if a stale namespace
-is already loaded.</p>
-<pre><code class="language-r">required_packages &lt;- c(
+<p>Install packages before class, then restart R. The lab script no longer
+tries to build GitHub packages while the lab is running, because this
+failed on some student laptops and can take a long time even when it
+works.</p>
+<pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive"
 )
-missing &lt;- required_packages[
-  !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+missing_cran &lt;- cran_packages[
+  !vapply(cran_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
-if (length(missing) &gt; 0) install.packages(missing)
+if (length(missing_cran) &gt; 0) install.packages(missing_cran)
 
-if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
-if (!requireNamespace("margot", quietly = TRUE)) pak::pak("go-bayes/margot")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("margot", quietly = TRUE)) {
+  remotes::install_github("go-bayes/margot", upgrade = "never")
+}
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
     packageVersion("causalworkshop") &lt; "0.6.0") {
-  pak::pak("go-bayes/causalworkshop")
+  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
   }
@@ -332,6 +343,9 @@ suppressPackageStartupMessages({
   library(dplyr)
 })
 </code></pre>
+<p>If the GitHub package installation fails, stop there and use the course
+lab machine or the pre-installed lab environment. Do not try to debug
+compilers during the lab.</p>
 <p>Load the cached fits. The first call downloads roughly 80 MB into a
 per-user cache directory; subsequent calls read from disk.</p>
 <pre><code class="language-r">cache &lt;- causalworkshop::load_lab_09_cache()
@@ -461,9 +475,10 @@ rule can be defended in front of a clinician, teacher, or community
 organiser.</p>
 </blockquote>
 <h2 id="step-4-qini-curves"><a class="header" href="#step-4-qini-curves">Step 4: QINI curves</a></h2>
-<p>QINI curves answer: at a moderate, realistic budget (say 10–40% of the
-population treated), does targeting beat random allocation? The vertical
-lines mark spend levels.</p>
+<p>QINI curves answer: if only a share of the population could be treated,
+would ranking people by estimated benefit beat random allocation? The
+vertical lines mark example treatment shares. This is a targeting
+diagnostic, not a budget-constrained policy-tree fit.</p>
 <pre><code class="language-r">qini_plots &lt;- margot_plot_qini_batch(
   models_binary,
   label_mapping = label_mapping,
@@ -471,9 +486,9 @@ lines mark spend levels.</p>
 )
 for (p in qini_plots) print(p)
 </code></pre>
-<p>A curve that bows above the diagonal at a 30% spend level says targeting
-is worth it at that budget. A curve hugging the diagonal says targeting
-is no better than random.</p>
+<p>A curve that bows above the diagonal at a 30% treatment share says the
+ranking has practical value at that share. A curve hugging the diagonal
+says targeting is no better than random.</p>
 <h2 id="step-5-rate-table"><a class="header" href="#step-5-rate-table">Step 5: RATE table</a></h2>
 <p>RATE summarises targeting value as a single number per outcome.
 <code>margot_plot_rate_batch()</code> returns a list of per-outcome plots;

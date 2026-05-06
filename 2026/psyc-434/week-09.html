@@ -291,17 +291,17 @@ be described in public, not just a ranking inside a script. The rule
 must be short enough to fit on a single page, clear enough for people
 who did not fit the model, and accompanied by an honest account of what
 the data can and cannot decide.</p>
-<p>We work through purpose for concreteness; lab 9 repeats the same
-workflow across four outcomes (purpose, belonging, self-esteem, life
-satisfaction).</p>
-<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The lab&#39;s day-to-day workflow estimates effects across many outcomes at once, then asks the policy question only for those whose effects survive sensitivity analysis." /></p>
+<p>We work through purpose for concreteness; Lab 9 repeats a simplified
+teaching version of this workflow across four outcomes (purpose,
+belonging, self-esteem, life satisfaction).</p>
+<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The lab&#39;s teaching workflow estimates effects across several outcomes at once, then asks the policy question only for those whose effects survive sensitivity analysis." /></p>
 <h2 id="outcome-wide-evidence-before-targeting"><a class="header" href="#outcome-wide-evidence-before-targeting">Outcome-wide evidence before targeting</a></h2>
 <p>Before fitting a policy tree, ask whether the underlying average effects
 are credible enough to justify a targeting exercise. Lab 9 estimates one
 exposure across four outcomes: purpose, belonging, self-esteem, and life
-satisfaction. This is an <strong>outcome-wide</strong> design. The point is to read
-the pattern across outcomes, not to hunt for whichever row happens to
-look best.</p>
+satisfaction. This is a small teaching version of an <strong>outcome-wide</strong>
+design. The point is to read the pattern across outcomes, not to hunt
+for whichever row happens to look best.</p>
 <p>When a single exposure is tested against several outcomes, the chance
 that at least one confidence interval excludes zero by chance alone is
 higher than the nominal per-test error rate. A simple correction is
@@ -349,16 +349,20 @@ not an input.</p>
 <p>If a project has a fixed budget, the policy problem can be written with
 a treatment-share cap:</p>
 <p>$$ \mathbb{E}[d(X)] \le q. $$</p>
-<p>That is useful to discuss, but it is not what the current <code>margot</code> lab
-pipeline enforces. In our workflow, policy trees identify regions where
-the estimated reward for treatment is higher than control, then report
-the expected mean differences and the size of those regions. Two
-practical complications remain. First, $V(d)$ is a counterfactual
-quantity, since for any individual we observe at most one of $Y(0)$ or
-$Y(1)$. We need to evaluate candidate rules without assigning everyone
-to them. Second, the rule must be small enough to defend in front of a
-non-statistical audience. Both constraints push the analysis toward
-shallow, transparent decision trees evaluated with doubly-robust scores.</p>
+<p>That is useful to discuss, but it is not what the current course lab
+enforces. In the lab workflow, policy trees identify regions where the
+estimated reward for treatment is higher than control, then report the
+expected mean differences and the size of those regions. Production
+scripts add further safeguards and interpretation layers, including more
+outcomes, sample weights, adverse-outcome flipping, cross-validated
+heterogeneity interpretation, depth comparison, and larger stability
+runs. Two practical complications remain. First, $V(d)$ is a
+counterfactual quantity, since for any individual we observe at most one
+of $Y(0)$ or $Y(1)$. We need to evaluate candidate rules without
+assigning everyone to them. Second, the rule must be small enough to
+defend in front of a non-statistical audience. Both constraints push the
+analysis toward shallow, transparent decision trees evaluated with
+doubly-robust scores.</p>
 <h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
 <p>A causal forest maps a high-dimensional covariate vector $X$ to a
 personalised score $\hat{\tau}(X)$. The function itself is too tangled
@@ -455,11 +459,10 @@ community programme that must be administered by volunteers, the simpler
 depth-1 rule may be preferable even at a real cost in policy value,
 because the rule is more likely to be applied correctly in the field. A
 rule a worker mis-remembers is not the rule that was evaluated.</p>
-<p>The lab's workflow returns both depths automatically, with a default
-switch threshold of $0.5%$ relative gain. That threshold is
-conservative: a small statistical lift will tip the recommendation
-toward depth-2. Investigators should examine both trees, then justify
-the chosen depth in the methods section.</p>
+<p>The full research workflow compares both depths automatically. Lab 9
+shows depth-1 and depth-2 outputs so you can practise the same
+judgement: examine both trees, then justify the chosen depth in the
+methods section.</p>
 <blockquote>
 <p><strong>Pair exercise: depth-1 versus depth-2</strong></p>
 <ol>
@@ -476,8 +479,8 @@ the depth-2 rule.</li>
 </blockquote>
 <h2 id="off-policy-evaluation"><a class="header" href="#off-policy-evaluation">Off-policy evaluation</a></h2>
 <p>A policy fitted to a sample will always look good on that sample. The
-serious test is held-out evaluation. The lab's workflow uses AIPW scores
-computed on a held-out fold, then estimates policy value and its
+serious test is held-out evaluation. The research workflow uses AIPW
+scores computed on a held-out fold, then estimates policy value and its
 sampling distribution by averaging over individuals' scores under the
 proposed rule. The estimator is <strong>doubly robust</strong> in the sense above;
 the standard errors come from a plug-in or bootstrap calculation that
@@ -661,7 +664,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
