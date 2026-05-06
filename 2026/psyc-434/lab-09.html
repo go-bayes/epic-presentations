@@ -260,7 +260,7 @@ explain, and contest.</p>
 <p><strong>What you will learn</strong></p>
 <ol>
 <li>How to read depth-1 and depth-2 policy trees.</li>
-<li>How to compare tree depth using policy value and interpretability.</li>
+<li>How to select tree depth using a stated parsimony threshold.</li>
 <li>How to interpret policy coverage: the share of people the rule
 treats.</li>
 <li>How to translate one tree into plain language.</li>
@@ -442,6 +442,41 @@ gain is worth the extra complexity.</p>
 <pre><code class="language-r">cat("\n=== depth comparison ===\n")
 print(wf$best$depth_summary_df)
 </code></pre>
+<p>The depth choice is not mechanical. Investigators must state how much
+extra policy value is needed before a depth-2 tree is worth using.
+<code>margot</code> exposes that choice through <code>min_gain_for_depth_switch</code>.</p>
+<pre><code class="language-r">depth_thresholds &lt;- c(0.005, 0.01, 0.03)
+depth_sensitivity &lt;- dplyr::bind_rows(lapply(depth_thresholds, \(threshold) {
+  best_at_threshold &lt;- suppressMessages(suppressWarnings(
+    margot::margot_policy_summary_compare_depths(
+      policy_tree_stability,
+      label_mapping = label_mapping,
+      min_gain_for_depth_switch = threshold,
+      verbose = FALSE
+    )
+  ))
+  best_at_threshold$depth_summary_df |&gt;
+    dplyr::transmute(
+      threshold = threshold,
+      outcome = outcome_label,
+      selected_depth = depth_selected,
+      pv_depth1 = pv_depth1,
+      pv_depth2 = pv_depth2,
+      gain_depth2_minus_depth1 = pv_depth2 - pv_depth1
+    )
+}))
+
+cat("\n=== depth selection sensitivity ===\n")
+print(depth_sensitivity)
+</code></pre>
+<blockquote>
+<p><strong>Parsimony threshold</strong></p>
+<p>A threshold of <code>0.005</code> says a depth-2 tree is worth using for a gain
+above 0.005 outcome units. A threshold of <code>0.03</code> says the extra split
+must buy at least 0.03 units. The threshold is an investigator
+judgement about interpretability, implementation cost, and expected
+value.</p>
+</blockquote>
 <blockquote>
 <p><strong>Coverage matters</strong></p>
 <p>If a policy tree recommends treatment for 90-97% of people, it is
@@ -489,19 +524,19 @@ for (m in model_ids) {
     label_mapping = label_mapping
   )
 
-  print(depth1_tree)
-  print(depth2_tree)
-  print(depth2_scatter)
+  suppressWarnings(print(depth1_tree))
+  suppressWarnings(print(depth2_tree))
+  suppressWarnings(print(depth2_scatter))
 
-  ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth1-tree.png")),
+  suppressWarnings(ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth1-tree.png")),
     depth1_tree, width = 8, height = 5, dpi = 150
-  )
-  ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth2-tree.png")),
+  ))
+  suppressWarnings(ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth2-tree.png")),
     depth2_tree, width = 8, height = 5, dpi = 150
-  )
-  ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth2-scatter.png")),
+  ))
+  suppressWarnings(ggplot2::ggsave(file.path(plot_dir, paste0(m, "-depth2-scatter.png")),
     depth2_scatter, width = 8, height = 5, dpi = 150
-  )
+  ))
 
   policy_tree_plots[[m]] &lt;- list(
     depth1_tree = depth1_tree,

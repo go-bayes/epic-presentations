@@ -216,7 +216,37 @@ print(wf$policy_brief_df)
 cat("\n=== depth comparison ===\n")
 print(wf$best$depth_summary_df)
 
-# --- step 5: render and save policy trees ------------------------------------
+# --- step 5: choose the parsimony threshold ----------------------------------
+
+# Depth selection is not automatic. Investigators must state how much
+# added policy value is needed before a more complex depth-2 tree is
+# worth using. The cached workflow used a permissive default threshold.
+# Try stricter thresholds and watch the selected depths change.
+depth_thresholds <- c(0.005, 0.01, 0.03)
+depth_sensitivity <- dplyr::bind_rows(lapply(depth_thresholds, \(threshold) {
+  best_at_threshold <- suppressMessages(suppressWarnings(
+    margot::margot_policy_summary_compare_depths(
+      policy_tree_stability,
+      label_mapping = label_mapping,
+      min_gain_for_depth_switch = threshold,
+      verbose = FALSE
+    )
+  ))
+  best_at_threshold$depth_summary_df |>
+    dplyr::transmute(
+      threshold = threshold,
+      outcome = outcome_label,
+      selected_depth = depth_selected,
+      pv_depth1 = pv_depth1,
+      pv_depth2 = pv_depth2,
+      gain_depth2_minus_depth1 = pv_depth2 - pv_depth1
+    )
+}))
+
+cat("\n=== depth selection sensitivity ===\n")
+print(depth_sensitivity)
+
+# --- step 6: render and save policy trees ------------------------------------
 
 # a policy tree converts the personalised CATE into a transparent
 # allocation rule: "treat people in this leaf, do not treat in this
@@ -254,31 +284,31 @@ for (m in model_ids) {
     label_mapping = label_mapping
   )
 
-  print(depth1_tree)
-  print(depth2_tree)
-  print(depth2_scatter)
+  suppressWarnings(print(depth1_tree))
+  suppressWarnings(print(depth2_tree))
+  suppressWarnings(print(depth2_scatter))
 
-  ggplot2::ggsave(
+  suppressWarnings(ggplot2::ggsave(
     filename = file.path(plot_dir, paste0(m, "-depth1-tree.png")),
     plot = depth1_tree,
     width = 8,
     height = 5,
     dpi = 150
-  )
-  ggplot2::ggsave(
+  ))
+  suppressWarnings(ggplot2::ggsave(
     filename = file.path(plot_dir, paste0(m, "-depth2-tree.png")),
     plot = depth2_tree,
     width = 8,
     height = 5,
     dpi = 150
-  )
-  ggplot2::ggsave(
+  ))
+  suppressWarnings(ggplot2::ggsave(
     filename = file.path(plot_dir, paste0(m, "-depth2-scatter.png")),
     plot = depth2_scatter,
     width = 8,
     height = 5,
     dpi = 150
-  )
+  ))
 
   policy_tree_plots[[m]] <- list(
     depth1_tree = depth1_tree,
@@ -289,7 +319,7 @@ for (m in model_ids) {
 
 cat("\nPolicy-tree plots saved to:\n  ", plot_dir, "\n", sep = "")
 
-# --- step 6: translate one policy tree ---------------------------------------
+# --- step 7: translate one policy tree ---------------------------------------
 
 # Use the Purpose tree for the worked example. Open the saved depth-2
 # tree and write the rule as ordinary language. Then compare the rule's
@@ -308,7 +338,7 @@ cat(
   sep = ""
 )
 
-# --- step 7: read the auto-generated prose ----------------------------------
+# --- step 8: read the auto-generated prose ----------------------------------
 
 # margot synthesises a draft narrative from the policy-workflow object.
 # read it critically. the prose is generated from the same numbers you
@@ -318,7 +348,7 @@ cat(
 cat("\n=========== auto-generated prose ===========\n\n")
 cat(wf$report_prose)
 
-# --- step 8: ground truth from the simulator -------------------------------
+# --- step 9: ground truth from the simulator -------------------------------
 
 # the analyses above never see the truth. the simulator stores the
 # *true* individual treatment effects in tau_community_<outcome>
@@ -360,6 +390,7 @@ print(true_tau_table)
 # data -> batch causal forest
 #      -> quick ATE and heterogeneity checks
 #      -> policy-value and coverage summary
+#      -> depth selection under a stated parsimony threshold
 #      -> depth-1 and depth-2 policy trees
 #      -> plain-language rule translation
 #      -> ground-truth audit.
