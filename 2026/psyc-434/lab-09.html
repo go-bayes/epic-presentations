@@ -325,13 +325,13 @@ missing_cran &lt;- cran_packages[
 ]
 if (length(missing_cran) &gt; 0) install.packages(missing_cran)
 
-if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 if (!requireNamespace("margot", quietly = TRUE)) {
-  remotes::install_github("go-bayes/margot", upgrade = "never")
+  pak::pak("go-bayes/margot")
 }
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
     packageVersion("causalworkshop") &lt; "0.6.0") {
-  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+  pak::pak("go-bayes/causalworkshop")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
   }

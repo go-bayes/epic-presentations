@@ -295,7 +295,7 @@ Xcode app.</p>
 <p>Run this in R:</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "purrr", "grf",
-  "arrow", "qs2", "googledrive", "remotes"
+  "arrow", "qs2", "googledrive", "pak"
 )
 
 missing_cran &lt;- cran_packages[
@@ -307,19 +307,22 @@ if (length(missing_cran) &gt; 0) {
 }
 </code></pre>
 <h2 id="step-4-install-github-packages"><a class="header" href="#step-4-install-github-packages">Step 4: Install GitHub Packages</a></h2>
-<p>You may use either <code>remotes</code> or <code>pak</code>. Try <code>remotes</code> first because it is
-simpler to explain.</p>
-<h3 id="option-a-remotes"><a class="header" href="#option-a-remotes">Option A: remotes</a></h3>
-<pre><code class="language-r">remotes::install_github("go-bayes/margot", upgrade = "never")
-remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
-</code></pre>
-<h3 id="option-b-pak"><a class="header" href="#option-b-pak">Option B: pak</a></h3>
-<pre><code class="language-r">install.packages("pak")
-pak::pak("go-bayes/margot")
+<p>Use <code>pak</code> first. It is the recommended installer because it resolves
+dependencies well and gives useful diagnostics. It still needs the
+system build tools above when packages must be built from source.</p>
+<h3 id="recommended-pak"><a class="header" href="#recommended-pak">Recommended: pak</a></h3>
+<pre><code class="language-r">pak::pak("go-bayes/margot")
 pak::pak("go-bayes/causalworkshop")
 </code></pre>
-<p><code>pak</code> can be faster and better at resolving dependencies. It still needs
-the same system build tools when packages must be built from source.</p>
+<h3 id="fallback-remotes"><a class="header" href="#fallback-remotes">Fallback: remotes</a></h3>
+<p>If <code>pak</code> itself fails, try <code>remotes</code>:</p>
+<pre><code class="language-r">install.packages("remotes")
+remotes::install_github("go-bayes/margot", upgrade = "never")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+</code></pre>
+<p>If the error mentions <code>make</code>, <code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation,
+changing installers will not solve the problem. Install the system build
+tools in Step 2, restart RStudio, then rerun the <code>pak</code> commands.</p>
 <h2 id="step-5-check-the-installation"><a class="header" href="#step-5-check-the-installation">Step 5: Check the Installation</a></h2>
 <p>Restart RStudio, then run:</p>
 <pre><code class="language-r">packages &lt;- c(

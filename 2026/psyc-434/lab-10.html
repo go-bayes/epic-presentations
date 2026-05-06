@@ -287,8 +287,8 @@ library(tidyverse)
 <p>If you haven't installed these packages, follow <a href="lab-setup.html">Lab Setup: R Packages
 and Build Tools</a>, then run:
 <code>install.packages(c("psych", "lavaan"))</code>
-<code>if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")</code>
-<code>remotes::install_github("go-bayes/causalworkshop", upgrade = "never")</code></p>
+<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
+<code>pak::pak("go-bayes/causalworkshop")</code></p>
 </blockquote>
 <h2 id="generate-data"><a class="header" href="#generate-data">Generate data</a></h2>
 <p>The <code>simulate_measurement_items()</code> function generates a 6-item

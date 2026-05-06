@@ -18,10 +18,10 @@ required_causalworkshop_exports <- c("simulate_measurement_items")
 
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
   !all(required_causalworkshop_exports %in% getNamespaceExports("causalworkshop"))) {
-  if (!requireNamespace("remotes", quietly = TRUE)) {
-    install.packages("remotes")
+  if (!requireNamespace("pak", quietly = TRUE)) {
+    install.packages("pak")
   }
-  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+  pak::pak("go-bayes/causalworkshop")
 }
 
 library(causalworkshop)

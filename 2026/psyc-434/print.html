@@ -489,8 +489,8 @@ Expression of Interest using the causal inference framework.</li>
 date, Option A is assumed.</p>
 <p>Generate your data using the <code>causalworkshop</code> package:</p>
 <pre><code class="language-r"># install (once)
-install.packages("remotes")
-remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+install.packages("pak")
+pak::pak("go-bayes/causalworkshop")
 
 # generate data
 library(causalworkshop)
@@ -3029,8 +3029,8 @@ not remove confounding by design.</p>
 <p>There is no confounding.</p>
 <p>The challenge is functional form.</p>
 <pre><code class="language-r"># install once
-# install.packages("remotes")
-# remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+# install.packages("pak")
+# pak::pak("go-bayes/causalworkshop")
 library(causalworkshop)
 
 # simulate data with non-linear heterogeneous effects
@@ -4760,7 +4760,7 @@ Xcode app.</p>
 <p>Run this in R:</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "purrr", "grf",
-  "arrow", "qs2", "googledrive", "remotes"
+  "arrow", "qs2", "googledrive", "pak"
 )
 
 missing_cran &lt;- cran_packages[
@@ -4772,19 +4772,22 @@ if (length(missing_cran) &gt; 0) {
 }
 </code></pre>
 <h2 id="step-4-install-github-packages"><a class="header" href="#step-4-install-github-packages">Step 4: Install GitHub Packages</a></h2>
-<p>You may use either <code>remotes</code> or <code>pak</code>. Try <code>remotes</code> first because it is
-simpler to explain.</p>
-<h3 id="option-a-remotes"><a class="header" href="#option-a-remotes">Option A: remotes</a></h3>
-<pre><code class="language-r">remotes::install_github("go-bayes/margot", upgrade = "never")
-remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
-</code></pre>
-<h3 id="option-b-pak"><a class="header" href="#option-b-pak">Option B: pak</a></h3>
-<pre><code class="language-r">install.packages("pak")
-pak::pak("go-bayes/margot")
+<p>Use <code>pak</code> first. It is the recommended installer because it resolves
+dependencies well and gives useful diagnostics. It still needs the
+system build tools above when packages must be built from source.</p>
+<h3 id="recommended-pak"><a class="header" href="#recommended-pak">Recommended: pak</a></h3>
+<pre><code class="language-r">pak::pak("go-bayes/margot")
 pak::pak("go-bayes/causalworkshop")
 </code></pre>
-<p><code>pak</code> can be faster and better at resolving dependencies. It still needs
-the same system build tools when packages must be built from source.</p>
+<h3 id="fallback-remotes"><a class="header" href="#fallback-remotes">Fallback: remotes</a></h3>
+<p>If <code>pak</code> itself fails, try <code>remotes</code>:</p>
+<pre><code class="language-r">install.packages("remotes")
+remotes::install_github("go-bayes/margot", upgrade = "never")
+remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+</code></pre>
+<p>If the error mentions <code>make</code>, <code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation,
+changing installers will not solve the problem. Install the system build
+tools in Step 2, restart RStudio, then rerun the <code>pak</code> commands.</p>
 <h2 id="step-5-check-the-installation"><a class="header" href="#step-5-check-the-installation">Step 5: Check the Installation</a></h2>
 <p>Restart RStudio, then run:</p>
 <pre><code class="language-r">packages &lt;- c(
@@ -6044,8 +6047,8 @@ Media. <a href="https://r4ds.had.co.nz">Available online</a></li>
 <p><strong>Exercise 2b: Install the causalworkshop package</strong></p>
 <p>The <code>causalworkshop</code> package provides simulated data for your research
 report. Run the following in your R console:</p>
-<pre><code class="language-r">install.packages("remotes")
-remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+<pre><code class="language-r">install.packages("pak")
+pak::pak("go-bayes/causalworkshop")
 </code></pre>
 <p>If this fails with an error about <code>make</code> or compilation, follow <a href="lab-setup.html">Lab
 Setup: R Packages and Build Tools</a>, then try again.</p>
@@ -6468,8 +6471,8 @@ before proceeding if you haven't already.</p>
 <p>Install and load the required packages:</p>
 <pre><code class="language-r"># install packages if needed
 # install.packages("grf")
-# if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-# remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+# if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+# pak::pak("go-bayes/causalworkshop")
 
 library(causalworkshop)
 library(grf)
@@ -6994,10 +6997,10 @@ missing &lt;- required_packages[
 ]
 if (length(missing) &gt; 0) install.packages(missing)
 
-if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
     packageVersion("causalworkshop") &lt; "0.6.0") {
-  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+  pak::pak("go-bayes/causalworkshop")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
   }
@@ -7327,13 +7330,13 @@ missing_cran &lt;- cran_packages[
 ]
 if (length(missing_cran) &gt; 0) install.packages(missing_cran)
 
-if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 if (!requireNamespace("margot", quietly = TRUE)) {
-  remotes::install_github("go-bayes/margot", upgrade = "never")
+  pak::pak("go-bayes/margot")
 }
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
     packageVersion("causalworkshop") &lt; "0.6.0") {
-  remotes::install_github("go-bayes/causalworkshop", upgrade = "never")
+  pak::pak("go-bayes/causalworkshop")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
   }
@@ -7656,8 +7659,8 @@ library(tidyverse)
 <p>If you haven't installed these packages, follow <a href="lab-setup.html">Lab Setup: R Packages
 and Build Tools</a>, then run:
 <code>install.packages(c("psych", "lavaan"))</code>
-<code>if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")</code>
-<code>remotes::install_github("go-bayes/causalworkshop", upgrade = "never")</code></p>
+<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
+<code>pak::pak("go-bayes/causalworkshop")</code></p>
 </blockquote>
 <h2 id="generate-data"><a class="header" href="#generate-data">Generate data</a></h2>
 <p>The <code>simulate_measurement_items()</code> function generates a 6-item
@@ -9095,8 +9098,7 @@ it, so you can see the reasoning step by step.</p>
 <p><code>causalworkshop</code>, <code>tidyverse</code>, <code>stdReg</code>, <code>gtsummary</code>, <code>clarify</code>,
 <code>grf</code>. Follow <a href="lab-setup.html">Lab Setup: R Packages and Build Tools</a>,
 then install <code>causalworkshop</code> from GitHub with
-<code>remotes::install_github("go-bayes/causalworkshop", upgrade = "never")</code>
-(version $\geq$ 0.6.0).</p>
+<code>pak::pak("go-bayes/causalworkshop")</code> (version $\geq$ 0.6.0).</p>
 </blockquote>
 <hr />
 <h2 id="generalisability-and-transportability"><a class="header" href="#generalisability-and-transportability">Generalisability and transportability</a></h2>
