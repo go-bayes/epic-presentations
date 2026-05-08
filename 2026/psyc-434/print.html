@@ -3818,11 +3818,21 @@ inverse-propensity-weighted (AIPW)</strong> score:</p>
 <p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{W_i = a}}{\Pr(W = a
 \mid X_i)},\bigl(Y_i - \mu_a(X_i)\bigr), $$</p>
 <p>where $\mu_a(x)$ is the outcome model and $\Pr(W = a \mid x)$ is the
-propensity. The first term is the model's best guess at $Y_i(a)$; the
-second corrects that guess on the observed cases using
-inverse-propensity reweighting. A rule built on AIPW scores is therefore
-robust to one form of misspecification: as long as one of the two models
-is correct, the scores stay unbiased estimates of $Y_i(a)$.</p>
+propensity. The first term is the model's best guess at $Y_i(a)$ for
+everyone. The second term uses the people who actually received action
+$a$ to correct that guess. The propensity score appears in the
+denominator because only a fraction of people with covariates like
+$X_i$ received action $a$; inverse-propensity weighting scales their
+residuals so they represent the whole covariate stratum, not only the
+observed treated or untreated cases.</p>
+<p>The result is a pseudo-outcome for each possible action. Under
+consistency, exchangeability, positivity, and correct specification of
+either the outcome model or the propensity model, averaging
+$\Gamma_i(a)$ estimates the mean potential outcome
+$\mathbb{E}[Y(a)]$. That is why an average of AIPW scores can
+estimate utility. Utility is the mean outcome we would expect if a rule
+were applied, and the AIPW score supplies the missing potential-outcome
+information for the action the rule would assign.</p>
 <p>This is the bridge from individual scores to policy value. For any
 candidate rule $d$, evaluate the score for the action that rule
 assigns to each person, then average:</p>
