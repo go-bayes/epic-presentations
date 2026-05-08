@@ -474,33 +474,47 @@ the data are simulated.</p>
 <p><strong>Missing data.</strong> Describe how missing data are handled. Use inverse
 probability of censoring weights (IPCW) for attrition, or state why the
 synthetic panel does not require them.</p>
-<p><strong>Model approach.</strong> Estimate the four ATEs with a doubly-robust method
-(we recommend <code>grf::causal_forest()</code> with <code>average_treatment_effect()</code>).
-Briefly explain how machine learning is used and what "doubly robust"
-means. State the tuning choices (number of trees, honesty, seed).</p>
+<p><strong>Model approach.</strong> Estimate the four ATEs in one batch using
+<code>margot::margot_causal_forest()</code> (a wrapper around
+<code>grf::causal_forest()</code> with sensible defaults: honest splitting,
+doubly-robust ATEs, and a shared adjustment set). Briefly explain how
+machine learning is used and what "doubly robust" means. State the
+tuning choices (number of trees, honesty, seed). The
+<code>research-report-template</code> scaffold (Lab 10) configures these choices in
+<code>setup.R</code>; report the values you used.</p>
 <p><strong>Multiple-testing correction.</strong> Because you report four outcomes, apply
 a Bonferroni correction at $\alpha_{FW} = 0.05$ and report the
 multiplicity-adjusted confidence intervals.</p>
 <p><strong>Sensitivity analysis.</strong> Report an E-value (<a href="#ref-vanderweele2017">VanderWeele &amp; Ding,
 2017</a>) for every outcome's point estimate and for
-the lower bound of its multiplicity-adjusted confidence interval.
-Interpret each E-value in plain language.</p>
+the lower bound of its multiplicity-adjusted (Bonferroni) confidence
+interval. The <code>ate_table()</code> helper in <code>setup.R</code> computes both. Interpret
+each E-value in plain language.</p>
 <p><strong>Reporting.</strong> Present the four ATE estimates, multiplicity-adjusted 95%
 confidence intervals, and E-values in a single forest plot <strong>and</strong> an
 accompanying table. Order outcomes by effect magnitude. Interpret the
 pattern as a whole, not outcome by outcome.</p>
 <p><strong>Subgroup identification with policy trees.</strong> This course studies
-comparative work. After estimating the four ATEs, fit a depth-2 policy
-tree per outcome using <code>margot</code> (Lab 9 walks through the steps).
-Identify the subgroup or region for which the estimated treatment effect
-is strongest. Translate the region into plain language a non-specialist
-could repeat. Report its expected mean difference, uncertainty, and
-approximate sample proportion. Report the policy value with its 95%
-confidence interval, and note whether the depth-2 rule meaningfully
-improves on depth-1 (apply the parsimony rule from the <a href="reporting-guide.html">Reporting
-Guide</a>). The current <code>margot</code> workflow does not
-force a fixed percentage treated; if you discuss a budget cap, state it
-as an extra decision problem.</p>
+comparative work. After estimating the four ATEs, fit depth-1 and
+depth-2 policy trees per outcome using the <code>margot</code> policy-tree workflow
+(Lab 9 walks through the steps; Lab 10 wires it into the report). Use
+the parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a> to
+choose between depth-1 and depth-2 (the course default is
+<code>min_gain_for_depth_switch = 0.01</code> outcome units). Identify the subgroup
+or region for which the estimated treatment effect is strongest.
+Translate the region into plain language a non-specialist could repeat.
+Report its expected mean difference, uncertainty, and approximate sample
+proportion. Report the policy value with its 95% confidence interval.
+The current <code>margot</code> workflow does not force a fixed percentage treated;
+if you discuss a budget cap, state it as an extra decision problem.</p>
+<p><strong>Graphing rule for policy trees.</strong> Apply
+<code>margot::margot_select_grf_policy_trees()</code> to decide which trees to
+plot. The rule keeps a policy tree only when both the policy-value and
+the treated-uplift lower confidence limits exceed zero (the course
+default thresholds are zero for both). State the thresholds in your
+methods. Outcomes that fail the rule remain in your tables and prose;
+their trees do not appear as figures. If no outcome passes the rule,
+report that and discuss what an unidentified targeting story implies.</p>
 <p><strong>Ethics statement.</strong> Devote one paragraph (about 150 words) to what
 would need to be considered before acting on the policy tree. Address:
 (i) fairness — if the rule were used to prioritise access, who might

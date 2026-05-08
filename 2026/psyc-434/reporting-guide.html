@@ -293,42 +293,52 @@ $a=0$, conditional on baseline characteristics?"</p>
 <h2 id="reporting-average-treatment-effects"><a class="header" href="#reporting-average-treatment-effects">Reporting average treatment effects</a></h2>
 <h3 id="standard-ate-table-format"><a class="header" href="#standard-ate-table-format">Standard ATE table format</a></h3>
 <p>Include these elements for each outcome:</p>
-<div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>Estimate (SD units)</th><th>95% CI</th><th>E-value</th><th>Interpretation</th></tr></thead><tbody>
-<tr><td>Outcome A</td><td>0.12</td><td>[0.08, 0.16]</td><td>1.8</td><td>Small positive effect</td></tr>
-<tr><td>Outcome B</td><td>0.15</td><td>[0.11, 0.19]</td><td>2.1</td><td>Moderate positive effect</td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>Estimate (SD units)</th><th>Bonferroni 95% CI</th><th>E-value (point)</th><th>E-value (Bonferroni bound)</th></tr></thead><tbody>
+<tr><td>Outcome A</td><td>0.12</td><td>[0.05, 0.19]</td><td>1.8</td><td>1.3</td></tr>
+<tr><td>Outcome B</td><td>0.15</td><td>[0.08, 0.22]</td><td>2.1</td><td>1.4</td></tr>
 </tbody></table>
 </div>
 <h3 id="key-reporting-elements"><a class="header" href="#key-reporting-elements">Key reporting elements</a></h3>
 <ol>
-<li><strong>Effect sizes</strong>: report in standard deviation units for continuous
+<li><strong>Effect sizes</strong>: report in standard deviation units. The
+simulator's four wellbeing outcomes are pre-z-scored, so the
+standardised scale is the only scale available — there is no
+original 1–7 scale to recover.</li>
+<li><strong>Confidence intervals</strong>: report the multiplicity-adjusted
+(Bonferroni) interval, since the design is outcome-wide across four
 outcomes.</li>
-<li><strong>Confidence intervals</strong>: show uncertainty around each estimate.</li>
-<li><strong>E-values</strong>: show how strong an unmeasured confounder would need to
-be to explain away the estimate.</li>
+<li><strong>E-values</strong>: report two — one for the point estimate and one for
+the lower end of the multiplicity-adjusted confidence interval (the
+bound nearest the null). Both are produced by the <code>ate_table()</code>
+helper in the research-report template's <code>setup.R</code>.</li>
 <li><strong>Sample size</strong>: total analysed after exclusions and weighting.</li>
 </ol>
 <h3 id="example-results-text"><a class="header" href="#example-results-text">Example results text</a></h3>
 <blockquote>
 <p>"Weekly religious service attendance was estimated to improve all four
 wellbeing outcomes. The largest estimates were for sense of belonging
-($\beta = 0.18$, 95% CI: 0.14–0.22) and life satisfaction ($\beta =
-0.15$, 95% CI: 0.11–0.19). The E-values were above 1.6, meaning an
-unmeasured confounder would need to be associated with both attendance
-and these outcomes by a risk ratio of at least 1.6 each, above and
-beyond measured covariates, to explain away the estimates."</p>
+($\beta = 0.18$ SD units, Bonferroni 95% CI: 0.11–0.25) and life
+satisfaction ($\beta = 0.15$ SD units, Bonferroni 95% CI:
+0.08–0.22). The point E-values were above 1.6 and the Bonferroni-bound
+E-values above 1.3, meaning an unmeasured confounder would need to be
+associated with both attendance and these outcomes by a risk ratio of
+at least 1.3 each, above and beyond measured covariates, to push the
+multiplicity-adjusted lower bound to the null."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
-<h3 id="rate-results-summary"><a class="header" href="#rate-results-summary">RATE results summary</a></h3>
-<p>For Option A, use RATE and QINI as supporting diagnostics. Put the plots
-and detailed ranking results in the appendix, then refer to them briefly
-from the main text if they help interpret the policy-tree results.</p>
+<p>For Option A, the policy-tree workflow is the primary heterogeneity
+output (see the next section). RATE and Qini diagnostics are introduced
+in Lab 8; you may include them as optional appendix material if they
+help interpret your policy trees, but they are not required for the
+report.</p>
+<h3 id="optional-rate-and-qini-diagnostics"><a class="header" href="#optional-rate-and-qini-diagnostics">Optional: RATE and Qini diagnostics</a></h3>
 <p>When there is evidence of heterogeneity, report it plainly:</p>
 <div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>RATE-AUTOC</th><th>p-value</th><th>RATE-Qini</th><th>p-value</th><th>Evidence</th></tr></thead><tbody>
-<tr><td>Social support</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
 <tr><td>Belonging</td><td>0.15</td><td>0.001</td><td>0.11</td><td>0.004</td><td>Strong</td></tr>
-<tr><td>Charitable donations</td><td>0.06</td><td>0.089</td><td>0.04</td><td>0.156</td><td>Moderate</td></tr>
-<tr><td>Volunteering</td><td>0.03</td><td>0.234</td><td>0.02</td><td>0.445</td><td>Weak</td></tr>
+<tr><td>Life satisfaction</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
+<tr><td>Sense of purpose</td><td>0.06</td><td>0.089</td><td>0.04</td><td>0.156</td><td>Moderate</td></tr>
+<tr><td>Self-esteem</td><td>0.03</td><td>0.234</td><td>0.02</td><td>0.445</td><td>Weak</td></tr>
 </tbody></table>
 </div>
 <h3 id="example-heterogeneity-text"><a class="header" href="#example-heterogeneity-text">Example heterogeneity text</a></h3>
@@ -342,10 +352,11 @@ causes of response."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
-<p>Present policy trees with both standardised and original-scale
-interpretations. In the current lab workflow, the tree describes the
-action or high-response region implied by the supplied rewards; it does
-not force a fixed percentage treated.</p>
+<p>Present each policy tree on the standardised outcome scale used by the
+simulator (the four wellbeing outcomes are pre-z-scored, so SD units are
+the only scale available). The tree describes the action or
+high-response region implied by the supplied rewards; it does not force
+a fixed percentage treated.</p>
 <h3 id="parsimony-rule"><a class="header" href="#parsimony-rule">Parsimony rule</a></h3>
 <p>Fit both depth-1 and depth-2 policy trees. Prefer the depth-1 tree
 unless the depth-2 tree improves policy value by at least
@@ -354,33 +365,46 @@ unless the depth-2 tree improves policy value by at least
 </code></pre>
 <p>State the threshold before reporting the selected tree. If depth-2 does
 not clear the threshold, report the simpler tree in the main text and
-place the full depth comparison in the appendix.</p>
-<h3 id="subgroup-reporting-with-data-scale-effects"><a class="header" href="#subgroup-reporting-with-data-scale-effects">Subgroup reporting with data-scale effects</a></h3>
-<p><strong>High-response subgroups for life satisfaction:</strong></p>
+place the full depth comparison in the appendix. The
+<code>margot_policy_workflow()</code> function applies this rule automatically and
+exposes the comparison in <code>wf$best$depth_summary_df</code>.</p>
+<h3 id="graphing-rule"><a class="header" href="#graphing-rule">Graphing rule</a></h3>
+<p>Apply <code>margot::margot_select_grf_policy_trees()</code> after the policy-tree
+workflow runs. The graphing rule keeps a policy tree only when <strong>both</strong>
+the policy-value lower confidence limit and the treated-uplift lower
+confidence limit exceed zero. Course defaults set both lower-CI
+thresholds at zero:</p>
+<pre><code class="language-r">policy_value_lower_threshold &lt;- 0
+treated_uplift_lower_threshold &lt;- 0
+</code></pre>
+<p>State the thresholds in your methods. Outcomes that fail the rule remain
+in your tables and prose; their trees do not appear as figures. The rule
+is a precommitment device: state the test, then graph only what passes.</p>
+<h3 id="subgroup-reporting"><a class="header" href="#subgroup-reporting">Subgroup reporting</a></h3>
+<p>For each graphed tree, report the high-response subgroups with their
+estimated effects, uncertainty, and sample proportions. Use the
+standardised scale; do not invent an original-scale interpretation,
+because the simulator outcomes are not on a 1–7 (or any other) raw
+scale.</p>
+<p><strong>Example: high-response subgroups for life satisfaction</strong></p>
 <ol>
 <li><strong>Older adults with high baseline belonging</strong> (age &gt; 45, baseline
 belonging &gt; +1 SD)
 <ul>
-<li>Standardised effect: $\beta = 0.28$ (95% CI: 0.21–0.35)</li>
-<li>Data-scale effect: 0.42 points on a 1–7 life satisfaction scale
-(95% CI: 0.31–0.53)</li>
+<li>Standardised effect: $\beta = 0.28$ SD units (95% CI: 0.21–0.35)</li>
 <li>Sample proportion: 23%</li>
 </ul>
 </li>
 <li><strong>Younger adults with lower baseline purpose</strong> (age &lt;= 45, baseline
 purpose &lt; 0)
 <ul>
-<li>Standardised effect: $\beta = 0.22$ (95% CI: 0.16–0.28)</li>
-<li>Data-scale effect: 0.33 points on a 1–7 life satisfaction scale
-(95% CI: 0.24–0.42)</li>
+<li>Standardised effect: $\beta = 0.22$ SD units (95% CI: 0.16–0.28)</li>
 <li>Sample proportion: 31%</li>
 </ul>
 </li>
 <li><strong>All others</strong>
 <ul>
-<li>Standardised effect: $\beta = 0.08$ (95% CI: 0.04–0.12)</li>
-<li>Data-scale effect: 0.12 points on a 1–7 life satisfaction scale
-(95% CI: 0.06–0.18)</li>
+<li>Standardised effect: $\beta = 0.08$ SD units (95% CI: 0.04–0.12)</li>
 <li>Sample proportion: 46%</li>
 </ul>
 </li>
@@ -389,10 +413,9 @@ purpose &lt; 0)
 <blockquote>
 <p>"The policy tree identified two subgroups with larger estimated gains
 in life satisfaction. Older adults (45+) with high baseline belonging
-had the largest estimate ($\beta = 0.28$ SD, about 0.42 points on a
-1–7 scale), representing 23% of the sample. This is a targeting
-result, not a claim that age or baseline belonging causes the
-treatment to work better."</p>
+had the largest estimate ($\beta = 0.28$ SD units), representing 23%
+of the sample. This is a targeting result, not a claim that age or
+baseline belonging causes the treatment to work better."</p>
 </blockquote>
 <hr />
 <h2 id="sensitivity-analysis-e-values"><a class="header" href="#sensitivity-analysis-e-values">Sensitivity analysis: E-values</a></h2>
@@ -439,12 +462,14 @@ policy value, and uncertainty.</li>
 <h2 id="reporting-checklist"><a class="header" href="#reporting-checklist">Reporting checklist</a></h2>
 <h3 id="do-report"><a class="header" href="#do-report">Do report</a></h3>
 <ul>
-<li>Both standardised and data-scale effects</li>
-<li>Effect sizes with confidence intervals</li>
+<li>Effect sizes in SD units (the simulator's outcome scale) with
+multiplicity-adjusted (Bonferroni) confidence intervals</li>
 <li>Sample sizes after exclusions and weighting</li>
-<li>E-values for sensitivity analysis</li>
+<li>E-values for both the point estimate and the Bonferroni-adjusted lower
+bound</li>
 <li>Clear practical interpretation of effect sizes</li>
-<li>Subgroup sizes and subgroup estimates</li>
+<li>Subgroup sizes and subgroup estimates for graphed policy trees</li>
+<li>The parsimony threshold and the graphing-rule thresholds you used</li>
 <li>Target trial framework and causal question</li>
 <li>Explicit treatment and outcome definitions</li>
 </ul>
@@ -452,7 +477,8 @@ policy value, and uncertainty.</li>
 <ul>
 <li>Model coefficients without interpretation</li>
 <li>p-values alone without effect sizes</li>
-<li>Only standardised effects for policy-relevant outcomes</li>
+<li>Original-scale (1–7) effects for the simulated outcomes; the simulator
+returns z-scored outcomes only</li>
 <li>Technical details that obscure main findings</li>
 <li>Causal claims beyond your identification strategy</li>
 </ul>
