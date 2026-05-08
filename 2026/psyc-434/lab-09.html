@@ -330,7 +330,7 @@ if (!requireNamespace("margot", quietly = TRUE)) {
   pak::pak("go-bayes/margot")
 }
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
-    packageVersion("causalworkshop") &lt; "0.6.0") {
+    packageVersion("causalworkshop") &lt; "0.6.1") {
   pak::pak("go-bayes/causalworkshop")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
@@ -349,7 +349,7 @@ tools, stop there and use the course lab machine or the pre-installed
 lab environment. Do not try to debug compilers during the lab.</p>
 <p>Load the cached fits. The first call downloads roughly 80 MB into a
 per-user cache directory; subsequent calls read from disk.</p>
-<pre><code class="language-r">cache &lt;- causalworkshop::load_lab_09_cache()
+<pre><code class="language-r">cache &lt;- causalworkshop::load_policy_learning_cache()
 
 models_binary &lt;- cache$models_binary
 policy_tree_stability &lt;- cache$policy_tree_stability

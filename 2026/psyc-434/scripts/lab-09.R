@@ -45,9 +45,9 @@ if (length(missing) > 0) {
   )
 }
 
-if (packageVersion("causalworkshop") < "0.6.0") {
+if (packageVersion("causalworkshop") < "0.6.1") {
   stop(
-    "causalworkshop >= 0.6.0 is required. Run the setup block in Lab 9, ",
+    "causalworkshop >= 0.6.1 is required. Run the setup block in Lab 9, ",
     "restart R, then run this script again.",
     call. = FALSE
   )
@@ -149,7 +149,7 @@ suppressPackageStartupMessages({
 #
 # load the pre-fitted results. the first run may take a moment while the
 # cache downloads; later runs should be faster.
-cache <- causalworkshop::load_lab_09_cache()
+cache <- causalworkshop::load_policy_learning_cache()
 
 models_binary <- cache$models_binary
 policy_tree_stability <- cache$policy_tree_stability
