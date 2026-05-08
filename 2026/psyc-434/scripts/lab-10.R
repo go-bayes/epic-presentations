@@ -1,234 +1,171 @@
 # ============================================================================
-# PSYC 434 — Lab 10: Measurement Invariance
-# self-standing script — run from top to bottom
+# PSYC 434 -- Lab 10: End-to-End Research Report
+# self-standing script -- run from top to bottom inside the unzipped
+# research-report template directory
+# ============================================================================
+
+# learning aims for this lab:
+#   1. assemble the course workflow into one report.
+#   2. estimate four ATEs in one batch with margot::margot_causal_forest.
+#   3. apply Bonferroni correction and report E-values for an outcome-wide
+#      design.
+#   4. fit policy trees and choose depth via a stated parsimony threshold.
+#   5. apply margot_select_grf_policy_trees() as a transparent graphing
+#      rule.
+#   6. render manuscript.qmd to PDF.
+#
+# how this lab differs from earlier labs:
+#   labs 5/6/8/9 taught the building blocks. lab 10 puts them together.
+#   the assignment is outcome-wide on one of two exposures
+#   (religious_service or volunteer_work). community_group is reserved
+#   for the lab 9 worked example and must not be used here.
 # ============================================================================
 
 # --- packages ---------------------------------------------------------------
 
-required_packages <- c("psych", "lavaan", "tidyverse")
-missing_packages <- required_packages[
-  !vapply(required_packages, \(pkg) requireNamespace(pkg, quietly = TRUE), logical(1))
+required_packages <- c(
+  "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
+  "knitr", "kableExtra", "rmarkdown",
+  "margot", "causalworkshop"
+)
+missing <- required_packages[
+  !vapply(required_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
 ]
 
-if (length(missing_packages) > 0) {
-  install.packages(missing_packages)
+if (length(missing) > 0) {
+  stop(
+    "Missing package(s): ", paste(missing, collapse = ", "), "\n\n",
+    "Run the setup block in Lab 10 first, restart R, then run this script ",
+    "again. If GitHub package installation fails, use the course lab ",
+    "machine. Errors mentioning make, gcc, g++, clang, or compilation ",
+    "usually mean your system build tools are missing.",
+    call. = FALSE
+  )
 }
 
-required_causalworkshop_exports <- c("simulate_measurement_items")
-
-if (!requireNamespace("causalworkshop", quietly = TRUE) ||
-  !all(required_causalworkshop_exports %in% getNamespaceExports("causalworkshop"))) {
-  if (!requireNamespace("pak", quietly = TRUE)) {
-    install.packages("pak")
-  }
-  pak::pak("go-bayes/causalworkshop")
+if (packageVersion("margot") < "1.0.300") {
+  stop("margot >= 1.0.300 is required. Run the setup block, restart R, then re-run.",
+       call. = FALSE)
+}
+if (packageVersion("causalworkshop") < "0.6.0") {
+  stop("causalworkshop >= 0.6.0 is required. Run the setup block, restart R, then re-run.",
+       call. = FALSE)
 }
 
-library(causalworkshop)
-library(psych)
-library(lavaan)
-library(tidyverse)
-
-# work around environments where detectCores() returns NA and lavaan errors
-if (is.na(suppressWarnings(parallel::detectCores()))) {
-  parallel_ns <- asNamespace("parallel")
-  unlockBinding("detectCores", parallel_ns)
-  assign(
-    "detectCores",
-    function(all.tests = FALSE, logical = TRUE) 1L,
-    envir = parallel_ns
-  )
-  lockBinding("detectCores", parallel_ns)
-}
-
-# --- generate data ----------------------------------------------------------
-
-d <- simulate_measurement_items(n = 2000, seed = 2026)
-dim(d)
-names(d)
-
-# check true factor loadings and intercepts
-attr(d, "true_loadings")
-attr(d, "true_intercepts_group0")
-attr(d, "true_intercepts_group1")
-
-# --- exploratory factor analysis (EFA) --------------------------------------
-
-# select items
-items <- d |> select(item_1:item_6)
-
-# factorability
-psych::KMO(items)
-psych::cortest.bartlett(cor(items), n = nrow(items))
-
-# one-factor solution
-fa_1 <- psych::fa(items, nfactors = 1, fm = "ml", rotate = "none")
-print(fa_1$loadings, cutoff = 0.3)
-
-# two-factor solution (for comparison)
-fa_2 <- psych::fa(items, nfactors = 2, fm = "ml", rotate = "oblimin")
-print(fa_2$loadings, cutoff = 0.3)
-
-# --- confirmatory factor analysis (CFA) ------------------------------------
-
-# specify one-factor model
-model <- "
-  distress =~ item_1 + item_2 + item_3 + item_4 + item_5 + item_6
-"
-
-# fit CFA on full sample
-fit_cfa <- cfa(model, data = d)
-summary(fit_cfa, fit.measures = TRUE, standardized = TRUE)
-
-# extract key fit indices
-fit_indices <- fitmeasures(fit_cfa, c("cfi", "rmsea", "srmr"))
-print(round(fit_indices, 3))
-
-# --- multigroup CFA: invariance testing -------------------------------------
-
-# step 1: configural invariance
-fit_configural <- cfa(model, data = d, group = "group")
-summary(fit_configural, fit.measures = TRUE)
-
-# step 2: metric invariance (equal loadings)
-fit_metric <- cfa(model, data = d, group = "group",
-                  group.equal = "loadings")
-summary(fit_metric, fit.measures = TRUE)
-
-# compare configural vs metric
-lavTestLRT(fit_configural, fit_metric)
-
-# step 3: scalar invariance (equal loadings + intercepts)
-fit_scalar <- cfa(model, data = d, group = "group",
-                  group.equal = c("loadings", "intercepts"))
-summary(fit_scalar, fit.measures = TRUE)
-
-# compare metric vs scalar
-lavTestLRT(fit_metric, fit_scalar)
-
-# --- partial scalar invariance ----------------------------------------------
-
-# free intercepts for items 3 and 5
-model_partial <- "
-  distress =~ item_1 + item_2 + item_3 + item_4 + item_5 + item_6
-  item_3 ~ c(i3a, i3b) * 1
-  item_5 ~ c(i5a, i5b) * 1
-"
-
-fit_partial <- cfa(model_partial, data = d, group = "group",
-                   group.equal = c("loadings", "intercepts"))
-summary(fit_partial, fit.measures = TRUE)
-
-# compare partial scalar vs metric
-lavTestLRT(fit_metric, fit_partial)
-
-# changes in fit indices across nested models
-delta_fit <- tibble(
-  comparison = c("Metric - Configural", "Scalar - Metric", "Partial Scalar - Metric"),
-  delta_cfi = c(
-    fitmeasures(fit_metric, "cfi") - fitmeasures(fit_configural, "cfi"),
-    fitmeasures(fit_scalar, "cfi") - fitmeasures(fit_metric, "cfi"),
-    fitmeasures(fit_partial, "cfi") - fitmeasures(fit_metric, "cfi")
-  ),
-  delta_rmsea = c(
-    fitmeasures(fit_metric, "rmsea") - fitmeasures(fit_configural, "rmsea"),
-    fitmeasures(fit_scalar, "rmsea") - fitmeasures(fit_metric, "rmsea"),
-    fitmeasures(fit_partial, "rmsea") - fitmeasures(fit_metric, "rmsea")
-  ),
-  delta_srmr = c(
-    fitmeasures(fit_metric, "srmr") - fitmeasures(fit_configural, "srmr"),
-    fitmeasures(fit_scalar, "srmr") - fitmeasures(fit_metric, "srmr"),
-    fitmeasures(fit_partial, "srmr") - fitmeasures(fit_metric, "srmr")
-  )
-) |>
-  mutate(across(starts_with("delta_"), \(x) round(x, 3)))
-
-print(delta_fit)
-
-# --- compare all models -----------------------------------------------------
-
-models <- list(
-  Configural = fit_configural,
-  Metric = fit_metric,
-  Scalar = fit_scalar,
-  "Partial Scalar" = fit_partial
-)
-
-fit_table <- map_dfr(names(models), function(name) {
-  fm <- fitmeasures(models[[name]], c("cfi", "rmsea", "srmr", "chisq", "df"))
-  tibble(
-    model = name,
-    cfi = round(fm["cfi"], 3),
-    rmsea = round(fm["rmsea"], 3),
-    srmr = round(fm["srmr"], 3),
-    chisq = round(fm["chisq"], 1),
-    df = fm["df"]
-  )
+suppressPackageStartupMessages({
+  library(causalworkshop)
+  library(margot)
+  library(grf)
+  library(ggdag)
+  library(ggplot2)
+  library(dplyr)
+  library(tibble)
+  library(knitr)
+  library(kableExtra)
 })
 
-print(fit_table)
+# --- step 1: load the report template's setup -------------------------------
 
-# ============================================================================
-# Part B: end-to-end research-report workflow
-# ----------------------------------------------------------------------------
-# the rest of this script demonstrates the manuscript scaffold students
-# copy for the research report (Option A). the course assessment page is
-# the source of truth: students choose one exposure, keep all four
-# wellbeing outcomes, estimate the ATE vector, fit policy trees, and place
-# RATE/QINI diagnostics in an appendix. setup.R holds the constants,
-# helpers, labels, and parsimony rule; manuscript.qmd sources setup.R and
-# renders the report end-to-end.
-# ============================================================================
-
-# the scaffold lives at the repo root, not inside src/. set your R working
-# directory to wherever you keep the course materials, then this relative
-# path resolves to the scaffold.
-template_dir <- "research-report-template"
-if (!dir.exists(template_dir)) {
+# this script expects to be run from the unzipped research-report folder.
+# setup.R is the single source of truth for study decisions and helpers.
+if (!file.exists("setup.R")) {
   stop(
-    "could not find `", template_dir, "` from ", getwd(),
-    ". setwd() to the directory that contains it, then re-run."
+    "setup.R not found in the current working directory.\n",
+    "Download and unzip the research-report template, then open the\n",
+    "resulting folder as an RStudio project before running this script.",
+    call. = FALSE
   )
 }
+source("setup.R")
 
-# 1. orient: list the scaffold files
-list.files(template_dir)
+cat("\n=== study decisions ===\n")
+cat("exposure:                   ", name_exposure, "\n")
+cat("outcomes (fixed):           ", paste(outcome_short_names, collapse = ", "), "\n")
+cat("study_n:                    ", study_n, "\n")
+cat("num_trees:                  ", num_trees, "\n")
+cat("n_iterations_stability:     ", n_iterations_stability, "\n")
+cat("alpha_family_wise:          ", alpha_family_wise, "\n")
+cat("min_gain_for_depth_switch:  ", min_gain_for_depth_switch, "\n")
+cat("policy_value_lower_threshold: ", policy_value_lower_threshold, "\n")
+cat("treated_uplift_lower_threshold:", treated_uplift_lower_threshold, "\n")
 
-# 2. read setup.R end to end so students see the main categories:
-#    packages -> study decisions -> labels -> palette -> data wrapper -> helpers
-file.show(file.path(template_dir, "setup.R"))
+# --- step 2: simulate the panel ---------------------------------------------
 
-# 3. source setup.R and exercise the helpers without rendering. this lets
-#    students see the same objects the manuscript chunks consume.
-source(file.path(template_dir, "setup.R"))
+cat("\n=== simulating panel ===\n")
 panel <- simulate_panel()
-print(descriptives_table(panel))
-cat("Exposure:", label_for(name_exposure), "\n")
-cat("Outcomes:", paste(vapply(outcome_names, label_for, character(1)), collapse = ", "), "\n")
+cat("rows: ", nrow(panel), "\n")
+cat("exposure prevalence:", round(mean(panel$exposure_t1), 2), "\n")
 
-# 4. render the manuscript once. students should run this from the
-#    research-report-template directory in their own copy.
-if (requireNamespace("quarto", quietly = TRUE)) {
-  quarto::quarto_render(
-    file.path(template_dir, "manuscript.qmd"),
-    output_format = "html"
-  )
-} else if (nzchar(Sys.which("quarto"))) {
-  old_wd <- getwd()
-  on.exit(setwd(old_wd), add = TRUE)
-  setwd(template_dir)
-  quarto_status <- system2("quarto", args = c("render", "manuscript.qmd", "--to", "html"))
-  if (!identical(quarto_status, 0L)) {
-    stop("quarto render failed with exit status ", quarto_status, call. = FALSE)
-  }
+# --- step 3: fit the four causal forests + policy-tree pipeline ------------
+
+cat("\n=== fitting margot pipeline (this may take a few minutes) ===\n")
+t0 <- Sys.time()
+fit <- fit_pipeline(panel)
+cat("pipeline fit in ", round(difftime(Sys.time(), t0, units = "mins"), 1), " min\n")
+
+# --- step 4: outcome-wide ATE table -----------------------------------------
+
+cat("\n=== outcome-wide ATEs with Bonferroni-adjusted CIs ===\n")
+results <- ate_table(fit$models_binary)
+print(results)
+
+cat("\n=== forest plot ===\n")
+forest_plot <- forest_plot_from_table(results)
+print(forest_plot)
+
+# --- step 5: policy-tree summary --------------------------------------------
+
+cat("\n=== policy-tree brief ===\n")
+print(fit$wf$policy_brief_df)
+
+cat("\n=== depth comparison ===\n")
+print(fit$wf$best$depth_summary_df |>
+        select(outcome_label, depth_selected, pv_depth1, pv_depth2,
+               pv_gain, decision))
+
+# --- step 6: graphing-rule selection ---------------------------------------
+
+cat("\n=== graphing-rule selection ===\n")
+print(fit$selection)
+
+# --- step 7: print the policy trees that pass the rule ---------------------
+
+cat("\n=== printing selected policy trees ===\n")
+label_to_model <- setNames(
+  fit$wf$best$depth_summary_df$model,
+  fit$wf$best$depth_summary_df$outcome_label
+)
+graphed_labels <- fit$selection$Outcome[fit$selection$graph_policy_tree]
+graphed <- unname(label_to_model[graphed_labels])
+graphed <- intersect(graphed, names(fit$wf$plots))
+
+if (length(graphed) == 0) {
+  cat("no outcome passed the graphing rule.\n")
 } else {
-  message(
-    "install Quarto from https://quarto.org/docs/get-started/, then run:\n",
-    "  cd ", template_dir, " && quarto render manuscript.qmd"
-  )
+  for (mn in graphed) {
+    cat("\n--- ", label_mapping[[mn]], " ---\n", sep = "")
+    print(fit$wf$plots[[mn]]$combined_plot)
+  }
 }
 
-# 5. swap exercise: edit setup.R so name_exposure becomes "volunteer_work"
-#    and re-render. the four outcomes stay fixed; every inline value,
-#    table, and figure should update because manuscript.qmd reads from
-#    setup.R rather than hard-coding the exposure name.
+# --- step 8: ground-truth audit (teaching scaffold) ------------------------
+
+cat("\n=== ground-truth audit ===\n")
+truth <- ground_truth_audit()
+audit <- results |>
+  select(outcome_label, estimate) |>
+  left_join(truth, by = "outcome_label") |>
+  mutate(diff = estimate - true_mean_tau)
+print(audit)
+
+# --- step 9: render the manuscript ------------------------------------------
+
+# the manuscript sources setup.R and re-fits the pipeline.
+# uncomment the line below to render in-script, or run from the terminal:
+#   quarto render manuscript.qmd
+#
+# quarto::quarto_render("manuscript.qmd")
+
+cat("\nlab 10 script complete.\n")
+cat("next: render manuscript.qmd from the terminal:\n")
+cat("  quarto render manuscript.qmd\n")

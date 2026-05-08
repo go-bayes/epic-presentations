@@ -7679,284 +7679,337 @@ recommendation. What information would they have that the model does
 not?</p>
 </li>
 </ol>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="lab-10-measurement-invariance"><a class="header" href="#lab-10-measurement-invariance">Lab 10: Measurement Invariance</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="lab-10-end-to-end-research-report"><a class="header" href="#lab-10-end-to-end-research-report">Lab 10: End-to-End Research Report</a></h1>
 <blockquote>
 <p><strong>R script</strong></p>
 <p><a href="scripts/lab-10.R">Download the R script for this lab</a></p>
+<p>The script mirrors the steps below. Run the setup block in <a href="lab-setup.html">Lab
+Setup</a>, restart R, then run the script from the project
+the report-template unzips into.</p>
 </blockquote>
-<p>This lab introduces measurement invariance testing, a prerequisite for
-meaningful cross-group comparisons. You will conduct exploratory factor
-analysis (EFA), confirmatory factor analysis (CFA), and multigroup CFA
-on simulated distress scale data with known non-invariance built in.</p>
+<p>This lab puts the whole course together in one workflow. By the end of
+the session you will have a draft Option A research report rendered to
+PDF: an outcome-wide average treatment effect table, a forest plot,
+per-outcome policy trees, and an ethics paragraph. You will not learn
+new theory today; you will learn how to assemble what you already know
+into a defensible report.</p>
 <blockquote>
 <p><strong>What you will learn</strong></p>
 <ol>
-<li>How to assess factorability (KMO, Bartlett's test) and extract
-factors using EFA</li>
-<li>How to fit a CFA in lavaan and evaluate model fit (CFI, RMSEA,
-SRMR)</li>
-<li>How to test configural, metric, and scalar invariance across
-groups</li>
-<li>How to discover and release non-invariant items (partial
-invariance)</li>
-<li>Why measurement invariance matters for causal inference across
-groups</li>
+<li>How to set up a single-source-of-truth <code>setup.R</code> for a research
+report.</li>
+<li>How to estimate four average treatment effects in one batch with
+<code>margot::margot_causal_forest()</code>.</li>
+<li>How to apply a Bonferroni correction and report E-values for an
+outcome-wide design.</li>
+<li>How to fit policy trees and choose between depth-1 and depth-2
+with a stated parsimony threshold.</li>
+<li>How to apply the <code>margot::margot_select_grf_policy_trees()</code>
+graphing rule so you graph only policies that survive a
+transparent reporting test.</li>
+<li>How to render a Quarto manuscript that consumes the fitted
+objects.</li>
 </ol>
 </blockquote>
 <blockquote>
-<p><strong>Connection to the lecture</strong></p>
-<p>This lab aligns with Week 10's lecture on classical measurement theory
-from a causal perspective. The lecture covers measurement error in
-DAGs, EFA, CFA, and VanderWeele's model linking measurement to causal
-identification. This lab focuses on the practical skills: fitting and
-comparing models.</p>
+<p><strong>Connection to previous labs</strong></p>
+<p>Lab 5 introduced the average treatment effect (ATE). Lab 6 introduced
+the conditional average treatment effect (CATE). Lab 8 evaluated
+targeting with rank-weighted average treatment effect (RATE) and qini
+curves. Lab 9 turned a CATE ranking into a depth-1 or depth-2 policy
+tree. This lab links those pieces into one outcome-wide report.</p>
+</blockquote>
+<blockquote>
+<p><strong>Where measurement fits</strong></p>
+<p>Week 10's lecture covers classical measurement theory and invariance
+from a causal perspective. The lecture is the place to think through
+reflective versus formative models, exploratory and confirmatory
+factor analysis, and configural, metric, and scalar invariance. This
+lab focuses on the report. For a refresher on measurement, see <a href="week-10.html">Week
+10 lecture notes</a>.</p>
 </blockquote>
 <h2 id="setup-2"><a class="header" href="#setup-2">Setup</a></h2>
-<pre><code class="language-r">library(causalworkshop)
-library(psych)
-library(lavaan)
-library(tidyverse)
+<p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
+Packages and Build Tools</a> first. The block below mirrors
+what <code>scripts/lab-10.R</code> requires at the top: it installs missing CRAN
+packages and requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.300</code>,
+stopping with a clear restart-R message if a stale namespace is loaded.</p>
+<pre><code class="language-r">cran_packages &lt;- c(
+  "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
+  "knitr", "kableExtra", "rmarkdown"
+)
+missing_cran &lt;- cran_packages[
+  !vapply(cran_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
+]
+if (length(missing_cran) &gt; 0) install.packages(missing_cran)
+
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+if (!requireNamespace("margot", quietly = TRUE) ||
+    packageVersion("margot") &lt; "1.0.300") {
+  pak::pak("go-bayes/margot")
+}
+if (!requireNamespace("causalworkshop", quietly = TRUE) ||
+    packageVersion("causalworkshop") &lt; "0.6.0") {
+  pak::pak("go-bayes/causalworkshop")
+  if ("causalworkshop" %in% loadedNamespaces()) {
+    stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)
+  }
+}
+
+suppressPackageStartupMessages({
+  library(causalworkshop)
+  library(margot)
+  library(grf)
+  library(ggdag)
+  library(ggplot2)
+  library(dplyr)
+  library(tibble)
+  library(knitr)
+  library(kableExtra)
+})
+</code></pre>
+<p>If the GitHub package installation fails after installing build tools,
+stop and use the course lab machine. Do not debug compilers during
+class.</p>
+<h2 id="step-1-start-from-the-report-template"><a class="header" href="#step-1-start-from-the-report-template">Step 1: Start from the report template</a></h2>
+<p>Download and unzip the <a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-assets/research-report-template.zip">research-report
+template</a>.
+Open the resulting folder as an RStudio project. Your folder should look
+like this:</p>
+<pre><code class="language-text">research-report/
+  setup.R          # study decisions, helpers, single source of truth
+  manuscript.qmd   # prose, headings, tables, figures
+  _quarto.yml      # render configuration
+  references.bib   # BibTeX references
+  README.md        # short orientation
+</code></pre>
+<p><code>setup.R</code> holds decisions and reusable code. <code>manuscript.qmd</code> holds
+prose and chunks that read from <code>setup.R</code>. The split lets you change one
+decision (the exposure, the parsimony threshold, the seed) without
+scattering edits across the manuscript.</p>
+<h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
+<p>Open <code>setup.R</code>. Three decisions live near the top.</p>
+<pre><code class="language-r"># choose one of "religious_service" or "volunteer_work"
+# do not use "community_group" — that exposure is reserved for the Lab 9 worked example
+name_exposure &lt;- "religious_service"
+
+study_seed &lt;- 2026
+study_n &lt;- 2000
+</code></pre>
+<p>The four wellbeing outcomes are fixed by the assignment: sense of
+purpose, belonging, self-esteem, and life satisfaction at wave 2. The
+adjustment set $L$ contains baseline demographics, socioeconomic and
+personality variables, the baseline exposure, and the baseline value of
+every outcome (lagged-self adjustment).</p>
+<h2 id="step-3-simulate-the-panel"><a class="header" href="#step-3-simulate-the-panel">Step 3: Simulate the panel</a></h2>
+<p>The simulator returns a long panel with three waves. The
+<code>simulate_panel()</code> helper in <code>setup.R</code> reshapes it into a wide tibble
+with one row per person: baseline covariates, exposure at wave 1, and
+the four outcomes at wave 2.</p>
+<pre><code class="language-r">panel &lt;- simulate_panel()
+nrow(panel)
+mean(panel$exposure_t1)
 </code></pre>
 <blockquote>
-<p><strong>Install packages</strong></p>
-<p>If you haven't installed these packages, follow <a href="lab-setup.html">Lab Setup: R Packages
-and Build Tools</a>, then run:
-<code>install.packages(c("psych", "lavaan"))</code>
-<code>if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")</code>
-<code>pak::pak("go-bayes/causalworkshop")</code></p>
+<p><strong>Synthetic data</strong></p>
+<p>The simulator is the same one used in Lab 9. It supports the eight
+exposure-by-outcome combinations students may pick. Numerical results
+do not generalise to any real population; they let you practise the
+workflow against a known truth.</p>
 </blockquote>
-<h2 id="generate-data"><a class="header" href="#generate-data">Generate data</a></h2>
-<p>The <code>simulate_measurement_items()</code> function generates a 6-item
-psychological distress scale (modelled on the Kessler-6) with a known
-factor structure and built-in measurement non-invariance across two
-groups:</p>
-<pre><code class="language-r"># simulate measurement data
-d &lt;- simulate_measurement_items(n = 2000, seed = 2026)
+<h2 id="step-4-fit-four-causal-forests-in-one-call"><a class="header" href="#step-4-fit-four-causal-forests-in-one-call">Step 4: Fit four causal forests in one call</a></h2>
+<p><code>margot::margot_causal_forest()</code> fits one honest causal forest per
+outcome with a shared adjustment set, and returns a single object with
+combined results. This is more concise than looping over
+<code>grf::causal_forest()</code> yourself, and it produces the inputs the
+policy-tree pipeline expects.</p>
+<pre><code class="language-r">X &lt;- as.matrix(panel[, covariate_cols])
+W &lt;- panel$exposure_t1
+weights &lt;- rep(1, nrow(panel))
 
-# check structure
-dim(d)
-names(d)
-</code></pre>
-<p>The six items correspond to:</p>
-<ul>
-<li><code>item_1</code>: nervous</li>
-<li><code>item_2</code>: hopeless</li>
-<li><code>item_3</code>: restless</li>
-<li><code>item_4</code>: depressed</li>
-<li><code>item_5</code>: effort (everything was an effort)</li>
-<li><code>item_6</code>: worthless</li>
-</ul>
-<pre><code class="language-r"># check the true factor loadings
-attr(d, "true_loadings")
-
-# check the true intercepts (they differ for items 3 and 5 across groups)
-attr(d, "true_intercepts_group0")
-attr(d, "true_intercepts_group1")
-</code></pre>
-<blockquote>
-<p><strong>What is non-invariance?</strong></p>
-<p>Items 3 (restless) and 5 (effort) have different intercepts across
-groups. This means that at the same level of true distress, group 1
-members score higher on these two items. If we ignore this,
-cross-group comparisons of mean distress scores will be biased.</p>
-</blockquote>
-<h2 id="exploratory-factor-analysis-efa"><a class="header" href="#exploratory-factor-analysis-efa">Exploratory factor analysis (EFA)</a></h2>
-<p>Before fitting a CFA, we check whether the data are factorable and how
-many factors to extract.</p>
-<h3 id="factorability"><a class="header" href="#factorability">Factorability</a></h3>
-<pre><code class="language-r"># select just the items
-items &lt;- d |&gt; select(item_1:item_6)
-
-# Kaiser-Meyer-Olkin measure of sampling adequacy
-psych::KMO(items)
-
-# Bartlett's test of sphericity
-psych::cortest.bartlett(cor(items), n = nrow(items))
-</code></pre>
-<blockquote>
-<p><strong>Interpreting KMO</strong></p>
-<p>KMO values above 0.60 are considered adequate for factor analysis.
-Values above 0.80 are good. Bartlett's test should be significant (p
-&lt; 0.05), indicating that correlations between items are sufficiently
-large for factor analysis.</p>
-</blockquote>
-<h3 id="extract-factors"><a class="header" href="#extract-factors">Extract factors</a></h3>
-<pre><code class="language-r"># one-factor solution
-fa_1 &lt;- psych::fa(items, nfactors = 1, fm = "ml", rotate = "none")
-print(fa_1$loadings, cutoff = 0.3)
-
-# two-factor solution (for comparison)
-fa_2 &lt;- psych::fa(items, nfactors = 2, fm = "ml", rotate = "oblimin")
-print(fa_2$loadings, cutoff = 0.3)
-</code></pre>
-<blockquote>
-<p><strong>How many factors?</strong></p>
-<p>The one-factor solution should show all six items loading
-substantially on a single factor (consistent with the data-generating
-process). The two-factor solution should not improve fit meaningfully.
-Compare the proportion of variance explained and check whether the
-two-factor loadings make theoretical sense.</p>
-</blockquote>
-<h2 id="confirmatory-factor-analysis-cfa"><a class="header" href="#confirmatory-factor-analysis-cfa">Confirmatory factor analysis (CFA)</a></h2>
-<p>Now we specify the one-factor model and fit it using lavaan:</p>
-<pre><code class="language-r"># specify one-factor CFA model
-model &lt;- "
-  distress =~ item_1 + item_2 + item_3 + item_4 + item_5 + item_6
-"
-
-# fit CFA on full sample
-fit_cfa &lt;- cfa(model, data = d)
-
-# summary with fit measures
-summary(fit_cfa, fit.measures = TRUE, standardized = TRUE)
-</code></pre>
-<p>Evaluate model fit:</p>
-<pre><code class="language-r"># extract key fit indices
-fit_indices &lt;- fitmeasures(fit_cfa, c("cfi", "rmsea", "srmr"))
-print(round(fit_indices, 3))
-</code></pre>
-<blockquote>
-<p><strong>Fit index guidelines</strong></p>
-<ul>
-<li><strong>CFI</strong> (Comparative Fit Index): &gt; 0.95 is excellent, &gt; 0.90 is
-acceptable</li>
-<li><strong>RMSEA</strong> (Root Mean Square Error of Approximation): &lt; 0.06 is
-excellent, &lt; 0.08 is acceptable</li>
-<li><strong>SRMR</strong> (Standardised Root Mean Square Residual): &lt; 0.08 is
-acceptable</li>
-</ul>
-</blockquote>
-<h2 id="multigroup-cfa-invariance-testing"><a class="header" href="#multigroup-cfa-invariance-testing">Multigroup CFA: invariance testing</a></h2>
-<p>We now test whether the factor structure is equivalent across the two
-groups. Invariance testing proceeds through a hierarchy of progressively
-stricter constraints:</p>
-<h3 id="step-1-configural-invariance"><a class="header" href="#step-1-configural-invariance">Step 1: Configural invariance</a></h3>
-<p>The same factor structure holds in both groups, but loadings and
-intercepts are freely estimated:</p>
-<pre><code class="language-r">fit_configural &lt;- cfa(model, data = d, group = "group")
-summary(fit_configural, fit.measures = TRUE)
-</code></pre>
-<h3 id="step-2-metric-invariance"><a class="header" href="#step-2-metric-invariance">Step 2: Metric invariance</a></h3>
-<p>Factor loadings are constrained to be equal across groups:</p>
-<pre><code class="language-r">fit_metric &lt;- cfa(model, data = d, group = "group",
-                  group.equal = "loadings")
-summary(fit_metric, fit.measures = TRUE)
-</code></pre>
-<p>Compare configural and metric models:</p>
-<pre><code class="language-r">lavTestLRT(fit_configural, fit_metric)
-</code></pre>
-<blockquote>
-<p><strong>Interpreting the comparison</strong></p>
-<p>A non-significant chi-square difference (p &gt; 0.05) means the metric
-model fits no worse than the configural model, so equal loadings
-across groups are supported. Because chi-square is sensitive to large
-sample sizes, also inspect $\Delta$CFI, $\Delta$RMSEA, and
-$\Delta$SRMR below.</p>
-</blockquote>
-<h3 id="step-3-scalar-invariance"><a class="header" href="#step-3-scalar-invariance">Step 3: Scalar invariance</a></h3>
-<p>Both loadings and intercepts are constrained to be equal:</p>
-<pre><code class="language-r">fit_scalar &lt;- cfa(model, data = d, group = "group",
-                  group.equal = c("loadings", "intercepts"))
-summary(fit_scalar, fit.measures = TRUE)
-</code></pre>
-<p>Compare metric and scalar models:</p>
-<pre><code class="language-r">lavTestLRT(fit_metric, fit_scalar)
-</code></pre>
-<blockquote>
-<p><strong>Expected result</strong></p>
-<p>Full scalar invariance should <strong>fail</strong>. In this lab, chi-square
-differences are usually significant, and fit-index changes should also
-worsen when intercepts are constrained. This is by design: items 3 and
-5 have different intercepts across groups in the data-generating
-process.</p>
-</blockquote>
-<h2 id="discover-partial-non-invariance"><a class="header" href="#discover-partial-non-invariance">Discover partial non-invariance</a></h2>
-<p>When full scalar invariance fails, we can release constraints on
-specific items to achieve <strong>partial scalar invariance</strong>. Based on
-modification indices or theory, we free the intercepts of items 3 and 5:</p>
-<pre><code class="language-r"># partial scalar invariance: free intercepts for items 3 and 5
-model_partial &lt;- "
-  distress =~ item_1 + item_2 + item_3 + item_4 + item_5 + item_6
-  item_3 ~ c(i3a, i3b) * 1
-  item_5 ~ c(i5a, i5b) * 1
-"
-
-fit_partial &lt;- cfa(model_partial, data = d, group = "group",
-                   group.equal = c("loadings", "intercepts"))
-summary(fit_partial, fit.measures = TRUE)
-</code></pre>
-<p>Compare partial scalar with metric invariance:</p>
-<pre><code class="language-r">lavTestLRT(fit_metric, fit_partial)
-</code></pre>
-<p>Calculate fit-index changes between adjacent models:</p>
-<pre><code class="language-r">delta_fit &lt;- tibble(
-  comparison = c("Metric - Configural", "Scalar - Metric", "Partial Scalar - Metric"),
-  delta_cfi = c(
-    fitmeasures(fit_metric, "cfi") - fitmeasures(fit_configural, "cfi"),
-    fitmeasures(fit_scalar, "cfi") - fitmeasures(fit_metric, "cfi"),
-    fitmeasures(fit_partial, "cfi") - fitmeasures(fit_metric, "cfi")
-  ),
-  delta_rmsea = c(
-    fitmeasures(fit_metric, "rmsea") - fitmeasures(fit_configural, "rmsea"),
-    fitmeasures(fit_scalar, "rmsea") - fitmeasures(fit_metric, "rmsea"),
-    fitmeasures(fit_partial, "rmsea") - fitmeasures(fit_metric, "rmsea")
-  ),
-  delta_srmr = c(
-    fitmeasures(fit_metric, "srmr") - fitmeasures(fit_configural, "srmr"),
-    fitmeasures(fit_scalar, "srmr") - fitmeasures(fit_metric, "srmr"),
-    fitmeasures(fit_partial, "srmr") - fitmeasures(fit_metric, "srmr")
-  )
-) |&gt;
-  mutate(across(starts_with("delta_"), \(x) round(x, 3)))
-
-print(delta_fit)
-</code></pre>
-<blockquote>
-<p><strong>Expected result</strong></p>
-<p>Partial scalar invariance should hold after jointly considering
-chi-square tests and fit-index changes. As a rule of thumb, evidence
-against invariance is often flagged by $\Delta$CFI &lt; -0.01,
-$\Delta$RMSEA &gt; 0.015, or $\Delta$SRMR &gt; 0.01. By releasing
-items 3 and 5, you should see improved fit relative to full scalar
-constraints.</p>
-</blockquote>
-<h2 id="compare-all-models"><a class="header" href="#compare-all-models">Compare all models</a></h2>
-<pre><code class="language-r"># summary table of fit indices
-models &lt;- list(
-  Configural = fit_configural,
-  Metric = fit_metric,
-  Scalar = fit_scalar,
-  "Partial Scalar" = fit_partial
+models_binary &lt;- margot::margot_causal_forest(
+  data = panel,
+  outcome_vars = c("t2_purpose", "t2_belonging",
+                   "t2_self_esteem", "t2_life_satisfaction"),
+  covariates = X,
+  W = W,
+  weights = weights,
+  grf_defaults = list(num.trees = 500, honesty = TRUE),
+  top_n_vars = 12,
+  save_models = TRUE,
+  save_data = TRUE,
+  compute_conditional_means = TRUE,
+  train_proportion = 0.5,
+  use_train_test_split = TRUE,
+  seed = study_seed
 )
 
-fit_table &lt;- map_dfr(names(models), function(name) {
-  fm &lt;- fitmeasures(models[[name]], c("cfi", "rmsea", "srmr", "chisq", "df"))
-  tibble(
-    model = name,
-    cfi = round(fm["cfi"], 3),
-    rmsea = round(fm["rmsea"], 3),
-    srmr = round(fm["srmr"], 3),
-    chisq = round(fm["chisq"], 1),
-    df = fm["df"]
-  )
-})
-
-print(fit_table)
+print(models_binary$combined_table)
 </code></pre>
-<h2 id="connection-to-causal-inference"><a class="header" href="#connection-to-causal-inference">Connection to causal inference</a></h2>
 <blockquote>
-<p><strong>Why measurement invariance matters for causal inference</strong></p>
-<p>If a scale measures the same construct differently across groups
-(non-invariance), then cross-group comparisons of treatment effects
-may be biased. In DAG terms, the measured outcome $Y^*$ is a
-function of both the true outcome $Y$ and group membership $G$:</p>
-<p>$$Y^* = f(Y, G)$$</p>
-<p>If $f$ differs by group (non-invariance), then even if the treatment
-has the same causal effect on $Y$ in both groups, the observed
-effect on $Y^*$ will differ. This is measurement bias in the causal
-inference framework.</p>
-<p>Establishing measurement invariance before estimating treatment
-effects is therefore a prerequisite for valid cross-group comparisons.</p>
+<p><strong>Reading <code>combined_table</code></strong></p>
+<p>One row per outcome. Columns are the risk-difference estimate
+<code>E[Y(1)]-E[Y(0)]</code>, the 95% confidence interval (<code>2.5 %</code>, <code>97.5 %</code>),
+the E-value for the point estimate (<code>E_Value</code>), and the E-value for
+the bound nearest the null (<code>E_Val_bound</code>). The CI is unadjusted; you
+will apply Bonferroni in Step 5.</p>
+</blockquote>
+<h2 id="step-5-outcome-wide-reporting"><a class="header" href="#step-5-outcome-wide-reporting">Step 5: Outcome-wide reporting</a></h2>
+<p>Reporting four outcomes in one table requires correcting for
+multiplicity. The <code>ate_table()</code> helper in <code>setup.R</code> applies a Bonferroni
+correction at $\alpha_{FW} = 0.05$ across the four outcomes and
+reports the family-wise interval alongside the E-values.</p>
+<pre><code class="language-r">results &lt;- ate_table(models_binary)
+print(results)
+
+forest_plot_from_table(results)
+</code></pre>
+<p>The helper computes the Bonferroni-adjusted critical value
+$z_{\alpha_{FW}/(2k)}$ with $k = 4$, multiplies by the standard
+error implied by the unadjusted 95% confidence interval, and reports the
+wider, family-wise interval. The E-values come straight from
+<code>combined_table</code>; do not re-derive them.</p>
+<blockquote>
+<p><strong>Why Bonferroni</strong></p>
+<p>The outcome-wide design asks how the exposure affects all four
+outcomes jointly. If you tested each outcome at $\alpha = 0.05$
+independently, the family-wise error rate would be approximately $1 -
+(1 - 0.05)^4 \approx 0.19$. Bonferroni keeps the family-wise rate at
+0.05. Other corrections (Holm, Benjamini-Hochberg) are reasonable;
+pick one and state which.</p>
+</blockquote>
+<h2 id="step-6-policy-trees"><a class="header" href="#step-6-policy-trees">Step 6: Policy trees</a></h2>
+<p>After estimating the four ATEs, the question becomes whether the same
+exposure benefits everyone equally. Lab 9 introduced policy trees as an
+interpretable allocation rule. Lab 10 uses the same <code>margot</code> workflow,
+then applies a transparent <strong>graphing rule</strong> before deciding which trees
+to put in the report.</p>
+<h3 id="step-6a-stability-and-the-workflow-object"><a class="header" href="#step-6a-stability-and-the-workflow-object">Step 6a: Stability and the workflow object</a></h3>
+<pre><code class="language-r">policy_tree_stability &lt;- margot::margot_policy_tree_stability(
+  model_results = models_binary,
+  depth = 2,
+  n_iterations = 50,
+  vary_type = "split_only",
+  parallel = FALSE,
+  label_mapping = label_mapping,
+  seed = study_seed
+)
+
+wf &lt;- margot::margot_policy_workflow(
+  stability = policy_tree_stability,
+  original_df = panel,
+  label_mapping = label_mapping,
+  audience = "policy",
+  prefer_stability = TRUE,
+  min_gain_for_depth_switch = 0.01,
+  signal_score = "pv_snr",
+  signals_k = 3,
+  interpret_models = "wins_borderline",
+  plot_models = "wins_borderline"
+)
+
+print(wf$policy_brief_df)
+print(wf$best$depth_summary_df)
+</code></pre>
+<p><code>policy_brief_df</code> lists, for each outcome, the selected depth, the
+policy value with its 95% confidence interval, the treated-uplift with
+its 95% confidence interval, and coverage (the share of the sample the
+rule recommends for treatment).</p>
+<p><code>best$depth_summary_df</code> contains the depth-1 versus depth-2 comparison
+and the parsimony decision. With <code>min_gain_for_depth_switch = 0.01</code>, the
+workflow selects depth-2 only when its policy value exceeds depth-1 by
+at least 0.01 outcome units.</p>
+<h3 id="step-6b-the-graphing-rule"><a class="header" href="#step-6b-the-graphing-rule">Step 6b: The graphing rule</a></h3>
+<p><code>margot::margot_select_grf_policy_trees()</code> applies a transparent
+reporting test. It keeps a policy tree only when <strong>both</strong> the
+policy-value lower confidence limit and the treated-uplift lower
+confidence limit exceed zero. Outcomes that fail the test still appear
+in your tables; their trees do not get graphed.</p>
+<pre><code class="language-r">selection &lt;- margot::margot_select_grf_policy_trees(
+  policy_brief = wf$policy_brief_df,
+  policy_value_lower_threshold = 0,
+  treated_uplift_lower_threshold = 0
+)
+print(selection)
+</code></pre>
+<p>The <code>graph_policy_tree</code> column is <code>TRUE</code> for outcomes whose targeting
+story passes the test. State the thresholds in your methods. If you
+raise them (for example, <code>policy_value_lower_threshold = 0.05</code>), justify
+the choice.</p>
+<blockquote>
+<p><strong>Why a graphing rule</strong></p>
+<p>The policy-tree algorithm always returns a tree. The interesting
+question is whether that tree is reliable enough to put in front of a
+reader. Reporting a tree with a policy value that includes zero
+invites overclaiming. The graphing rule is a precommitment: state the
+test, then graph only what passes.</p>
+</blockquote>
+<h3 id="step-6c-plotting-the-selected-trees"><a class="header" href="#step-6c-plotting-the-selected-trees">Step 6c: Plotting the selected trees</a></h3>
+<p><code>margot_policy_workflow()</code> builds combined plots (decision tree +
+prediction-points scatter) for the models flagged for interpretation.
+Pull them out for the manuscript by mapping selected outcome labels back
+to their model names.</p>
+<pre><code class="language-r">label_to_model &lt;- setNames(
+  wf$best$depth_summary_df$model,
+  wf$best$depth_summary_df$outcome_label
+)
+graphed_labels &lt;- selection$Outcome[selection$graph_policy_tree]
+graphed_models &lt;- unname(label_to_model[graphed_labels])
+
+for (mn in graphed_models) {
+  print(wf$plots[[mn]]$combined_plot)
+}
+</code></pre>
+<p>If <code>wf$plots</code> does not contain a model you want to graph, change
+<code>interpret_models</code> and <code>plot_models</code> in the workflow call. The default
+<code>wins_borderline</code> covers most reports; <code>recommended</code> is more permissive.</p>
+<h2 id="step-7-audit-against-simulator-ground-truth-1"><a class="header" href="#step-7-audit-against-simulator-ground-truth-1">Step 7: Audit against simulator ground truth</a></h2>
+<p>The simulator stores the <em>true</em> individual treatment effects in <code>tau_*</code>
+columns. A side-by-side comparison of the estimated ATE and the
+population mean tau is a sanity check the analyses themselves cannot
+perform.</p>
+<pre><code class="language-r">truth &lt;- ground_truth_audit()
+results |&gt;
+  select(outcome_label, estimate) |&gt;
+  left_join(truth, by = "outcome_label") |&gt;
+  mutate(diff = estimate - true_mean_tau)
+</code></pre>
+<p>In a real research report you do not have a <code>tau_*</code> column. The audit is
+a teaching scaffold: in the lab, it shows you how close the estimates
+come to the truth. Do not include the audit in the submitted report.</p>
+<h2 id="step-8-render-the-manuscript"><a class="header" href="#step-8-render-the-manuscript">Step 8: Render the manuscript</a></h2>
+<p>Open <code>manuscript.qmd</code>. The preamble sources <code>setup.R</code>, simulates the
+panel, fits the four causal forests, builds the policy-tree workflow,
+and applies the graphing rule. Every table and figure reads from the
+resulting objects.</p>
+<p>In the terminal (not the R console), run:</p>
+<pre><code class="language-sh">cd research-report
+quarto render manuscript.qmd
+</code></pre>
+<p>Quarto writes a PDF and an HTML next to <code>manuscript.qmd</code>. Read both
+alongside the <code>.qmd</code> source. Check that every table and figure updates
+from <code>setup.R</code>; do not hard-code numerical results in the prose.</p>
+<blockquote>
+<p><strong>Render early and often</strong></p>
+<p>Render after every meaningful change. A render that fails an hour
+after the last successful render is easier to repair than one that
+fails after a day. While drafting, lower <code>study_n</code>, <code>num_trees</code>, and
+<code>n_iterations_stability</code> in <code>setup.R</code> for faster iteration; raise them
+for the final render.</p>
+</blockquote>
+<h2 id="step-9-write-the-ethics-paragraph"><a class="header" href="#step-9-write-the-ethics-paragraph">Step 9: Write the ethics paragraph</a></h2>
+<p>The Option A criteria require one paragraph (about 150 words) on what
+would need to be considered before acting on a policy rule. Address
+fairness, proxy variables, governance, and one value judgement the
+analysis depends on. The paragraph belongs in the manuscript before the
+conclusion.</p>
+<blockquote>
+<p><strong>Reading your own rule</strong></p>
+<p>A policy tree that splits on income or deprivation can be
+interpretable and defensible — or it can be a proxy for ethnicity or
+migration history. The ethics paragraph names the trade-off. The model
+cannot settle public values; you can describe what evidence the model
+can and cannot provide.</p>
 </blockquote>
 <h2 id="exercises-4"><a class="header" href="#exercises-4">Exercises</a></h2>
 <blockquote>
@@ -7965,184 +8018,38 @@ effects is therefore a prerequisite for valid cross-group comparisons.</p>
 </blockquote>
 <ol>
 <li>
-<p><strong>Group by sex.</strong> Repeat the invariance testing using <code>male</code> as the
-grouping variable instead of <code>group</code>. Does the invariance pattern
-change? (Since the data-generating process only introduces
-non-invariance by <code>group</code>, invariance by <code>male</code> should hold.)</p>
+<p><strong>Switch the exposure.</strong> Change <code>name_exposure</code> from
+<code>religious_service</code> to <code>volunteer_work</code> in <code>setup.R</code> and re-render.
+Compare the four ATEs across exposures. Which outcomes look more
+responsive to which exposure?</p>
 </li>
 <li>
-<p><strong>Two-factor model.</strong> Fit a two-factor CFA where items 1-3 load on
-factor 1 and items 4-6 load on factor 2. Compare fit with the
-one-factor model. Does the data support a two-factor structure?</p>
+<p><strong>Tighten the parsimony rule.</strong> Set
+<code>min_gain_for_depth_switch &lt;- 0.05</code> in <code>setup.R</code>. Which outcomes
+lose their depth-2 rule? Does the report change in a useful way?</p>
 </li>
 <li>
-<p><strong>Interpretation.</strong> In one paragraph, explain what you would
-conclude about using a single distress score to compare
-psychological purpose across two demographic groups, given that
-items 3 and 5 show non-invariance. What practical steps would you
-take before reporting cross-group differences?</p>
+<p><strong>Tighten the graphing rule.</strong> Set
+<code>policy_value_lower_threshold &lt;- 0.05</code>. How many outcomes still
+pass? What does this say about how confidently you can target each
+outcome?</p>
+</li>
+<li>
+<p><strong>Translate one rule.</strong> Pick the strongest policy tree your graphing
+rule keeps. Translate the depth-2 (or depth-1) rule into a sentence
+a non-specialist could repeat. Note its coverage and one limitation.</p>
 </li>
 </ol>
-<hr />
-<h2 id="part-b-end-to-end-research-report-workflow"><a class="header" href="#part-b-end-to-end-research-report-workflow">Part B: End-to-end research-report workflow</a></h2>
-<p>The research report (Option A) asks you to estimate the effect of one
-exposure on all four wellbeing outcomes and write the results in a
-Quarto document. Part B of this lab gives you the plan for doing that
-end to end: set the study decisions once, estimate the average treatment
-effects, fit policy trees, place ranking diagnostics in an appendix, and
-render a single PDF.</p>
-<p>The course assessment page is the source of truth. Historical lab
-manuscripts show how an analysis can be organised, but they are more
-complex than this course requires. For this assignment, follow the 2026
-research-report template and the Option A criteria.</p>
-<h3 id="why-split-a-manuscript-into-two-files"><a class="header" href="#why-split-a-manuscript-into-two-files">Why split a manuscript into two files</a></h3>
-<p>Putting the manuscript in one big <code>.qmd</code> file works for a one-off
-report. It does not work when you need to swap the exposure, change the
-colour palette, or rerun the analysis on new data, because every change
-scatters across the document. The lab's solution is to keep <code>setup.R</code> as
-the single source of truth for study-level decisions and to keep
-<code>manuscript.qmd</code> thin: prose, headings, and chunks that read from
-<code>setup.R</code>.</p>
-<p>You will see this pattern in published manuscripts from the lab. Use the
-pattern, not the full production workflow.</p>
-<h3 id="files-to-create"><a class="header" href="#files-to-create">Files to create</a></h3>
-<p>Start from the <a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-assets/research-report-template.zip">research-report
-template</a>.
-Your folder should look like this:</p>
-<pre><code class="language-text">research-report/
-  setup.R
-  manuscript.qmd
-  _quarto.yml
-  references.bib
-  README.md
-  figures/
-  appendix/
-</code></pre>
-<p><code>setup.R</code> holds decisions and reusable code. <code>manuscript.qmd</code> holds
-headings, prose, tables, figures, and the final interpretation.</p>
-<h3 id="study-decisions"><a class="header" href="#study-decisions">Study decisions</a></h3>
-<p>Make these decisions before estimating models:</p>
-<pre><code class="language-r">study_seed &lt;- 2026
-study_n &lt;- 5000
-
-name_exposure &lt;- "religious_service" # or "volunteer_work"
-outcomes &lt;- c("purpose", "belonging", "self_esteem", "life_satisfaction")
-
-alpha_family_wise &lt;- 0.05
-min_gain_for_depth_switch &lt;- 0.01
-</code></pre>
-<p>The parsimony rule matters. Prefer a depth-1 policy tree unless the
-depth-2 tree improves policy value by at least
-<code>min_gain_for_depth_switch</code> in outcome units. State this threshold
-before reporting results. If you use a different threshold, justify it
-in words.</p>
-<h3 id="analysis-plan"><a class="header" href="#analysis-plan">Analysis plan</a></h3>
-<p>Work in this order.</p>
-<ol>
-<li>
-<p><strong>Choose the exposure.</strong> Use <code>religious_service</code> or
-<code>volunteer_work</code>. Do not use <code>community_group</code>; Lab 9 uses it as the
-worked example.</p>
-</li>
-<li>
-<p><strong>Simulate and prepare the panel.</strong> Generate the synthetic NZAVS
-data with <code>causalworkshop::simulate_nzavs_data()</code>. Build the
-exposure from wave 1, the outcomes from wave 2, and the adjustment
-set from baseline variables. Include baseline values of the exposure
-and all four outcomes in the adjustment set.</p>
-</li>
-<li>
-<p><strong>Describe the sample.</strong> Report baseline demographics, exposure
-prevalence, and outcome distributions. Remind readers that the data
-are simulated.</p>
-</li>
-<li>
-<p><strong>State the causal estimand.</strong> The causal estimand is the vector of
-four average treatment effects:</p>
-<p>$$ \left( \mathrm{ATE}<em>{\text{purpose}},
-\mathrm{ATE}</em>{\text{belonging}}, \mathrm{ATE}<em>{\text{self-esteem}},
-\mathrm{ATE}</em>{\text{life-satisfaction}} \right). $$</p>
-</li>
-<li>
-<p><strong>Estimate the average treatment effects.</strong> Use the course workflow
-for doubly robust estimation with <code>grf::causal_forest()</code> and
-<code>average_treatment_effect()</code>. Report all four outcomes, not a
-selected subset.</p>
-</li>
-<li>
-<p><strong>Correct for multiple testing.</strong> Apply the Bonferroni correction
-for four outcomes at $\alpha_{FW} = 0.05$. Present
-multiplicity-adjusted confidence intervals.</p>
-</li>
-<li>
-<p><strong>Report sensitivity.</strong> Add E-values for the point estimate and the
-relevant multiplicity-adjusted confidence-limit for each outcome.</p>
-</li>
-<li>
-<p><strong>Fit policy trees.</strong> For each outcome, fit depth-1 and depth-2
-policy trees with <code>margot</code>. Use the parsimony rule to decide which
-tree belongs in the main text. Translate the selected rule into
-plain language and report the expected mean difference, uncertainty,
-policy value, and approximate sample proportion.</p>
-</li>
-<li>
-<p><strong>Place RATE and QINI plots in the appendix.</strong> Use RATE and QINI as
-supporting diagnostics for treatment-effect ranking. They should not
-replace the main average treatment effect results or the policy-tree
-summary.</p>
-</li>
-<li>
-<p><strong>Write the ethics paragraph.</strong> Explain what would need to be
-considered before acting on a policy rule: fairness, proxy
-variables, oversight, and one value judgement the model cannot
-settle.</p>
-</li>
-</ol>
-<h3 id="main-text-and-appendix"><a class="header" href="#main-text-and-appendix">Main text and appendix</a></h3>
-<p>Keep the main text aligned with the assessment criteria.</p>
-<div class="table-wrapper"><table><thead><tr><th>Location</th><th>Include</th></tr></thead><tbody>
-<tr><td>Main text</td><td>causal question, exposure, four outcomes, adjustment set, DAG, causal estimand vector, sample description, ATE forest plot and table, Bonferroni correction, E-values, selected policy tree, parsimony decision, ethics paragraph</td></tr>
-<tr><td>Appendix</td><td>code appendix, extra descriptive tables, RATE plots, QINI plots, full depth-comparison table, extra policy-tree figures</td></tr>
-</tbody></table>
-</div>
-<h3 id="quarto-workflow"><a class="header" href="#quarto-workflow">Quarto workflow</a></h3>
-<p>Render early and often.</p>
-<pre><code class="language-sh">cd research-report
-quarto render manuscript.qmd
-</code></pre>
-<p>Output appears in <code>_output/</code>. Read the rendered PDF alongside the <code>.qmd</code>
-source. Check that every table, figure, and inline estimate updates from
-<code>setup.R</code>; do not hard-code numerical results in the prose.</p>
-<h3 id="what-to-take-away"><a class="header" href="#what-to-take-away">What to take away</a></h3>
-<p>This template is yours to copy, edit, and submit. The discipline it
-teaches matters more than the specific code: separate the
-<em>configuration</em> (what to study, what labels, what parsimony threshold)
-from the <em>narrative</em> (what you are arguing). When the configuration
-lives in one file, you can change a single line and trust that the
-narrative remains correct.</p>
-<p>The R script for this part of the lab is <code>scripts/lab-10.R</code>, after the
-measurement-invariance content. It checks the scaffold, exercises the
-helpers, and renders the manuscript.</p>
-<h2 id="assessment-support-for-week-10"><a class="header" href="#assessment-support-for-week-10">Assessment support for Week 10</a></h2>
-<p>Use the remaining time this week to turn the assessment requirements
-into files you can work on.</p>
-<ol>
-<li><strong>Test 2 notes sheet.</strong> Build one A4 page around the workflow:
-estimand, identification assumptions, heterogeneity test, policy
-tree, fairness check, measurement check. Practise from the <a href="test-2-study-prompts.html">Test 2
-practice questions</a>.</li>
-<li><strong>Option A report.</strong> Copy the <a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-assets/research-report-template.zip">research-report
-template</a>,
-choose <code>religious_service</code> or <code>volunteer_work</code>, and keep all four
-wellbeing outcomes in the analysis. The template is the 2026 source
-of truth.</li>
-<li><strong>Option B Marsden EOI.</strong> Use the official RSNZ forms linked in
-<a href="assessments.html">Assessments</a>. The old example shows compact grant
-prose, but the criteria have changed.</li>
-<li><strong>Final check.</strong> Historical examples are useful for tone. The
-marking criteria on the assessments page decide what your 2026
-submission must contain.</li>
-</ol>
+<h2 id="pointers"><a class="header" href="#pointers">Pointers</a></h2>
+<ul>
+<li>The Option A assessment criteria are in <a href="assessments.html">Assessments</a>.</li>
+<li>The reporting checklist is in the <a href="reporting-guide.html">Reporting
+Guide</a>.</li>
+<li>Self-checks for the workflow are in <a href="assessment-self-checks.html">Assessment
+Self-Checks</a>.</li>
+<li>The simulator is documented in the <a href="simulation-guide.html">Simulation
+Guide</a>.</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="test-1-study-sheet"><a class="header" href="#test-1-study-sheet">Test 1: Study Sheet</a></h1>
 <p>Current study sheet for Test 1, covering lectures 1–6.</p>
 <div class="pdf-embed">
