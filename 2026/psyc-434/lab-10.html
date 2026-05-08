@@ -297,7 +297,7 @@ lab focuses on the report. For a refresher on measurement, see <a href="week-10.
 <p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
 Packages and Build Tools</a> first. The block below mirrors
 what <code>scripts/lab-10.R</code> requires at the top: it installs missing CRAN
-packages and requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.300</code>,
+packages and requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.322</code>,
 stopping with a clear restart-R message if a stale namespace is loaded.</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
@@ -310,7 +310,7 @@ if (length(missing_cran) &gt; 0) install.packages(missing_cran)
 
 if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 if (!requireNamespace("margot", quietly = TRUE) ||
-    packageVersion("margot") &lt; "1.0.300") {
+    packageVersion("margot") &lt; "1.0.322") {
   pak::pak("go-bayes/margot")
 }
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
@@ -354,18 +354,29 @@ decision (the exposure, the parsimony threshold, the seed) without
 scattering edits across the manuscript.</p>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
 <p>Open <code>setup.R</code>. Three decisions live near the top.</p>
-<pre><code class="language-r"># choose one of "religious_service" or "volunteer_work"
-# do not use "community_group" — that exposure is reserved for the Lab 9 worked example
-name_exposure &lt;- "religious_service"
+<pre><code class="language-r"># for the lab walkthrough, set this to "community_group"
+# for your submitted report, set this to "religious_service" or "volunteer_work"
+name_exposure &lt;- "community_group"
 
 study_seed &lt;- 2026
 study_n &lt;- 2000
 </code></pre>
+<blockquote>
+<p><strong>Lab demo vs report</strong></p>
+<p>In this session we walk through the <strong>same template</strong> using
+<code>community_group</code> as the exposure. We use <code>community_group</code> for the
+lab so we can work end-to-end without spoiling either of the two
+report exposures (<code>religious_service</code> or <code>volunteer_work</code>). When you
+start your report, change <code>name_exposure</code> back to one of those two —
+the template's <code>stopifnot()</code> passes for all three values, but only the
+first two are valid choices for submission.</p>
+</blockquote>
 <p>The four wellbeing outcomes are fixed by the assignment: sense of
 purpose, belonging, self-esteem, and life satisfaction at wave 2. The
 adjustment set $L$ contains baseline demographics, socioeconomic and
 personality variables, the baseline exposure, and the baseline value of
-every outcome (lagged-self adjustment).</p>
+every outcome (<em>lagged-self adjustment</em> — using each variable's own past
+value as a covariate).</p>
 <h2 id="step-3-simulate-the-panel"><a class="header" href="#step-3-simulate-the-panel">Step 3: Simulate the panel</a></h2>
 <p>The simulator returns a long panel with three waves. The
 <code>simulate_panel()</code> helper in <code>setup.R</code> reshapes it into a wide tibble
@@ -419,26 +430,26 @@ the E-value for the point estimate (<code>E_Value</code>), and the E-value for
 the bound nearest the null (<code>E_Val_bound</code>). The CI is unadjusted; you
 will apply Bonferroni in Step 5.</p>
 </blockquote>
-<h2 id="step-5-outcome-wide-reporting"><a class="header" href="#step-5-outcome-wide-reporting">Step 5: Outcome-wide reporting</a></h2>
+<h2 id="step-5-outcome-wide-reporting-with-margot_plot"><a class="header" href="#step-5-outcome-wide-reporting-with-margot_plot">Step 5: Outcome-wide reporting with <code>margot_plot()</code></a></h2>
 <p>Reporting four outcomes in one table requires correcting for
-multiplicity. The <code>ate_table()</code> helper in <code>setup.R</code> applies a Bonferroni
-correction at $\alpha_{FW} = 0.05$ across the four outcomes and
-reports the family-wise interval alongside the E-values.</p>
-<pre><code class="language-r">results &lt;- ate_table(models_binary)
-print(results)
-
-forest_plot_from_table(results)
+multiplicity. <code>margot::margot_plot()</code> does this in one call: pass the
+four-outcome combined table, set <code>adjust = "bonferroni"</code>, and it returns
+a plot, a transformed table with the multiplicity-adjusted confidence
+intervals, and a short prose interpretation.</p>
+<pre><code class="language-r">ate &lt;- ate_plot_objects(models_binary)   # wrapper from setup.R
+ate$plot                                  # forest plot
+ate$transformed_table                     # ATE, Bonferroni 95% CI, E-values
+cat(ate$interpretation)                   # auto-drafted summary
 </code></pre>
-<p>The helper computes the Bonferroni-adjusted critical value
-$z_{\alpha_{FW}/(2k)}$ with $k = 4$, multiplies by the standard
-error implied by the unadjusted 95% confidence interval, and reports the
-wider, family-wise interval. The point E-value uses the Chinn (2000)
-approximation for standardised mean differences. The bound E-value is
-computed at the <strong>Bonferroni-adjusted</strong> lower confidence limit (the
-bound nearest the null), so it answers "how strong an unmeasured
-confounder would need to be, on the risk-ratio scale, to push the
-multiplicity-adjusted lower bound to zero". If the multiplicity-adjusted
-CI crosses zero, the bound E-value is reported as 1 (no robustness).</p>
+<p><code>ate_plot_objects()</code> wraps <code>margot::margot_plot()</code> with a
+<code>plot_defaults</code> list (in <code>setup.R</code>) so you can restyle (colours,
+ordering, text size, x-axis limits) without editing the manuscript
+chunks. The Bonferroni correction widens each CI by the family-wise
+$z$ factor ($z_{\alpha_{FW}/(2k)}$ with $k = 4$), and the
+<strong>bound E-value</strong> is recomputed at the multiplicity-adjusted lower
+limit. If that limit crosses zero, the bound E-value is reported as 1 —
+meaning no unmeasured-confounder strength is needed to push the bound to
+the null.</p>
 <blockquote>
 <p><strong>Why Bonferroni</strong></p>
 <p>The outcome-wide design asks how the exposure affects all four

@@ -554,6 +554,13 @@ outcome-wide interpretation).</li>
 <li>APA style. Submit as a single PDF with R code appendix.</li>
 </ul>
 <h4 id="assessment-criteria-option-a"><a class="header" href="#assessment-criteria-option-a">Assessment Criteria (Option A)</a></h4>
+<p>The criteria are listed in the order in which they should appear in the
+report and follow the <a href="causal-workflow.html">ten-step causal workflow</a>:
+first define the <em>contrast</em>, then the <em>population</em>, then check the
+<em>identification assumptions</em>, then state the <em>estimand</em>, then estimate,
+then report, then ethics. The same order is reflected in the
+<code>manuscript.qmd</code> scaffold inside the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip?usp=sharing">research-report
+template</a>.</p>
 <p><strong>Stating the problem.</strong> State your question clearly. Explain why it
 matters. Frame it as a causal question for a defined target population.
 Note that the question is outcome-wide: you ask how the exposure affects
@@ -562,71 +569,99 @@ outcome after looking at the results. Explain the causal inference
 framework for non-specialists. Describe any practical or ethical
 relevance. Confirm data are from the NZAVS-style simulator distributed
 in <code>causalworkshop</code> and that you use three waves.</p>
+<p><strong>Determining the exposure.</strong> Define the exposure $A$. Explain the
+contrast (binary or modified treatment policy). Address the consistency
+assumption — would two participants with the same recorded exposure
+value share the same potential outcomes? Confirm the exposure precedes
+the outcomes in time.</p>
 <p><strong>Determining the outcomes.</strong> Define each outcome $Y_k$ for $k = 1,
 \dots, 4$. State the scale (continuous, z-scored), the timing (wave 2,
 post-exposure), and how each outcome relates to the question. Explain
-why an outcome-wide design reduces selective reporting and supports a
-meta-analytic interpretation.</p>
-<p><strong>Determining the exposure.</strong> Define the exposure $A$. Explain the
-contrast (binary or modified treatment policy). Address consistency,
-positivity, and conditional exchangeability. Confirm the exposure
-precedes the outcomes in time.</p>
+why an outcome-wide design reduces selective reporting (selecting only
+the outcome that gave the strongest result after seeing the data) and
+supports a meta-analytic interpretation.</p>
+<p><strong>Source and target populations.</strong> State the target population — for
+whom would the answer apply if the assumptions held? Would the exposure
+apply to <em>all</em> New Zealanders, or only to a subset? Identify
+subpopulations for whom the contrast is ill-defined or for whom
+positivity is unlikely to hold. Explain how the synthetic sample relates
+to your target population. Comment on transportability.</p>
+<p><strong>Eligibility criteria.</strong> State the eligibility criteria for the
+analysis sample. Let your target-population discussion drive these
+criteria — anyone for whom the contrast is ill-defined, or for whom a
+credible counterfactual is implausible, should be excluded.</p>
+<p><strong>Sample characteristics.</strong> Provide descriptive statistics for baseline
+demographics, exposure prevalence, and outcome distributions. Make clear
+the data are simulated.</p>
 <p><strong>Accounting for confounders.</strong> Define the baseline confounder set
 $L$. Justify each variable as a plausible cause of both $A$ and the
 $Y_k$. Confirm temporal order. Include baseline values of the exposure
-and of every outcome in $L$ (lagged-self adjustment). Use z-scores for
-continuous covariates and one-hot encoding for categorical covariates
-with three or more levels.</p>
+and of every outcome in $L$ — <em>lagged-self adjustment</em> (treating each
+variable's own past value as a covariate). Use z-scores for continuous
+covariates and one-hot encoding for categorical covariates with three or
+more levels. Describe how the adjustment set supports <strong>conditional
+exchangeability</strong>: that for two people who match on $L$, exposure
+status is, on average, as good as random with respect to potential
+outcomes. Note positivity (overlap of exposure levels) is required as
+well.</p>
 <p><strong>Drawing a causal diagram.</strong> Include measured confounders, unmeasured
 confounders, and time indices. The diagram should make the
-identification strategy legible at a glance.</p>
+identification strategy legible at a glance. Recall that DAG arrows are
+qualitative claims about <em>which variables can affect which others</em>, not
+commitments to specific causal mechanisms; the diagram is for checking
+d-separation (a graphical rule for reading off conditional
+independencies).</p>
 <p><strong>Identifying the causal estimand.</strong> State the causal contrast for each
 outcome: $$ \mathrm{ATE}_k = \mathbb{E}[Y_k(1) - Y_k(0)], \quad k =
 1, \dots, 4. $$ State the joint causal estimand of interest (the
 vector of four ATEs) and how you will summarise it.</p>
-<p><strong>Source and target populations.</strong> Explain how the synthetic sample
-relates to your target population. Comment on transportability.</p>
-<p><strong>Eligibility criteria.</strong> State the eligibility criteria for the
-analysis sample.</p>
-<p><strong>Sample characteristics.</strong> Provide descriptive statistics for baseline
-demographics, exposure prevalence, and outcome distributions. Make clear
-the data are simulated.</p>
-<p><strong>Missing data.</strong> Describe how missing data are handled. Use inverse
-probability of censoring weights (IPCW) for attrition, or state why the
-synthetic panel does not require them.</p>
+<p><strong>Missing data.</strong> Describe how missing data are handled. Use
+<strong>inverse-probability-of-censoring weights (IPCW)</strong> — a method that
+reweights observed cases so they stand in for those who dropped out —
+for attrition, or state why the synthetic panel does not require them.</p>
 <p><strong>Model approach.</strong> Estimate the four ATEs in one batch using
 <code>margot::margot_causal_forest()</code> (a wrapper around
 <code>grf::causal_forest()</code> with sensible defaults: honest splitting,
 doubly-robust ATEs, and a shared adjustment set). Briefly explain how
-machine learning is used and what "doubly robust" means. State the
-tuning choices (number of trees, honesty, seed). The
-<code>research-report-template</code> scaffold (Lab 10) configures these choices in
-<code>setup.R</code>; report the values you used.</p>
+machine learning is used and what "doubly robust" means (the estimator
+is consistent if either the outcome model or the propensity-score model
+is well specified). State the tuning choices (number of trees, honesty,
+seed). The <code>research-report-template</code> scaffold (Lab 10) configures these
+choices in <code>setup.R</code>; report the values you used.</p>
 <p><strong>Multiple-testing correction.</strong> Because you report four outcomes, apply
 a Bonferroni correction at $\alpha_{FW} = 0.05$ and report the
-multiplicity-adjusted confidence intervals.</p>
+multiplicity-adjusted confidence intervals.
+<code>margot::margot_plot(adjust = "bonferroni")</code> does this automatically.</p>
 <p><strong>Sensitivity analysis.</strong> Report an E-value (<a href="assessments.html#ref-vanderweele2017">VanderWeele &amp; Ding,
 2017</a>) for every outcome's point estimate and for
 the lower bound of its multiplicity-adjusted (Bonferroni) confidence
-interval. The <code>ate_table()</code> helper in <code>setup.R</code> computes both. Interpret
-each E-value in plain language.</p>
+interval. <code>margot::margot_plot()</code> recomputes the bound E-value at the
+multiplicity-adjusted limit and reports it in the transformed table.
+Interpret each E-value in plain language.</p>
 <p><strong>Reporting.</strong> Present the four ATE estimates, multiplicity-adjusted 95%
 confidence intervals, and E-values in a single forest plot <strong>and</strong> an
 accompanying table. Order outcomes by effect magnitude. Interpret the
-pattern as a whole, not outcome by outcome.</p>
-<p><strong>Subgroup identification with policy trees.</strong> This course studies
-comparative work. After estimating the four ATEs, fit depth-1 and
-depth-2 policy trees per outcome using the <code>margot</code> policy-tree workflow
-(Lab 9 walks through the steps; Lab 10 wires it into the report). Use
-the parsimony rule from the <a href="reporting-guide.html">Reporting Guide</a> to
-choose between depth-1 and depth-2 (the course default is
-<code>min_gain_for_depth_switch = 0.01</code> outcome units). Identify the subgroup
-or region for which the estimated treatment effect is strongest.
-Translate the region into plain language a non-specialist could repeat.
-Report its expected mean difference, uncertainty, and approximate sample
-proportion. Report the policy value with its 95% confidence interval.
-The current <code>margot</code> workflow does not force a fixed percentage treated;
-if you discuss a budget cap, state it as an extra decision problem.</p>
+pattern as a whole, not outcome by outcome. Use the auto-drafted prose
+returned by <code>margot::margot_plot()</code> as a starting point; revise it for
+clarity and your audience.</p>
+<p><strong>Identifying optimal policy trees.</strong> A policy tree finds the partition
+of the population that maximises a utility function (here, the benefit
+of treating people the rule recommends to treat, relative to a
+no-one-treated baseline). The tree therefore identifies an <em>optimal
+targeting rule</em>, not a set of subgroup contrasts; each leaf is a
+partition, not a comparison group with its own causal effect estimate.
+After estimating the four ATEs, fit depth-1 and depth-2 policy trees per
+outcome using the <code>margot</code> policy-tree workflow (Lab 9 walks through the
+steps; Lab 10 wires it into the report). Use the parsimony rule from the
+<a href="reporting-guide.html">Reporting Guide</a> to choose between depth-1 and
+depth-2 (the course default is <code>min_gain_for_depth_switch = 0.01</code>
+outcome units). Translate the leaves of the chosen tree into plain
+language a non-specialist could repeat. Report the policy value with its
+95% confidence interval, and the proportion of the sample assigned to
+treatment. Read the split variables as descriptors of where the rule
+sends people, not as identified causes of differential response. The
+current <code>margot</code> workflow does not force a fixed percentage treated; if
+you discuss a budget cap, state it as an extra decision problem.</p>
 <p><strong>Graphing rule for policy trees.</strong> Apply
 <code>margot::margot_select_grf_policy_trees()</code> to decide which trees to
 plot. The rule keeps a policy tree only when both the policy-value and
@@ -7748,7 +7783,7 @@ lab focuses on the report. For a refresher on measurement, see <a href="week-10.
 <p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
 Packages and Build Tools</a> first. The block below mirrors
 what <code>scripts/lab-10.R</code> requires at the top: it installs missing CRAN
-packages and requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.300</code>,
+packages and requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.322</code>,
 stopping with a clear restart-R message if a stale namespace is loaded.</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
@@ -7761,7 +7796,7 @@ if (length(missing_cran) &gt; 0) install.packages(missing_cran)
 
 if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 if (!requireNamespace("margot", quietly = TRUE) ||
-    packageVersion("margot") &lt; "1.0.300") {
+    packageVersion("margot") &lt; "1.0.322") {
   pak::pak("go-bayes/margot")
 }
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
@@ -7805,18 +7840,29 @@ decision (the exposure, the parsimony threshold, the seed) without
 scattering edits across the manuscript.</p>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
 <p>Open <code>setup.R</code>. Three decisions live near the top.</p>
-<pre><code class="language-r"># choose one of "religious_service" or "volunteer_work"
-# do not use "community_group" — that exposure is reserved for the Lab 9 worked example
-name_exposure &lt;- "religious_service"
+<pre><code class="language-r"># for the lab walkthrough, set this to "community_group"
+# for your submitted report, set this to "religious_service" or "volunteer_work"
+name_exposure &lt;- "community_group"
 
 study_seed &lt;- 2026
 study_n &lt;- 2000
 </code></pre>
+<blockquote>
+<p><strong>Lab demo vs report</strong></p>
+<p>In this session we walk through the <strong>same template</strong> using
+<code>community_group</code> as the exposure. We use <code>community_group</code> for the
+lab so we can work end-to-end without spoiling either of the two
+report exposures (<code>religious_service</code> or <code>volunteer_work</code>). When you
+start your report, change <code>name_exposure</code> back to one of those two —
+the template's <code>stopifnot()</code> passes for all three values, but only the
+first two are valid choices for submission.</p>
+</blockquote>
 <p>The four wellbeing outcomes are fixed by the assignment: sense of
 purpose, belonging, self-esteem, and life satisfaction at wave 2. The
 adjustment set $L$ contains baseline demographics, socioeconomic and
 personality variables, the baseline exposure, and the baseline value of
-every outcome (lagged-self adjustment).</p>
+every outcome (<em>lagged-self adjustment</em> — using each variable's own past
+value as a covariate).</p>
 <h2 id="step-3-simulate-the-panel"><a class="header" href="#step-3-simulate-the-panel">Step 3: Simulate the panel</a></h2>
 <p>The simulator returns a long panel with three waves. The
 <code>simulate_panel()</code> helper in <code>setup.R</code> reshapes it into a wide tibble
@@ -7870,26 +7916,26 @@ the E-value for the point estimate (<code>E_Value</code>), and the E-value for
 the bound nearest the null (<code>E_Val_bound</code>). The CI is unadjusted; you
 will apply Bonferroni in Step 5.</p>
 </blockquote>
-<h2 id="step-5-outcome-wide-reporting"><a class="header" href="#step-5-outcome-wide-reporting">Step 5: Outcome-wide reporting</a></h2>
+<h2 id="step-5-outcome-wide-reporting-with-margot_plot"><a class="header" href="#step-5-outcome-wide-reporting-with-margot_plot">Step 5: Outcome-wide reporting with <code>margot_plot()</code></a></h2>
 <p>Reporting four outcomes in one table requires correcting for
-multiplicity. The <code>ate_table()</code> helper in <code>setup.R</code> applies a Bonferroni
-correction at $\alpha_{FW} = 0.05$ across the four outcomes and
-reports the family-wise interval alongside the E-values.</p>
-<pre><code class="language-r">results &lt;- ate_table(models_binary)
-print(results)
-
-forest_plot_from_table(results)
+multiplicity. <code>margot::margot_plot()</code> does this in one call: pass the
+four-outcome combined table, set <code>adjust = "bonferroni"</code>, and it returns
+a plot, a transformed table with the multiplicity-adjusted confidence
+intervals, and a short prose interpretation.</p>
+<pre><code class="language-r">ate &lt;- ate_plot_objects(models_binary)   # wrapper from setup.R
+ate$plot                                  # forest plot
+ate$transformed_table                     # ATE, Bonferroni 95% CI, E-values
+cat(ate$interpretation)                   # auto-drafted summary
 </code></pre>
-<p>The helper computes the Bonferroni-adjusted critical value
-$z_{\alpha_{FW}/(2k)}$ with $k = 4$, multiplies by the standard
-error implied by the unadjusted 95% confidence interval, and reports the
-wider, family-wise interval. The point E-value uses the Chinn (2000)
-approximation for standardised mean differences. The bound E-value is
-computed at the <strong>Bonferroni-adjusted</strong> lower confidence limit (the
-bound nearest the null), so it answers "how strong an unmeasured
-confounder would need to be, on the risk-ratio scale, to push the
-multiplicity-adjusted lower bound to zero". If the multiplicity-adjusted
-CI crosses zero, the bound E-value is reported as 1 (no robustness).</p>
+<p><code>ate_plot_objects()</code> wraps <code>margot::margot_plot()</code> with a
+<code>plot_defaults</code> list (in <code>setup.R</code>) so you can restyle (colours,
+ordering, text size, x-axis limits) without editing the manuscript
+chunks. The Bonferroni correction widens each CI by the family-wise
+$z$ factor ($z_{\alpha_{FW}/(2k)}$ with $k = 4$), and the
+<strong>bound E-value</strong> is recomputed at the multiplicity-adjusted lower
+limit. If that limit crosses zero, the bound E-value is reported as 1 —
+meaning no unmeasured-confounder strength is needed to push the bound to
+the null.</p>
 <blockquote>
 <p><strong>Why Bonferroni</strong></p>
 <p>The outcome-wide design asks how the exposure affects all four

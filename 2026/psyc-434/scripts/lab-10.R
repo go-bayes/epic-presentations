@@ -43,8 +43,8 @@ if (length(missing) > 0) {
   )
 }
 
-if (packageVersion("margot") < "1.0.300") {
-  stop("margot >= 1.0.300 is required. Run the setup block, restart R, then re-run.",
+if (packageVersion("margot") < "1.0.322") {
+  stop("margot >= 1.0.322 is required. Run the setup block, restart R, then re-run.",
        call. = FALSE)
 }
 if (packageVersion("causalworkshop") < "0.6.0") {
@@ -98,20 +98,22 @@ cat("exposure prevalence:", round(mean(panel$exposure_t1), 2), "\n")
 
 # --- step 3: fit the four causal forests + policy-tree pipeline ------------
 
-cat("\n=== fitting margot pipeline (this may take a few minutes) ===\n")
+cat("\n=== fitting margot pipeline (cached re-runs reuse _cache/) ===\n")
 t0 <- Sys.time()
-fit <- fit_pipeline(panel)
-cat("pipeline fit in ", round(difftime(Sys.time(), t0, units = "mins"), 1), " min\n")
+fit <- run_fit_pipeline(panel)
+cat("pipeline ready in ", round(difftime(Sys.time(), t0, units = "mins"), 1), " min\n")
 
-# --- step 4: outcome-wide ATE table -----------------------------------------
+# --- step 4: outcome-wide ATE table + plot + interpretation ----------------
 
-cat("\n=== outcome-wide ATEs with Bonferroni-adjusted CIs ===\n")
-results <- ate_table(fit$models_binary)
-print(results)
+cat("\n=== margot_plot: Bonferroni-adjusted ATEs with E-values ===\n")
+ate <- ate_plot_objects(fit$models_binary)
+print(ate$transformed_table)
 
 cat("\n=== forest plot ===\n")
-forest_plot <- forest_plot_from_table(results)
-print(forest_plot)
+print(ate$plot)
+
+cat("\n=== auto-generated interpretation ===\n")
+cat(ate$interpretation, "\n")
 
 # --- step 5: policy-tree summary --------------------------------------------
 
@@ -152,10 +154,20 @@ if (length(graphed) == 0) {
 
 cat("\n=== ground-truth audit ===\n")
 truth <- ground_truth_audit()
-audit <- results |>
-  select(outcome_label, estimate) |>
+combined <- as.data.frame(fit$models_binary$combined_table, check.names = FALSE)
+audit <- tibble(
+  outcome_label = vapply(
+    paste0("model_", rownames(combined)),
+    function(id) {
+      v <- label_mapping[[id]]
+      if (is.null(v)) id else v
+    },
+    character(1)
+  ),
+  estimated_ate = combined[["E[Y(1)]-E[Y(0)]"]]
+) |>
   left_join(truth, by = "outcome_label") |>
-  mutate(diff = estimate - true_mean_tau)
+  mutate(diff = estimated_ate - true_mean_tau)
 print(audit)
 
 # --- step 9: render the manuscript ------------------------------------------
