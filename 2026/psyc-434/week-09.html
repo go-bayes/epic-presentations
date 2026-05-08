@@ -346,6 +346,16 @@ population. We need a way to score competing rules: how much utility
 each would deliver, on average, if applied to the whole population. Call
 that number the rule's <strong>policy value</strong>, written $V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
+<p>In the course lab, utility is the outcome $Y$ itself. That assumes the
+treatment and control actions have equal cost, or that costs are being
+ignored for the teaching example. If treatment costs money, time, risk,
+or staff capacity, the utility should be a net utility such as $U(a) =
+Y(a) - c_a(X)$. If costs change, the best policy can change too: a rule
+that maximises wellbeing gain when treatment is cheap may no longer
+maximise net utility when treatment is expensive or scarce. With costs
+included, the rule should treat when the expected benefit is large
+enough to justify the cost, not simply when the expected benefit is
+positive.</p>
 <p>The default <code>policytree</code> problem does <strong>not</strong> set a fixed percentage of
 people to treat. Instead, it estimates the utility of candidate
 allocation rules and asks which action has the highest estimated reward
@@ -384,29 +394,31 @@ largest gain in policy value when each child receives the
 locally-optimal action. It then recurses into each child until the depth
 limit is reached. Because the rule must hold for the entire population,
 the search uses <strong>doubly-robust scores</strong> rather than raw outcomes.</p>
-<p>Define $\Gamma_i(a)$ as person $i$'s estimated utility contribution
-if an allocation rule assigned action $a$. This score fills in the
-unobserved potential outcome needed to ask, "what outcome would we
-expect for this person under this action?" The <strong>augmented
+<p>Define $\Gamma_i(a)$ as person $i$'s estimated outcome contribution
+if an allocation rule assigned action $a$. In the lab, outcome
+contribution and utility contribution are the same because we are
+treating $Y$ as the utility. The <strong>augmented
 inverse-propensity-weighted (AIPW)</strong> version is:</p>
 <p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{W_i = a}}{\Pr(W = a
 \mid X_i)},\bigl(Y_i - \mu_a(X_i)\bigr), $$</p>
 <p>where $\mu_a(x)$ is the outcome model and $\Pr(W = a \mid x)$ is the
-propensity. The first term is the model's best guess at the utility
-contribution under action $a$, for everyone. The second term uses the
-people who actually received action $a$ to correct that guess. The
-propensity score appears in the denominator because only a fraction of
-people with covariates like $X_i$ received action $a$;
-inverse-propensity weighting scales their residuals so they represent
-the whole covariate stratum, not only the observed treated or untreated
-cases.</p>
+propensity score. The propensity score is <strong>not</strong> a potential outcome.
+It is the estimated probability of receiving action $a$ given
+covariates. The first term is the outcome model's best guess at
+$Y_i(a)$ for everyone. The second term uses the people who actually
+received action $a$ to correct that guess. The propensity score
+appears in the denominator because only a fraction of people with
+covariates like $X_i$ received action $a$; inverse-propensity
+weighting scales their residuals so they represent the whole covariate
+stratum, not only the observed treated or untreated cases.</p>
 <p>Under consistency, exchangeability, positivity, and correct
 specification of either the outcome model or the propensity model,
 averaging $\Gamma_i(a)$ estimates the mean potential outcome
 $\mathbb{E}[Y(a)]$. That is why $\Gamma_i(a)$ is useful for policy
-learning: it is an action-specific pseudo-utility. It lets us estimate
-the utility contribution each person would make under whichever action a
-candidate rule assigns.</p>
+learning: it is an action-specific pseudo-outcome. In the simple lab
+case, that pseudo-outcome is also a pseudo-utility. If costs are
+included, the same logic applies after replacing $Y(a)$ with net
+utility $U(a)$.</p>
 <p>This is the bridge from individual scores to policy value. For any
 candidate rule $d$, evaluate the score for the action that rule
 assigns to each person, then average:</p>
@@ -689,7 +701,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
