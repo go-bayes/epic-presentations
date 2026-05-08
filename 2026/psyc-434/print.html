@@ -709,10 +709,8 @@ them; the model cannot settle public values.</li>
 disclosure.</strong> Append a <a href="https://credit.niso.org/">CRediT contributor
 statement</a> (a National Information Standards
 Organization (NISO) standard) and an AI disclosure statement (per the
-course's <a href="https://go-bayes.github.io/26-434/assessments.html">AI use
-policy</a>) after the
-Discussion. The template provides headings and short placeholder text
-for both.</p>
+course's <a href="assessments.html#ai-use-in-this-course">AI use policy</a>) after the Discussion.
+The template provides headings and short placeholder text for both.</p>
 <h3 id="option-b-marsden-fund-expression-of-interest-eoi"><a class="header" href="#option-b-marsden-fund-expression-of-interest-eoi">Option B: Marsden Fund Expression of Interest (EOI)</a></h3>
 <p>Write a first-round Marsden Fund Expression of Interest (EOI) following
 the RSNZ 2026 guidelines. Your research question must use the causal
@@ -7861,8 +7859,20 @@ class.</p>
 <h2 id="step-1-start-from-the-report-template"><a class="header" href="#step-1-start-from-the-report-template">Step 1: Start from the report template</a></h2>
 <p>Download <code>research-report-template.zip</code> from the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip?usp=sharing">course Google Drive
 folder</a>
-and unzip it. Open the resulting folder in RStudio (or another editor).
-Your folder should look like this:</p>
+and unzip it. Open the resulting folder in RStudio (or another editor),
+then open <code>manuscript.qmd</code>.</p>
+<p>In RStudio:</p>
+<ol>
+<li>Choose <code>File &gt; Open Project...</code> if the folder contains an <code>.Rproj</code>
+file; otherwise choose <code>File &gt; Open...</code> and select <code>manuscript.qmd</code>.</li>
+<li>Keep the Files pane pointed at the unzipped
+<code>research-report-template</code> folder.</li>
+<li>Click <code>manuscript.qmd</code> to open the report source.</li>
+</ol>
+<p>If you use another editor, open the whole unzipped folder first, then
+open <code>manuscript.qmd</code> from inside that folder. Do not edit the zipped
+file itself.</p>
+<p>Your folder should look like this:</p>
 <pre><code class="language-text">research-report/
   setup.R          # study decisions, helpers, single source of truth
   manuscript.qmd   # prose, headings, tables, figures
@@ -7870,8 +7880,9 @@ Your folder should look like this:</p>
   references.bib   # BibTeX references
   README.md        # short orientation
 </code></pre>
-<p><code>setup.R</code> holds decisions and reusable code. <code>manuscript.qmd</code> holds
-prose and chunks that read from <code>setup.R</code>. The split lets you change one
+<p><code>setup.R</code> holds decisions and reusable code. <code>manuscript.qmd</code> is the
+file you will write in: it holds the prose, headings, tables, figures,
+and code chunks that read from <code>setup.R</code>. The split lets you change one
 decision (the exposure, the parsimony threshold, the seed) without
 scattering edits across the manuscript.</p>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
@@ -8081,7 +8092,8 @@ results |&gt;
 a teaching scaffold: in the lab, it shows you how close the estimates
 come to the truth. Do not include the audit in the submitted report.</p>
 <h2 id="step-8-render-the-manuscript"><a class="header" href="#step-8-render-the-manuscript">Step 8: Render the manuscript</a></h2>
-<p>Open <code>manuscript.qmd</code>. The preamble sources <code>setup.R</code>, simulates the
+<p>Open <code>manuscript.qmd</code> in RStudio (or your editor) before rendering. This
+is the report source file. The preamble sources <code>setup.R</code>, simulates the
 panel, fits the four causal forests, builds the policy-tree workflow,
 and applies the graphing rule. Every table and figure reads from the
 resulting objects.</p>
