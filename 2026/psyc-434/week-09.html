@@ -269,7 +269,7 @@ Forests</a></li>
 <blockquote>
 <p><strong>Key concepts</strong></p>
 <ol>
-<li>Policy learning turns CATE scores into treatment rules.</li>
+<li>Policy learning estimates utility over allocation rules.</li>
 <li>Policy value must be evaluated out of sample.</li>
 <li>Shallow policy trees trade a little value for a lot of
 interpretability.</li>
@@ -338,14 +338,19 @@ profile $x$ to an action $d(x) \in {0, 1}$, "treat" or "do not
 treat". Two profiles that are nearly identical should receive nearly
 identical decisions, and a ranking gives no such guarantee, because rank
 position drifts with sample size.</p>
-<p>We need a way to score competing rules: how much benefit each would
-deliver, on average, if applied to the whole population. Call that
-number the rule's <strong>policy value</strong>, written $V(d)$:</p>
+<p>The causal estimand has changed. Conditional average treatment effect
+(CATE) estimation asks for a person-level contrast, $\tau(x) =
+\mathbb{E}[Y(1)-Y(0)\mid X=x]$. Policy learning asks which allocation
+rule has the highest expected utility if applied to the target
+population. We need a way to score competing rules: how much utility
+each would deliver, on average, if applied to the whole population. Call
+that number the rule's <strong>policy value</strong>, written $V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
 <p>The default <code>policytree</code> problem does <strong>not</strong> set a fixed percentage of
-people to treat. Instead, it asks which action has the highest estimated
-reward in each leaf. The share treated is an output of the fitted rule,
-not an input.</p>
+people to treat. Instead, it estimates the utility of candidate
+allocation rules and asks which action has the highest estimated reward
+in each leaf. The share treated is an output of the fitted rule, not an
+input.</p>
 <p>If a project has a fixed budget, the policy problem can be written with
 a treatment-share cap:</p>
 <p>$$ \mathbb{E}[d(X)] \le q. $$</p>
@@ -365,13 +370,14 @@ analysis toward shallow, transparent decision trees evaluated with
 doubly-robust scores.</p>
 <h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
 <p>A causal forest maps a high-dimensional covariate vector $X$ to a
-personalised score $\hat{\tau}(X)$. The function itself is too tangled
-(thousands of overlapping splits across hundreds of trees) to hand to a
-decision-maker. The <code>policytree</code> algorithm bridges that gap. It
-collapses the forest's many $\hat{\tau}(X)$ values into a single
-shallow decision tree, where each split is chosen to maximise expected
-policy value subject to the depth budget (<a href="#ref-policytree_package_2024">Sverdrup et al.,
-2024</a>).</p>
+personalised CATE score $\hat{\tau}(X)$. The score says how much
+treatment is expected to change the outcome for people with covariates
+$X=x$. It does not decide how to allocate a programme. The
+<code>policytree</code> algorithm bridges that gap by comparing the utility of
+allocation rules. It collapses the forest's many $\hat{\tau}(X)$
+values into a single shallow decision tree, where each split is chosen
+to maximise expected policy value subject to the depth budget (<a href="#ref-policytree_package_2024">Sverdrup
+et al., 2024</a>).</p>
 <p>The algorithm proceeds greedily, top down. At the root, it searches
 every covariate and every threshold for the split that delivers the
 largest gain in policy value when each child receives the
@@ -522,18 +528,17 @@ policy value with its confidence interval, and explicitly disclaim the
 causal interpretation of the splits. Readers who skim past those
 clarifications will otherwise treat the splitters as causes.</p>
 <h2 id="heterogeneity-as-scientific-discovery"><a class="header" href="#heterogeneity-as-scientific-discovery">Heterogeneity as scientific discovery</a></h2>
-<p>Conditional average treatment effect (CATE) machinery maps treatment
-effects across a high-dimensional covariate space. It helps test whether
-our conventional categories (gender, age group, clinical severity)
-capture the differences that matter. Sometimes they do; often they do
-not. Discovering where the forest finds meaningful splits can generate
-fresh hypotheses about who responds and why, even when no policy
-decision is on the table. A forest that splits on loneliness rather than
-age, for example, suggests a hypothesis about social connection; it does
-not prove that loneliness is the causal source of the heterogeneity.
-This use of heterogeneity is exploratory, not confirmatory, and a
-follow-up study designed around the discovered subgroup is the proper
-test.</p>
+<p>CATE machinery maps treatment effects across a high-dimensional
+covariate space. It helps test whether our conventional categories
+(gender, age group, clinical severity) capture the differences that
+matter. Sometimes they do; often they do not. Discovering where the
+forest finds meaningful splits can generate fresh hypotheses about who
+responds and why, even when no policy decision is on the table. A forest
+that splits on loneliness rather than age, for example, suggests a
+hypothesis about social connection; it does not prove that loneliness is
+the causal source of the heterogeneity. This use of heterogeneity is
+exploratory, not confirmatory, and a follow-up study designed around the
+discovered subgroup is the proper test.</p>
 <h2 id="appendix-why-effect-modifiers-are-descriptive"><a class="header" href="#appendix-why-effect-modifiers-are-descriptive">Appendix: why effect modifiers are descriptive</a></h2>
 <p>Heterogeneous treatment effect (HET) estimates are descriptions of how
 treatment contrasts vary across measured covariates. They are not causal
@@ -665,7 +670,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.

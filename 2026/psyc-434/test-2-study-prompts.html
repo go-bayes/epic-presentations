@@ -254,7 +254,7 @@ the relevant lecture, lab, <a href="reporting-guide.html">Reporting Guide</a>, a
 <h2 id="heterogeneous-treatment-effects-week-8"><a class="header" href="#heterogeneous-treatment-effects-week-8">Heterogeneous Treatment Effects (Week 8)</a></h2>
 <ol>
 <li>State the difference between the average treatment effect and the
-conditional average treatment effect. When is the distinction
+conditional average treatment effect (CATE). When is the distinction
 substantively important?</li>
 <li>A regression model with treatment-by-age and treatment-by-gender
 interactions reports both interactions as non-significant. Does this
@@ -277,10 +277,12 @@ right interaction terms will find it." Reply in two sentences.</li>
 <h2 id="policy-trees-fairness-and-judgement-week-9"><a class="header" href="#policy-trees-fairness-and-judgement-week-9">Policy Trees, Fairness, and Judgement (Week 9)</a></h2>
 <ol>
 <li>State, in one or two sentences, what a policy tree does that a
-conditional average treatment effect estimate alone does not.</li>
+conditional average treatment effect estimate alone does not. Your
+answer should use the idea of utility or policy value over
+allocation rules.</li>
 <li>Explain the parsimony rule for choosing tree depth. Why is the
 simpler rule often preferable even when the more complex rule has a
-slightly larger policy value?</li>
+slightly larger estimated utility or policy value?</li>
 <li>A depth-2 policy tree treats the leaf "deprivation index $&gt; 1.2$
 and age $\leq 40$". Translate this into a sentence a community
 organiser could repeat.</li>
@@ -296,7 +298,9 @@ the model does not?</li>
 <li>State the difference between a ranking rule (for example, treat the
 top 20% by $\hat{\tau}$ when a budget is fixed) and a default
 depth-2 policy tree, where the treated share is whatever the fitted
-rule implies. Give one scenario in which the ranking is preferable.</li>
+rule implies. In your answer, distinguish estimating CATEs from
+estimating the utility of allocation rules. Give one scenario in
+which the ranking is preferable.</li>
 </ol>
 <h2 id="outcome-wide-reporting"><a class="header" href="#outcome-wide-reporting">Outcome-Wide Reporting</a></h2>
 <ol>
@@ -337,10 +341,11 @@ causal workflow: estimands, identification assumptions, estimator,
 multiple-testing correction, sensitivity analysis, presentation.</li>
 <li>A community wellbeing programme wants to use heterogeneous treatment
 effect estimates. Walk through the steps from conditional average
-treatment effect estimation to a readable policy-tree summary,
-naming the fairness check and one value judgement the model cannot
-settle. State how the answer would change if the programme also had
-a fixed budget.</li>
+treatment effect estimation to a readable policy-tree summary.
+Explain that policy learning estimates utility over allocation
+rules, name the fairness check, and state one value judgement the
+model cannot settle. State how the answer would change if the
+programme also had a fixed budget.</li>
 <li>A cross-cultural study uses the K6 to compare the effect of a
 school-based mindfulness intervention in two countries. Identify the
 measurement, treatment-version, and identification threats, and
