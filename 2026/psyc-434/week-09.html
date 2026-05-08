@@ -397,6 +397,15 @@ second corrects that guess on the observed cases using
 inverse-propensity reweighting. A rule built on AIPW scores is therefore
 robust to one form of misspecification: as long as one of the two models
 is correct, the scores stay unbiased estimates of $Y_i(a)$.</p>
+<p>This is the bridge from individual scores to policy value. For any
+candidate rule $d$, evaluate the score for the action that rule
+assigns to each person, then average:</p>
+<p>$$ \widehat{V}(d) = \frac{1}{n}\sum_{i=1}^{n}\Gamma_i(d(X_i)). $$</p>
+<p>The policy tree search compares candidate rules by this average. A split
+is useful when assigning different actions in the two child nodes raises
+$\widehat{V}(d)$ relative to a simpler rule. The tree is therefore not
+estimating a new CATE for each leaf; it is searching for a simple
+allocation rule with high estimated utility.</p>
 <p>In this course we cap tree depth at two. Three reasons motivate the cap.
 First, at most three yes/no questions per rule means the logic fits on a
 slide for policy-makers or clinicians. Second, each leaf retains enough
@@ -670,7 +679,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
