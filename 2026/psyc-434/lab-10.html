@@ -247,22 +247,17 @@
                         <h1 id="lab-10-end-to-end-research-report"><a class="header" href="#lab-10-end-to-end-research-report">Lab 10: End-to-End Research Report</a></h1>
 <blockquote>
 <p><strong>Lab materials</strong></p>
-<ul>
-<li><a href="scripts/lab-10.R">Download the R script for this lab</a></li>
-<li><a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Download the final assessment Option A report
+<p><a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Download the final assessment Option A report
 template</a>
-(Google Drive folder containing <code>research-report-template.zip</code>)</li>
-</ul>
-<p>The script mirrors the steps below. Run the setup block in <a href="lab-setup.html">Lab
-Setup</a>, restart R, then run the script from the project
-the report-template unzips into.</p>
+(Google Drive folder containing <code>research-report-template.zip</code>).</p>
+<p>Run the setup block in <a href="lab-setup.html">Lab Setup</a>, restart R, then work
+from the project the report-template unzips into. The steps below
+mirror the template's <code>setup.R</code> and <code>manuscript.qmd</code>.</p>
 </blockquote>
 <p>This lab puts the whole course together in one workflow. By the end of
 the session you will have a draft Option A research report rendered to
 PDF: an outcome-wide average treatment effect table, a forest plot,
-per-outcome policy trees, and an ethics paragraph. You will not learn
-new theory today; you will learn how to assemble what you already know
-into a defensible report.</p>
+per-outcome policy trees, and an ethics paragraph.</p>
 <blockquote>
 <p><strong>What you will learn</strong></p>
 <ol>
@@ -301,9 +296,10 @@ lab focuses on the report. For a refresher on measurement, see <a href="week-10.
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
 <p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
 Packages and Build Tools</a> first. The block below mirrors
-what <code>scripts/lab-10.R</code> requires at the top: it installs missing CRAN
-packages and requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.322</code>,
-stopping with a clear restart-R message if a stale namespace is loaded.</p>
+what the report template's <code>setup.R</code> requires at the top: it installs
+missing CRAN packages and requires <code>causalworkshop &gt;= 0.6.0</code> and
+<code>margot &gt;= 1.0.322</code>, stopping with a clear restart-R message if a stale
+namespace is loaded.</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
   "knitr", "kableExtra", "rmarkdown"

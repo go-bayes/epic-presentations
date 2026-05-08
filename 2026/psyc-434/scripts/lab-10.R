@@ -3,6 +3,11 @@
 # self-standing script -- run from top to bottom inside the unzipped
 # research-report template directory
 # ============================================================================
+#
+# STALE: this script is no longer used in lab. Lab 10 now runs directly
+# from the Option A report template (setup.R + manuscript.qmd) on the
+# course Google Drive. Kept for reference only; do not rely on it.
+# ============================================================================
 
 # learning aims for this lab:
 #   1. assemble the course workflow into one report.
