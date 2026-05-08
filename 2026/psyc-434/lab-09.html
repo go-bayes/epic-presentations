@@ -330,7 +330,7 @@ if (!requireNamespace("margot", quietly = TRUE)) {
   pak::pak("go-bayes/margot")
 }
 if (!requireNamespace("causalworkshop", quietly = TRUE) ||
-    packageVersion("causalworkshop") &lt; "0.6.1") {
+    packageVersion("causalworkshop") &lt; "0.6.2") {
   pak::pak("go-bayes/causalworkshop")
   if ("causalworkshop" %in% loadedNamespaces()) {
     stop("causalworkshop was upgraded; please restart R and re-run.", call. = FALSE)

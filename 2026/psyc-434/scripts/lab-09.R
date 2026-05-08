@@ -45,9 +45,9 @@ if (length(missing) > 0) {
   )
 }
 
-if (packageVersion("causalworkshop") < "0.6.1") {
+if (packageVersion("causalworkshop") < "0.6.2") {
   stop(
-    "causalworkshop >= 0.6.1 is required. Run the setup block in Lab 9, ",
+    "causalworkshop >= 0.6.2 is required. Run the setup block in Lab 9, ",
     "restart R, then run this script again.",
     call. = FALSE
   )
