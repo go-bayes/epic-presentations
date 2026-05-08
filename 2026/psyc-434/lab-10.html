@@ -269,29 +269,10 @@ report.</li>
 outcome-wide design.</li>
 <li>How to fit policy trees and choose between depth-1 and depth-2
 with a stated parsimony threshold.</li>
-<li>How to apply the <code>margot::margot_select_grf_policy_trees()</code>
-graphing rule so you graph only policies that survive a
-transparent reporting test.</li>
-<li>How to render a Quarto manuscript that consumes the fitted
-objects.</li>
+<li>How to apply a transparent graphing rule so you graph only
+policies that survive a stated reporting test.</li>
+<li>How to build a research report in Quarto Markdown with citations.</li>
 </ol>
-</blockquote>
-<blockquote>
-<p><strong>Connection to previous labs</strong></p>
-<p>Lab 5 introduced the average treatment effect (ATE). Lab 6 introduced
-the conditional average treatment effect (CATE). Lab 8 evaluated
-targeting with rank-weighted average treatment effect (RATE) and qini
-curves. Lab 9 turned a CATE ranking into a depth-1 or depth-2 policy
-tree. This lab links those pieces into one outcome-wide report.</p>
-</blockquote>
-<blockquote>
-<p><strong>Where measurement fits</strong></p>
-<p>Week 10's lecture covers classical measurement theory and invariance
-from a causal perspective. The lecture is the place to think through
-reflective versus formative models, exploratory and confirmatory
-factor analysis, and configural, metric, and scalar invariance. This
-lab focuses on the report. For a refresher on measurement, see <a href="week-10.html">Week
-10 lecture notes</a>.</p>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
 <p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
@@ -582,41 +563,49 @@ for the final render.</p>
 <h2 id="step-9-write-the-report"><a class="header" href="#step-9-write-the-report">Step 9: Write the report</a></h2>
 <p>The template gives you headings, code chunks, tables, and figures. What
 it does not give you is the prose. Replace each italicised placeholder
-paragraph with your own writing, following the <strong>Introduction, Methods,
-Results, and Discussion (IMRAD)</strong> conventions below. IMRAD is the
-default structure for psychology, epidemiology, and most life-sciences
-journals; if you target a journal that asks for a different structure,
-follow that.</p>
+paragraph with your own writing, using the <strong>Introduction, Methods,
+Results, and Discussion (IMRAD)</strong> structure. IMRAD is the default for
+psychology, epidemiology, and most life-sciences journals.</p>
+<p>The ten steps in the <a href="causal-workflow.html">Causal Workflow</a> tell you
+<em>what</em> a defensible causal study has to establish. IMRAD tells you
+<em>where</em> in the manuscript each piece goes. The two are complementary:
+every IMRAD slot is anchored to specific workflow steps.</p>
 <blockquote>
-<p><strong>IMRAD writing checklist</strong></p>
+<p><strong>IMRAD checklist, mapped to the causal workflow</strong></p>
 <ul>
-<li><strong>Title:</strong> concise and informative. Highlight the main result, not
-only the method ("Phylogenetic evidence indicates …" rather than "A
-study of …").</li>
-<li><strong>Abstract:</strong> a stand-alone summary with background, purpose, key
-methods, principal results, and conclusions.</li>
+<li><strong>Title:</strong> concise and informative. Name the exposure, the outcome
+family, and the population. Highlight the result, not only the
+method.</li>
+<li><strong>Abstract:</strong> a stand-alone summary with background, causal
+question, key methods, principal results, and conclusions. Anchored
+in workflow Steps 0, 2, 3 (well-defined treatment, well-defined
+outcome, target population).</li>
 <li><strong>Introduction:</strong> set the context, identify the gap, state the
-purpose or hypothesis. Two paragraphs maximum. Do not summarise
-results here.</li>
+causal question and target estimand. Two paragraphs maximum.
+Anchored in Steps 0, 2, 3. Do not summarise results here.</li>
 <li><strong>Methods:</strong> detailed enough for another investigator to reproduce
-the study. Move methods-heavy detail to supplements when
-appropriate.</li>
-<li><strong>Results:</strong> objective presentation of findings. No interpretation,
-no citations.</li>
+the study. Anchored in Steps 1, 4, 5, 6, 7, 8: time zero, the DAG
+and adjustment set for exchangeability, the causal-consistency
+argument, positivity diagnostics, measurement choices, and the
+strategy for preserving representativeness (attrition, missingness).</li>
+<li><strong>Results:</strong> objective presentation of findings — the four ATEs with
+Bonferroni-adjusted intervals, E-values, and any policy trees that
+pass the graphing rule. No interpretation, no citations. Outputs of
+estimation given the identification arguments stated in Methods.</li>
 <li><strong>Discussion:</strong> interpret results, compare with existing literature,
-address limitations, state implications. Do not overstate
-conclusions. Acknowledge limitations honestly; doing so is a sign of
-good science.</li>
+address limitations, state implications. Anchored in Step 9
+(transparent documentation): name the assumptions you made, where
+each could fail, and what the sensitivity analyses (E-values) imply.
+Acknowledge limitations honestly.</li>
 <li>In summaries and abstracts, keep to one tense.</li>
-<li>Use flowing prose in the main text. Bullet lists are acceptable in
-methods checklists and supplementary material.</li>
+<li>Use flowing prose in the main text. Bullet lists belong in methods
+checklists and supplementary material.</li>
 </ul>
 </blockquote>
-<p>The template's section ordering already follows the workflow rather than
-IMRAD strictly (causal-question framing first, then identification, then
-estimation), but the Introduction, Methods, Results, and Discussion
-blocks all map cleanly onto the IMRAD slots above. Use the IMRAD
-checklist as your editing pass.</p>
+<p>The template's section ordering follows the workflow (causal-question
+framing, then identification, then estimation). The Introduction,
+Methods, Results, and Discussion blocks map cleanly onto the IMRAD slots
+above; use the checklist as your editing pass.</p>
 <blockquote>
 <p><strong>Ethics paragraph (subsection of the Discussion)</strong></p>
 <p>The Option A criteria require a short statement on what would need to
@@ -629,35 +618,6 @@ ethnicity or migration history; the ethics paragraph names the
 trade-off. The model cannot settle public values; you can describe
 what evidence the model can and cannot provide.</p>
 </blockquote>
-<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
-<blockquote>
-<p><strong>Lab diary</strong></p>
-<p>Complete at least two of the following exercises for your lab diary.</p>
-</blockquote>
-<ol>
-<li>
-<p><strong>Switch the exposure.</strong> Change <code>name_exposure</code> from
-<code>religious_service</code> to <code>volunteer_work</code> in <code>setup.R</code> and re-render.
-Compare the four ATEs across exposures. Which outcomes look more
-responsive to which exposure?</p>
-</li>
-<li>
-<p><strong>Tighten the parsimony rule.</strong> Set
-<code>min_gain_for_depth_switch &lt;- 0.05</code> in <code>setup.R</code>. Which outcomes
-lose their depth-2 rule? Does the report change in a useful way?</p>
-</li>
-<li>
-<p><strong>Tighten the graphing rule.</strong> Set
-<code>policy_value_lower_threshold &lt;- 0.05</code>. How many outcomes still
-pass? What does this say about how confidently you can target each
-outcome?</p>
-</li>
-<li>
-<p><strong>Translate one rule.</strong> Pick the strongest policy tree your graphing
-rule keeps. Translate the depth-2 (or depth-1) rule into a sentence
-a non-specialist could repeat. Note its coverage and one limitation.</p>
-</li>
-</ol>
 <h2 id="pointers"><a class="header" href="#pointers">Pointers</a></h2>
 <ul>
 <li>The Option A assessment criteria are in <a href="assessments.html">Assessments</a>.</li>
