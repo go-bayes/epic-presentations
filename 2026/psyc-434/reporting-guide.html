@@ -327,29 +327,10 @@ multiplicity-adjusted lower bound to the null."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
-<p>For Option A, the policy-tree workflow is the primary heterogeneity
-output (see the next section). RATE and Qini diagnostics are introduced
-in Lab 8; you may include them as optional appendix material if they
-help interpret your policy trees, but they are not required for the
-report.</p>
-<h3 id="optional-rate-and-qini-diagnostics"><a class="header" href="#optional-rate-and-qini-diagnostics">Optional: RATE and Qini diagnostics</a></h3>
-<p>When there is evidence of heterogeneity, report it plainly:</p>
-<div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>RATE-AUTOC</th><th>p-value</th><th>RATE-Qini</th><th>p-value</th><th>Evidence</th></tr></thead><tbody>
-<tr><td>Belonging</td><td>0.15</td><td>0.001</td><td>0.11</td><td>0.004</td><td>Strong</td></tr>
-<tr><td>Life satisfaction</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
-<tr><td>Sense of purpose</td><td>0.06</td><td>0.089</td><td>0.04</td><td>0.156</td><td>Moderate</td></tr>
-<tr><td>Self-esteem</td><td>0.03</td><td>0.234</td><td>0.02</td><td>0.445</td><td>Weak</td></tr>
-</tbody></table>
-</div>
-<h3 id="example-heterogeneity-text"><a class="header" href="#example-heterogeneity-text">Example heterogeneity text</a></h3>
-<blockquote>
-<p>"The RATE results suggest that treatment effects vary across people
-for belonging and life satisfaction. The evidence is weaker for the
-other outcomes. This means the average effect is not the whole story:
-some people appear to benefit more than others, though the split
-variables should be read as descriptive markers, not as identified
-causes of response."</p>
-</blockquote>
+<p>For Option A, the policy-tree workflow is the only heterogeneity output.
+The rank-weighted average treatment effect (RATE) and Qini diagnostics
+introduced in Lab 8 are not part of this report's scaffold; the template
+does not ship code for them, and you do not need to include them.</p>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
 <p>Present each policy tree on the standardised outcome scale used by the
@@ -454,8 +435,9 @@ justification for conditional exchangeability.</li>
 (e.g., number of trees, minimum node size).</li>
 <li><strong>Attrition handling</strong>: censoring weights, stages of dropout
 addressed.</li>
-<li><strong>Heterogeneity assessment</strong>: RATE metrics, policy tree depth,
-policy value, and uncertainty.</li>
+<li><strong>Heterogeneity assessment</strong>: policy-tree depth (with parsimony
+decision), policy value, treated uplift, and the graphing-rule
+decision.</li>
 <li><strong>Sensitivity analysis</strong>: E-values for all primary estimates.</li>
 </ol>
 <hr />

@@ -433,9 +433,10 @@ I found the following steps useful:
 </code></pre>
 </blockquote>
 <h2 id="assessment-2-in-class-test-1-20--22-april"><a class="header" href="#assessment-2-in-class-test-1-20--22-april">Assessment 2: In-Class Test 1 (20%) — 22 April</a></h2>
-<p>Covers material from weeks 1–6 (causal diagrams, confounding, ATE,
-effect modification). Test duration is 50 minutes. The allocated time is
-1 hour 50 minutes. Required: pen/pencil. No devices permitted.</p>
+<p>Covers material from weeks 1–6 (causal diagrams, confounding, average
+treatment effect (ATE), effect modification). Test duration is 50
+minutes. The allocated time is 1 hour 50 minutes. Required: pen/pencil.
+No devices permitted.</p>
 <blockquote>
 <p><strong>Test Location</strong></p>
 <p>The test is in class. Come to the seminar room (EA120) with a writing
@@ -551,7 +552,8 @@ practised in Labs 8–10. You choose one exposure (<code>religious_service</code
 <li><strong>Conclusion:</strong> 1,000-word hard limit (extended to accommodate
 outcome-wide interpretation).</li>
 <li><strong>Methods/Results:</strong> concise, no specific word limit.</li>
-<li>APA style. Submit as a single PDF with R code appendix.</li>
+<li>American Psychological Association (APA) style. Submit as a single PDF
+with R code appendix.</li>
 </ul>
 <h4 id="assessment-criteria-option-a"><a class="header" href="#assessment-criteria-option-a">Assessment Criteria (Option A)</a></h4>
 <p>The criteria are listed in the order in which they should appear in the
@@ -613,11 +615,11 @@ outcomes. Note positivity (overlap of exposure levels) is required as
 well.</p>
 <p><strong>Draw a causal diagram.</strong> Include measured confounders, unmeasured
 confounders, and time indices. The diagram should make the
-identification strategy legible at a glance. Recall that DAG arrows are
-qualitative claims about <em>which variables can affect which others</em>, not
-commitments to specific causal mechanisms; the diagram is for checking
-d-separation (a graphical rule for reading off conditional
-independencies).</p>
+identification strategy legible at a glance. Recall that directed
+acyclic graph (DAG) arrows are qualitative claims about <em>which variables
+can affect which others</em>, not commitments to specific causal mechanisms;
+the diagram is for checking d-separation (a graphical rule for reading
+off conditional independencies).</p>
 <p><strong>Identify the causal estimand.</strong> State the causal contrast for each
 outcome: $$ \mathrm{ATE}_k = \mathbb{E}[Y_k(1) - Y_k(0)], \quad k =
 1, \dots, 4. $$ State the joint causal estimand of interest (the
@@ -703,9 +705,11 @@ acted on the policy tree. State one value judgement the analysis
 depends on. The aim is to flag the considerations, not to resolve
 them; the model cannot settle public values.</li>
 </ol>
-<p><strong>CRediT and AI disclosure.</strong> Append a <a href="https://credit.niso.org/">CRediT contributor
-statement</a> and an AI disclosure statement (per
-the course's <a href="https://go-bayes.github.io/26-434/assessments.html">AI use
+<p><strong>Contributor Roles Taxonomy (CRediT) and artificial-intelligence (AI)
+disclosure.</strong> Append a <a href="https://credit.niso.org/">CRediT contributor
+statement</a> (a National Information Standards
+Organization (NISO) standard) and an AI disclosure statement (per the
+course's <a href="https://go-bayes.github.io/26-434/assessments.html">AI use
 policy</a>) after the
 Discussion. The template provides headings and short placeholder text
 for both.</p>
@@ -8093,13 +8097,14 @@ fails after a day. While drafting, lower <code>study_n</code>, <code>num_trees</
 <code>n_iterations_stability</code> in <code>setup.R</code> for faster iteration; raise them
 for the final render.</p>
 </blockquote>
-<h2 id="step-9-write-the-report-imrad"><a class="header" href="#step-9-write-the-report-imrad">Step 9: Write the report (IMRAD)</a></h2>
+<h2 id="step-9-write-the-report"><a class="header" href="#step-9-write-the-report">Step 9: Write the report</a></h2>
 <p>The template gives you headings, code chunks, tables, and figures. What
 it does not give you is the prose. Replace each italicised placeholder
-paragraph with your own writing, following the IMRAD conventions below
-(Introduction, Methods, Results, Discussion). IMRAD is the default for
-psychology, epidemiology, and most life-sciences journals; if you target
-a journal that asks for a different structure, follow that.</p>
+paragraph with your own writing, following the <strong>Introduction, Methods,
+Results, and Discussion (IMRAD)</strong> conventions below. IMRAD is the
+default structure for psychology, epidemiology, and most life-sciences
+journals; if you target a journal that asks for a different structure,
+follow that.</p>
 <blockquote>
 <p><strong>IMRAD writing checklist</strong></p>
 <ul>
@@ -8977,29 +8982,10 @@ multiplicity-adjusted lower bound to the null."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
-<p>For Option A, the policy-tree workflow is the primary heterogeneity
-output (see the next section). RATE and Qini diagnostics are introduced
-in Lab 8; you may include them as optional appendix material if they
-help interpret your policy trees, but they are not required for the
-report.</p>
-<h3 id="optional-rate-and-qini-diagnostics"><a class="header" href="#optional-rate-and-qini-diagnostics">Optional: RATE and Qini diagnostics</a></h3>
-<p>When there is evidence of heterogeneity, report it plainly:</p>
-<div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>RATE-AUTOC</th><th>p-value</th><th>RATE-Qini</th><th>p-value</th><th>Evidence</th></tr></thead><tbody>
-<tr><td>Belonging</td><td>0.15</td><td>0.001</td><td>0.11</td><td>0.004</td><td>Strong</td></tr>
-<tr><td>Life satisfaction</td><td>0.12</td><td>0.003</td><td>0.08</td><td>0.012</td><td>Strong</td></tr>
-<tr><td>Sense of purpose</td><td>0.06</td><td>0.089</td><td>0.04</td><td>0.156</td><td>Moderate</td></tr>
-<tr><td>Self-esteem</td><td>0.03</td><td>0.234</td><td>0.02</td><td>0.445</td><td>Weak</td></tr>
-</tbody></table>
-</div>
-<h3 id="example-heterogeneity-text"><a class="header" href="#example-heterogeneity-text">Example heterogeneity text</a></h3>
-<blockquote>
-<p>"The RATE results suggest that treatment effects vary across people
-for belonging and life satisfaction. The evidence is weaker for the
-other outcomes. This means the average effect is not the whole story:
-some people appear to benefit more than others, though the split
-variables should be read as descriptive markers, not as identified
-causes of response."</p>
-</blockquote>
+<p>For Option A, the policy-tree workflow is the only heterogeneity output.
+The rank-weighted average treatment effect (RATE) and Qini diagnostics
+introduced in Lab 8 are not part of this report's scaffold; the template
+does not ship code for them, and you do not need to include them.</p>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
 <p>Present each policy tree on the standardised outcome scale used by the
@@ -9104,8 +9090,9 @@ justification for conditional exchangeability.</li>
 (e.g., number of trees, minimum node size).</li>
 <li><strong>Attrition handling</strong>: censoring weights, stages of dropout
 addressed.</li>
-<li><strong>Heterogeneity assessment</strong>: RATE metrics, policy tree depth,
-policy value, and uncertainty.</li>
+<li><strong>Heterogeneity assessment</strong>: policy-tree depth (with parsimony
+decision), policy value, treated uplift, and the graphing-rule
+decision.</li>
 <li><strong>Sensitivity analysis</strong>: E-values for all primary estimates.</li>
 </ol>
 <hr />
