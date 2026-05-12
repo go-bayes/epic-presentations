@@ -252,8 +252,11 @@ template</a>. If the course-site
 download fails, use the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Google Drive
 mirror</a>.</p>
 <p>Run the setup block in <a href="lab-setup.html">Lab Setup</a>, restart R, then work
-from the project the report-template unzips into. The steps below
-mirror the template's <code>setup.R</code> and <code>manuscript.qmd</code>.</p>
+from the project the report-template unzips into. Before attempting
+the manuscript, open <code>setup.R</code> and run the whole script. The first run
+downloads the required materials and packages, which may take about 5
+to 10 minutes. When <code>setup.R</code> finishes without an error, open and
+render <code>manuscript.qmd</code>.</p>
 </blockquote>
 <p>This lab puts the whole course together in one workflow. By the end of
 the session you will have a draft Option A research report rendered to
@@ -279,12 +282,12 @@ policies that survive a stated reporting test.</li>
 <p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
 Packages and Build Tools</a> first. The block below mirrors
 what the report template's <code>setup.R</code> requires at the top: it installs
-missing CRAN packages and requires <code>causalworkshop &gt;= 0.6.0</code> and
-<code>margot &gt;= 1.0.322</code>, stopping with a clear restart-R message if a stale
-namespace is loaded.</p>
+missing CRAN packages, including <code>tinytex</code> for PDF rendering, and
+requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.322</code>, stopping
+with a clear restart-R message if a stale namespace is loaded.</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
-  "knitr", "kableExtra", "rmarkdown"
+  "knitr", "kableExtra", "rmarkdown", "tinytex"
 )
 missing_cran &lt;- cran_packages[
   !vapply(cran_packages, \(p) requireNamespace(p, quietly = TRUE), logical(1))
