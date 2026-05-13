@@ -426,7 +426,7 @@ have a good reason to change them.</li>
 paragraphs.</li>
 <li>Inline R code uses <code>`r object_name`</code>. Use it when a number or
 label should update automatically.</li>
-<li>Code chunks start with <code>```{r}</code> and end with <code>```</code>.
+<li>R code chunks start with <code>```{r}</code> and end with <code>```</code>.
 Put chunk options such as <code>echo: false</code> or <code>fig-cap:</code> directly under
 the chunk header.</li>
 <li>Citations use <code>[@citekey]</code>, where the key must appear in
@@ -434,6 +434,66 @@ the chunk header.</li>
 <li>Figures and tables need captions. A reader should understand what the
 display shows without searching the prose.</li>
 </ul>
+<h3 id="quarto-code-chunks-what-runs-and-what-appears"><a class="header" href="#quarto-code-chunks-what-runs-and-what-appears">Quarto code chunks: what runs and what appears</a></h3>
+<p>Quarto code chunks have three layers: the fence, the options, and the
+code. The fence says what language the block uses. The options say
+whether the code runs and whether the code or output appears in the
+report. The code does the work.</p>
+<p>For R chunks, options begin with <code>#|</code> because <code>#</code> is an R comment:</p>
+<pre><code class="language-markdown">```{r}
+#| label: fig-example
+#| echo: false
+#| warning: false
+#| fig-cap: "Example figure caption."
+
+plot(1:10)
+```
+</code></pre>
+<p>For LaTeX/TikZ chunks, options begin with <code>%|</code> because <code>%</code> is a LaTeX
+comment:</p>
+<pre><code class="language-markdown">```{tikz}
+%| label: fig-dag-tikz
+%| eval: false
+%| fig-cap: "TikZ DAG, switched off while using the ggdag version."
+
+\begin{tikzpicture}
+  \node {$A \to Y$};
+\end{tikzpicture}
+```
+</code></pre>
+<p>The most useful options are:</p>
+<ul>
+<li><code>eval: false</code>: do not run this chunk. Use this when you want to keep
+alternative code in the file, such as the TikZ DAG, without rendering
+it.</li>
+<li><code>echo: false</code>: run the code but hide the code from the PDF or HTML.
+Use this for most tables and figures.</li>
+<li><code>include: false</code>: run the code but hide the code and all its output.
+Use this for setup chunks that create objects used later.</li>
+<li><code>warning: false</code> and <code>message: false</code>: hide routine warnings or
+package messages from the report. Do not use these to hide real
+errors.</li>
+<li><code>tbl-cap:</code> and <code>fig-cap:</code>: add table and figure captions. Use
+<code>tbl-cap</code> for tables and <code>fig-cap</code> for figures.</li>
+<li><code>label:</code>: name the chunk. Labels must be unique, short, and contain no
+spaces. A good pattern is <code>tbl-results</code>, <code>fig-forest</code>, or <code>setup-fit</code>.</li>
+</ul>
+<p>Use the right option for the job:</p>
+<div class="table-wrapper"><table><thead><tr><th>Goal</th><th>Option</th></tr></thead><tbody>
+<tr><td>Keep code in the file but stop it running</td><td><code>eval: false</code></td></tr>
+<tr><td>Run code but hide the code itself</td><td><code>echo: false</code></td></tr>
+<tr><td>Run setup code silently</td><td><code>include: false</code></td></tr>
+<tr><td>Show output as raw Markdown</td><td><code>output: asis</code></td></tr>
+<tr><td>Temporarily let render continue after an error</td><td><code>error: true</code></td></tr>
+</tbody></table>
+</div>
+<p>In the template, the <code>ggdag</code> DAG chunk has <code>#| eval: true</code> and the TikZ
+chunk has <code>%| eval: false</code>. To switch to the TikZ version, turn the
+<code>ggdag</code> chunk to <code>#| eval: false</code> and the TikZ chunk to <code>%| eval: true</code>.
+Keep only one DAG version active at a time.</p>
+<p>Do not put options in the middle of a chunk. Quarto reads them at the
+top of the chunk, before the code. Also check the comment marker: <code>#|</code>
+is for R chunks, <code>%|</code> is for TikZ/LaTeX chunks.</p>
 <p>For this report, write the prose in <code>manuscript.qmd</code>, put study
 decisions and helper code in <code>setup.R</code>, and keep references in
 <code>references.bib</code>. Do not paste screenshots of tables or figures into the
@@ -449,6 +509,10 @@ headings, links, lists, equations, and images.</li>
 <li><a href="https://quarto.org/docs/get-started/computations/rstudio">Tutorial:
 Computations</a>:
 executable R code chunks and inline code.</li>
+<li><a href="https://quarto.org/docs/computations/execution-options.html">Execution
+options</a>:
+<code>eval</code>, <code>echo</code>, <code>include</code>, <code>warning</code>, <code>message</code>, <code>output</code>, and related
+chunk controls.</li>
 <li><a href="https://quarto.org/docs/authoring/citations.html">Citations</a>: how
 <code>[@citekey]</code>, <code>references.bib</code>, and citation styles work.</li>
 <li><a href="https://quarto.org/docs/cli/render.html">Render command</a>: terminal
