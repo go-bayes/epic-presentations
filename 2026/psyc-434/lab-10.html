@@ -352,6 +352,64 @@ file you will write in: it holds the prose, headings, tables, figures,
 and code chunks that read from <code>setup.R</code>. The split lets you change one
 decision (the exposure, the parsimony threshold, the seed) without
 scattering edits across the manuscript.</p>
+<h3 id="quarto-markdown-survival-guide"><a class="header" href="#quarto-markdown-survival-guide">Quarto Markdown survival guide</a></h3>
+<p>A Quarto report is a plain-text <code>.qmd</code> file that mixes prose, citations,
+tables, figures, and executable R code. When you render it, Quarto runs
+the code chunks, inserts their output, and turns the result into PDF and
+HTML. Treat <code>manuscript.qmd</code> as the source of truth for the written
+report.</p>
+<p>Use this minimal syntax while drafting:</p>
+<pre><code class="language-markdown">## Methods
+
+This report estimates the causal effect of `r exposure_label` on four
+wellbeing outcomes.
+
+We follow the outcome-wide reporting logic in VanderWeele [@vanderweele2020].
+
+```{r}
+#| label: tbl-ate
+#| echo: false
+#| tbl-cap: "Average treatment effects for four wellbeing outcomes."
+
+ate$transformed_table
+```
+</code></pre>
+<p>The parts to recognise are:</p>
+<ul>
+<li><code>##</code> starts a section heading. Use the template headings unless you
+have a good reason to change them.</li>
+<li>Ordinary paragraphs are just text. Leave a blank line between
+paragraphs.</li>
+<li>Inline R code uses <code>`r object_name`</code>. Use it when a number or
+label should update automatically.</li>
+<li>Code chunks start with <code>```{r}</code> and end with <code>```</code>.
+Put chunk options such as <code>echo: false</code> or <code>fig-cap:</code> directly under
+the chunk header.</li>
+<li>Citations use <code>[@citekey]</code>, where the key must appear in
+<code>references.bib</code>. For example, <code>[@vanderweele2020]</code>.</li>
+<li>Figures and tables need captions. A reader should understand what the
+display shows without searching the prose.</li>
+</ul>
+<p>For this report, write the prose in <code>manuscript.qmd</code>, put study
+decisions and helper code in <code>setup.R</code>, and keep references in
+<code>references.bib</code>. Do not paste screenshots of tables or figures into the
+report. Let the code chunks create them when the document renders.</p>
+<p>Useful Quarto references:</p>
+<ul>
+<li><a href="https://quarto.org/docs/get-started/hello/rstudio.html">Hello, Quarto for
+RStudio</a>: the
+basic render workflow for <code>.qmd</code> files.</li>
+<li><a href="https://quarto.org/docs/authoring/markdown-basics.html">Markdown
+basics</a>:
+headings, links, lists, equations, and images.</li>
+<li><a href="https://quarto.org/docs/get-started/computations/rstudio">Tutorial:
+Computations</a>:
+executable R code chunks and inline code.</li>
+<li><a href="https://quarto.org/docs/authoring/citations.html">Citations</a>: how
+<code>[@citekey]</code>, <code>references.bib</code>, and citation styles work.</li>
+<li><a href="https://quarto.org/docs/cli/render.html">Render command</a>: terminal
+options for <code>quarto render</code>.</li>
+</ul>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
 <p>Open <code>setup.R</code>. Three decisions live near the top.</p>
 <pre><code class="language-r"># for the lab walkthrough, set this to "community_group"
@@ -578,6 +636,10 @@ after the last successful render is easier to repair than one that
 fails after a day. While drafting, lower <code>study_n</code>, <code>num_trees</code>, and
 <code>n_iterations_stability</code> in <code>setup.R</code> for faster iteration; raise them
 for the final render.</p>
+<p>If the render fails, read the first error message in the terminal.
+Most failures come from a missing package, an object name that does
+not exist, an unclosed code chunk, or a citation key that is absent
+from <code>references.bib</code>.</p>
 </blockquote>
 <h2 id="step-9-write-the-report"><a class="header" href="#step-9-write-the-report">Step 9: Write the report</a></h2>
 <p>The template gives you headings, code chunks, tables, and figures. What
@@ -646,6 +708,12 @@ Guide</a>.</li>
 Self-Checks</a>.</li>
 <li>The simulator is documented in the <a href="simulation-guide.html">Simulation
 Guide</a>.</li>
+<li>Quarto's official <a href="https://quarto.org/docs/authoring/markdown-basics.html">Markdown
+basics</a>, <a href="https://quarto.org/docs/get-started/computations/rstudio">R
+computations
+tutorial</a>,
+and <a href="https://quarto.org/docs/authoring/citations.html">citation guide</a>
+cover the report-writing mechanics.</li>
 </ul>
 
                     </main>
