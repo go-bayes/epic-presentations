@@ -315,10 +315,10 @@ allocation rules by their expected utility or policy value if the
 rule were applied to the target population.</p>
 </li>
 <li>
-<p>Prefer the simpler tree unless the deeper tree gives a meaningfully
-larger held-out utility or policy value and the uncertainty supports
-that gain. Simpler trees are easier to explain, more stable, and
-less likely to be misapplied.</p>
+<p>Fit the shallower and deeper trees as candidates, then prefer the
+simpler tree unless the deeper tree clears the prespecified held-out
+policy-value gain threshold. Simpler trees are easier to explain,
+more stable, and less likely to be misapplied.</p>
 </li>
 <li>
 <p>Offer the programme to residents whose deprivation index is above
@@ -357,11 +357,12 @@ contextual information that the model does not contain.</p>
 <p>A ranking rule can treat the top 20% by $\hat{\tau}(x)$ when a
 budget fixes the treatment share. It uses the full continuous CATE
 score, so the first task is estimating person-level treatment
-contrasts. A default depth-2 policy tree solves a different problem:
-it estimates the utility or policy value of simple if-then
-allocation rules and assigns the action with the highest estimated
-reward in each leaf. The treated share is whatever the fitted rule
-implies. Ranking may be preferable when trained staff can use a
+contrasts. The course policy-tree workflow solves a different
+problem: it estimates the utility or policy value of simple if-then
+allocation rules, fits depth-1 and depth-2 candidates, and chooses
+depth-2 only if the held-out policy-value gain clears the
+prespecified threshold. The treated share is whatever the selected
+rule implies. Ranking may be preferable when trained staff can use a
 score safely, a fixed budget must be met exactly, and the extra
 policy value is large enough to justify lower transparency.</p>
 </li>

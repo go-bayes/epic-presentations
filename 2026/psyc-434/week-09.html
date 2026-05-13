@@ -685,9 +685,11 @@ Week 10 asks whether that assumption holds.</p>
 <p><strong>Pair exercise: policy tree versus ranking</strong></p>
 <ol>
 <li>Strategy A ranks individuals by $\hat{\tau}(X_i)$ and, if a
-budget is fixed, could treat the top 20%. Strategy B fits a
-depth-2 policy tree using the default reward objective, so the
-treated share is whatever the rule implies.</li>
+budget is fixed, could treat the top 20%. Strategy B fits depth-1
+and depth-2 policy-tree candidates using the default reward
+objective, then selects the simpler rule unless depth-2 clears the
+prespecified gain threshold. The treated share is whatever the
+selected rule implies.</li>
 <li>Compare the two strategies on: (a) estimated policy value, (b)
 explainability to a non-technical audience, and (c) ability to
 answer "why was I selected?"</li>
@@ -700,7 +702,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
