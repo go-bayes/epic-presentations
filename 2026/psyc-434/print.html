@@ -7984,6 +7984,53 @@ executable R code chunks and inline code.</li>
 <li><a href="https://quarto.org/docs/cli/render.html">Render command</a>: terminal
 options for <code>quarto render</code>.</li>
 </ul>
+<h3 id="adding-citations-with-bibtex"><a class="header" href="#adding-citations-with-bibtex">Adding citations with BibTeX</a></h3>
+<p>The template already tells Quarto to use <code>references.bib</code>. You only need
+to add BibTeX entries to that file and cite them from <code>manuscript.qmd</code>.</p>
+<p>Use this workflow for a source you find on Google Scholar:</p>
+<ol>
+<li>Search for the exact article title in <a href="https://scholar.google.com/">Google
+Scholar</a>.</li>
+<li>Find the correct record. Prefer the publisher version or a record
+with a Digital Object Identifier (DOI) when there are duplicates.</li>
+<li>Click the quotation-mark cite icon, or the <code>Cite</code> link if that is
+what your browser shows.</li>
+<li>Click <code>BibTeX</code>.</li>
+<li>Copy the full entry, from <code>@article{...</code> or <code>@book{...</code> through the
+closing <code>}</code>.</li>
+<li>Paste it at the bottom of <code>references.bib</code>.</li>
+<li>Give the entry a readable key, such as <code>vanderweele2020</code>,
+<code>ding2016</code>, or <code>smith2024wellbeing</code>.</li>
+<li>In <code>manuscript.qmd</code>, cite it with <code>[@vanderweele2020]</code> or use an
+in-text citation such as <code>@vanderweele2020</code>.</li>
+<li>Render the manuscript. If Quarto says a citation is missing, check
+that the key in the <code>.qmd</code> exactly matches the key in
+<code>references.bib</code>.</li>
+</ol>
+<p>A BibTeX entry looks like this:</p>
+<pre><code class="language-bibtex">@article{vanderweele2020,
+  title = {Outcome-wide Epidemiology},
+  author = {VanderWeele, Tyler J.},
+  journal = {Epidemiology},
+  year = {2020},
+  volume = {31},
+  number = {1},
+  pages = {6--9},
+  doi = {10.1097/EDE.0000000000001141}
+}
+</code></pre>
+<p>Check Google Scholar entries before trusting them. Fix obvious errors in
+capitalisation, missing journal names, missing DOIs, page ranges, or
+author names. For title capitalisation that must be preserved in APA
+style, protect proper nouns with braces, for example
+<code>title = {Te Tiriti o Waitangi and Wellbeing}</code>.</p>
+<p>For several sources, you can also set Google Scholar to show BibTeX
+links directly: open the menu, choose <code>Settings</code>, find
+<code>Bibliography manager</code>, select <code>Show links to import citations into</code>,
+choose <code>BibTeX</code>, and save. Some library guides also describe saving
+sources to <code>My Library</code> and exporting several records at once, but for
+this assessment it is usually safer to add and check one source at a
+time.</p>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
 <p>Open <code>setup.R</code>. Three decisions live near the top.</p>
 <pre><code class="language-r"># for the lab walkthrough, set this to "community_group"
