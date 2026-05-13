@@ -338,6 +338,13 @@ simulator (the four wellbeing outcomes are pre-z-scored, so SD units are
 the only scale available). The tree describes the action or
 high-response region implied by the supplied rewards; it does not force
 a fixed percentage treated.</p>
+<p>The course policy-tree workflow uses an outcome-only objective. A <em>do
+not treat</em> leaf means the rule assigns the no-treatment action for that
+covariate profile. It does not compute money saved, staff time saved, or
+other resource savings. To make savings part of the analysis,
+investigators would need to specify a treatment cost in outcome units,
+subtract that cost from the treatment reward, and refit or compare trees
+across plausible cost values.</p>
 <h3 id="parsimony-rule"><a class="header" href="#parsimony-rule">Parsimony rule</a></h3>
 <p>Fit both depth-1 and depth-2 policy trees. Prefer the depth-1 tree
 unless the depth-2 tree improves policy value by at least
@@ -367,6 +374,10 @@ estimated effects, uncertainty, and sample proportions. Use the
 standardised scale; do not invent an original-scale interpretation,
 because the simulator outcomes are not on a 1–7 (or any other) raw
 scale.</p>
+<p>Report coverage as the treated share implied by the selected rule, not
+as a budget constraint. If a programme can treat only a fixed share, say
+so explicitly. The default policy tree estimates the value of a shallow
+allocation rule; it does not solve a fixed-capacity allocation problem.</p>
 <p><strong>Example: high-response subgroups for life satisfaction</strong></p>
 <ol>
 <li><strong>Older adults with high baseline belonging</strong> (age &gt; 45, baseline
@@ -398,6 +409,10 @@ had the largest estimate ($\beta = 0.28$ SD units), representing 23%
 of the sample. This is a targeting result, not a claim that age or
 baseline belonging causes the treatment to work better."</p>
 </blockquote>
+<p>Avoid phrasing such as "the do-not-treat leaf saves resources" unless a
+treatment cost has been built into the objective. Under the course
+workflow, the accurate wording is: "the outcome-only rule assigns these
+profiles to no treatment."</p>
 <hr />
 <h2 id="sensitivity-analysis-e-values"><a class="header" href="#sensitivity-analysis-e-values">Sensitivity analysis: E-values</a></h2>
 <h3 id="interpretation"><a class="header" href="#interpretation">Interpretation</a></h3>

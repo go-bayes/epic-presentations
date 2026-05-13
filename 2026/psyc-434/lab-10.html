@@ -570,6 +570,13 @@ exposure benefits everyone equally. Lab 9 introduced policy trees as an
 interpretable allocation rule. Lab 10 uses the same <code>margot</code> workflow,
 then applies a transparent <strong>graphing rule</strong> before deciding which trees
 to put in the report.</p>
+<p>The course workflow uses an outcome-only policy objective. A
+<code>do not treat</code> leaf means the fitted rule assigns the no-treatment
+action for that covariate profile; it does not compute a financial
+saving. If a decision-maker needs a scarce-budget or cost-sensitive
+rule, the cost must be specified explicitly, for example by subtracting
+a treatment cost <code>c</code> from the treatment reward before refitting the
+policy tree.</p>
 <h3 id="step-6a-stability-and-the-workflow-object"><a class="header" href="#step-6a-stability-and-the-workflow-object">Step 6a: Stability and the workflow object</a></h3>
 <pre><code class="language-r">policy_tree_stability &lt;- margot::margot_policy_tree_stability(
   model_results = models_binary,
@@ -605,6 +612,10 @@ rule recommends for treatment).</p>
 and the parsimony decision. With <code>min_gain_for_depth_switch = 0.01</code>, the
 workflow selects depth-2 only when its policy value exceeds depth-1 by
 at least 0.01 outcome units.</p>
+<p>Coverage is an output of the fitted rule, not a fixed treatment budget.
+If the rule treats 80% of people, the tree is mostly saying "treat
+broadly" under the outcome-only objective. It is not saying a programme
+with capacity for 20% should use the same rule.</p>
 <h3 id="step-6b-the-graphing-rule"><a class="header" href="#step-6b-the-graphing-rule">Step 6b: The graphing rule</a></h3>
 <p><code>margot::margot_select_grf_policy_trees()</code> applies a transparent
 reporting test. It keeps a policy tree only when <strong>both</strong> the
@@ -743,8 +754,10 @@ on. In the template this lives as the <em>Ethics</em> subsection of the
 Discussion (three to five sentences). A policy tree that splits on
 income or deprivation can be defensible, or it can be a proxy for
 ethnicity or migration history; the ethics paragraph names the
-trade-off. The model cannot settle public values; you can describe
-what evidence the model can and cannot provide.</p>
+trade-off. Also state that the current rule does not include treatment
+cost unless you have explicitly specified one. The model cannot settle
+public values; you can describe what evidence the model can and cannot
+provide.</p>
 </blockquote>
 <h2 id="pointers"><a class="header" href="#pointers">Pointers</a></h2>
 <ul>

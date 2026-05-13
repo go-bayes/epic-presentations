@@ -490,6 +490,12 @@ mostly saying "treat nearly everyone". That can be a valid learned
 rule, but it is not a scarce-budget allocation policy. If a real
 programme can only treat 20% of people, the budget constraint must be
 added separately.</p>
+<p>In this lab the policy-tree objective contains no treatment-cost term.
+A <code>do not treat</code> leaf means the outcome-only rule assigns the
+no-treatment action for that profile; it does not report money saved
+or resources freed. A cost-sensitive policy would need a different
+objective, for example subtracting a cost <code>c</code> from the treatment
+reward and refitting the tree across plausible values of <code>c</code>.</p>
 </blockquote>
 <h2 id="step-4-render-policy-trees"><a class="header" href="#step-4-render-policy-trees">Step 4: render policy trees</a></h2>
 <p>A policy tree converts the personalised CATE into a transparent
@@ -560,6 +566,10 @@ print(saved_policy_plots)
 if the condition is true and right otherwise. Each leaf says "treat"
 or "do not treat". A useful policy tree can be repeated by a
 clinician, teacher, or community organiser without opening the model.</p>
+<p>Read "do not treat" as "the rule assigns the no-treatment action under
+the current outcome-only objective." The current tree compares
+expected wellbeing outcomes under treatment and no treatment; it does
+not attach a resource saving to the no-treatment action.</p>
 </blockquote>
 <blockquote>
 <p><strong>Inspect every graph</strong></p>
@@ -634,6 +644,8 @@ tree cannot recover heterogeneity that is weak, noisy, or absent.</p>
 <p>A policy tree maximises expected treatment benefit under the objective
 you give it. Before anyone acts on it, ask:</p>
 <ul>
+<li><strong>Objective.</strong> Does the rule optimise wellbeing gain only, or has a
+treatment cost been specified in the same units as the outcome?</li>
 <li><strong>Proxy variables.</strong> Does the tree split on variables correlated
 with protected characteristics such as ethnicity, gender, or
 socioeconomic status?</li>
