@@ -440,18 +440,37 @@ with R code appendix.</li>
 <h4 id="assessment-criteria-option-a"><a class="header" href="#assessment-criteria-option-a">Assessment Criteria (Option A)</a></h4>
 <p>The criteria are listed in the order in which they should appear in the
 report and follow the <a href="causal-workflow.html">ten-step causal workflow</a>:
-first define the <em>contrast</em>, then the <em>population</em>, then check the
-<em>identification assumptions</em>, then state the <em>estimand</em>, then estimate,
-then report, then ethics. The same order is reflected in the
-<code>manuscript.qmd</code> scaffold inside the <a href="assets/research-report-template.zip">research-report
+first define the <em>target population</em>, then the <em>contrast</em> and outcomes,
+then check the <em>identification assumptions</em>, then state the <em>causal
+estimand</em>, then estimate, then report, then ethics. The same order is
+reflected in the <code>manuscript.qmd</code> scaffold inside the <a href="assets/research-report-template.zip">research-report
 template</a>.</p>
-<p><strong>State the problem.</strong> State your question clearly. Explain why it
-matters. Frame it as a causal question for a defined target population.
-Note that the question is outcome-wide: you ask how the exposure affects
-four wellbeing outcomes jointly, rather than picking one favourite
-outcome after looking at the results. Explain the causal inference
-framework for non-specialists. Describe any practical or ethical
-relevance. Confirm data are from the course simulator distributed in
+<p><strong>Introduction.</strong> Set up the scientific interest of the question.
+Explain why this population and topic matter, what is already known,
+what remains uncertain, and why a causal answer would be useful. The
+Introduction should read like the beginning of a scientific paper, not
+like a numbered workflow checklist.</p>
+<p><strong>Define the target population.</strong> State the target population: for whom
+would the answer apply if the assumptions held? Would the exposure apply
+to <em>all</em> New Zealanders, or only to a subset? Identify subpopulations
+for whom the contrast is ill-defined or for whom positivity is unlikely
+to hold. Explain how the synthetic sample relates to your target
+population. Comment on transportability.</p>
+<p><strong>Eligibility criteria.</strong> Force yourself to think concretely. Name the
+people for whom the answer is relevant ("would a Kiwi reader say <em>this
+applies to me</em>?"), and the people for whom the intervention would be
+incoherent (for example, <em>increase religious-service attendance</em> is not
+a coherent intervention for a self-described atheist with no intention
+of attending). Excluding the second group up front protects positivity
+and clarifies what the estimate is about.</p>
+<p><strong>State the causal question.</strong> State your question clearly after naming
+the target population. Frame it as a causal question: among this
+population, what would later wellbeing look like if everyone received
+the exposure compared with if no one received it? Note that the question
+is outcome-wide: you ask how the exposure affects four wellbeing
+outcomes jointly, rather than picking one favourite outcome after
+looking at the results. Describe any practical or ethical relevance.
+Confirm data are from the course simulator distributed in
 <code>causalworkshop</code> and that you use three waves.</p>
 <p><strong>Determine the exposure.</strong> Define the exposure $A$. Explain the
 contrast (binary or modified treatment policy). Address the consistency
@@ -468,19 +487,6 @@ endpoints. Explain why this design reduces selective reporting
 (selecting only the outcome that gave the strongest result after seeing
 the data) and lets the reader read the pattern across the family rather
 than over-interpreting any single outcome.</p>
-<p><strong>Source and target populations.</strong> State the target population — for
-whom would the answer apply if the assumptions held? Would the exposure
-apply to <em>all</em> New Zealanders, or only to a subset? Identify
-subpopulations for whom the contrast is ill-defined or for whom
-positivity is unlikely to hold. Explain how the synthetic sample relates
-to your target population. Comment on transportability.</p>
-<p><strong>Eligibility criteria.</strong> Force yourself to think concretely. Name the
-people for whom the answer is relevant ("would a Kiwi reader say <em>this
-applies to me</em>?"), and the people for whom the intervention would be
-incoherent (for example, <em>increase religious-service attendance</em> is not
-a coherent intervention for a self-described atheist with no intention
-of attending). Excluding the second group up front protects positivity
-and clarifies what the estimate is about.</p>
 <p><strong>Sample characteristics.</strong> Provide descriptive statistics for baseline
 demographics, exposure prevalence, and outcome distributions. Make clear
 the data are simulated.</p>
@@ -704,7 +710,7 @@ yourself.</li>
 <li>Using it to memorise phrases rather than understand the logic.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-vanderweele2017" class="csl-entry">
 <p>VanderWeele, T. J., &amp; Ding, P. (2017). Sensitivity analysis in
 observational research: Introducing the E-value. <em>Annals of Internal

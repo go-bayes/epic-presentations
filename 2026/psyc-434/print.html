@@ -559,18 +559,37 @@ with R code appendix.</li>
 <h4 id="assessment-criteria-option-a"><a class="header" href="#assessment-criteria-option-a">Assessment Criteria (Option A)</a></h4>
 <p>The criteria are listed in the order in which they should appear in the
 report and follow the <a href="causal-workflow.html">ten-step causal workflow</a>:
-first define the <em>contrast</em>, then the <em>population</em>, then check the
-<em>identification assumptions</em>, then state the <em>estimand</em>, then estimate,
-then report, then ethics. The same order is reflected in the
-<code>manuscript.qmd</code> scaffold inside the <a href="assets/research-report-template.zip">research-report
+first define the <em>target population</em>, then the <em>contrast</em> and outcomes,
+then check the <em>identification assumptions</em>, then state the <em>causal
+estimand</em>, then estimate, then report, then ethics. The same order is
+reflected in the <code>manuscript.qmd</code> scaffold inside the <a href="assets/research-report-template.zip">research-report
 template</a>.</p>
-<p><strong>State the problem.</strong> State your question clearly. Explain why it
-matters. Frame it as a causal question for a defined target population.
-Note that the question is outcome-wide: you ask how the exposure affects
-four wellbeing outcomes jointly, rather than picking one favourite
-outcome after looking at the results. Explain the causal inference
-framework for non-specialists. Describe any practical or ethical
-relevance. Confirm data are from the course simulator distributed in
+<p><strong>Introduction.</strong> Set up the scientific interest of the question.
+Explain why this population and topic matter, what is already known,
+what remains uncertain, and why a causal answer would be useful. The
+Introduction should read like the beginning of a scientific paper, not
+like a numbered workflow checklist.</p>
+<p><strong>Define the target population.</strong> State the target population: for whom
+would the answer apply if the assumptions held? Would the exposure apply
+to <em>all</em> New Zealanders, or only to a subset? Identify subpopulations
+for whom the contrast is ill-defined or for whom positivity is unlikely
+to hold. Explain how the synthetic sample relates to your target
+population. Comment on transportability.</p>
+<p><strong>Eligibility criteria.</strong> Force yourself to think concretely. Name the
+people for whom the answer is relevant ("would a Kiwi reader say <em>this
+applies to me</em>?"), and the people for whom the intervention would be
+incoherent (for example, <em>increase religious-service attendance</em> is not
+a coherent intervention for a self-described atheist with no intention
+of attending). Excluding the second group up front protects positivity
+and clarifies what the estimate is about.</p>
+<p><strong>State the causal question.</strong> State your question clearly after naming
+the target population. Frame it as a causal question: among this
+population, what would later wellbeing look like if everyone received
+the exposure compared with if no one received it? Note that the question
+is outcome-wide: you ask how the exposure affects four wellbeing
+outcomes jointly, rather than picking one favourite outcome after
+looking at the results. Describe any practical or ethical relevance.
+Confirm data are from the course simulator distributed in
 <code>causalworkshop</code> and that you use three waves.</p>
 <p><strong>Determine the exposure.</strong> Define the exposure $A$. Explain the
 contrast (binary or modified treatment policy). Address the consistency
@@ -587,19 +606,6 @@ endpoints. Explain why this design reduces selective reporting
 (selecting only the outcome that gave the strongest result after seeing
 the data) and lets the reader read the pattern across the family rather
 than over-interpreting any single outcome.</p>
-<p><strong>Source and target populations.</strong> State the target population — for
-whom would the answer apply if the assumptions held? Would the exposure
-apply to <em>all</em> New Zealanders, or only to a subset? Identify
-subpopulations for whom the contrast is ill-defined or for whom
-positivity is unlikely to hold. Explain how the synthetic sample relates
-to your target population. Comment on transportability.</p>
-<p><strong>Eligibility criteria.</strong> Force yourself to think concretely. Name the
-people for whom the answer is relevant ("would a Kiwi reader say <em>this
-applies to me</em>?"), and the people for whom the intervention would be
-incoherent (for example, <em>increase religious-service attendance</em> is not
-a coherent intervention for a self-described atheist with no intention
-of attending). Excluding the second group up front protects positivity
-and clarifies what the estimate is about.</p>
 <p><strong>Sample characteristics.</strong> Provide descriptive statistics for baseline
 demographics, exposure prevalence, and outcome distributions. Make clear
 the data are simulated.</p>
@@ -823,7 +829,7 @@ yourself.</li>
 <li>Using it to memorise phrases rather than understand the logic.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-vanderweele2017" class="csl-entry">
 <p>VanderWeele, T. J., &amp; Ding, P. (2017). Sensitivity analysis in
 observational research: Introducing the E-value. <em>Annals of Internal
@@ -988,7 +994,7 @@ website</a>. Documentation, guides, and
 vignettes used in weeks 6, 8, and 9.</li>
 </ul>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bandalos2018" class="csl-entry">
 <p>Bandalos, D. L. (2018). <em>Measurement theory and applications for the
 social sciences</em>. Guilford Publications.</p>
@@ -1092,7 +1098,8 @@ the association between wearing glasses and purpose in the same dataset.</p>
 young people. Some investigators argued the conclusions were not strong
 enough: those teenagers who most frequently engaged with social media
 exhibited the lowest purpose scores, and the negative association is
-non-linear (<a href="week-01.html#ref-twenge2020underestimating">Twenge et al., 2020</a>).</p>
+non-linear (<a href="week-01.html#ref-twenge2020underestimating"><span class="nocase">Twenge et al.</span>,
+2020</a>).</p>
 <p>Questions about whether social media use harms young people remain live.
 On 18 February 2026, CNN reported testimony in ongoing litigation about
 adolescent social media use
@@ -1325,7 +1332,7 @@ Bulbulia (<a href="week-01.html#ref-bulbulia2023">2024</a>).</p>
 <hr />
 <p>Lab materials: <a href="lab-01.html">Lab 1: Git and GitHub</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2023" class="csl-entry">
 <p>Bulbulia, J. A. (2024). Methods in causal inference part 1: Causal
 diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
@@ -1346,9 +1353,9 @@ Behaviour</em>, <em>3</em>(2), 173–182. <a href="https://doi.org/10.1038/s4156
 cause and effect</em>. Basic books.</p>
 </div>
 <div id="ref-twenge2020underestimating" class="csl-entry">
-<p>Twenge, J. M., Haidt, J., Joiner, T. E., et al. (2020). Underestimating
-digital media harm. <em>Nature Human Behaviour</em>, <em>4</em>, 346–348.
-<a href="https://doi.org/10.1038/s41562-020-0839-4">https://doi.org/10.1038/s41562-020-0839-4</a></p>
+<p><span class="nocase">Twenge, J. M., Haidt, J., Joiner, T. E., et
+al.</span> (2020). Underestimating digital media harm. <em>Nature Human
+Behaviour</em>, <em>4</em>, 346–348. <a href="https://doi.org/10.1038/s41562-020-0839-4">https://doi.org/10.1038/s41562-020-0839-4</a></p>
 </div>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-2-causal-diagrams-five-elementary-structures"><a class="header" href="#week-2-causal-diagrams-five-elementary-structures">Week 2: Causal Diagrams: Five Elementary Structures</a></h1>
@@ -1695,7 +1702,7 @@ Bulbulia (<a href="week-02.html#ref-bulbulia2023">2024a</a>). See also Bulbulia
 <hr />
 <p>Lab materials: <a href="lab-02.html">Lab 2: Install R and Set Up Your IDE</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-barrett2023ggdag" class="csl-entry">
 <p>Barrett, M. (2023). <em>Ggdag: Analyze and create elegant directed acyclic
 graphs</em>. <a href="https://github.com/malcolmbarrett/ggdag">https://github.com/malcolmbarrett/ggdag</a></p>
@@ -1974,12 +1981,12 @@ to satisfy the backdoor criterion.</li>
 <blockquote>
 <p><strong>Further reading</strong></p>
 <p>All open access: Bulbulia (<a href="week-03.html#ref-bulbulia2023">2024</a>); Hernán &amp; Robins
-(<a href="week-03.html#ref-hernanrobins2025">2025, 6</a>).</p>
+(<a href="week-03.html#ref-hernanrobins2025">2025, Chapter 6</a>).</p>
 </blockquote>
 <hr />
 <p>Lab materials: <a href="lab-03.html">Lab 3: Regression, Graphing, and Simulation</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2023" class="csl-entry">
 <p>Bulbulia, J. A. (2024). Methods in causal inference part 1: Causal
 diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
@@ -2358,7 +2365,7 @@ A. Bulbulia (<a href="week-04.html#ref-bulbulia2023">2024a</a>); J. A. Bulbulia
 <hr />
 <p>Lab materials: <a href="lab-04.html">Lab 4: Writing Regression Models</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2023" class="csl-entry">
 <p>Bulbulia, J. A. (2024a). Methods in causal inference part 1: Causal
 diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
@@ -2415,9 +2422,9 @@ directed acyclic graphs. <em>American Journal of Epidemiology</em>, <em>175</em>
 <ul>
 <li>Hernán &amp; Robins (<a href="week-05.html#ref-hernanrobins2025">2025</a>), chapters 1-3.
 <a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">link</a></li>
-<li>Cashin et al. (<a href="week-05.html#ref-cashin2025target">2025</a>). TARGET (Transparent
-Reporting of Observational Studies Emulating a Target Trial)
-statement.</li>
+<li><span class="nocase">Cashin et al.</span>
+(<a href="week-05.html#ref-cashin2025target">2025</a>). TARGET (Transparent Reporting of
+Observational Studies Emulating a Target Trial) statement.</li>
 </ul>
 <p><strong>Optional</strong></p>
 <ul>
@@ -2728,7 +2735,13 @@ before estimation begins. The following workflow organises these
 commitments into a sequence. Each step depends on the ones before it.
 Also see the course <a href="causal-workflow.html">causal workflow</a> reference
 page.</p>
-<p><strong>Step 0: state a well-defined treatment.</strong> Specify the hypothetical
+<p><strong>Step 0: define the target population.</strong> Say exactly who the answer is
+meant to inform before choosing the exposure or outcomes. "University
+students" may be too broad if the intervention is a guided app that only
+some students could realistically use. The population choice shapes
+which treatment versions are coherent, which outcomes matter, and where
+positivity may fail.</p>
+<p><strong>Step 1: state a well-defined treatment.</strong> Specify the hypothetical
 intervention precisely enough that every member of the target population
 could, in principle, receive it. "Mindfulness" is too vague: people
 meditate with different apps, in groups, alone, once, or every day. A
@@ -2736,24 +2749,18 @@ clearer intervention is: "start a guided mindfulness app at the
 beginning of semester and complete one 10-minute session per day for
 eight weeks." Precision here underwrites consistency and makes the
 timeline visible.</p>
-<p><strong>Step 1: establish time zero.</strong> Define the point at which treatment
+<p><strong>Step 2: establish time zero.</strong> Define the point at which treatment
 assignment begins and follow-up starts. We cannot do this until the
 treatment is specified, because time zero is the moment that
 intervention becomes assigned or initiated. In the mindfulness example,
 time zero is the beginning of semester when students start the app or
 are assigned not to start it. Without a clear time zero, consistency is
 undermined and exchangeability is hard to assess.</p>
-<p><strong>Step 2: state a well-defined outcome.</strong> Define the outcome so the
+<p><strong>Step 3: state a well-defined outcome.</strong> Define the outcome so the
 causal contrast is meaningful and temporally anchored. "Sense of
 Purpose" is underspecified; "psychological distress one year
 post-intervention measured with the Kessler-6" is interpretable and
 reproducible. Include timing, scale, and instrument.</p>
-<p><strong>Step 3: clarify the target population.</strong> Say exactly who you aim to
-inform. Eligibility rules define the source population, but sampling and
-participation can yield an analytic sample with a different distribution
-of effect modifiers (Bulbulia (<a href="week-05.html#ref-bulbulia2024wierd">2024</a>)). If you
-intend to generalise beyond the source population (transport),
-articulate the additional conditions required.</p>
 <p><strong>Step 4: evaluate exchangeability.</strong> Make the case that potential
 outcomes are independent of treatment conditional on covariates: $Y(a)
 \coprod A \mid L$ (Hernan &amp; Robins (<a href="week-05.html#ref-hernan2024WHATIF">2020</a>)).
@@ -2797,10 +2804,10 @@ Transparent reasoning is a scientific result in its own right (Ogburn &amp;
 Shpitser (<a href="week-05.html#ref-ogburn2021">2021</a>)).</p>
 <h2 id="reporting-the-target-checklist"><a class="header" href="#reporting-the-target-checklist">Reporting: the TARGET checklist</a></h2>
 <p>The TARGET (Transparent Reporting of Observational Studies Emulating a
-Target Trial) statement (Cashin et al. (<a href="week-05.html#ref-cashin2025target">2025</a>))
-provides a structured checklist for reporting studies that emulate a
-target trial. It maps directly onto the causal workflow above. Use it
-when writing up results.</p>
+Target Trial) statement (<span class="nocase">Cashin et al.</span>
+(<a href="week-05.html#ref-cashin2025target">2025</a>)) provides a structured checklist for
+reporting studies that emulate a target trial. It maps directly onto the
+causal workflow above. Use it when writing up results.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">No.</th><th style="text-align: left">Item</th><th style="text-align: left">Workflow step</th></tr></thead><tbody>
 <tr><td style="text-align: left"></td><td style="text-align: left"><strong>Title and Abstract</strong></td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left">1</td><td style="text-align: left">Identify that the study emulates a target trial; state objectives</td><td style="text-align: left">Steps 0–1</td></tr>
@@ -2848,17 +2855,17 @@ when writing up results.</p>
 <p>and</p>
 <p>$$ Y_i(a=1) - Y_i(a=0). $$</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024wierd" class="csl-entry">
 <p>Bulbulia, J. A. (2024). Methods in causal inference part 3: Measurement
 error and external validity threats. <em>Evolutionary Human Sciences</em>, <em>6</em>,
 e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2024.33</a></p>
 </div>
 <div id="ref-cashin2025target" class="csl-entry">
-<p>Cashin, A. G., Hansford, H. J., Hernán, M. A., et al. (2025).
-Transparent reporting of observational studies emulating a target
-trial—the TARGET statement. <em>JAMA</em>, <em>334</em>(12), 1084–1093.
-<a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
+<p><span class="nocase">Cashin, A. G., Hansford, H. J., Hernán, M. A., et
+al.</span> (2025). Transparent reporting of observational studies
+emulating a target trial—the TARGET statement. <em>JAMA</em>, <em>334</em>(12),
+1084–1093. <a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
 </div>
 <div id="ref-hernan2024WHATIF" class="csl-entry">
 <p>Hernan, M. A., &amp; Robins, J. M. (2020). <em>Causal inference: What if?</em>
@@ -3185,7 +3192,7 @@ $$</p>
 <p>$$ \mathbb{E}[Y(1,1)] - \mathbb{E}[Y(1,0)] -
 \mathbb{E}[Y(0,1)] + \mathbb{E}[Y(0,0)]. $$</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-hernanrobins2025" class="csl-entry">
 <p>Hernán, M. A., &amp; Robins, J. M. (2025). <em>Causal inference: What if</em>.
 Chapman &amp; Hall/CRC.
@@ -3196,8 +3203,8 @@ Chapman &amp; Hall/CRC.
 effect modification. <em>Epidemiology</em>, 863–871.</p>
 </div>
 <div id="ref-vanderweele2012" class="csl-entry">
-<p>VanderWeele, T. J. (2012). Confounding and Effect Modification:
-Distribution and Measure. <em>Epidemiologic Methods</em>, <em>1</em>(1), 55–82.
+<p>VanderWeele, T. J. (2012). Confounding and effect modification:
+Distribution and measure. <em>Epidemiologic Methods</em>, <em>1</em>(1), 55–82.
 <a href="https://doi.org/10.1515/2161-962X.1004">https://doi.org/10.1515/2161-962X.1004</a></p>
 </div>
 <div id="ref-vanderweele2007" class="csl-entry">
@@ -3638,7 +3645,7 @@ forests starts around the eighteen-minute mark.</p>
 <hr />
 <p>Lab materials: <a href="lab-08.html">Lab 8: RATE and QINI Curves</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-breiman2001random" class="csl-entry">
 <p>Breiman, L. (2001). Random forests. <em>Machine Learning</em>, <em>45</em>(1), 5–32.
 <a href="https://doi.org/10.1023/A:1010933404324">https://doi.org/10.1023/A:1010933404324</a></p>
@@ -4133,7 +4140,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
@@ -4763,7 +4770,7 @@ Online Causal Inference Seminar. The linked timestamp begins near the
 practical implications for measure construction.</li>
 </ul>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2022" class="csl-entry">
 <p>Bulbulia, J. A. (2023). A workflow for causal inference in
 cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(3),
@@ -4774,18 +4781,18 @@ cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(
 multi-group invariance testing possibilities in r. <em>Frontiers in
 Psychology</em>, 1507.</p>
 </div>
+<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
+<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
+<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
+</div>
 <div id="ref-harkness2003questionnaire" class="csl-entry">
 <p>Harkness, J. A., Van de Vijver, F. J., &amp; Johnson, T. P. (2003).
 Questionnaire design in comparative research. <em>Cross-Cultural Survey
 Methods</em>, 19–34.</p>
 </div>
-<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
-<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
-<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
-</div>
 <div id="ref-he2012" class="csl-entry">
-<p>He, J., &amp; Vijver, F. van de. (2012). Bias and Equivalence in
-Cross-Cultural Research. <em>Online Readings in Psychology and Culture</em>,
+<p>He, J., &amp; Vijver, F. van de. (2012). Bias and equivalence in
+cross-cultural research. <em>Online Readings in Psychology and Culture</em>,
 <em>2</em>(2). <a href="https://doi.org/10.9707/2307-0919.1111">https://doi.org/10.9707/2307-0919.1111</a></p>
 </div>
 <div id="ref-vanderweele2022" class="csl-entry">
@@ -4875,10 +4882,11 @@ one PDF with an R code appendix via Nuku.</p>
 and some errors require system tools that cannot be fixed quickly during
 class.</p>
 <h2 id="what-you-need"><a class="header" href="#what-you-need">What You Need</a></h2>
-<p>You need four things, in this order:</p>
+<p>You need five things, in this order:</p>
 <ol>
 <li>R and RStudio.</li>
 <li>System build tools for your operating system.</li>
+<li>Quarto's TinyTeX tool for PDF rendering.</li>
 <li>Core course packages from CRAN.</li>
 <li>Course packages from GitHub.</li>
 </ol>
@@ -4917,11 +4925,56 @@ Xcode app.</p>
 </code></pre>
 <p>Restart RStudio afterwards.</p>
 </blockquote>
-<h2 id="step-3-install-cran-packages"><a class="header" href="#step-3-install-cran-packages">Step 3: Install CRAN Packages</a></h2>
+<h2 id="step-3-install-tinytex-for-quarto-pdfs"><a class="header" href="#step-3-install-tinytex-for-quarto-pdfs">Step 3: Install TinyTeX for Quarto PDFs</a></h2>
+<p>The final report must render to PDF. Installing the R package called
+<code>tinytex</code> is not enough: Quarto also needs a TeX distribution. Quarto
+recommends TinyTeX for PDF documents, installed from the system command
+line.</p>
+<p>Run this in a terminal, not in the R console:</p>
+<pre><code class="language-sh">quarto install tinytex
+</code></pre>
+<p>Then check that Quarto can see it:</p>
+<pre><code class="language-sh">quarto list tools
+</code></pre>
+<p>If TinyTeX is already installed but Quarto says it is out of date, run:</p>
+<pre><code class="language-sh">quarto update tinytex
+</code></pre>
+<blockquote>
+<p><strong>macOS</strong></p>
+<p>Open <strong>Terminal</strong> (or the RStudio Terminal tab) and run:</p>
+<pre><code class="language-sh">quarto install tinytex
+quarto list tools
+</code></pre>
+<p>If <code>quarto</code> is not found, install or update Quarto from
+<a href="https://quarto.org/docs/download/">https://quarto.org/docs/download/</a>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Windows</strong></p>
+<p>Open <strong>Command Prompt</strong>, <strong>PowerShell</strong>, or the <strong>Terminal</strong> tab in
+RStudio. Run:</p>
+<pre><code class="language-sh">quarto install tinytex
+quarto list tools
+</code></pre>
+<p>Do not run this command in the R console. If Windows says <code>quarto</code> is
+not recognised, install Quarto from
+<a href="https://quarto.org/docs/download/">https://quarto.org/docs/download/</a>, close and reopen RStudio, then
+try again. If the PDF render later says <code>lualatex</code> or a LaTeX package
+is missing, rerun <code>quarto install tinytex</code> and render again.</p>
+</blockquote>
+<blockquote>
+<p><strong>Linux</strong></p>
+<p>Run the same command in your terminal:</p>
+<pre><code class="language-sh">quarto install tinytex
+</code></pre>
+<p>A system TeX Live installation can also work, but TinyTeX is the
+supported route for this course.</p>
+</blockquote>
+<h2 id="step-4-install-cran-packages"><a class="header" href="#step-4-install-cran-packages">Step 4: Install CRAN Packages</a></h2>
 <p>Run this in R:</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "purrr", "grf",
-  "arrow", "qs2", "googledrive", "pak"
+  "arrow", "qs2", "googledrive", "pak", "rmarkdown", "knitr",
+  "kableExtra", "tinytex", "ggdag", "dagitty"
 )
 
 missing_cran &lt;- cran_packages[
@@ -4932,7 +4985,7 @@ if (length(missing_cran) &gt; 0) {
   install.packages(missing_cran)
 }
 </code></pre>
-<h2 id="step-4-install-github-packages"><a class="header" href="#step-4-install-github-packages">Step 4: Install GitHub Packages</a></h2>
+<h2 id="step-5-install-github-packages"><a class="header" href="#step-5-install-github-packages">Step 5: Install GitHub Packages</a></h2>
 <p>Use <code>pak</code> first. It is the recommended installer because it resolves
 dependencies well and gives useful diagnostics. It still needs the
 system build tools above when packages must be built from source.</p>
@@ -4951,7 +5004,7 @@ remotes::install_github("go-bayes/boilerplate", upgrade = "never")
 <p>If the error mentions <code>make</code>, <code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation,
 changing installers will not solve the problem. Install the system build
 tools in Step 2, restart RStudio, then rerun the <code>pak</code> commands.</p>
-<h2 id="step-5-check-the-installation"><a class="header" href="#step-5-check-the-installation">Step 5: Check the Installation</a></h2>
+<h2 id="step-6-check-the-installation"><a class="header" href="#step-6-check-the-installation">Step 6: Check the Installation</a></h2>
 <p>Restart RStudio, then run:</p>
 <pre><code class="language-r">packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive",
@@ -4970,6 +5023,12 @@ print(status)
 <p>Read the first real error message, not only the final line. Common
 meanings:</p>
 <ul>
+<li><code>quarto: command not found</code> or <code>'quarto' is not recognized</code>: install
+Quarto, restart RStudio, and run <code>quarto install tinytex</code> from a
+terminal.</li>
+<li><code>lualatex: command not found</code>, <code>pdflatex: command not found</code>, or
+missing LaTeX packages while rendering PDF: run
+<code>quarto install tinytex</code> from a terminal, then render again.</li>
 <li><code>make: command not found</code>: install Xcode CLT on macOS or Rtools on
 Windows.</li>
 <li><code>gcc</code>, <code>g++</code>, or <code>clang</code> missing: install system build tools.</li>
@@ -7860,9 +7919,10 @@ not?</p>
 template</a>. If the course-site
 download fails, use the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Google Drive
 mirror</a>.</p>
-<p>Run the setup block in <a href="lab-setup.html">Lab Setup</a>, restart R, then work
-from the project the report-template unzips into. Before attempting
-the manuscript, open <code>setup.R</code> and run the whole script. The first run
+<p>Run the setup block in <a href="lab-setup.html">Lab Setup</a>, including
+<code>quarto install tinytex</code> from a terminal, then restart R. Work from
+the project the report-template unzips into. Before attempting the
+manuscript, open <code>setup.R</code> and run the whole script. The first run
 downloads the required materials and packages, which may take about 5
 to 10 minutes. When <code>setup.R</code> finishes without an error, open and
 render <code>manuscript.qmd</code>.</p>
@@ -7889,11 +7949,24 @@ policies that survive a stated reporting test.</li>
 </blockquote>
 <h2 id="setup-2"><a class="header" href="#setup-2">Setup</a></h2>
 <p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
-Packages and Build Tools</a> first. The block below mirrors
-what the report template's <code>setup.R</code> requires at the top: it installs
-missing CRAN packages, including <code>tinytex</code> for PDF rendering, and
-requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.322</code>, stopping
-with a clear restart-R message if a stale namespace is loaded.</p>
+Packages and Build Tools</a> first.</p>
+<p>PDF rendering has one extra system step. Run this in a terminal, not in
+the R console:</p>
+<pre><code class="language-sh">quarto install tinytex
+quarto list tools
+</code></pre>
+<p>On macOS, use Terminal or the RStudio Terminal tab. On Windows, use
+Command Prompt, PowerShell, or the RStudio Terminal tab. If Windows says
+<code>quarto</code> is not recognised, install Quarto from
+<a href="https://quarto.org/docs/download/">https://quarto.org/docs/download/</a>, close and reopen RStudio, then
+rerun the commands above.</p>
+<p>The R block below mirrors what the report template's <code>setup.R</code> requires
+at the top: it installs missing CRAN packages, including the <code>tinytex</code> R
+interface package. The R package is useful, but it does not replace
+<code>quarto install tinytex</code>, which installs the TeX distribution Quarto
+needs to build PDFs. The block also requires <code>causalworkshop &gt;= 0.6.0</code>
+and <code>margot &gt;= 1.0.322</code>, stopping with a clear restart-R message if a
+stale namespace is loaded.</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
   "knitr", "kableExtra", "rmarkdown", "tinytex"
@@ -7948,6 +8021,18 @@ file; otherwise choose <code>File &gt; Open...</code> and select <code>manuscrip
 <p>If you use another editor, open the whole unzipped folder first, then
 open <code>manuscript.qmd</code> from inside that folder. Do not edit the zipped
 file itself.</p>
+<blockquote>
+<p><strong>Windows note</strong></p>
+<p>Keep the template in a simple folder such as
+<code>Documents\PSYC434\research-report-template</code>, not inside the zipped
+archive and not in a synced folder with a very long path. Render from
+the RStudio Terminal with:</p>
+<pre><code class="language-sh">quarto render manuscript.qmd
+</code></pre>
+<p>If the render fails before running any R code and mentions LaTeX, run
+<code>quarto install tinytex</code> from Command Prompt or PowerShell, restart
+RStudio, and render again.</p>
+</blockquote>
 <p>Your folder should look like this:</p>
 <pre><code class="language-text">research-report/
   setup.R          # study decisions, helpers, single source of truth
@@ -7963,6 +8048,9 @@ decision (the exposure, the parsimony threshold, the seed) without
 scattering edits across the manuscript.</p>
 <p>The main decision controls live near the top of <code>setup.R</code>:</p>
 <ul>
+<li><code>use_fit_cache</code>: whether a successful model fit is reused on later
+renders. The template leaves this <code>FALSE</code> so a changed exposure or
+model reruns cleanly.</li>
 <li><code>min_gain_for_depth_switch</code>: how much held-out policy-value point gain
 depth-2 needs before it replaces depth-1.</li>
 <li><code>policy_value_lower_threshold</code> and <code>treated_uplift_lower_threshold</code>:
@@ -8083,8 +8171,11 @@ this assessment it is usually safer to add and check one source at a
 time.</p>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
 <p>Open <code>setup.R</code>. The main study decisions and reporting thresholds live
-near the top. Start with the exposure, seed, and simulated sample size:</p>
-<pre><code class="language-r"># for the lab walkthrough, set this to "community_group"
+near the top. Start with the target population, exposure, seed, and
+simulated sample size:</p>
+<pre><code class="language-r">target_population &lt;- "..."
+
+# for the lab walkthrough, set this to "community_group"
 # for your submitted report, set this to "religious_service" or "volunteer_work"
 name_exposure &lt;- "community_group"
 
@@ -8097,10 +8188,13 @@ study_n &lt;- 2000
 <code>community_group</code> as the exposure. We use <code>community_group</code> for the
 lab so we can work end-to-end without spoiling either of the two
 report exposures (<code>religious_service</code> or <code>volunteer_work</code>). When you
-start your report, change <code>name_exposure</code> back to one of those two —
-the template's <code>stopifnot()</code> passes for all three values, but only the
-first two are valid choices for submission.</p>
+start your report, change <code>name_exposure</code> back to one of those two.
+The setup script accepts all three values so the lab can render, but
+only the first two are valid choices for submission.</p>
 </blockquote>
+<p>Choose the people first. The target population tells the reader whose
+wellbeing the report is about and which interventions could sensibly
+apply to them. Only then define the exposure contrast and outcomes.</p>
 <p>The four wellbeing outcomes are fixed by the assignment: sense of
 purpose, belonging, self-esteem, and life satisfaction at wave 2. The
 adjustment set $L$ contains baseline demographics, socioeconomic and
@@ -8322,6 +8416,11 @@ resulting objects.</p>
 <pre><code class="language-sh">cd research-report
 quarto render manuscript.qmd
 </code></pre>
+<p>On Windows, first open the unzipped template folder in RStudio, then run
+the render command from the RStudio Terminal. If you are using Command
+Prompt or PowerShell, use <code>cd</code> to move into the folder that contains
+<code>manuscript.qmd</code>; paths with spaces are easier to handle if you keep the
+folder under <code>Documents\PSYC434</code>.</p>
 <p>Quarto writes a PDF and an HTML next to <code>manuscript.qmd</code>. Read both
 alongside the <code>.qmd</code> source. Check that every table and figure updates
 from <code>setup.R</code>; do not hard-code numerical results in the prose.</p>
@@ -8355,16 +8454,18 @@ family, and the population. Highlight the result, not only the
 method.</li>
 <li><strong>Abstract:</strong> a stand-alone summary with background, causal
 question, key methods, principal results, and conclusions. Anchored
-in workflow Steps 0, 2, 3 (well-defined treatment, well-defined
-outcome, target population).</li>
-<li><strong>Introduction:</strong> set the context, identify the gap, state the
-causal question and target estimand. Two paragraphs maximum.
-Anchored in Steps 0, 2, 3. Do not summarise results here.</li>
+in workflow Steps 0, 1, 2, 3 (target population, exposure, time
+zero, outcomes).</li>
+<li><strong>Introduction:</strong> set the scientific context, identify the gap, and
+state why the question matters for the target population. Do not
+turn the Introduction into the ten-step workflow and do not
+summarise results here.</li>
 <li><strong>Methods:</strong> detailed enough for another investigator to reproduce
-the study. Anchored in Steps 1, 4, 5, 6, 7, 8: time zero, the DAG
-and adjustment set for exchangeability, the causal-consistency
-argument, positivity diagnostics, measurement choices, and the
-strategy for preserving representativeness (attrition, missingness).</li>
+the study. Anchored in Steps 0-8: target population, time zero,
+exposure, outcomes, the DAG and adjustment set for exchangeability,
+the causal-consistency argument, positivity diagnostics, measurement
+choices, and the strategy for preserving representativeness
+(attrition, missingness).</li>
 <li><strong>Results:</strong> objective presentation of findings — the four ATEs with
 Bonferroni-adjusted intervals, E-values, and any policy trees that
 pass the graphing rule. No interpretation, no citations. Outputs of
@@ -8379,8 +8480,9 @@ Acknowledge limitations honestly.</li>
 checklists and supplementary material.</li>
 </ul>
 </blockquote>
-<p>The template's section ordering follows the workflow (causal-question
-framing, then identification, then estimation). The Introduction,
+<p>The template's section ordering follows the workflow after the
+Introduction: target population first, then the causal contrast and
+outcomes, then identification, then estimation. The Introduction,
 Methods, Results, and Discussion blocks map cleanly onto the IMRAD slots
 above; use the checklist as your editing pass.</p>
 <blockquote>
@@ -8960,7 +9062,21 @@ Robins (<em>What If</em>, 2024), VanderWeele (2022), and Bulbulia (2024).</p>
 research report. Each step links back to the lecture where it was
 introduced.</p>
 </blockquote>
-<h2 id="step-0-state-a-well-defined-treatment"><a class="header" href="#step-0-state-a-well-defined-treatment">Step 0: State a well-defined treatment</a></h2>
+<h2 id="step-0-define-the-target-population"><a class="header" href="#step-0-define-the-target-population">Step 0: Define the target population</a></h2>
+<p>Say exactly who the answer is meant to inform before choosing the
+exposure or outcomes. A causal question about "New Zealanders" differs
+from one about "adults for whom weekly religious-service attendance is a
+meaningful option" or "working-age adults for whom volunteering is
+feasible." The population choice shapes which interventions are
+coherent, which outcomes matter, and where positivity may fail.</p>
+<p>Eligibility rules define the <strong>source population</strong>, but sampling and
+participation can yield a <strong>study population</strong> with a different
+distribution of effect modifiers. If you intend to generalise beyond the
+source population (transportability), articulate the additional
+conditions required.</p>
+<p><em>See <a href="week-06.html">Week 6</a> for how effect modification interacts with
+population composition.</em></p>
+<h2 id="step-1-state-a-well-defined-treatment"><a class="header" href="#step-1-state-a-well-defined-treatment">Step 1: State a well-defined treatment</a></h2>
 <p>Specify the hypothetical intervention precisely enough that every member
 of the target population could, in principle, receive it. "Mindfulness"
 is too vague because people meditate with different apps, in groups,
@@ -8973,13 +9089,13 @@ receive different interventions, and the potential outcome $Y(a)$ is
 not well-defined. It also makes the relevant time origin visible.</p>
 <p><em>See <a href="week-05.html">Week 5</a> for the formal definition of causal
 consistency.</em></p>
-<h2 id="step-1-establish-time-zero"><a class="header" href="#step-1-establish-time-zero">Step 1: Establish time zero</a></h2>
+<h2 id="step-2-establish-time-zero"><a class="header" href="#step-2-establish-time-zero">Step 2: Establish time zero</a></h2>
 <p>Define the point at which treatment assignment begins and follow-up
 starts. We cannot do this until the treatment is specified, because time
 zero is defined relative to treatment assignment or initiation.</p>
 <p><em>See <a href="week-05.html">Week 5</a> for why ambiguous time zero distorts target
 trial emulation.</em></p>
-<h2 id="step-2-state-a-well-defined-outcome"><a class="header" href="#step-2-state-a-well-defined-outcome">Step 2: State a well-defined outcome</a></h2>
+<h2 id="step-3-state-a-well-defined-outcome"><a class="header" href="#step-3-state-a-well-defined-outcome">Step 3: State a well-defined outcome</a></h2>
 <p>Define the outcome so the causal contrast is meaningful and temporally
 anchored. "Sense of Purpose" is underspecified; "psychological distress
 one year post-intervention, measured with the Kessler-6" is
@@ -8987,14 +9103,6 @@ interpretable and reproducible. Include timing, scale, and instrument.</p>
 <p><em>See <a href="week-04.html">Week 4</a> for measurement from the vantage point of
 causal inference, and <a href="week-10.html">Week 10</a> for the problems with
 classical test theory.</em></p>
-<h2 id="step-3-clarify-the-target-population"><a class="header" href="#step-3-clarify-the-target-population">Step 3: Clarify the target population</a></h2>
-<p>Say exactly who you aim to inform. Eligibility rules define the <strong>source
-population</strong>, but sampling and participation can yield a <strong>study
-population</strong> with a different distribution of effect modifiers. If you
-intend to generalise beyond the source population (transportability),
-articulate the additional conditions required.</p>
-<p><em>See <a href="week-06.html">Week 6</a> for how effect modification interacts with
-population composition.</em></p>
 <h2 id="step-4-evaluate-exchangeability"><a class="header" href="#step-4-evaluate-exchangeability">Step 4: Evaluate exchangeability</a></h2>
 <p>Make the case that potential outcomes are independent of treatment
 conditional on covariates: $Y(a) \coprod A \mid X$. Use DAGs,
@@ -9041,10 +9149,10 @@ or timestamp your analytic plan. Include identification arguments
 analyses. Transparent reasoning is a scientific result in its own right.</p>
 <h2 id="summary-table"><a class="header" href="#summary-table">Summary table</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Step</th><th>Requirement</th><th>Core assumption</th></tr></thead><tbody>
-<tr><td>0</td><td>Well-defined treatment</td><td>Consistency</td></tr>
-<tr><td>1</td><td>Time zero aligned to assignment</td><td>Temporal coherence</td></tr>
-<tr><td>2</td><td>Well-defined outcome</td><td>Interpretability</td></tr>
-<tr><td>3</td><td>Target population</td><td>Generalisability</td></tr>
+<tr><td>0</td><td>Target population</td><td>Generalisability</td></tr>
+<tr><td>1</td><td>Well-defined treatment</td><td>Consistency</td></tr>
+<tr><td>2</td><td>Time zero aligned to assignment</td><td>Temporal coherence</td></tr>
+<tr><td>3</td><td>Well-defined outcome</td><td>Interpretability</td></tr>
 <tr><td>4</td><td>Exchangeability</td><td>Conditional independence</td></tr>
 <tr><td>5</td><td>Causal consistency</td><td>No interference, well-defined versions</td></tr>
 <tr><td>6</td><td>Positivity</td><td>Overlap</td></tr>

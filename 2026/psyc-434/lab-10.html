@@ -251,9 +251,10 @@
 template</a>. If the course-site
 download fails, use the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Google Drive
 mirror</a>.</p>
-<p>Run the setup block in <a href="lab-setup.html">Lab Setup</a>, restart R, then work
-from the project the report-template unzips into. Before attempting
-the manuscript, open <code>setup.R</code> and run the whole script. The first run
+<p>Run the setup block in <a href="lab-setup.html">Lab Setup</a>, including
+<code>quarto install tinytex</code> from a terminal, then restart R. Work from
+the project the report-template unzips into. Before attempting the
+manuscript, open <code>setup.R</code> and run the whole script. The first run
 downloads the required materials and packages, which may take about 5
 to 10 minutes. When <code>setup.R</code> finishes without an error, open and
 render <code>manuscript.qmd</code>.</p>
@@ -280,11 +281,24 @@ policies that survive a stated reporting test.</li>
 </blockquote>
 <h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
 <p>Install packages before class, then restart R. Follow <a href="lab-setup.html">Lab Setup: R
-Packages and Build Tools</a> first. The block below mirrors
-what the report template's <code>setup.R</code> requires at the top: it installs
-missing CRAN packages, including <code>tinytex</code> for PDF rendering, and
-requires <code>causalworkshop &gt;= 0.6.0</code> and <code>margot &gt;= 1.0.322</code>, stopping
-with a clear restart-R message if a stale namespace is loaded.</p>
+Packages and Build Tools</a> first.</p>
+<p>PDF rendering has one extra system step. Run this in a terminal, not in
+the R console:</p>
+<pre><code class="language-sh">quarto install tinytex
+quarto list tools
+</code></pre>
+<p>On macOS, use Terminal or the RStudio Terminal tab. On Windows, use
+Command Prompt, PowerShell, or the RStudio Terminal tab. If Windows says
+<code>quarto</code> is not recognised, install Quarto from
+<a href="https://quarto.org/docs/download/">https://quarto.org/docs/download/</a>, close and reopen RStudio, then
+rerun the commands above.</p>
+<p>The R block below mirrors what the report template's <code>setup.R</code> requires
+at the top: it installs missing CRAN packages, including the <code>tinytex</code> R
+interface package. The R package is useful, but it does not replace
+<code>quarto install tinytex</code>, which installs the TeX distribution Quarto
+needs to build PDFs. The block also requires <code>causalworkshop &gt;= 0.6.0</code>
+and <code>margot &gt;= 1.0.322</code>, stopping with a clear restart-R message if a
+stale namespace is loaded.</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "ggdag", "grf",
   "knitr", "kableExtra", "rmarkdown", "tinytex"
@@ -339,6 +353,18 @@ file; otherwise choose <code>File &gt; Open...</code> and select <code>manuscrip
 <p>If you use another editor, open the whole unzipped folder first, then
 open <code>manuscript.qmd</code> from inside that folder. Do not edit the zipped
 file itself.</p>
+<blockquote>
+<p><strong>Windows note</strong></p>
+<p>Keep the template in a simple folder such as
+<code>Documents\PSYC434\research-report-template</code>, not inside the zipped
+archive and not in a synced folder with a very long path. Render from
+the RStudio Terminal with:</p>
+<pre><code class="language-sh">quarto render manuscript.qmd
+</code></pre>
+<p>If the render fails before running any R code and mentions LaTeX, run
+<code>quarto install tinytex</code> from Command Prompt or PowerShell, restart
+RStudio, and render again.</p>
+</blockquote>
 <p>Your folder should look like this:</p>
 <pre><code class="language-text">research-report/
   setup.R          # study decisions, helpers, single source of truth
@@ -354,6 +380,9 @@ decision (the exposure, the parsimony threshold, the seed) without
 scattering edits across the manuscript.</p>
 <p>The main decision controls live near the top of <code>setup.R</code>:</p>
 <ul>
+<li><code>use_fit_cache</code>: whether a successful model fit is reused on later
+renders. The template leaves this <code>FALSE</code> so a changed exposure or
+model reruns cleanly.</li>
 <li><code>min_gain_for_depth_switch</code>: how much held-out policy-value point gain
 depth-2 needs before it replaces depth-1.</li>
 <li><code>policy_value_lower_threshold</code> and <code>treated_uplift_lower_threshold</code>:
@@ -474,8 +503,11 @@ this assessment it is usually safer to add and check one source at a
 time.</p>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
 <p>Open <code>setup.R</code>. The main study decisions and reporting thresholds live
-near the top. Start with the exposure, seed, and simulated sample size:</p>
-<pre><code class="language-r"># for the lab walkthrough, set this to "community_group"
+near the top. Start with the target population, exposure, seed, and
+simulated sample size:</p>
+<pre><code class="language-r">target_population &lt;- "..."
+
+# for the lab walkthrough, set this to "community_group"
 # for your submitted report, set this to "religious_service" or "volunteer_work"
 name_exposure &lt;- "community_group"
 
@@ -488,10 +520,13 @@ study_n &lt;- 2000
 <code>community_group</code> as the exposure. We use <code>community_group</code> for the
 lab so we can work end-to-end without spoiling either of the two
 report exposures (<code>religious_service</code> or <code>volunteer_work</code>). When you
-start your report, change <code>name_exposure</code> back to one of those two —
-the template's <code>stopifnot()</code> passes for all three values, but only the
-first two are valid choices for submission.</p>
+start your report, change <code>name_exposure</code> back to one of those two.
+The setup script accepts all three values so the lab can render, but
+only the first two are valid choices for submission.</p>
 </blockquote>
+<p>Choose the people first. The target population tells the reader whose
+wellbeing the report is about and which interventions could sensibly
+apply to them. Only then define the exposure contrast and outcomes.</p>
 <p>The four wellbeing outcomes are fixed by the assignment: sense of
 purpose, belonging, self-esteem, and life satisfaction at wave 2. The
 adjustment set $L$ contains baseline demographics, socioeconomic and
@@ -713,6 +748,11 @@ resulting objects.</p>
 <pre><code class="language-sh">cd research-report
 quarto render manuscript.qmd
 </code></pre>
+<p>On Windows, first open the unzipped template folder in RStudio, then run
+the render command from the RStudio Terminal. If you are using Command
+Prompt or PowerShell, use <code>cd</code> to move into the folder that contains
+<code>manuscript.qmd</code>; paths with spaces are easier to handle if you keep the
+folder under <code>Documents\PSYC434</code>.</p>
 <p>Quarto writes a PDF and an HTML next to <code>manuscript.qmd</code>. Read both
 alongside the <code>.qmd</code> source. Check that every table and figure updates
 from <code>setup.R</code>; do not hard-code numerical results in the prose.</p>
@@ -746,16 +786,18 @@ family, and the population. Highlight the result, not only the
 method.</li>
 <li><strong>Abstract:</strong> a stand-alone summary with background, causal
 question, key methods, principal results, and conclusions. Anchored
-in workflow Steps 0, 2, 3 (well-defined treatment, well-defined
-outcome, target population).</li>
-<li><strong>Introduction:</strong> set the context, identify the gap, state the
-causal question and target estimand. Two paragraphs maximum.
-Anchored in Steps 0, 2, 3. Do not summarise results here.</li>
+in workflow Steps 0, 1, 2, 3 (target population, exposure, time
+zero, outcomes).</li>
+<li><strong>Introduction:</strong> set the scientific context, identify the gap, and
+state why the question matters for the target population. Do not
+turn the Introduction into the ten-step workflow and do not
+summarise results here.</li>
 <li><strong>Methods:</strong> detailed enough for another investigator to reproduce
-the study. Anchored in Steps 1, 4, 5, 6, 7, 8: time zero, the DAG
-and adjustment set for exchangeability, the causal-consistency
-argument, positivity diagnostics, measurement choices, and the
-strategy for preserving representativeness (attrition, missingness).</li>
+the study. Anchored in Steps 0-8: target population, time zero,
+exposure, outcomes, the DAG and adjustment set for exchangeability,
+the causal-consistency argument, positivity diagnostics, measurement
+choices, and the strategy for preserving representativeness
+(attrition, missingness).</li>
 <li><strong>Results:</strong> objective presentation of findings — the four ATEs with
 Bonferroni-adjusted intervals, E-values, and any policy trees that
 pass the graphing rule. No interpretation, no citations. Outputs of
@@ -770,8 +812,9 @@ Acknowledge limitations honestly.</li>
 checklists and supplementary material.</li>
 </ul>
 </blockquote>
-<p>The template's section ordering follows the workflow (causal-question
-framing, then identification, then estimation). The Introduction,
+<p>The template's section ordering follows the workflow after the
+Introduction: target population first, then the causal contrast and
+outcomes, then identification, then estimation. The Introduction,
 Methods, Results, and Discussion blocks map cleanly onto the IMRAD slots
 above; use the checklist as your editing pass.</p>
 <blockquote>

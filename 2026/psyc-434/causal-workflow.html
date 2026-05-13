@@ -255,7 +255,21 @@ Robins (<em>What If</em>, 2024), VanderWeele (2022), and Bulbulia (2024).</p>
 research report. Each step links back to the lecture where it was
 introduced.</p>
 </blockquote>
-<h2 id="step-0-state-a-well-defined-treatment"><a class="header" href="#step-0-state-a-well-defined-treatment">Step 0: State a well-defined treatment</a></h2>
+<h2 id="step-0-define-the-target-population"><a class="header" href="#step-0-define-the-target-population">Step 0: Define the target population</a></h2>
+<p>Say exactly who the answer is meant to inform before choosing the
+exposure or outcomes. A causal question about "New Zealanders" differs
+from one about "adults for whom weekly religious-service attendance is a
+meaningful option" or "working-age adults for whom volunteering is
+feasible." The population choice shapes which interventions are
+coherent, which outcomes matter, and where positivity may fail.</p>
+<p>Eligibility rules define the <strong>source population</strong>, but sampling and
+participation can yield a <strong>study population</strong> with a different
+distribution of effect modifiers. If you intend to generalise beyond the
+source population (transportability), articulate the additional
+conditions required.</p>
+<p><em>See <a href="week-06.html">Week 6</a> for how effect modification interacts with
+population composition.</em></p>
+<h2 id="step-1-state-a-well-defined-treatment"><a class="header" href="#step-1-state-a-well-defined-treatment">Step 1: State a well-defined treatment</a></h2>
 <p>Specify the hypothetical intervention precisely enough that every member
 of the target population could, in principle, receive it. "Mindfulness"
 is too vague because people meditate with different apps, in groups,
@@ -268,13 +282,13 @@ receive different interventions, and the potential outcome $Y(a)$ is
 not well-defined. It also makes the relevant time origin visible.</p>
 <p><em>See <a href="week-05.html">Week 5</a> for the formal definition of causal
 consistency.</em></p>
-<h2 id="step-1-establish-time-zero"><a class="header" href="#step-1-establish-time-zero">Step 1: Establish time zero</a></h2>
+<h2 id="step-2-establish-time-zero"><a class="header" href="#step-2-establish-time-zero">Step 2: Establish time zero</a></h2>
 <p>Define the point at which treatment assignment begins and follow-up
 starts. We cannot do this until the treatment is specified, because time
 zero is defined relative to treatment assignment or initiation.</p>
 <p><em>See <a href="week-05.html">Week 5</a> for why ambiguous time zero distorts target
 trial emulation.</em></p>
-<h2 id="step-2-state-a-well-defined-outcome"><a class="header" href="#step-2-state-a-well-defined-outcome">Step 2: State a well-defined outcome</a></h2>
+<h2 id="step-3-state-a-well-defined-outcome"><a class="header" href="#step-3-state-a-well-defined-outcome">Step 3: State a well-defined outcome</a></h2>
 <p>Define the outcome so the causal contrast is meaningful and temporally
 anchored. "Sense of Purpose" is underspecified; "psychological distress
 one year post-intervention, measured with the Kessler-6" is
@@ -282,14 +296,6 @@ interpretable and reproducible. Include timing, scale, and instrument.</p>
 <p><em>See <a href="week-04.html">Week 4</a> for measurement from the vantage point of
 causal inference, and <a href="week-10.html">Week 10</a> for the problems with
 classical test theory.</em></p>
-<h2 id="step-3-clarify-the-target-population"><a class="header" href="#step-3-clarify-the-target-population">Step 3: Clarify the target population</a></h2>
-<p>Say exactly who you aim to inform. Eligibility rules define the <strong>source
-population</strong>, but sampling and participation can yield a <strong>study
-population</strong> with a different distribution of effect modifiers. If you
-intend to generalise beyond the source population (transportability),
-articulate the additional conditions required.</p>
-<p><em>See <a href="week-06.html">Week 6</a> for how effect modification interacts with
-population composition.</em></p>
 <h2 id="step-4-evaluate-exchangeability"><a class="header" href="#step-4-evaluate-exchangeability">Step 4: Evaluate exchangeability</a></h2>
 <p>Make the case that potential outcomes are independent of treatment
 conditional on covariates: $Y(a) \coprod A \mid X$. Use DAGs,
@@ -336,10 +342,10 @@ or timestamp your analytic plan. Include identification arguments
 analyses. Transparent reasoning is a scientific result in its own right.</p>
 <h2 id="summary-table"><a class="header" href="#summary-table">Summary table</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Step</th><th>Requirement</th><th>Core assumption</th></tr></thead><tbody>
-<tr><td>0</td><td>Well-defined treatment</td><td>Consistency</td></tr>
-<tr><td>1</td><td>Time zero aligned to assignment</td><td>Temporal coherence</td></tr>
-<tr><td>2</td><td>Well-defined outcome</td><td>Interpretability</td></tr>
-<tr><td>3</td><td>Target population</td><td>Generalisability</td></tr>
+<tr><td>0</td><td>Target population</td><td>Generalisability</td></tr>
+<tr><td>1</td><td>Well-defined treatment</td><td>Consistency</td></tr>
+<tr><td>2</td><td>Time zero aligned to assignment</td><td>Temporal coherence</td></tr>
+<tr><td>3</td><td>Well-defined outcome</td><td>Interpretability</td></tr>
 <tr><td>4</td><td>Exchangeability</td><td>Conditional independence</td></tr>
 <tr><td>5</td><td>Causal consistency</td><td>No interference, well-defined versions</td></tr>
 <tr><td>6</td><td>Positivity</td><td>Overlap</td></tr>

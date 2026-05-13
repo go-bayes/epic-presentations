@@ -249,10 +249,11 @@
 and some errors require system tools that cannot be fixed quickly during
 class.</p>
 <h2 id="what-you-need"><a class="header" href="#what-you-need">What You Need</a></h2>
-<p>You need four things, in this order:</p>
+<p>You need five things, in this order:</p>
 <ol>
 <li>R and RStudio.</li>
 <li>System build tools for your operating system.</li>
+<li>Quarto's TinyTeX tool for PDF rendering.</li>
 <li>Core course packages from CRAN.</li>
 <li>Course packages from GitHub.</li>
 </ol>
@@ -291,11 +292,56 @@ Xcode app.</p>
 </code></pre>
 <p>Restart RStudio afterwards.</p>
 </blockquote>
-<h2 id="step-3-install-cran-packages"><a class="header" href="#step-3-install-cran-packages">Step 3: Install CRAN Packages</a></h2>
+<h2 id="step-3-install-tinytex-for-quarto-pdfs"><a class="header" href="#step-3-install-tinytex-for-quarto-pdfs">Step 3: Install TinyTeX for Quarto PDFs</a></h2>
+<p>The final report must render to PDF. Installing the R package called
+<code>tinytex</code> is not enough: Quarto also needs a TeX distribution. Quarto
+recommends TinyTeX for PDF documents, installed from the system command
+line.</p>
+<p>Run this in a terminal, not in the R console:</p>
+<pre><code class="language-sh">quarto install tinytex
+</code></pre>
+<p>Then check that Quarto can see it:</p>
+<pre><code class="language-sh">quarto list tools
+</code></pre>
+<p>If TinyTeX is already installed but Quarto says it is out of date, run:</p>
+<pre><code class="language-sh">quarto update tinytex
+</code></pre>
+<blockquote>
+<p><strong>macOS</strong></p>
+<p>Open <strong>Terminal</strong> (or the RStudio Terminal tab) and run:</p>
+<pre><code class="language-sh">quarto install tinytex
+quarto list tools
+</code></pre>
+<p>If <code>quarto</code> is not found, install or update Quarto from
+<a href="https://quarto.org/docs/download/">https://quarto.org/docs/download/</a>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Windows</strong></p>
+<p>Open <strong>Command Prompt</strong>, <strong>PowerShell</strong>, or the <strong>Terminal</strong> tab in
+RStudio. Run:</p>
+<pre><code class="language-sh">quarto install tinytex
+quarto list tools
+</code></pre>
+<p>Do not run this command in the R console. If Windows says <code>quarto</code> is
+not recognised, install Quarto from
+<a href="https://quarto.org/docs/download/">https://quarto.org/docs/download/</a>, close and reopen RStudio, then
+try again. If the PDF render later says <code>lualatex</code> or a LaTeX package
+is missing, rerun <code>quarto install tinytex</code> and render again.</p>
+</blockquote>
+<blockquote>
+<p><strong>Linux</strong></p>
+<p>Run the same command in your terminal:</p>
+<pre><code class="language-sh">quarto install tinytex
+</code></pre>
+<p>A system TeX Live installation can also work, but TinyTeX is the
+supported route for this course.</p>
+</blockquote>
+<h2 id="step-4-install-cran-packages"><a class="header" href="#step-4-install-cran-packages">Step 4: Install CRAN Packages</a></h2>
 <p>Run this in R:</p>
 <pre><code class="language-r">cran_packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "tidyr", "purrr", "grf",
-  "arrow", "qs2", "googledrive", "pak"
+  "arrow", "qs2", "googledrive", "pak", "rmarkdown", "knitr",
+  "kableExtra", "tinytex", "ggdag", "dagitty"
 )
 
 missing_cran &lt;- cran_packages[
@@ -306,7 +352,7 @@ if (length(missing_cran) &gt; 0) {
   install.packages(missing_cran)
 }
 </code></pre>
-<h2 id="step-4-install-github-packages"><a class="header" href="#step-4-install-github-packages">Step 4: Install GitHub Packages</a></h2>
+<h2 id="step-5-install-github-packages"><a class="header" href="#step-5-install-github-packages">Step 5: Install GitHub Packages</a></h2>
 <p>Use <code>pak</code> first. It is the recommended installer because it resolves
 dependencies well and gives useful diagnostics. It still needs the
 system build tools above when packages must be built from source.</p>
@@ -325,7 +371,7 @@ remotes::install_github("go-bayes/boilerplate", upgrade = "never")
 <p>If the error mentions <code>make</code>, <code>gcc</code>, <code>g++</code>, <code>clang</code>, or compilation,
 changing installers will not solve the problem. Install the system build
 tools in Step 2, restart RStudio, then rerun the <code>pak</code> commands.</p>
-<h2 id="step-5-check-the-installation"><a class="header" href="#step-5-check-the-installation">Step 5: Check the Installation</a></h2>
+<h2 id="step-6-check-the-installation"><a class="header" href="#step-6-check-the-installation">Step 6: Check the Installation</a></h2>
 <p>Restart RStudio, then run:</p>
 <pre><code class="language-r">packages &lt;- c(
   "ggplot2", "dplyr", "tibble", "arrow", "qs2", "googledrive",
@@ -344,6 +390,12 @@ print(status)
 <p>Read the first real error message, not only the final line. Common
 meanings:</p>
 <ul>
+<li><code>quarto: command not found</code> or <code>'quarto' is not recognized</code>: install
+Quarto, restart RStudio, and run <code>quarto install tinytex</code> from a
+terminal.</li>
+<li><code>lualatex: command not found</code>, <code>pdflatex: command not found</code>, or
+missing LaTeX packages while rendering PDF: run
+<code>quarto install tinytex</code> from a terminal, then render again.</li>
 <li><code>make: command not found</code>: install Xcode CLT on macOS or Rtools on
 Windows.</li>
 <li><code>gcc</code>, <code>g++</code>, or <code>clang</code> missing: install system build tools.</li>
