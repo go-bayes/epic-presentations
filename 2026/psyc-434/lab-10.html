@@ -352,6 +352,21 @@ file you will write in: it holds the prose, headings, tables, figures,
 and code chunks that read from <code>setup.R</code>. The split lets you change one
 decision (the exposure, the parsimony threshold, the seed) without
 scattering edits across the manuscript.</p>
+<p>The main decision controls live near the top of <code>setup.R</code>:</p>
+<ul>
+<li><code>min_gain_for_depth_switch</code>: how much held-out policy-value point gain
+depth-2 needs before it replaces depth-1.</li>
+<li><code>policy_value_lower_threshold</code> and <code>treated_uplift_lower_threshold</code>:
+the graphing-rule thresholds that decide whether a selected tree is
+strong enough to appear as a figure.</li>
+<li><code>alpha_family_wise</code>: the family-wise error rate for the four-outcome
+Bonferroni correction.</li>
+<li><code>num_trees</code> and <code>n_iterations_stability</code>: fitting controls that trade
+speed against Monte Carlo noise and stability information.</li>
+</ul>
+<p>These are not cosmetic choices. They decide what counts as enough
+improvement, what counts as enough evidence to graph a tree, and how
+cautious the report should be.</p>
 <h3 id="quarto-markdown-survival-guide"><a class="header" href="#quarto-markdown-survival-guide">Quarto Markdown survival guide</a></h3>
 <p>A Quarto report is a plain-text <code>.qmd</code> file that mixes prose, citations,
 tables, figures, and executable R code. When you render it, Quarto runs
@@ -458,7 +473,8 @@ sources to <code>My Library</code> and exporting several records at once, but fo
 this assessment it is usually safer to add and check one source at a
 time.</p>
 <h2 id="step-2-make-your-study-decisions"><a class="header" href="#step-2-make-your-study-decisions">Step 2: Make your study decisions</a></h2>
-<p>Open <code>setup.R</code>. Three decisions live near the top.</p>
+<p>Open <code>setup.R</code>. The main study decisions and reporting thresholds live
+near the top. Start with the exposure, seed, and simulated sample size:</p>
 <pre><code class="language-r"># for the lab walkthrough, set this to "community_group"
 # for your submitted report, set this to "religious_service" or "volunteer_work"
 name_exposure &lt;- "community_group"
@@ -615,6 +631,16 @@ over depth-1 is at least 0.01 outcome units. Use uncertainty intervals,
 stability, equity, and implementation burden to judge how cautiously to
 interpret the selected rule; do not treat interval overlap as the
 depth-selection rule.</p>
+<p>In the report template, these decisions appear in two tables:</p>
+<ul>
+<li><code>tbl-depth</code> reads from <code>fit$wf$best$depth_summary_df</code> and shows the
+depth-1 value, depth-2 value, point gain, and selected depth.</li>
+<li><code>tbl-selection</code> reads from <code>fit$selection</code> and shows whether each
+selected tree passes the graphing rule.</li>
+</ul>
+<p>The corresponding controls are in <code>setup.R</code>: <code>min_gain_for_depth_switch</code>
+controls <code>tbl-depth</code>; <code>policy_value_lower_threshold</code> and
+<code>treated_uplift_lower_threshold</code> control <code>tbl-selection</code>.</p>
 <p>Coverage is an output of the fitted rule, not a fixed treatment budget.
 If the rule treats 80% of people, the tree is mostly saying "treat
 broadly" under the outcome-only objective. It is not saying a programme
