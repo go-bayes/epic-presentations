@@ -317,8 +317,10 @@ rule were applied to the target population.</p>
 <li>
 <p>Fit the shallower and deeper trees as candidates, then prefer the
 simpler tree unless the deeper tree clears the prespecified held-out
-policy-value gain threshold. Simpler trees are easier to explain,
-more stable, and less likely to be misapplied.</p>
+policy-value point-gain threshold. Uncertainty and stability guide
+how cautiously to interpret a threshold-clearing depth-2 rule;
+interval overlap is not the selection rule. Simpler trees are easier
+to explain, more stable, and less likely to be misapplied.</p>
 </li>
 <li>
 <p>Offer the programme to residents whose deprivation index is above
@@ -360,7 +362,7 @@ score, so the first task is estimating person-level treatment
 contrasts. The course policy-tree workflow solves a different
 problem: it estimates the utility or policy value of simple if-then
 allocation rules, fits depth-1 and depth-2 candidates, and chooses
-depth-2 only if the held-out policy-value gain clears the
+depth-2 only if the held-out policy-value point gain clears the
 prespecified threshold. The treated share is whatever the selected
 rule implies. Ranking may be preferable when trained staff can use a
 score safely, a fixed budget must be met exactly, and the extra

@@ -486,16 +486,20 @@ from the parent's recommendation.</p>
 <p>On the same held-out sample, the depth-1 policy delivers an estimated
 policy value of $0.215$ (the rule's expected outcome on the held-out
 fold, in the outcome's own units); the depth-2 policy delivers
-$0.243$, a lift of $0.028$ (about thirteen percent above depth-1).
-The lift is real but small relative to the additional complexity.</p>
-<p>A useful rule of thumb: prefer the shallower tree unless the lift is
-both statistically significant and practically meaningful. "Practically
-meaningful" depends on context. For a high-stakes clinical intervention,
-a thirteen-percent lift may justify the extra complexity. For a
-community programme that must be administered by volunteers, the simpler
-depth-1 rule may be preferable even at a real cost in policy value,
-because the rule is more likely to be applied correctly in the field. A
-rule a worker mis-remembers is not the rule that was evaluated.</p>
+$0.243$, a point gain of $0.028$ (about thirteen percent above
+depth-1). The gain is real in the fitted comparison, but small relative
+to the additional complexity.</p>
+<p>The course rule is prespecified: prefer the shallower tree unless the
+depth-2 point gain in held-out policy value clears the stated gain
+threshold. Uncertainty intervals, stability checks, equity
+considerations, and implementation burden then inform how confidently
+investigators should act on the selected rule. For a high-stakes
+clinical intervention, a threshold-clearing gain may justify the extra
+complexity only with strong validation. For a community programme that
+must be administered by volunteers, the simpler depth-1 rule may be
+preferable even when depth-2 clears the point-gain threshold, because
+the rule is more likely to be applied correctly in the field. A rule a
+worker mis-remembers is not the rule that was evaluated.</p>
 <p>The full research workflow compares both depths automatically. Lab 9
 shows depth-1 and depth-2 outputs so you can practise the same
 judgement: examine both trees, then justify the chosen depth in the
@@ -702,7 +706,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.

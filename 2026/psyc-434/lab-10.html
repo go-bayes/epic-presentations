@@ -610,8 +610,11 @@ its 95% confidence interval, and coverage (the share of the sample the
 rule recommends for treatment).</p>
 <p><code>best$depth_summary_df</code> contains the depth-1 versus depth-2 comparison
 and the parsimony decision. With <code>min_gain_for_depth_switch = 0.01</code>, the
-workflow selects depth-2 only when its policy value exceeds depth-1 by
-at least 0.01 outcome units.</p>
+workflow selects depth-2 only when the held-out policy-value point gain
+over depth-1 is at least 0.01 outcome units. Use uncertainty intervals,
+stability, equity, and implementation burden to judge how cautiously to
+interpret the selected rule; do not treat interval overlap as the
+depth-selection rule.</p>
 <p>Coverage is an output of the fitted rule, not a fixed treatment budget.
 If the rule treats 80% of people, the tree is mostly saying "treat
 broadly" under the outcome-only objective. It is not saying a programme

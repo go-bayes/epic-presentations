@@ -347,15 +347,19 @@ subtract that cost from the treatment reward, and refit or compare trees
 across plausible cost values.</p>
 <h3 id="parsimony-rule"><a class="header" href="#parsimony-rule">Parsimony rule</a></h3>
 <p>Fit both depth-1 and depth-2 policy trees. Prefer the depth-1 tree
-unless the depth-2 tree improves policy value by at least
-<code>min_gain_for_depth_switch</code>. The course default is:</p>
+unless the depth-2 tree improves held-out policy value, using the point
+estimate, by at least <code>min_gain_for_depth_switch</code>. The course default
+is:</p>
 <pre><code class="language-r">min_gain_for_depth_switch &lt;- 0.01
 </code></pre>
 <p>State the threshold before reporting the selected tree. If depth-2 does
 not clear the threshold, report the simpler tree in the main text and
-place the full depth comparison in the appendix. The
-<code>margot_policy_workflow()</code> function applies this rule automatically and
-exposes the comparison in <code>wf$best$depth_summary_df</code>.</p>
+place the full depth comparison in the appendix. If depth-2 clears the
+threshold but uncertainty is wide, describe the rule as promising or
+fragile and use stability, equity, and implementation burden to temper
+the conclusion. The <code>margot_policy_workflow()</code> function applies the
+point-gain rule automatically and exposes the comparison in
+<code>wf$best$depth_summary_df</code>.</p>
 <h3 id="graphing-rule"><a class="header" href="#graphing-rule">Graphing rule</a></h3>
 <p>Apply <code>margot::margot_select_grf_policy_trees()</code> after the policy-tree
 workflow runs. The graphing rule keeps a policy tree only when <strong>both</strong>

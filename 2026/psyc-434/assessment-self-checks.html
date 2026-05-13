@@ -283,8 +283,11 @@ variable as the causal source of effect modification.</li>
 <li><strong>Support:</strong> whether both treatment levels are represented in the
 relevant covariate regions. A policy tree cannot rescue poor
 positivity.</li>
-<li><strong>Parsimony:</strong> whether the depth-2 tree meaningfully improves on
-depth-1. Prefer the simpler rule unless the improvement is clear.</li>
+<li><strong>Parsimony:</strong> whether the depth-2 tree clears the prespecified
+held-out policy-value point-gain threshold. Prefer the simpler rule
+by default, then use uncertainty, stability, equity, and
+implementation burden to decide how cautiously to interpret any
+threshold-clearing depth-2 rule.</li>
 <li><strong>Uncertainty:</strong> whether the policy value and subgroup effects have
 confidence intervals.</li>
 <li><strong>Oversight:</strong> what value judgement would authorise acting on the
