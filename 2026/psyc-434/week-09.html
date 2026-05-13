@@ -269,6 +269,8 @@ Forests</a></li>
 <blockquote>
 <p><strong>Key concepts</strong></p>
 <ol>
+<li>Outcome-wide evidence asks whether a prespecified exposure has a
+credible pattern across several outcomes.</li>
 <li>Policy learning estimates utility over allocation rules.</li>
 <li>Policy value must be evaluated out of sample.</li>
 <li>Shallow policy trees trade a little value for a lot of
@@ -302,6 +304,30 @@ exposure across four outcomes: purpose, belonging, self-esteem, and life
 satisfaction. This is a small teaching version of an <strong>outcome-wide</strong>
 design. The point is to read the pattern across outcomes, not to hunt
 for whichever row happens to look best.</p>
+<p>VanderWeele's outcome-wide design starts from a common problem in social
+and psychological science: exposures often plausibly affect several
+outcomes, and investigators can tell a convincing story after the fact
+if they focus only on whichever row looks strongest. An outcome-wide
+design disciplines that choice. It asks about a prespecified family of
+outcomes under the same exposure, target population, time zero, and
+adjustment set (<a href="#ref-vanderweele2020">VanderWeele et al., 2020</a>).</p>
+<p>The motivation is disciplined comparison. A broad pattern across
+outcomes can support a stronger substantive interpretation than one
+isolated estimate. A specific pattern can show that the exposure seems
+more relevant for some outcomes than others. A null pattern can prevent
+investigators from over-selling a single noisy association. Because the
+same exposure is being evaluated repeatedly, outcome-wide designs also
+require multiplicity control and sensitivity analysis.</p>
+<p>Read the forest plot in four passes:</p>
+<ol>
+<li>Is the pattern broad, outcome-specific, or mostly null?</li>
+<li>Which outcomes remain statistically reliable after multiplicity
+correction?</li>
+<li>Which estimates are robust enough to unmeasured confounding to
+discuss seriously?</li>
+<li>Which outcome, if any, has enough evidence to justify asking a
+targeting question?</li>
+</ol>
 <p>When a single exposure is tested against several outcomes, the chance
 that at least one confidence interval excludes zero by chance alone is
 higher than the nominal per-test error rate. A simple correction is
@@ -653,6 +679,24 @@ even when any single fit looks reasonable.</li>
 <li>Conduct a fairness check before recommending a rule.</li>
 <li>Report trade-offs: value, fairness, transparency, and feasibility.</li>
 </ol>
+<h2 id="which-question-are-we-answering"><a class="header" href="#which-question-are-we-answering">Which question are we answering?</a></h2>
+<p>The methods in weeks 5-9 answer related but different questions. The
+sequence matters because each step changes the causal estimand, the
+statistical summary, and the decision that the evidence can support.</p>
+<div class="table-wrapper"><table><thead><tr><th>Tool</th><th>Question</th><th>Main quantity</th><th>What it can support</th><th>What it does not settle</th></tr></thead><tbody>
+<tr><td>Outcome-wide ATE</td><td>Does one exposure appear to improve outcomes on average across a prespecified outcome family?</td><td>$\mathbb{E}[Y_k(1)-Y_k(0)]$ for each outcome $k$</td><td>Whether the exposure has credible average evidence for one or more outcomes</td><td>Who should receive treatment</td></tr>
+<tr><td>Prespecified group CATE</td><td>Do average effects differ across a group chosen before looking at results?</td><td>$\mathbb{E}[Y(1)-Y(0)\mid G=g]$</td><td>Whether an interpretable group comparison deserves attention</td><td>Individual assignment or a complete allocation rule</td></tr>
+<tr><td>Forest CATE ranking</td><td>Who is predicted to benefit more, conditional on baseline covariates?</td><td>$\hat{\tau}(X)$</td><td>A ranking for possible targeting</td><td>A transparent public rule, or a fixed treatment share by itself</td></tr>
+<tr><td>RATE / Qini</td><td>Does targeting by the CATE ranking improve outcomes over random or uniform allocation?</td><td>Targeting gain over the ranked population</td><td>Whether heterogeneity has practical value</td><td>Which simple rule should be used</td></tr>
+<tr><td>Policy tree</td><td>What short allocation rule has high expected policy value?</td><td>$V(d)=\mathbb{E}[Y(d(X))]$</td><td>A defensible, interpretable rule to consider</td><td>Whether the split variables are causes, or whether the rule is fair</td></tr>
+</tbody></table>
+</div>
+<p>The table is also a writing guide. In a report, avoid presenting policy
+trees as though they answer the same question as an average treatment
+effect. The ATE asks whether the exposure helps on average. CATE
+summaries ask whether effects vary. RATE and Qini ask whether a ranking
+is useful for targeting. Policy trees ask whether a short rule can
+recover enough value to be worth considering.</p>
 <h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
 <p>We will reserve about 25 minutes today for the assessments.</p>
 <ol>
@@ -706,7 +750,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
