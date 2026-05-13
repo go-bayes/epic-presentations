@@ -280,7 +280,9 @@ observing every counterfactual.</li>
 <hr />
 <p>Week 6 introduced the conditional average treatment effect (CATE): the
 contrast for a subgroup defined by baseline covariates at time zero.
-Estimating CATE with parametric models requires the analyst to guess the
+Investigators can estimate CATEs for theory-driven subgroups by
+stratifying first, then estimating effects separately within each
+subgroup. They can also use interaction models, which require a chosen
 functional form. This week introduces causal forests, which learn the
 heterogeneity surface from data. The machine-learning step changes the
 estimator, not the identification logic: treatment must still be
@@ -374,7 +376,23 @@ Machine learning replaces the <em>guessed functional form</em> of an
 interaction model with a <em>learned</em> one; it does not replace the
 identification argument.</p>
 <p><img src="figures/week-08/estimand-pipeline.svg" alt="Three-stage pipeline showing how heterogeneous-treatment-effect analysis bridges what we want to know to what the forest produces. Left: the causal estimand $\tau(x) = \mathbb{E}[Y(1) - Y(0) \mid X = x]$ is the unobservable contrast we care about. Centre: under exchangeability, consistency, and positivity, the causal estimand equals an observable contrast of conditional means $\mathbb{E}[Y \mid A = 1, X = x] - \mathbb{E}[Y \mid A = 0, X = x]$, which is the statistical estimand the forest can target. Right: the causal forest estimates the two conditional means non-parametrically and returns $\hat{\tau}(x)$. Identification is what carries causal meaning across the first arrow; estimation is what carries it across the second." /></p>
-<h2 id="why-linear-interaction-models-are-often-not-enough"><a class="header" href="#why-linear-interaction-models-are-often-not-enough">Why linear interaction models are often not enough</a></h2>
+<h2 id="why-pre-specified-subgroup-checks-are-often-not-enough"><a class="header" href="#why-pre-specified-subgroup-checks-are-often-not-enough">Why pre-specified subgroup checks are often not enough</a></h2>
+<p>If theory names a subgroup in advance, a simple non-parametric check is
+to split the data into those strata and estimate the ATE separately in
+each subgroup. For example, investigators might estimate the effect
+among younger and older adults separately, then compare the two subgroup
+estimates. This is descriptive heterogeneity analysis, not policy
+optimisation: it reports how $\hat{\tau}$ varies across
+investigator-defined groups.</p>
+<p>The strength of stratification is clarity. The weakness is that the
+answer is only as broad as the strata chosen. Subgroup estimates can
+also be noisy when strata are small, and repeated subgroup searches
+create the same multiplicity and over-interpretation problems that
+outcome-wide designs try to discipline. Use stratified subgroup
+comparisons when there is a theoretical reason to expect a difference;
+be cautious when the subgroup list is exploratory.</p>
+<p>Linear interaction models provide another pre-specified check, but they
+add modelling assumptions about shape.</p>
 <p>A small interaction model assumes a simple shape. If the analyst writes
 $\tau(x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2$ and stops there, every
 covariate must enter linearly and the heterogeneity along $x_1$ must
@@ -384,10 +402,9 @@ and carry sharp regime changes (the effect of a programme on purpose may
 climb steeply with extraversion up to a saturation point, then flatten).
 A pre-specified interaction model can miss all three features.</p>
 <p>A pre-specified linear interaction model can still be useful when the
-scientific question is a specific, pre-declared group comparison. For
-discovery, it is a weak test of heterogeneity because its answer is
-limited to the variables, interactions, and functional form chosen in
-advance.</p>
+scientific question is a specific, pre-declared contrast. For discovery,
+it is a weak test of heterogeneity because its answer is limited to the
+variables, interactions, and functional form chosen in advance.</p>
 <p>A non-parametric estimator like a causal forest sidesteps the
 functional-form problem by letting the data dictate where to draw splits
 and how deep to go. The cost is interpretability: the forest is no
