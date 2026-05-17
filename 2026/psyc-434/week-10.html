@@ -357,7 +357,8 @@ adjustment sets are otherwise defensible.</p>
 <li>State what each classical validity type (content, construct,
 criterion, ecological) claims, and identify the causal assumptions
 each leaves implicit.</li>
-<li>Run EFA and CFA with clear model-comparison logic.</li>
+<li>Run exploratory factor analysis (EFA) and confirmatory factor
+analysis (CFA) with clear model-comparison logic.</li>
 <li>Run configural, metric, and scalar/threshold invariance tests, and
 state what they do not establish.</li>
 <li>Explain why good fit does not prove a causal latent model.</li>
@@ -486,9 +487,10 @@ causal story and often new data, not a better fit index.</li>
 <p>Also note that item means can differ for many reasons that have nothing
 to do with biased measurement. If group A is more distressed than group
 B, we should expect different item means even under perfect measurement.
-Invariance testing is not a way to label differences as artefact. It is
-a way to describe whether a particular psychometric model is stable
-across groups.</p>
+Invariance testing describes whether a particular psychometric model is
+stable across groups. A failed test, on its own, does not establish
+whether a group difference is measurement artefact or a real difference
+in the underlying state.</p>
 <p>Under the standard invariance interpretation, if scalar/threshold
 invariance fails then latent mean comparisons are not identified within
 that measurement model. In this course, treat this as a warning about
@@ -520,12 +522,11 @@ same outcome across groups.</li>
 <h2 id="part-2-how-traditional-measurement-theory-fails-for-causal-inference"><a class="header" href="#part-2-how-traditional-measurement-theory-fails-for-causal-inference">Part 2: how traditional measurement theory fails (for causal inference)</a></h2>
 <p>This part restores the core point of the lecture. Causal inference
 operates under assumptions. For measurement, it is causality all the way
-down. This is not a matter of attitude. It is a consequence of the
-potential outcomes framework: causal contrasts require well-defined
-outcomes under interventions, and constructed measures are outcomes of
-causal processes (question wording, translation, response styles,
-incentives, and the world that generates the experiences being
-reported).</p>
+down. This follows from the potential outcomes framework: causal
+contrasts require well-defined outcomes under interventions, and
+constructed measures are outcomes of causal processes (question wording,
+translation, response styles, incentives, and the world that generates
+the experiences being reported).</p>
 <p>Classical psychometric checks (internal consistency, model fit,
 invariance tests) can organise associations. They do not, by themselves,
 evaluate the causal assumptions about direction and causal efficacy that
@@ -710,7 +711,10 @@ constructed measures.</p>
 $\eta_Y$). They are the states we would ideally intervene on and
 measure without error.</li>
 <li>The $var_{f(X_1,\dots,X_n)}$ nodes are constructed measures:
-functions of multiple indicators.</li>
+functions of multiple indicators. Simpler measurement DAGs compress
+this notation, writing the true outcome state as $Y^\ast$ and the
+recorded measure as $Y$; in that shorthand $\eta_Y$ is
+$Y^\ast$ and $Y_{f(X_1,\dots,X_n)}$ is $Y$.</li>
 <li>The $U$ nodes are unmeasured sources of error in those constructed
 measures. They include stable reporting tendencies, transient mood
 at the time of survey completion, social desirability, and
@@ -751,7 +755,8 @@ causally affects the error in the measured outcome.</p>
 <h3 id="confounding-control-by-baseline-measures-in-three-wave-panels"><a class="header" href="#confounding-control-by-baseline-measures-in-three-wave-panels">Confounding control by baseline measures in three-wave panels</a></h3>
 <p>One pragmatic design response is to measure baseline values of exposure
 and outcome (and key confounders), then estimate effects forward in time
-using a three-wave panel.</p>
+using a three-wave panel. Adjusting for each variable's own baseline
+value is called <em>lagged-self adjustment</em>.</p>
 <ol>
 <li>This design adjusts for baseline measurements of both exposure and
 outcome.</li>

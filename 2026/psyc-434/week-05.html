@@ -332,11 +332,10 @@ at most one. If student $i$ starts the app ($A_i = 1$), we observe
 $Y_i(1)$ but not $Y_i(0)$. If the student does not start it ($A_i =
 0$), we observe $Y_i(0)$ but not $Y_i(1)$. The unobserved term is
 the counterfactual.</p>
-<p>This is not a sample-size problem or a measurement problem. It is a
-structural feature of the physical world: a person cannot simultaneously
-exist under two incompatible conditions. No dataset, however large,
-contains both potential outcomes for one individual at one time.
-Individual causal effects are missing by necessity, not by accident.</p>
+<p>This is a structural feature of the physical world: a person cannot
+simultaneously exist under two incompatible conditions. No dataset,
+however large, contains both potential outcomes for one individual at
+one time. Individual causal effects are missing by necessity.</p>
 <blockquote>
 <p><strong>Pair exercise: building a potential outcomes table</strong></p>
 <ol>
@@ -356,7 +355,8 @@ $\bar{Y}<em>{A=1}^{\mathrm{obs}} - \bar{Y}</em>{A=0}^{\mathrm{obs}}$.</li>
 </blockquote>
 <h2 id="step-2-move-from-individuals-to-populations"><a class="header" href="#step-2-move-from-individuals-to-populations">Step 2: move from individuals to populations</a></h2>
 <p>Because individual effects are unobservable, we target a population
-causal estimand. The average treatment effect (ATE) is:</p>
+causal estimand: the quantity we want our analysis to estimate. The
+average treatment effect (ATE) is:</p>
 <p>$$ \text{ATE}=\mathbb{E}[Y(1)-Y(0)]. $$</p>
 <p>This is the mean contrast if everyone in the target population received
 $A=1$ versus $A=0$.</p>
@@ -432,8 +432,9 @@ For example, biological males cannot receive hysterectomy. Deterministic
 violations require restricting the analysis to scientifically plausible
 cases.</p>
 <p>Positivity is the one identification assumption we can partially check
-empirically. Plot propensity score distributions and look for gaps or
-near-zero densities.</p>
+empirically. The <em>propensity score</em> is the conditional probability of
+receiving treatment given covariates, $P(A=1 \mid L)$. Plot propensity
+score distributions and look for gaps or near-zero densities.</p>
 <blockquote>
 <p><strong>What each assumption buys us</strong></p>
 <ul>
@@ -558,7 +559,6 @@ causal rationale for each (draw a short DAG if it helps).</li>
 subgroup where one side of the contrast is effectively empty).</li>
 </ol>
 </blockquote>
-<p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
 <h2 id="the-causal-workflow"><a class="header" href="#the-causal-workflow">The causal workflow</a></h2>
 <p>The identification assumptions are not items on a checklist to be ticked
 off after analysis. They are design commitments that must be defended

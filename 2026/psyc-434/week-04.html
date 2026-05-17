@@ -315,11 +315,10 @@ They are more general than that.</p>
 The second threat is measurement bias. Both can be analysed with the
 same elementary graph logic you already know.</p>
 <h2 id="the-same-graph-logic-still-applies"><a class="header" href="#the-same-graph-logic-still-applies">The same graph logic still applies</a></h2>
-<p>The key idea from the earlier weeks is not just "adjust for
-confounders". The key idea is that a small number of graph structures
-determine which paths are open and which are blocked. Once you can
-recognise a fork, a chain, and a collider, you can start to diagnose
-bias in almost any study.</p>
+<p>The key idea from the earlier weeks reaches past "adjust for
+confounders": a small number of graph structures determine which paths
+are open and which are blocked. Once you can recognise a fork, a chain,
+and a collider, you can start to diagnose bias in almost any study.</p>
 <p>More complicated studies are built from simpler pieces. Selection
 problems, attrition problems, and measurement problems usually look
 confusing at first because they involve more nodes. But the underlying
@@ -394,7 +393,9 @@ the recorded value?</p>
 <li>Independent (undirected): one true variable does not causally affect
 another variable's measurement error.</li>
 <li>Dependent (directed): one true variable causally affects another
-variable's measurement error.</li>
+variable's measurement error. Epidemiology usually calls this
+<em>differential</em> measurement error, and the independent case
+<em>non-differential</em>.</li>
 </ul>
 <p><strong>Dimension 2: uncorrelated vs correlated</strong></p>
 <ul>
@@ -554,16 +555,22 @@ the outcome causally affects what is recorded. Restriction through
 attrition mirrors independent measurement error off the null (type 1):
 the signal is diluted because the analytic sample differs from the
 target in composition. Investigators should diagnose which mechanism is
-operating, because the remedies differ: inverse-probability-of-censoring
-weights address distortion, whereas reweighting to the target population
-addresses restriction.</p>
+operating, because the remedies differ. Inverse-probability-of-censoring
+weights (IPCW) address distortion: each participant still observed at
+the end of the study is up-weighted by the inverse of their estimated
+probability of remaining, so the analysed cases stand in for the similar
+participants who dropped out. The weights remove the bias only when the
+measured covariates capture why people left. Restriction is handled
+differently, by reweighting the sample to match the target population's
+distribution of effect modifiers.</p>
 <h2 id="weird-samples-and-effect-heterogeneity"><a class="header" href="#weird-samples-and-effect-heterogeneity">WEIRD samples and effect heterogeneity</a></h2>
-<p>A WEIRD sample is not automatically invalid. The problem is Mechanism 2:
-if effect modifiers are distributed differently between the analytic and
-target populations, and treatment effects vary by those modifiers, the
-sample ATE does not transport. A perfectly unconfounded study in a WEIRD
-sample can produce a correct estimate for that sample and a wrong
-estimate for the population of interest.</p>
+<p>A WEIRD (Western, Educated, Industrialised, Rich, Democratic) sample is
+not automatically invalid. The problem is Mechanism 2: if effect
+modifiers are distributed differently between the analytic and target
+populations, and treatment effects vary by those modifiers, the sample
+ATE does not transport. A perfectly unconfounded study in a WEIRD sample
+can produce a correct estimate for that sample and a wrong estimate for
+the population of interest.</p>
 <h2 id="preview-of-week-10"><a class="header" href="#preview-of-week-10">Preview of Week 10</a></h2>
 <p>This week treats measurement from the vantage point of causal inference:
 what happens when the recorded variable differs from the variable in the

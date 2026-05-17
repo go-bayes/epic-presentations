@@ -300,11 +300,11 @@ to vaccine or placebo under double-blind conditions.</p>
 vaccine reduced paralytic polio (<a href="#ref-francis1955">Francis Jr., 1955</a>).
 The observed-control protocol did not support the same conclusion,
 because parental consent shaped vaccine assignment.</p>
-<p>Parents who consented tended to have higher socioeconomic status, and
-socioeconomic status also predicted baseline susceptibility to paralytic
-polio. The observed-control comparison was therefore confounded:
-vaccination status and polio risk differed for reasons other than the
-vaccine itself.</p>
+<p>Consent and polio susceptibility shared a common cause—socioeconomic
+status—which opened a backdoor path between vaccine receipt and the
+outcome. Vaccination status and polio risk differed for reasons other
+than the vaccine itself. That is the structure of confounding: a fork in
+which a common cause affects both treatment and outcome.</p>
 <p>Same question. Different assignment mechanism. Different estimate,
 different reliability.</p>
 <p>Salk later reported on the 1956 vaccination campaign (<a href="#ref-salk1957">Salk,
@@ -331,6 +331,11 @@ in words.</p>
 <h2 id="independence-language"><a class="header" href="#independence-language">Independence language</a></h2>
 <p>Do not let the notation do more work than it should. It is just
 shorthand.</p>
+<p>We never observe $Y(a)$ for more than one treatment level per person
+(Week 1's unobservability problem). The notation $Y(a)$ refers to "the
+outcome this person would have under treatment level $a$." The
+observed $Y$ equals $Y(a)$ only for the level of $A$ that person
+actually received.</p>
 <ul>
 <li>$A \coprod Y(a)$: $A$ and $Y(a)$ are independent.</li>
 <li>$A \cancel\coprod Y(a)$: $A$ and $Y(a)$ are dependent.</li>
@@ -352,18 +357,25 @@ A=1]-\hat{\mathbb{E}}[Y\mid A=0]. $$</p>
 adjustment.</p>
 <h2 id="working-definitions"><a class="header" href="#working-definitions">Working definitions</a></h2>
 <p><strong>Internal validity</strong> concerns whether the study contrast estimates the
-target causal contrast in the study population.</p>
+target causal contrast in the study population. In DAG terms, a threat
+to internal validity corresponds to an open non-causal path between
+$A$ and $Y$ that the design has not closed.</p>
 <p><strong>External validity</strong> concerns whether that causal contrast transports
-to the target population.</p>
+to the target population. In DAG terms, external validity is threatened
+when the structural relationships in the study population differ from
+those in the target population (Week 4 formalises this as
+transportability).</p>
 <p>These are design properties, not instrument properties. Measurement
 quality is part of the causal question because the outcome must be well
 defined. Week 4 returns to measurement from the vantage point of causal
 inference; Week 10 focuses on the problems with classical test theory.</p>
 <p><strong>Confounding bias</strong> exists when treatment groups differ systematically
 in ways that affect the outcome, so that the observed association
-between $A$ and $Y$ does not equal the causal effect. In graph
-terms, confounding corresponds to an open non-causal path from $A$ to
-$Y$ (a "backdoor path," formalised below in the four rules of
+between $A$ and $Y$ does not equal the causal effect.</p>
+<p>Confounding arises because <strong>there is a common cause of the treatment
+and the outcome.</strong></p>
+<p>In graph terms, confounding corresponds to an open non-causal path from
+$A$ to $Y$ (a "backdoor path," formalised below in the four rules of
 confounding control).</p>
 <h2 id="causal-dag-notation-and-elements"><a class="header" href="#causal-dag-notation-and-elements">Causal DAG notation and elements</a></h2>
 <p><img src="figures/terminologylocalconventions.svg" alt="Our variable naming conventions (adapted from Bulbulia, 2023)" /></p>
@@ -385,6 +397,8 @@ confounding control).</p>
 </ul>
 <h2 id="five-elementary-structures"><a class="header" href="#five-elementary-structures">Five elementary structures</a></h2>
 <p><img src="figures/terminologydirectedgraph.svg" alt="Five elementary structures (adapted from Bulbulia, 2023)" /></p>
+<p>The five structures below correspond to the labelled panels in the
+figure.</p>
 <ol>
 <li><strong>No causal relation:</strong> $A \coprod B$. The variables are
 statistically independent.</li>
@@ -399,7 +413,11 @@ the path: $A \coprod C \mid B$.</li>
 <li><strong>Collider:</strong> $A\to C\leftarrow B$. Because $A$ and $B$ both
 cause $C$ but do not cause each other, they are marginally
 independent. Conditioning on $C$ opens a spurious association: $A
-\cancel\coprod B \mid C$.</li>
+\cancel\coprod B \mid C$. The intuition: when two independent
+causes can both produce the same effect, knowledge of the effect
+makes the two causes informative about each other—if one cause was
+absent, the other becomes more probable. Conditioning on $C$
+therefore induces a non-causal association between its causes.</li>
 </ol>
 <p>These five structures generate all patterns of conditional independence
 and dependence in a causal DAG. Understanding which structures block and
@@ -430,80 +448,6 @@ links genetics and diet through blood pressure? What happens if
 you condition on blood pressure?</li>
 </ol>
 </blockquote>
-<h2 id="three-identification-assumptions"><a class="header" href="#three-identification-assumptions">Three identification assumptions</a></h2>
-<blockquote>
-<p><strong>Assumption 1: Causal consistency</strong></p>
-<p>If person $i$ receives $A_i=a$, then $Y_i=Y_i(a)$.</p>
-</blockquote>
-<blockquote>
-<p><strong>Assumption 2: Conditional exchangeability</strong></p>
-<p>After conditioning on an adequate set $L$,</p>
-<p>$$ Y(a) \coprod A \mid L. $$</p>
-</blockquote>
-<blockquote>
-<p><strong>Assumption 3: Positivity</strong></p>
-<p>For all treatment levels and covariate strata used for inference,</p>
-<p>$$ P(A=a\mid L=l)&gt;0. $$</p>
-</blockquote>
-<blockquote>
-<p><strong>Pair exercise: checking assumptions against a causal DAG</strong></p>
-<ol>
-<li>Draw a causal DAG for the Salk vaccine example. Include: parental
-consent ($L$), vaccine assignment ($A$), polio outcome
-($Y$), and socioeconomic status ($U$) as an unmeasured common
-cause of $L$ and $Y$.</li>
-<li>In the observational design (assignment by parental consent),
-check exchangeability: is $Y(a) \coprod A$? Trace the open
-backdoor path.</li>
-<li>In the randomised design, check exchangeability: is $Y(a) \coprod
-A$? Explain why the path is now blocked.</li>
-<li>Check positivity in each design. In which design is a positivity
-violation more probable, and why?</li>
-</ol>
-</blockquote>
-<h2 id="four-rules-of-confounding-control"><a class="header" href="#four-rules-of-confounding-control">Four rules of confounding control</a></h2>
-<p><img src="figures/terminologyelconfounders.svg" alt="Four rules of confounding control" /></p>
-<ol>
-<li><strong>Condition on common causes (or defensible proxies).</strong> If $L$
-causes both $A$ and $Y$, the fork $A \leftarrow L \to Y$ opens
-a backdoor path. Conditioning on $L$ closes it. When $L$ is
-unmeasured, conditioning on a measured proxy can reduce, though not
-eliminate, confounding.</li>
-<li><strong>Do not condition on mediators when estimating total effects.</strong> If
-$A \to M \to Y$, conditioning on $M$ blocks part of the causal
-path we want to estimate.</li>
-<li><strong>Do not condition on colliders.</strong> If $A \to C \leftarrow Y$,
-conditioning on $C$ opens a spurious path between $A$ and $Y$.
-The "control for everything" instinct is unsafe for this reason.</li>
-<li><strong>Treat descendants carefully.</strong> Conditioning on a descendant of a
-variable is akin to partially conditioning on that variable. A
-descendant of a collider can transmit collider bias; a descendant of
-a confounder can partially reduce confounding.</li>
-</ol>
-<blockquote>
-<p><strong>A short rulebook for the test</strong></p>
-<ul>
-<li>Common cause: usually condition.</li>
-<li>Mediator: do not condition if you want the total effect.</li>
-<li>Collider: do not condition.</li>
-<li>Descendant: ask what it is downstream of before you adjust for it.</li>
-</ul>
-</blockquote>
-<h2 id="a-note-on-the-generality-of-d-separation"><a class="header" href="#a-note-on-the-generality-of-d-separation">A note on the generality of d-separation</a></h2>
-<p>Two variables are <strong>d-separated</strong> ("directionally separated") in a
-causal DAG when every path between them is blocked. In practice, this
-means that the DAG implies conditional independence once the relevant
-conditioning set is stated. The rules above focus on confounding, but
-d-separation is more general than confounding control. It is the reason
-the same DAG logic can later be used for collider bias, mediator bias,
-and measurement problems.</p>
-<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
-<p>The Salk example is a structural lesson about assignment. The
-observed-control design produced a biased effect estimate because
-socioeconomic status confounded the comparison. The randomised design
-blocked that path. Causal DAGs help us state this lesson before
-analysis. First we define the question. Then we draw assumptions. Then
-we choose an adjustment set. Then we estimate.</p>
 <h2 id="where-do-causal-assumptions-come-from"><a class="header" href="#where-do-causal-assumptions-come-from">Where do causal assumptions come from?</a></h2>
 <p>A causal DAG encodes assumptions. Those assumptions do not come from the
 data. They come from prior knowledge: theory, mechanism, previous
@@ -525,47 +469,6 @@ evidence warrants. The alternative, letting data alone determine causal
 structure, is not available. Data reveal associations. Associations are
 compatible with many causal structures. Without assumptions, the data do
 not tell us which structure generated them.</p>
-<p>Next week we apply these structures to the specific problem of
-confounding bias: the patterns that open backdoor paths and the
-strategies for closing them.</p>
-<h2 id="epilogue-avoid-within-person-and-between-person"><a class="header" href="#epilogue-avoid-within-person-and-between-person">Epilogue: avoid "within-person" and "between-person"</a></h2>
-<ol>
-<li>Students often describe designs as "within-person" or
-"between-person". These labels feel intuitive, but they hide the
-causal object. "Between-person" in particular can mislead because it
-sounds like we compare two different populations. In an experiment
-we have one population, which we project into two potential states
-under two intervention levels. Randomisation lets two groups stand
-in for those two projected states.</li>
-</ol>
-<p>In this course we instead name a target population, two intervention
-regimes, an outcome, and the time that we measure that outcome.</p>
-<ol>
-<li>
-<p>This framing works even when the target population contains one
-unit. Let the population be Alice. Define two regimes over time:
-$a=1$ means Alice doom-scrolls for two hours nightly for four
-weeks, and $a=0$ means she studies for two hours nightly for four
-weeks. Let the outcome be her life satisfaction, measured after each
-four-week period. The causal contrast for Alice is
-$\delta_{\text{Alice}}=Y_{\text{Alice}}(1)-Y_{\text{Alice}}(0)$.</p>
-</li>
-<li>
-<p>Week 1 shows why this contrast is inaccessible from observation
-alone. Alice can follow regime $a=1$ or regime $a=0$, but not
-both in the same period. We therefore observe only one of
-$Y_{\text{Alice}}(1)$ or $Y_{\text{Alice}}(0)$. This missing
-counterfactual is not a statistical inconvenience. It is a logical
-constraint.</p>
-</li>
-<li>
-<p>Week 2 adds a second lesson. Even when we target a population-level
-average, we still need a defensible assignment story. Causal DAGs
-let us state, and critique, the assumptions that connect the
-observed data to the causal contrast. They do not rescue imprecise
-language. They force us to say what we compare, for whom, and why.</p>
-</li>
-</ol>
 <blockquote>
 <p><strong>Pair exercise: Neurath's ship and your own causal DAG</strong></p>
 <ol>
@@ -578,6 +481,115 @@ common cause.</li>
 <li>Revise your causal DAG in response. State what changed and why.</li>
 </ol>
 </blockquote>
+<p>With this grounding in the five elementary structures and the sources of
+our assumptions, we can now state the three identification conditions
+that any causal analysis requires.</p>
+<h2 id="three-identification-assumptions"><a class="header" href="#three-identification-assumptions">Three identification assumptions</a></h2>
+<blockquote>
+<p><strong>Assumption 1: Causal consistency</strong></p>
+<p>If person $i$ receives $A_i=a$, then $Y_i=Y_i(a)$.</p>
+</blockquote>
+<blockquote>
+<p><strong>Assumption 2: Conditional exchangeability</strong></p>
+<p>After conditioning on an adequate set $L$,</p>
+<p>$$ Y(a) \coprod A \mid L. $$</p>
+</blockquote>
+<blockquote>
+<p><strong>Assumption 3: Positivity</strong></p>
+<p>For all treatment levels and covariate strata used for inference,</p>
+<p>$$ P(A=a\mid L=l)&gt;0. $$</p>
+</blockquote>
+<p>In DAG terms, conditional exchangeability requires that, after
+conditioning on $L$, every backdoor path between $A$ and $Y$ is
+closed. Positivity requires that the data contain observations at every
+treatment level within the covariate strata we intend to use—a property
+that is itself a finding, not an assumption we can simply assert.</p>
+<blockquote>
+<p><strong>Pair exercise: checking assumptions against a causal DAG</strong></p>
+<ol>
+<li>Draw a causal DAG for the Salk vaccine example. Include: parental
+consent ($L$), vaccine assignment ($A$), polio outcome
+($Y$), and socioeconomic status ($U$) as an unmeasured common
+cause of $L$ and $Y$.</li>
+<li>In the observational design (assignment by parental consent),
+check exchangeability: is $Y(a) \coprod A$? Trace the open
+backdoor path.</li>
+<li>In the randomised design, check exchangeability: is $Y(a) \coprod
+A$? Explain why the path is now blocked.</li>
+<li>Check positivity in each design. In which design is a positivity
+violation more probable, and why?</li>
+</ol>
+</blockquote>
+<h2 id="four-rules-of-confounding-control"><a class="header" href="#four-rules-of-confounding-control">Four rules of confounding control</a></h2>
+<p><img src="figures/terminologyelconfounders.svg" alt="Four rules of confounding control" /></p>
+<ol>
+<li><strong>Condition on common causes (rule 1: close the fork).</strong> If $L$
+causes both $A$ and $Y$, the fork $A \leftarrow L \to Y$ opens
+a backdoor path. Conditioning on $L$ closes it. When $L$ is
+unmeasured, conditioning on a measured proxy can reduce, though not
+eliminate, confounding.</li>
+<li><strong>Do not condition on mediators when estimating total effects (rule
+2: preserve the chain).</strong> If $A \to M \to Y$, conditioning on
+$M$ blocks part of the causal path we want to estimate.</li>
+<li><strong>Do not condition on colliders (rule 3: avoid opening the
+collider).</strong> If $A \to C \leftarrow Y$, conditioning on $C$
+opens a spurious path between $A$ and $Y$. The "control for
+everything" instinct is unsafe for this reason.</li>
+<li><strong>Treat descendants carefully (rule 4: trace the structure first).</strong>
+Conditioning on a descendant of a variable is akin to partially
+conditioning on that variable. A descendant of a collider can
+transmit collider bias; a descendant of a confounder can partially
+reduce confounding.</li>
+</ol>
+<blockquote>
+<p><strong>A short rulebook for the test</strong></p>
+<ul>
+<li>Common cause: usually condition.</li>
+<li>Mediator: do not condition if you want the total effect.</li>
+<li>Collider: do not condition.</li>
+<li>Descendant: ask what it is downstream of before you adjust for it.</li>
+</ul>
+</blockquote>
+<h2 id="a-note-on-the-generality-of-d-separation"><a class="header" href="#a-note-on-the-generality-of-d-separation">A note on the generality of d-separation</a></h2>
+<p>Two variables are <strong>d-separated</strong> ("directionally separated") in a
+causal DAG when every path between them is blocked. In practice, this
+means the DAG implies conditional independence once the relevant
+conditioning set is stated. The rules above focus on confounding, but
+d-separation is more general than confounding control. It is the reason
+the same DAG logic works for collider bias, mediator bias, and
+measurement problems. For example, in a collider $A \to C \leftarrow
+Y$, $A$ and $Y$ are d-separated when we do not condition on $C$,
+but conditioning on $C$ opens the path and they become d-connected.
+The same blocking logic—ask whether every path is open or closed—applies
+in all three bias settings.</p>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>The Salk example is a structural lesson about assignment. The
+observed-control design produced a biased effect estimate because
+socioeconomic status confounded the comparison. The randomised design
+blocked that path. Causal DAGs help us state this lesson before
+analysis. First we define the question. Then we draw assumptions. Then
+we choose an adjustment set. Then we estimate.</p>
+<p>The five structures, three assumptions, and four rules form a single
+framework: the four rules apply the five structures to the problem of
+bias, and the three assumptions specify the conditions under which those
+rules produce an unbiased estimate.</p>
+<h2 id="epilogue-avoid-within-person-and-between-person"><a class="header" href="#epilogue-avoid-within-person-and-between-person">Epilogue: avoid "within-person" and "between-person"</a></h2>
+<p>Students often describe designs as "within-person" or "between-person".
+These labels feel intuitive, but they hide the causal object.
+"Between-person" in particular can mislead because it sounds like we
+compare two different populations. In an experiment we have one
+population, which we project into two potential states under two
+intervention levels. Randomisation lets two groups stand in for those
+two projected states.</p>
+<p>In this course we instead name a target population, two intervention
+regimes, an outcome, and the time that we measure that outcome. This
+framing works for any target population, including a single person
+studied over time (Week 1's Alice example). The key lesson from Week 2
+is that even when we target a population-level average, we still need a
+defensible assignment story. Causal DAGs let us state, and critique, the
+assumptions that connect the observed data to the causal contrast. They
+do not rescue imprecise language. They force us to say what we compare,
+for whom, and why.</p>
 <blockquote>
 <p><strong>Further reading</strong></p>
 <p>The identification assumptions and randomisation framework are treated

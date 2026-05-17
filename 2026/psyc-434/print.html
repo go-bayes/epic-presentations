@@ -934,7 +934,10 @@ and external validity); Bulbulia (<a href="readings.html#ref-bulbulia2024swigsti
 <h3 id="week-5-average-treatment-effects"><a class="header" href="#week-5-average-treatment-effects">Week 5: Average treatment effects</a></h3>
 <p><strong>Required:</strong> Hernán &amp; Robins (<a href="readings.html#ref-hernanrobins2025">2025</a>), chapters
 1–2 (review identification assumptions).
-<a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">PDF</a></p>
+<a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">PDF</a>;
+Cashin et al. (<a href="readings.html#ref-cashin2025target">2025</a>) — the TARGET (Transparent
+Reporting of Observational Studies Emulating a Target Trial) statement,
+a reporting checklist for studies that emulate a target trial.</p>
 <h3 id="week-6-effect-modification-and-cate"><a class="header" href="#week-6-effect-modification-and-cate">Week 6: Effect modification and CATE</a></h3>
 <p><strong>Required:</strong> Hernán &amp; Robins (<a href="readings.html#ref-hernanrobins2025">2025</a>), chapters
 4–5.
@@ -1022,6 +1025,12 @@ e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2
 <p>Bulbulia, J. A. (2024d). Methods in causal inference part 4: Confounding
 in experiments. <em>Evolutionary Human Sciences</em>, <em>6</em>, e43.
 <a href="https://doi.org/10.1017/ehs.2024.34">https://doi.org/10.1017/ehs.2024.34</a></p>
+</div>
+<div id="ref-cashin2025target" class="csl-entry">
+<p>Cashin, A. G., Hansford, H. J., Hernán, M. A., et al. (2025).
+Transparent reporting of observational studies emulating a target
+trial—the TARGET statement. <em>JAMA</em>, <em>334</em>(12), 1084–1093.
+<a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
 </div>
 <div id="ref-hernan2009MEASUREMENT" class="csl-entry">
 <p>Hernán, M. A., &amp; Cole, S. R. (2009). Invited commentary: Causal diagrams
@@ -1162,8 +1171,10 @@ in: the intervention comes first, then we measure the outcome.</p>
 </ul>
 </blockquote>
 <p>Everything in this course follows from the demand that psychological
-questions specify their contrasts. This lecture introduces three
-problems that make specifying a contrast harder than it first appears.</p>
+questions specify their contrasts. Every causal question in this course
+must satisfy this five-part template before we turn to the data. This
+lecture introduces three problems that make specifying a contrast harder
+than it first appears.</p>
 <h2 id="problem-1-both-sides-of-the-contrast-must-be-precisely-defined"><a class="header" href="#problem-1-both-sides-of-the-contrast-must-be-precisely-defined">Problem 1: both sides of the contrast must be precisely defined</a></h2>
 <p>When investigators evaluate "time on social media," what do they mean?
 Passive scrolling, direct messaging, and creative content production may
@@ -1185,8 +1196,8 @@ together. We must define the <em>outcome</em>, its measure (for example, life
 satisfaction on a 0 to 10 scale), and the time frame over which we
 assess it. The consequences of scrolling for a teenager's purpose in
 five hundred years are zero because life ends.</p>
-<p>Notice that specifying interventions and outcomes forces us to order
-events along a timeline. For one state to influence another, it must
+<p>Notice that specifying interventions and outcomes forces us <strong>to order
+events along a timeline.</strong> For one state to influence another, it must
 precede it. There must be a contrast condition and a stated time
 horizon, because timing affects the magnitude of interest. The effects
 of scrolling for five minutes for three weeks (contrasted with no social
@@ -1237,11 +1248,10 @@ condition ($A = 0$). The individual causal effect is:</p>
 person: the difference between what would happen to person $i$ under
 treatment and what would happen under control. We observe only one of
 $Y_i(1)$ or $Y_i(0)$ for any individual. The individual causal
-effect $\delta_i$ is therefore never directly observable. This is not
-a limitation of our methods; it is a logical constraint. No amount of
-data collection, no statistical technique, and no machine learning
-algorithm can reveal both potential outcomes for the same person at the
-same time.</p>
+effect $\delta_i$ is therefore never directly observable. The obstacle
+is logical: no amount of data collection, no statistical technique, and
+no machine learning algorithm can reveal both potential outcomes for the
+same person at the same time.</p>
 <blockquote>
 <p><strong>Pair exercise: formulating a contrast</strong></p>
 <ol>
@@ -1253,6 +1263,9 @@ sleep?), a target population, and a time horizon.</li>
 contrast well defined? Is the population specific enough?</li>
 </ol>
 </blockquote>
+<p>The individual causal effect is unobservable, so causal inference shifts
+to populations: what can we learn about the average effect across a
+defined group?</p>
 <h2 id="from-individuals-to-populations"><a class="header" href="#from-individuals-to-populations">From individuals to populations</a></h2>
 <p>If individual causal effects are unobservable, what can we learn? We can
 learn about average effects across a population. The average treatment
@@ -1294,9 +1307,10 @@ recover average effects under assumptions we have not yet stated.</p>
 <p>The lesson is that before answering a question we must ask it.
 Psychology begins with a clearly defined question. A well-defined causal
 question requires a contrast between at least two interventions, a
-specified outcome and time horizon, and a target population. In later
-weeks we add the further question of whether the observed data can
-identify that contrast.</p>
+specified outcome and time horizon, and a target population. These are
+the five parts of the template: population, intervention, control,
+outcome, timing. In later weeks we add the further question of whether
+the observed data can identify that contrast.</p>
 <p>Most psychological research cannot randomise the variables we care
 about. We cannot randomly assign people to experience trauma, adopt a
 religion, or lose a job. Week 2 introduces the randomised experiment as
@@ -1413,11 +1427,11 @@ to vaccine or placebo under double-blind conditions.</p>
 vaccine reduced paralytic polio (<a href="week-02.html#ref-francis1955">Francis Jr., 1955</a>).
 The observed-control protocol did not support the same conclusion,
 because parental consent shaped vaccine assignment.</p>
-<p>Parents who consented tended to have higher socioeconomic status, and
-socioeconomic status also predicted baseline susceptibility to paralytic
-polio. The observed-control comparison was therefore confounded:
-vaccination status and polio risk differed for reasons other than the
-vaccine itself.</p>
+<p>Consent and polio susceptibility shared a common cause—socioeconomic
+status—which opened a backdoor path between vaccine receipt and the
+outcome. Vaccination status and polio risk differed for reasons other
+than the vaccine itself. That is the structure of confounding: a fork in
+which a common cause affects both treatment and outcome.</p>
 <p>Same question. Different assignment mechanism. Different estimate,
 different reliability.</p>
 <p>Salk later reported on the 1956 vaccination campaign (<a href="week-02.html#ref-salk1957">Salk,
@@ -1444,6 +1458,11 @@ in words.</p>
 <h2 id="independence-language"><a class="header" href="#independence-language">Independence language</a></h2>
 <p>Do not let the notation do more work than it should. It is just
 shorthand.</p>
+<p>We never observe $Y(a)$ for more than one treatment level per person
+(Week 1's unobservability problem). The notation $Y(a)$ refers to "the
+outcome this person would have under treatment level $a$." The
+observed $Y$ equals $Y(a)$ only for the level of $A$ that person
+actually received.</p>
 <ul>
 <li>$A \coprod Y(a)$: $A$ and $Y(a)$ are independent.</li>
 <li>$A \cancel\coprod Y(a)$: $A$ and $Y(a)$ are dependent.</li>
@@ -1465,18 +1484,25 @@ A=1]-\hat{\mathbb{E}}[Y\mid A=0]. $$</p>
 adjustment.</p>
 <h2 id="working-definitions"><a class="header" href="#working-definitions">Working definitions</a></h2>
 <p><strong>Internal validity</strong> concerns whether the study contrast estimates the
-target causal contrast in the study population.</p>
+target causal contrast in the study population. In DAG terms, a threat
+to internal validity corresponds to an open non-causal path between
+$A$ and $Y$ that the design has not closed.</p>
 <p><strong>External validity</strong> concerns whether that causal contrast transports
-to the target population.</p>
+to the target population. In DAG terms, external validity is threatened
+when the structural relationships in the study population differ from
+those in the target population (Week 4 formalises this as
+transportability).</p>
 <p>These are design properties, not instrument properties. Measurement
 quality is part of the causal question because the outcome must be well
 defined. Week 4 returns to measurement from the vantage point of causal
 inference; Week 10 focuses on the problems with classical test theory.</p>
 <p><strong>Confounding bias</strong> exists when treatment groups differ systematically
 in ways that affect the outcome, so that the observed association
-between $A$ and $Y$ does not equal the causal effect. In graph
-terms, confounding corresponds to an open non-causal path from $A$ to
-$Y$ (a "backdoor path," formalised below in the four rules of
+between $A$ and $Y$ does not equal the causal effect.</p>
+<p>Confounding arises because <strong>there is a common cause of the treatment
+and the outcome.</strong></p>
+<p>In graph terms, confounding corresponds to an open non-causal path from
+$A$ to $Y$ (a "backdoor path," formalised below in the four rules of
 confounding control).</p>
 <h2 id="causal-dag-notation-and-elements"><a class="header" href="#causal-dag-notation-and-elements">Causal DAG notation and elements</a></h2>
 <p><img src="figures/terminologylocalconventions.svg" alt="Our variable naming conventions (adapted from Bulbulia, 2023)" /></p>
@@ -1498,6 +1524,8 @@ confounding control).</p>
 </ul>
 <h2 id="five-elementary-structures"><a class="header" href="#five-elementary-structures">Five elementary structures</a></h2>
 <p><img src="figures/terminologydirectedgraph.svg" alt="Five elementary structures (adapted from Bulbulia, 2023)" /></p>
+<p>The five structures below correspond to the labelled panels in the
+figure.</p>
 <ol>
 <li><strong>No causal relation:</strong> $A \coprod B$. The variables are
 statistically independent.</li>
@@ -1512,7 +1540,11 @@ the path: $A \coprod C \mid B$.</li>
 <li><strong>Collider:</strong> $A\to C\leftarrow B$. Because $A$ and $B$ both
 cause $C$ but do not cause each other, they are marginally
 independent. Conditioning on $C$ opens a spurious association: $A
-\cancel\coprod B \mid C$.</li>
+\cancel\coprod B \mid C$. The intuition: when two independent
+causes can both produce the same effect, knowledge of the effect
+makes the two causes informative about each other—if one cause was
+absent, the other becomes more probable. Conditioning on $C$
+therefore induces a non-causal association between its causes.</li>
 </ol>
 <p>These five structures generate all patterns of conditional independence
 and dependence in a causal DAG. Understanding which structures block and
@@ -1543,80 +1575,6 @@ links genetics and diet through blood pressure? What happens if
 you condition on blood pressure?</li>
 </ol>
 </blockquote>
-<h2 id="three-identification-assumptions"><a class="header" href="#three-identification-assumptions">Three identification assumptions</a></h2>
-<blockquote>
-<p><strong>Assumption 1: Causal consistency</strong></p>
-<p>If person $i$ receives $A_i=a$, then $Y_i=Y_i(a)$.</p>
-</blockquote>
-<blockquote>
-<p><strong>Assumption 2: Conditional exchangeability</strong></p>
-<p>After conditioning on an adequate set $L$,</p>
-<p>$$ Y(a) \coprod A \mid L. $$</p>
-</blockquote>
-<blockquote>
-<p><strong>Assumption 3: Positivity</strong></p>
-<p>For all treatment levels and covariate strata used for inference,</p>
-<p>$$ P(A=a\mid L=l)&gt;0. $$</p>
-</blockquote>
-<blockquote>
-<p><strong>Pair exercise: checking assumptions against a causal DAG</strong></p>
-<ol>
-<li>Draw a causal DAG for the Salk vaccine example. Include: parental
-consent ($L$), vaccine assignment ($A$), polio outcome
-($Y$), and socioeconomic status ($U$) as an unmeasured common
-cause of $L$ and $Y$.</li>
-<li>In the observational design (assignment by parental consent),
-check exchangeability: is $Y(a) \coprod A$? Trace the open
-backdoor path.</li>
-<li>In the randomised design, check exchangeability: is $Y(a) \coprod
-A$? Explain why the path is now blocked.</li>
-<li>Check positivity in each design. In which design is a positivity
-violation more probable, and why?</li>
-</ol>
-</blockquote>
-<h2 id="four-rules-of-confounding-control"><a class="header" href="#four-rules-of-confounding-control">Four rules of confounding control</a></h2>
-<p><img src="figures/terminologyelconfounders.svg" alt="Four rules of confounding control" /></p>
-<ol>
-<li><strong>Condition on common causes (or defensible proxies).</strong> If $L$
-causes both $A$ and $Y$, the fork $A \leftarrow L \to Y$ opens
-a backdoor path. Conditioning on $L$ closes it. When $L$ is
-unmeasured, conditioning on a measured proxy can reduce, though not
-eliminate, confounding.</li>
-<li><strong>Do not condition on mediators when estimating total effects.</strong> If
-$A \to M \to Y$, conditioning on $M$ blocks part of the causal
-path we want to estimate.</li>
-<li><strong>Do not condition on colliders.</strong> If $A \to C \leftarrow Y$,
-conditioning on $C$ opens a spurious path between $A$ and $Y$.
-The "control for everything" instinct is unsafe for this reason.</li>
-<li><strong>Treat descendants carefully.</strong> Conditioning on a descendant of a
-variable is akin to partially conditioning on that variable. A
-descendant of a collider can transmit collider bias; a descendant of
-a confounder can partially reduce confounding.</li>
-</ol>
-<blockquote>
-<p><strong>A short rulebook for the test</strong></p>
-<ul>
-<li>Common cause: usually condition.</li>
-<li>Mediator: do not condition if you want the total effect.</li>
-<li>Collider: do not condition.</li>
-<li>Descendant: ask what it is downstream of before you adjust for it.</li>
-</ul>
-</blockquote>
-<h2 id="a-note-on-the-generality-of-d-separation"><a class="header" href="#a-note-on-the-generality-of-d-separation">A note on the generality of d-separation</a></h2>
-<p>Two variables are <strong>d-separated</strong> ("directionally separated") in a
-causal DAG when every path between them is blocked. In practice, this
-means that the DAG implies conditional independence once the relevant
-conditioning set is stated. The rules above focus on confounding, but
-d-separation is more general than confounding control. It is the reason
-the same DAG logic can later be used for collider bias, mediator bias,
-and measurement problems.</p>
-<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
-<p>The Salk example is a structural lesson about assignment. The
-observed-control design produced a biased effect estimate because
-socioeconomic status confounded the comparison. The randomised design
-blocked that path. Causal DAGs help us state this lesson before
-analysis. First we define the question. Then we draw assumptions. Then
-we choose an adjustment set. Then we estimate.</p>
 <h2 id="where-do-causal-assumptions-come-from"><a class="header" href="#where-do-causal-assumptions-come-from">Where do causal assumptions come from?</a></h2>
 <p>A causal DAG encodes assumptions. Those assumptions do not come from the
 data. They come from prior knowledge: theory, mechanism, previous
@@ -1638,47 +1596,6 @@ evidence warrants. The alternative, letting data alone determine causal
 structure, is not available. Data reveal associations. Associations are
 compatible with many causal structures. Without assumptions, the data do
 not tell us which structure generated them.</p>
-<p>Next week we apply these structures to the specific problem of
-confounding bias: the patterns that open backdoor paths and the
-strategies for closing them.</p>
-<h2 id="epilogue-avoid-within-person-and-between-person"><a class="header" href="#epilogue-avoid-within-person-and-between-person">Epilogue: avoid "within-person" and "between-person"</a></h2>
-<ol>
-<li>Students often describe designs as "within-person" or
-"between-person". These labels feel intuitive, but they hide the
-causal object. "Between-person" in particular can mislead because it
-sounds like we compare two different populations. In an experiment
-we have one population, which we project into two potential states
-under two intervention levels. Randomisation lets two groups stand
-in for those two projected states.</li>
-</ol>
-<p>In this course we instead name a target population, two intervention
-regimes, an outcome, and the time that we measure that outcome.</p>
-<ol>
-<li>
-<p>This framing works even when the target population contains one
-unit. Let the population be Alice. Define two regimes over time:
-$a=1$ means Alice doom-scrolls for two hours nightly for four
-weeks, and $a=0$ means she studies for two hours nightly for four
-weeks. Let the outcome be her life satisfaction, measured after each
-four-week period. The causal contrast for Alice is
-$\delta_{\text{Alice}}=Y_{\text{Alice}}(1)-Y_{\text{Alice}}(0)$.</p>
-</li>
-<li>
-<p>Week 1 shows why this contrast is inaccessible from observation
-alone. Alice can follow regime $a=1$ or regime $a=0$, but not
-both in the same period. We therefore observe only one of
-$Y_{\text{Alice}}(1)$ or $Y_{\text{Alice}}(0)$. This missing
-counterfactual is not a statistical inconvenience. It is a logical
-constraint.</p>
-</li>
-<li>
-<p>Week 2 adds a second lesson. Even when we target a population-level
-average, we still need a defensible assignment story. Causal DAGs
-let us state, and critique, the assumptions that connect the
-observed data to the causal contrast. They do not rescue imprecise
-language. They force us to say what we compare, for whom, and why.</p>
-</li>
-</ol>
 <blockquote>
 <p><strong>Pair exercise: Neurath's ship and your own causal DAG</strong></p>
 <ol>
@@ -1691,6 +1608,115 @@ common cause.</li>
 <li>Revise your causal DAG in response. State what changed and why.</li>
 </ol>
 </blockquote>
+<p>With this grounding in the five elementary structures and the sources of
+our assumptions, we can now state the three identification conditions
+that any causal analysis requires.</p>
+<h2 id="three-identification-assumptions"><a class="header" href="#three-identification-assumptions">Three identification assumptions</a></h2>
+<blockquote>
+<p><strong>Assumption 1: Causal consistency</strong></p>
+<p>If person $i$ receives $A_i=a$, then $Y_i=Y_i(a)$.</p>
+</blockquote>
+<blockquote>
+<p><strong>Assumption 2: Conditional exchangeability</strong></p>
+<p>After conditioning on an adequate set $L$,</p>
+<p>$$ Y(a) \coprod A \mid L. $$</p>
+</blockquote>
+<blockquote>
+<p><strong>Assumption 3: Positivity</strong></p>
+<p>For all treatment levels and covariate strata used for inference,</p>
+<p>$$ P(A=a\mid L=l)&gt;0. $$</p>
+</blockquote>
+<p>In DAG terms, conditional exchangeability requires that, after
+conditioning on $L$, every backdoor path between $A$ and $Y$ is
+closed. Positivity requires that the data contain observations at every
+treatment level within the covariate strata we intend to use—a property
+that is itself a finding, not an assumption we can simply assert.</p>
+<blockquote>
+<p><strong>Pair exercise: checking assumptions against a causal DAG</strong></p>
+<ol>
+<li>Draw a causal DAG for the Salk vaccine example. Include: parental
+consent ($L$), vaccine assignment ($A$), polio outcome
+($Y$), and socioeconomic status ($U$) as an unmeasured common
+cause of $L$ and $Y$.</li>
+<li>In the observational design (assignment by parental consent),
+check exchangeability: is $Y(a) \coprod A$? Trace the open
+backdoor path.</li>
+<li>In the randomised design, check exchangeability: is $Y(a) \coprod
+A$? Explain why the path is now blocked.</li>
+<li>Check positivity in each design. In which design is a positivity
+violation more probable, and why?</li>
+</ol>
+</blockquote>
+<h2 id="four-rules-of-confounding-control"><a class="header" href="#four-rules-of-confounding-control">Four rules of confounding control</a></h2>
+<p><img src="figures/terminologyelconfounders.svg" alt="Four rules of confounding control" /></p>
+<ol>
+<li><strong>Condition on common causes (rule 1: close the fork).</strong> If $L$
+causes both $A$ and $Y$, the fork $A \leftarrow L \to Y$ opens
+a backdoor path. Conditioning on $L$ closes it. When $L$ is
+unmeasured, conditioning on a measured proxy can reduce, though not
+eliminate, confounding.</li>
+<li><strong>Do not condition on mediators when estimating total effects (rule
+2: preserve the chain).</strong> If $A \to M \to Y$, conditioning on
+$M$ blocks part of the causal path we want to estimate.</li>
+<li><strong>Do not condition on colliders (rule 3: avoid opening the
+collider).</strong> If $A \to C \leftarrow Y$, conditioning on $C$
+opens a spurious path between $A$ and $Y$. The "control for
+everything" instinct is unsafe for this reason.</li>
+<li><strong>Treat descendants carefully (rule 4: trace the structure first).</strong>
+Conditioning on a descendant of a variable is akin to partially
+conditioning on that variable. A descendant of a collider can
+transmit collider bias; a descendant of a confounder can partially
+reduce confounding.</li>
+</ol>
+<blockquote>
+<p><strong>A short rulebook for the test</strong></p>
+<ul>
+<li>Common cause: usually condition.</li>
+<li>Mediator: do not condition if you want the total effect.</li>
+<li>Collider: do not condition.</li>
+<li>Descendant: ask what it is downstream of before you adjust for it.</li>
+</ul>
+</blockquote>
+<h2 id="a-note-on-the-generality-of-d-separation"><a class="header" href="#a-note-on-the-generality-of-d-separation">A note on the generality of d-separation</a></h2>
+<p>Two variables are <strong>d-separated</strong> ("directionally separated") in a
+causal DAG when every path between them is blocked. In practice, this
+means the DAG implies conditional independence once the relevant
+conditioning set is stated. The rules above focus on confounding, but
+d-separation is more general than confounding control. It is the reason
+the same DAG logic works for collider bias, mediator bias, and
+measurement problems. For example, in a collider $A \to C \leftarrow
+Y$, $A$ and $Y$ are d-separated when we do not condition on $C$,
+but conditioning on $C$ opens the path and they become d-connected.
+The same blocking logic—ask whether every path is open or closed—applies
+in all three bias settings.</p>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>The Salk example is a structural lesson about assignment. The
+observed-control design produced a biased effect estimate because
+socioeconomic status confounded the comparison. The randomised design
+blocked that path. Causal DAGs help us state this lesson before
+analysis. First we define the question. Then we draw assumptions. Then
+we choose an adjustment set. Then we estimate.</p>
+<p>The five structures, three assumptions, and four rules form a single
+framework: the four rules apply the five structures to the problem of
+bias, and the three assumptions specify the conditions under which those
+rules produce an unbiased estimate.</p>
+<h2 id="epilogue-avoid-within-person-and-between-person"><a class="header" href="#epilogue-avoid-within-person-and-between-person">Epilogue: avoid "within-person" and "between-person"</a></h2>
+<p>Students often describe designs as "within-person" or "between-person".
+These labels feel intuitive, but they hide the causal object.
+"Between-person" in particular can mislead because it sounds like we
+compare two different populations. In an experiment we have one
+population, which we project into two potential states under two
+intervention levels. Randomisation lets two groups stand in for those
+two projected states.</p>
+<p>In this course we instead name a target population, two intervention
+regimes, an outcome, and the time that we measure that outcome. This
+framing works for any target population, including a single person
+studied over time (Week 1's Alice example). The key lesson from Week 2
+is that even when we target a population-level average, we still need a
+defensible assignment story. Causal DAGs let us state, and critique, the
+assumptions that connect the observed data to the causal contrast. They
+do not rescue imprecise language. They force us to say what we compare,
+for whom, and why.</p>
 <blockquote>
 <p><strong>Further reading</strong></p>
 <p>The identification assumptions and randomisation framework are treated
@@ -2078,11 +2104,10 @@ They are more general than that.</p>
 The second threat is measurement bias. Both can be analysed with the
 same elementary graph logic you already know.</p>
 <h2 id="the-same-graph-logic-still-applies"><a class="header" href="#the-same-graph-logic-still-applies">The same graph logic still applies</a></h2>
-<p>The key idea from the earlier weeks is not just "adjust for
-confounders". The key idea is that a small number of graph structures
-determine which paths are open and which are blocked. Once you can
-recognise a fork, a chain, and a collider, you can start to diagnose
-bias in almost any study.</p>
+<p>The key idea from the earlier weeks reaches past "adjust for
+confounders": a small number of graph structures determine which paths
+are open and which are blocked. Once you can recognise a fork, a chain,
+and a collider, you can start to diagnose bias in almost any study.</p>
 <p>More complicated studies are built from simpler pieces. Selection
 problems, attrition problems, and measurement problems usually look
 confusing at first because they involve more nodes. But the underlying
@@ -2157,7 +2182,9 @@ the recorded value?</p>
 <li>Independent (undirected): one true variable does not causally affect
 another variable's measurement error.</li>
 <li>Dependent (directed): one true variable causally affects another
-variable's measurement error.</li>
+variable's measurement error. Epidemiology usually calls this
+<em>differential</em> measurement error, and the independent case
+<em>non-differential</em>.</li>
 </ul>
 <p><strong>Dimension 2: uncorrelated vs correlated</strong></p>
 <ul>
@@ -2317,16 +2344,22 @@ the outcome causally affects what is recorded. Restriction through
 attrition mirrors independent measurement error off the null (type 1):
 the signal is diluted because the analytic sample differs from the
 target in composition. Investigators should diagnose which mechanism is
-operating, because the remedies differ: inverse-probability-of-censoring
-weights address distortion, whereas reweighting to the target population
-addresses restriction.</p>
+operating, because the remedies differ. Inverse-probability-of-censoring
+weights (IPCW) address distortion: each participant still observed at
+the end of the study is up-weighted by the inverse of their estimated
+probability of remaining, so the analysed cases stand in for the similar
+participants who dropped out. The weights remove the bias only when the
+measured covariates capture why people left. Restriction is handled
+differently, by reweighting the sample to match the target population's
+distribution of effect modifiers.</p>
 <h2 id="weird-samples-and-effect-heterogeneity"><a class="header" href="#weird-samples-and-effect-heterogeneity">WEIRD samples and effect heterogeneity</a></h2>
-<p>A WEIRD sample is not automatically invalid. The problem is Mechanism 2:
-if effect modifiers are distributed differently between the analytic and
-target populations, and treatment effects vary by those modifiers, the
-sample ATE does not transport. A perfectly unconfounded study in a WEIRD
-sample can produce a correct estimate for that sample and a wrong
-estimate for the population of interest.</p>
+<p>A WEIRD (Western, Educated, Industrialised, Rich, Democratic) sample is
+not automatically invalid. The problem is Mechanism 2: if effect
+modifiers are distributed differently between the analytic and target
+populations, and treatment effects vary by those modifiers, the sample
+ATE does not transport. A perfectly unconfounded study in a WEIRD sample
+can produce a correct estimate for that sample and a wrong estimate for
+the population of interest.</p>
 <h2 id="preview-of-week-10"><a class="header" href="#preview-of-week-10">Preview of Week 10</a></h2>
 <p>This week treats measurement from the vantage point of causal inference:
 what happens when the recorded variable differs from the variable in the
@@ -2500,11 +2533,10 @@ at most one. If student $i$ starts the app ($A_i = 1$), we observe
 $Y_i(1)$ but not $Y_i(0)$. If the student does not start it ($A_i =
 0$), we observe $Y_i(0)$ but not $Y_i(1)$. The unobserved term is
 the counterfactual.</p>
-<p>This is not a sample-size problem or a measurement problem. It is a
-structural feature of the physical world: a person cannot simultaneously
-exist under two incompatible conditions. No dataset, however large,
-contains both potential outcomes for one individual at one time.
-Individual causal effects are missing by necessity, not by accident.</p>
+<p>This is a structural feature of the physical world: a person cannot
+simultaneously exist under two incompatible conditions. No dataset,
+however large, contains both potential outcomes for one individual at
+one time. Individual causal effects are missing by necessity.</p>
 <blockquote>
 <p><strong>Pair exercise: building a potential outcomes table</strong></p>
 <ol>
@@ -2524,7 +2556,8 @@ $\bar{Y}<em>{A=1}^{\mathrm{obs}} - \bar{Y}</em>{A=0}^{\mathrm{obs}}$.</li>
 </blockquote>
 <h2 id="step-2-move-from-individuals-to-populations"><a class="header" href="#step-2-move-from-individuals-to-populations">Step 2: move from individuals to populations</a></h2>
 <p>Because individual effects are unobservable, we target a population
-causal estimand. The average treatment effect (ATE) is:</p>
+causal estimand: the quantity we want our analysis to estimate. The
+average treatment effect (ATE) is:</p>
 <p>$$ \text{ATE}=\mathbb{E}[Y(1)-Y(0)]. $$</p>
 <p>This is the mean contrast if everyone in the target population received
 $A=1$ versus $A=0$.</p>
@@ -2600,8 +2633,9 @@ For example, biological males cannot receive hysterectomy. Deterministic
 violations require restricting the analysis to scientifically plausible
 cases.</p>
 <p>Positivity is the one identification assumption we can partially check
-empirically. Plot propensity score distributions and look for gaps or
-near-zero densities.</p>
+empirically. The <em>propensity score</em> is the conditional probability of
+receiving treatment given covariates, $P(A=1 \mid L)$. Plot propensity
+score distributions and look for gaps or near-zero densities.</p>
 <blockquote>
 <p><strong>What each assumption buys us</strong></p>
 <ul>
@@ -2726,7 +2760,6 @@ causal rationale for each (draw a short DAG if it helps).</li>
 subgroup where one side of the contrast is effectively empty).</li>
 </ol>
 </blockquote>
-<p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
 <h2 id="the-causal-workflow"><a class="header" href="#the-causal-workflow">The causal workflow</a></h2>
 <p>The identification assumptions are not items on a checklist to be ticked
 off after analysis. They are design commitments that must be defended
@@ -3018,13 +3051,14 @@ $\hat{\tau}(X_i)$ is not the unobservable individual contrast
 $Y_i(1)-Y_i(0)$.</p>
 <h3 id="personalised-effects-versus-true-individual-effects"><a class="header" href="#personalised-effects-versus-true-individual-effects">Personalised effects versus true individual effects</a></h3>
 <p>Students sometimes read $\hat{\tau}(X_i)$ as the effect of treatment
-on person $i$. It is not. Person $i$'s true effect, $Y_i(1) -
-Y_i(0)$, requires both potential outcomes, and we observe at most one.
-What $\hat{\tau}(X_i)$ estimates is the average effect across all
-people who share person $i$'s measured profile $X_i$. The estimate
-is "personalised" in the sense that it uses person $i$'s covariates,
-but it remains a subgroup average. Two people with identical $X_i$ can
-have different true effects if they differ on unmeasured variables.</p>
+on person $i$. It estimates something coarser. Person $i$'s true
+effect, $Y_i(1) - Y_i(0)$, requires both potential outcomes, and we
+observe at most one. What $\hat{\tau}(X_i)$ estimates is the average
+effect across all people who share person $i$'s measured profile
+$X_i$. The estimate is "personalised" in the sense that it uses person
+$i$'s covariates, but it remains a subgroup average. Two people with
+identical $X_i$ can have different true effects if they differ on
+unmeasured variables.</p>
 <p>When the literature refers to "individualised treatment effects," the
 intended meaning is almost always $\hat{\tau}(X_i)$: an estimated
 subgroup average, not the unknowable individual contrast.</p>
@@ -3513,12 +3547,12 @@ with many covariates.</p>
 <strong>augmented inverse-propensity-weighted (AIPW)</strong> score:</p>
 <p>$$ \Gamma_i(a) =
 \underbrace{\mu_a(X_i)}_{\textcolor{blue}{\text{outcome model
-prediction}}} + \underbrace{\frac{\mathbb{1}\lbrace W_i =
-a\rbrace}{\Pr(W = a \mid X_i)}}_{\textcolor{teal}{\text{IPW
+prediction}}} + \underbrace{\frac{\mathbb{1}\lbrace A_i =
+a\rbrace}{\Pr(A = a \mid X_i)}}_{\textcolor{teal}{\text{IPW
 weight}}}\thinspace\underbrace{\bigl(Y_i -
 \mu_a(X_i)\bigr)}_{\textcolor{red}{\text{residual correction}}}, $$</p>
 <p>where $\mu_a(x)$ is the causal forest's estimate of the outcome
-surface under treatment $a$, and $\Pr(W = a \mid x)$ is the
+surface under treatment $a$, and $\Pr(A = a \mid x)$ is the
 propensity for treatment $a$ given covariates. $\Gamma_i(a)$ is an
 unbiased estimate of $Y_i(a)$ when <em>either</em> the outcome model <em>or</em> the
 propensity model is correct, hence "doubly robust". Targeting metrics,
@@ -3552,7 +3586,8 @@ cumulative gain from treating that top-$q$ slice.</p>
 <p><img src="figures/lab-09/toc-curve.svg" alt="TOC curve from the same small causal forest used above. Targeting rate $q$ on the horizontal axis; gain over random assignment on the vertical axis. A steep early rise indicates concentrated heterogeneity: the highest-ranked individuals carry most of the treatment benefit. A flat curve indicates none. The curve must return to zero at $q = 1$, since at full coverage every targeting rule is identical to &quot;treat everyone&quot;." /></p>
 <p>The TOC curve is the most direct answer to "does targeting beat random?"
 but it carries no single-number summary. Two integrals of the curve give
-that summary:</p>
+that summary. Both are forms of the <strong>RATE</strong> (rank-weighted average
+treatment effect):</p>
 <p><strong>RATE AUTOC</strong> (area under the TOC) puts equal weight on every value of
 $q$. It answers: across all possible budgets, how much can we gain by
 selecting? A large AUTOC indicates concentrated heterogeneity. A small
@@ -3582,7 +3617,8 @@ heavily concentrated. A curve that hugs the diagonal everywhere
 indicates that the ranking carries no useful targeting information; in
 that case, treat-everyone is the simplest defensible policy.</p>
 <p>Both summaries (AUTOC and Qini) must be computed on held-out or
-cross-fitted data, not in-sample rankings. The forest reuses information
+cross-fitted data (where each observation is scored by models trained on
+the other folds), not in-sample rankings. The forest reuses information
 across trees through its bootstrap structure. Evaluating RATE or Qini on
 the training fold produces optimistic estimates. Computing them on a
 separate fold blocks this bias and yields honest confidence intervals.</p>
@@ -3604,24 +3640,32 @@ one sentence.</li>
 <h2 id="workflow-for-this-week"><a class="header" href="#workflow-for-this-week">Workflow for this week</a></h2>
 <p>The week's tools answer three questions in sequence:</p>
 <ol>
-<li><strong>Is there substantial heterogeneity?</strong> Reject the null that
-$\tau(x)$ is constant if the differential-prediction omnibus test
-rejects, or if RATE-AUTOC is positive and statistically reliable.</li>
+<li><strong>Is there substantial heterogeneity?</strong> The causal-forest
+<strong>calibration test</strong> checks whether $\hat{\tau}(x)$ varies across
+people more than chance alone would produce; its
+<em>differential-prediction</em> coefficient is the signal to read. Reject
+the null that $\tau(x)$ is constant if that test rejects, or if
+RATE-AUTOC is positive and statistically reliable.</li>
 <li><strong>Does targeting pay at realistic budgets?</strong> Inspect the slope of
 the Qini curve around plausible coverage levels.</li>
 <li><strong>Can we express the targeting rule in a few defensible steps?</strong>
 Week 9 fits and validates a shallow policy tree to answer this
 question.</li>
 </ol>
+<p>Treat these three checks as diagnostics. A positive calibration test or
+RATE is evidence that effects vary, but variation improves on a blanket
+policy only when the better action differs across covariate regions, or
+a budget forces a choice. Whether a particular rule actually wins is
+settled by the policy tree's held-out policy value, compared against the
+blanket policies of treating everyone or treating no-one (week 9).</p>
 <p>The pipeline below turns these questions into steps:</p>
 <ol>
 <li>Specify the causal estimand: treatment, time zero, target
 population, outcome, and identification assumptions.</li>
 <li>Fit a causal forest with honest splitting on baseline covariates
 measured at time zero.</li>
-<li>Verify that heterogeneity is real (the omnibus test for differential
-prediction in week 9, run early to avoid spending time on a flat
-forest).</li>
+<li>Verify that heterogeneity is real (the calibration test above, run
+early to avoid spending time on a flat forest).</li>
 <li>Estimate targeting value with RATE-AUTOC and RATE-Qini on held-out
 data.</li>
 <li>Run sensitivity analysis on the underlying ATE before staking a
@@ -3880,9 +3924,9 @@ if an allocation rule assigned action $a$. In the lab, outcome
 contribution and utility contribution are the same because we are
 treating $Y$ as the utility. The <strong>augmented
 inverse-propensity-weighted (AIPW)</strong> version is:</p>
-<p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{W_i = a}}{\Pr(W = a
+<p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{A_i = a}}{\Pr(A = a
 \mid X_i)},\bigl(Y_i - \mu_a(X_i)\bigr), $$</p>
-<p>where $\mu_a(x)$ is the outcome model and $\Pr(W = a \mid x)$ is the
+<p>where $\mu_a(x)$ is the outcome model and $\Pr(A = a \mid x)$ is the
 propensity score. The propensity score is <strong>not</strong> a potential outcome.
 It is the estimated probability of receiving action $a$ given
 covariates. The first term is the outcome model's best guess at
@@ -3906,9 +3950,10 @@ assigns to each person, then average:</p>
 <p>$$ \widehat{V}(d) = \frac{1}{n}\sum_{i=1}^{n}\Gamma_i(d(X_i)). $$</p>
 <p>The policy tree search compares candidate rules by this average. A split
 is useful when assigning different actions in the two child nodes raises
-$\widehat{V}(d)$ relative to a simpler rule. The tree is therefore not
-estimating a new CATE for each leaf; it is searching for a simple
-allocation rule with high estimated utility.</p>
+$\widehat{V}(d)$ relative to a simpler rule. The tree therefore
+searches for a simple allocation rule with high estimated utility, and
+each leaf names the action — treat or control — that maximises that
+utility.</p>
 <p>In this course we cap tree depth at two. Three reasons motivate the cap.
 First, at most three yes/no questions per rule means the logic fits on a
 slide for policy-makers or clinicians. Second, each leaf retains enough
@@ -3954,8 +3999,7 @@ individuals whose own predicted benefit is small but whose neighbourhood
 benefit is large. That is the cost of forcing a sharp threshold onto a
 smooth surface, and it is one reason a policy tree should never be the
 only output of an analysis. The underlying CATE estimates and the
-omnibus heterogeneity test from week 8 carry information the tree
-discards.</p>
+calibration test from week 8 carry information the tree discards.</p>
 <h2 id="choosing-tree-depth"><a class="header" href="#choosing-tree-depth">Choosing tree depth</a></h2>
 <p>The depth budget is a design choice, not a property of the data. A
 depth-1 rule asks one question; a depth-2 rule asks two or three.
@@ -3970,17 +4014,18 @@ fold, in the outcome's own units); the depth-2 policy delivers
 $0.243$, a point gain of $0.028$ (about thirteen percent above
 depth-1). The gain is real in the fitted comparison, but small relative
 to the additional complexity.</p>
-<p>The course rule is prespecified: prefer the shallower tree unless the
-depth-2 point gain in held-out policy value clears the stated gain
-threshold. Uncertainty intervals, stability checks, equity
-considerations, and implementation burden then inform how confidently
-investigators should act on the selected rule. For a high-stakes
-clinical intervention, a threshold-clearing gain may justify the extra
-complexity only with strong validation. For a community programme that
-must be administered by volunteers, the simpler depth-1 rule may be
-preferable even when depth-2 clears the point-gain threshold, because
-the rule is more likely to be applied correctly in the field. A rule a
-worker mis-remembers is not the rule that was evaluated.</p>
+<p>The course rule is prespecified. Under this <em>parsimony rule</em>, prefer the
+shallower tree unless the depth-2 point gain in held-out policy value
+clears the stated gain threshold. Uncertainty intervals, stability
+checks, equity considerations, and implementation burden then inform how
+confidently investigators should act on the selected rule. For a
+high-stakes clinical intervention, a threshold-clearing gain may justify
+the extra complexity only with strong validation. For a community
+programme that must be administered by volunteers, the simpler depth-1
+rule may be preferable even when depth-2 clears the point-gain
+threshold, because the rule is more likely to be applied correctly in
+the field. A rule a worker mis-remembers is not the rule that was
+evaluated.</p>
 <p>The full research workflow compares both depths automatically. Lab 9
 shows depth-1 and depth-2 outputs so you can practise the same
 judgement: examine both trees, then justify the chosen depth in the
@@ -4358,7 +4403,8 @@ adjustment sets are otherwise defensible.</p>
 <li>State what each classical validity type (content, construct,
 criterion, ecological) claims, and identify the causal assumptions
 each leaves implicit.</li>
-<li>Run EFA and CFA with clear model-comparison logic.</li>
+<li>Run exploratory factor analysis (EFA) and confirmatory factor
+analysis (CFA) with clear model-comparison logic.</li>
 <li>Run configural, metric, and scalar/threshold invariance tests, and
 state what they do not establish.</li>
 <li>Explain why good fit does not prove a causal latent model.</li>
@@ -4487,9 +4533,10 @@ causal story and often new data, not a better fit index.</li>
 <p>Also note that item means can differ for many reasons that have nothing
 to do with biased measurement. If group A is more distressed than group
 B, we should expect different item means even under perfect measurement.
-Invariance testing is not a way to label differences as artefact. It is
-a way to describe whether a particular psychometric model is stable
-across groups.</p>
+Invariance testing describes whether a particular psychometric model is
+stable across groups. A failed test, on its own, does not establish
+whether a group difference is measurement artefact or a real difference
+in the underlying state.</p>
 <p>Under the standard invariance interpretation, if scalar/threshold
 invariance fails then latent mean comparisons are not identified within
 that measurement model. In this course, treat this as a warning about
@@ -4521,12 +4568,11 @@ same outcome across groups.</li>
 <h2 id="part-2-how-traditional-measurement-theory-fails-for-causal-inference"><a class="header" href="#part-2-how-traditional-measurement-theory-fails-for-causal-inference">Part 2: how traditional measurement theory fails (for causal inference)</a></h2>
 <p>This part restores the core point of the lecture. Causal inference
 operates under assumptions. For measurement, it is causality all the way
-down. This is not a matter of attitude. It is a consequence of the
-potential outcomes framework: causal contrasts require well-defined
-outcomes under interventions, and constructed measures are outcomes of
-causal processes (question wording, translation, response styles,
-incentives, and the world that generates the experiences being
-reported).</p>
+down. This follows from the potential outcomes framework: causal
+contrasts require well-defined outcomes under interventions, and
+constructed measures are outcomes of causal processes (question wording,
+translation, response styles, incentives, and the world that generates
+the experiences being reported).</p>
 <p>Classical psychometric checks (internal consistency, model fit,
 invariance tests) can organise associations. They do not, by themselves,
 evaluate the causal assumptions about direction and causal efficacy that
@@ -4711,7 +4757,10 @@ constructed measures.</p>
 $\eta_Y$). They are the states we would ideally intervene on and
 measure without error.</li>
 <li>The $var_{f(X_1,\dots,X_n)}$ nodes are constructed measures:
-functions of multiple indicators.</li>
+functions of multiple indicators. Simpler measurement DAGs compress
+this notation, writing the true outcome state as $Y^\ast$ and the
+recorded measure as $Y$; in that shorthand $\eta_Y$ is
+$Y^\ast$ and $Y_{f(X_1,\dots,X_n)}$ is $Y$.</li>
 <li>The $U$ nodes are unmeasured sources of error in those constructed
 measures. They include stable reporting tendencies, transient mood
 at the time of survey completion, social desirability, and
@@ -4752,7 +4801,8 @@ causally affects the error in the measured outcome.</p>
 <h3 id="confounding-control-by-baseline-measures-in-three-wave-panels"><a class="header" href="#confounding-control-by-baseline-measures-in-three-wave-panels">Confounding control by baseline measures in three-wave panels</a></h3>
 <p>One pragmatic design response is to measure baseline values of exposure
 and outcome (and key confounders), then estimate effects forward in time
-using a three-wave panel.</p>
+using a three-wave panel. Adjusting for each variable's own baseline
+value is called <em>lagged-self adjustment</em>.</p>
 <ol>
 <li>This design adjusts for baseline measurements of both exposure and
 outcome.</li>
@@ -9629,8 +9679,8 @@ returns z-scored outcomes only</li>
 <li>Include sample proportions in each node.</li>
 <li>Provide plain-language interpretation alongside the tree.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="presentation-rubric-10"><a class="header" href="#presentation-rubric-10">Presentation Rubric (10%)</a></h1>
-<p>This rubric is for the in-class presentation in Week 12. You have 10
+<div style="break-before: page; page-break-before: always;"></div><h1 id="presentation-advice-10"><a class="header" href="#presentation-advice-10">Presentation Advice (10%)</a></h1>
+<p>This advice is for the in-class presentation in Week 12. You have 10
 minutes, followed by one panel question. You may use the whiteboard and
 paper notes. No slides, handouts, or devices.</p>
 <p>The talk is marked on four criteria, each worth 2.5%. Each criterion is
@@ -9645,7 +9695,7 @@ scored in one of four bands:</p>
 see the <a href="https://www.wgtn.ac.nz/students/study/progress/grades">VUW grades and grade point average
 page</a>.</p>
 <p>The four criteria are marked separately. A talk can be strong on causal
-reasoning and still need work on the "so what".</p>
+reasoning and still need work on answering the "so what" question.</p>
 <h2 id="what-we-look-for"><a class="header" href="#what-we-look-for">What we look for</a></h2>
 <p>A good presentation leaves the audience clear on three things:</p>
 <ol>
@@ -9653,8 +9703,7 @@ reasoning and still need work on the "so what".</p>
 <li>How would you answer it?</li>
 <li>Why would the answer matter?</li>
 </ol>
-<p>That is the job. No need to sound like a visiting professor from a
-conference dinner.</p>
+<p>That is your job.</p>
 <hr />
 <h2 id="rubric"><a class="header" href="#rubric">Rubric</a></h2>
 <h3 id="1-clarity-and-structure-25"><a class="header" href="#1-clarity-and-structure-25">1. Clarity and structure (2.5%)</a></h3>

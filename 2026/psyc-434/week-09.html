@@ -425,9 +425,9 @@ if an allocation rule assigned action $a$. In the lab, outcome
 contribution and utility contribution are the same because we are
 treating $Y$ as the utility. The <strong>augmented
 inverse-propensity-weighted (AIPW)</strong> version is:</p>
-<p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{W_i = a}}{\Pr(W = a
+<p>$$ \Gamma_i(a) = \mu_a(X_i) + \frac{\mathbb{1}{A_i = a}}{\Pr(A = a
 \mid X_i)},\bigl(Y_i - \mu_a(X_i)\bigr), $$</p>
-<p>where $\mu_a(x)$ is the outcome model and $\Pr(W = a \mid x)$ is the
+<p>where $\mu_a(x)$ is the outcome model and $\Pr(A = a \mid x)$ is the
 propensity score. The propensity score is <strong>not</strong> a potential outcome.
 It is the estimated probability of receiving action $a$ given
 covariates. The first term is the outcome model's best guess at
@@ -451,9 +451,10 @@ assigns to each person, then average:</p>
 <p>$$ \widehat{V}(d) = \frac{1}{n}\sum_{i=1}^{n}\Gamma_i(d(X_i)). $$</p>
 <p>The policy tree search compares candidate rules by this average. A split
 is useful when assigning different actions in the two child nodes raises
-$\widehat{V}(d)$ relative to a simpler rule. The tree is therefore not
-estimating a new CATE for each leaf; it is searching for a simple
-allocation rule with high estimated utility.</p>
+$\widehat{V}(d)$ relative to a simpler rule. The tree therefore
+searches for a simple allocation rule with high estimated utility, and
+each leaf names the action — treat or control — that maximises that
+utility.</p>
 <p>In this course we cap tree depth at two. Three reasons motivate the cap.
 First, at most three yes/no questions per rule means the logic fits on a
 slide for policy-makers or clinicians. Second, each leaf retains enough
@@ -499,8 +500,7 @@ individuals whose own predicted benefit is small but whose neighbourhood
 benefit is large. That is the cost of forcing a sharp threshold onto a
 smooth surface, and it is one reason a policy tree should never be the
 only output of an analysis. The underlying CATE estimates and the
-omnibus heterogeneity test from week 8 carry information the tree
-discards.</p>
+calibration test from week 8 carry information the tree discards.</p>
 <h2 id="choosing-tree-depth"><a class="header" href="#choosing-tree-depth">Choosing tree depth</a></h2>
 <p>The depth budget is a design choice, not a property of the data. A
 depth-1 rule asks one question; a depth-2 rule asks two or three.
@@ -515,17 +515,18 @@ fold, in the outcome's own units); the depth-2 policy delivers
 $0.243$, a point gain of $0.028$ (about thirteen percent above
 depth-1). The gain is real in the fitted comparison, but small relative
 to the additional complexity.</p>
-<p>The course rule is prespecified: prefer the shallower tree unless the
-depth-2 point gain in held-out policy value clears the stated gain
-threshold. Uncertainty intervals, stability checks, equity
-considerations, and implementation burden then inform how confidently
-investigators should act on the selected rule. For a high-stakes
-clinical intervention, a threshold-clearing gain may justify the extra
-complexity only with strong validation. For a community programme that
-must be administered by volunteers, the simpler depth-1 rule may be
-preferable even when depth-2 clears the point-gain threshold, because
-the rule is more likely to be applied correctly in the field. A rule a
-worker mis-remembers is not the rule that was evaluated.</p>
+<p>The course rule is prespecified. Under this <em>parsimony rule</em>, prefer the
+shallower tree unless the depth-2 point gain in held-out policy value
+clears the stated gain threshold. Uncertainty intervals, stability
+checks, equity considerations, and implementation burden then inform how
+confidently investigators should act on the selected rule. For a
+high-stakes clinical intervention, a threshold-clearing gain may justify
+the extra complexity only with strong validation. For a community
+programme that must be administered by volunteers, the simpler depth-1
+rule may be preferable even when depth-2 clears the point-gain
+threshold, because the rule is more likely to be applied correctly in
+the field. A rule a worker mis-remembers is not the rule that was
+evaluated.</p>
 <p>The full research workflow compares both depths automatically. Lab 9
 shows depth-1 and depth-2 outputs so you can practise the same
 judgement: examine both trees, then justify the chosen depth in the

@@ -342,8 +342,10 @@ in: the intervention comes first, then we measure the outcome.</p>
 </ul>
 </blockquote>
 <p>Everything in this course follows from the demand that psychological
-questions specify their contrasts. This lecture introduces three
-problems that make specifying a contrast harder than it first appears.</p>
+questions specify their contrasts. Every causal question in this course
+must satisfy this five-part template before we turn to the data. This
+lecture introduces three problems that make specifying a contrast harder
+than it first appears.</p>
 <h2 id="problem-1-both-sides-of-the-contrast-must-be-precisely-defined"><a class="header" href="#problem-1-both-sides-of-the-contrast-must-be-precisely-defined">Problem 1: both sides of the contrast must be precisely defined</a></h2>
 <p>When investigators evaluate "time on social media," what do they mean?
 Passive scrolling, direct messaging, and creative content production may
@@ -365,8 +367,8 @@ together. We must define the <em>outcome</em>, its measure (for example, life
 satisfaction on a 0 to 10 scale), and the time frame over which we
 assess it. The consequences of scrolling for a teenager's purpose in
 five hundred years are zero because life ends.</p>
-<p>Notice that specifying interventions and outcomes forces us to order
-events along a timeline. For one state to influence another, it must
+<p>Notice that specifying interventions and outcomes forces us <strong>to order
+events along a timeline.</strong> For one state to influence another, it must
 precede it. There must be a contrast condition and a stated time
 horizon, because timing affects the magnitude of interest. The effects
 of scrolling for five minutes for three weeks (contrasted with no social
@@ -417,11 +419,10 @@ condition ($A = 0$). The individual causal effect is:</p>
 person: the difference between what would happen to person $i$ under
 treatment and what would happen under control. We observe only one of
 $Y_i(1)$ or $Y_i(0)$ for any individual. The individual causal
-effect $\delta_i$ is therefore never directly observable. This is not
-a limitation of our methods; it is a logical constraint. No amount of
-data collection, no statistical technique, and no machine learning
-algorithm can reveal both potential outcomes for the same person at the
-same time.</p>
+effect $\delta_i$ is therefore never directly observable. The obstacle
+is logical: no amount of data collection, no statistical technique, and
+no machine learning algorithm can reveal both potential outcomes for the
+same person at the same time.</p>
 <blockquote>
 <p><strong>Pair exercise: formulating a contrast</strong></p>
 <ol>
@@ -433,6 +434,9 @@ sleep?), a target population, and a time horizon.</li>
 contrast well defined? Is the population specific enough?</li>
 </ol>
 </blockquote>
+<p>The individual causal effect is unobservable, so causal inference shifts
+to populations: what can we learn about the average effect across a
+defined group?</p>
 <h2 id="from-individuals-to-populations"><a class="header" href="#from-individuals-to-populations">From individuals to populations</a></h2>
 <p>If individual causal effects are unobservable, what can we learn? We can
 learn about average effects across a population. The average treatment
@@ -474,9 +478,10 @@ recover average effects under assumptions we have not yet stated.</p>
 <p>The lesson is that before answering a question we must ask it.
 Psychology begins with a clearly defined question. A well-defined causal
 question requires a contrast between at least two interventions, a
-specified outcome and time horizon, and a target population. In later
-weeks we add the further question of whether the observed data can
-identify that contrast.</p>
+specified outcome and time horizon, and a target population. These are
+the five parts of the template: population, intervention, control,
+outcome, timing. In later weeks we add the further question of whether
+the observed data can identify that contrast.</p>
 <p>Most psychological research cannot randomise the variables we care
 about. We cannot randomly assign people to experience trauma, adopt a
 religion, or lose a job. Week 2 introduces the randomised experiment as

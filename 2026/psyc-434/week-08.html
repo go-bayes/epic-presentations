@@ -502,12 +502,12 @@ with many covariates.</p>
 <strong>augmented inverse-propensity-weighted (AIPW)</strong> score:</p>
 <p>$$ \Gamma_i(a) =
 \underbrace{\mu_a(X_i)}_{\textcolor{blue}{\text{outcome model
-prediction}}} + \underbrace{\frac{\mathbb{1}\lbrace W_i =
-a\rbrace}{\Pr(W = a \mid X_i)}}_{\textcolor{teal}{\text{IPW
+prediction}}} + \underbrace{\frac{\mathbb{1}\lbrace A_i =
+a\rbrace}{\Pr(A = a \mid X_i)}}_{\textcolor{teal}{\text{IPW
 weight}}}\thinspace\underbrace{\bigl(Y_i -
 \mu_a(X_i)\bigr)}_{\textcolor{red}{\text{residual correction}}}, $$</p>
 <p>where $\mu_a(x)$ is the causal forest's estimate of the outcome
-surface under treatment $a$, and $\Pr(W = a \mid x)$ is the
+surface under treatment $a$, and $\Pr(A = a \mid x)$ is the
 propensity for treatment $a$ given covariates. $\Gamma_i(a)$ is an
 unbiased estimate of $Y_i(a)$ when <em>either</em> the outcome model <em>or</em> the
 propensity model is correct, hence "doubly robust". Targeting metrics,
@@ -541,7 +541,8 @@ cumulative gain from treating that top-$q$ slice.</p>
 <p><img src="figures/lab-09/toc-curve.svg" alt="TOC curve from the same small causal forest used above. Targeting rate $q$ on the horizontal axis; gain over random assignment on the vertical axis. A steep early rise indicates concentrated heterogeneity: the highest-ranked individuals carry most of the treatment benefit. A flat curve indicates none. The curve must return to zero at $q = 1$, since at full coverage every targeting rule is identical to &quot;treat everyone&quot;." /></p>
 <p>The TOC curve is the most direct answer to "does targeting beat random?"
 but it carries no single-number summary. Two integrals of the curve give
-that summary:</p>
+that summary. Both are forms of the <strong>RATE</strong> (rank-weighted average
+treatment effect):</p>
 <p><strong>RATE AUTOC</strong> (area under the TOC) puts equal weight on every value of
 $q$. It answers: across all possible budgets, how much can we gain by
 selecting? A large AUTOC indicates concentrated heterogeneity. A small
@@ -571,7 +572,8 @@ heavily concentrated. A curve that hugs the diagonal everywhere
 indicates that the ranking carries no useful targeting information; in
 that case, treat-everyone is the simplest defensible policy.</p>
 <p>Both summaries (AUTOC and Qini) must be computed on held-out or
-cross-fitted data, not in-sample rankings. The forest reuses information
+cross-fitted data (where each observation is scored by models trained on
+the other folds), not in-sample rankings. The forest reuses information
 across trees through its bootstrap structure. Evaluating RATE or Qini on
 the training fold produces optimistic estimates. Computing them on a
 separate fold blocks this bias and yields honest confidence intervals.</p>
@@ -593,24 +595,32 @@ one sentence.</li>
 <h2 id="workflow-for-this-week"><a class="header" href="#workflow-for-this-week">Workflow for this week</a></h2>
 <p>The week's tools answer three questions in sequence:</p>
 <ol>
-<li><strong>Is there substantial heterogeneity?</strong> Reject the null that
-$\tau(x)$ is constant if the differential-prediction omnibus test
-rejects, or if RATE-AUTOC is positive and statistically reliable.</li>
+<li><strong>Is there substantial heterogeneity?</strong> The causal-forest
+<strong>calibration test</strong> checks whether $\hat{\tau}(x)$ varies across
+people more than chance alone would produce; its
+<em>differential-prediction</em> coefficient is the signal to read. Reject
+the null that $\tau(x)$ is constant if that test rejects, or if
+RATE-AUTOC is positive and statistically reliable.</li>
 <li><strong>Does targeting pay at realistic budgets?</strong> Inspect the slope of
 the Qini curve around plausible coverage levels.</li>
 <li><strong>Can we express the targeting rule in a few defensible steps?</strong>
 Week 9 fits and validates a shallow policy tree to answer this
 question.</li>
 </ol>
+<p>Treat these three checks as diagnostics. A positive calibration test or
+RATE is evidence that effects vary, but variation improves on a blanket
+policy only when the better action differs across covariate regions, or
+a budget forces a choice. Whether a particular rule actually wins is
+settled by the policy tree's held-out policy value, compared against the
+blanket policies of treating everyone or treating no-one (week 9).</p>
 <p>The pipeline below turns these questions into steps:</p>
 <ol>
 <li>Specify the causal estimand: treatment, time zero, target
 population, outcome, and identification assumptions.</li>
 <li>Fit a causal forest with honest splitting on baseline covariates
 measured at time zero.</li>
-<li>Verify that heterogeneity is real (the omnibus test for differential
-prediction in week 9, run early to avoid spending time on a flat
-forest).</li>
+<li>Verify that heterogeneity is real (the calibration test above, run
+early to avoid spending time on a flat forest).</li>
 <li>Estimate targeting value with RATE-AUTOC and RATE-Qini on held-out
 data.</li>
 <li>Run sensitivity analysis on the underlying ATE before staking a
