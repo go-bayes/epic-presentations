@@ -279,7 +279,10 @@ appear across the relevant covariate patterns.</li>
 assumptions needed for the measure to mean the same thing across
 people, groups, and time.</li>
 <li><strong>Attrition handling.</strong> Describe how panel dropout was addressed
-(e.g., inverse probability of censoring weights).</li>
+(e.g., inverse probability of censoring weights (note that the
+simulated data do not have missing responses, so your description
+should follow the lab 10 template in which you state how attrition
+would be handled if present).</li>
 <li><strong>Transparent reporting.</strong> Document the analysis choices and
 assumptions.</li>
 </ol>
@@ -407,16 +410,19 @@ purpose &lt; 0)
 </ol>
 <h3 id="example-policy-tree-text"><a class="header" href="#example-policy-tree-text">Example policy tree text</a></h3>
 <blockquote>
-<p>"The policy tree identified two subgroups with larger estimated gains
-in life satisfaction. Older adults (45+) with high baseline belonging
-had the largest estimate ($\beta = 0.28$ SD units), representing 23%
-of the sample. This is a targeting result, not a claim that age or
-baseline belonging causes the treatment to work better."</p>
+<p>"The policy tree estimates the expected value of assigning the single
+treatment according to the fitted rule. In this example, the rule
+assigns treatment to two profiles with larger estimated gains in life
+satisfaction. Older adults (45+) with high baseline belonging had the
+largest estimated gain ($\beta = 0.28$ SD units), representing 23%
+of the sample. Interpret these leaves as parts of an allocation rule,
+with age and baseline belonging used as splitting variables."</p>
 </blockquote>
 <p>Avoid phrasing such as "the do-not-treat leaf saves resources" unless a
 treatment cost has been built into the objective. Under the course
 workflow, the accurate wording is: "the outcome-only rule assigns these
-profiles to no treatment."</p>
+profiles to no treatment because the no-treatment action has the higher
+estimated value for that leaf."</p>
 <hr />
 <h2 id="sensitivity-analysis-e-values"><a class="header" href="#sensitivity-analysis-e-values">Sensitivity analysis: E-values</a></h2>
 <h3 id="interpretation"><a class="header" href="#interpretation">Interpretation</a></h3>
