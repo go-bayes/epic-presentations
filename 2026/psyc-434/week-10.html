@@ -286,6 +286,32 @@ recommendation. Every step assumed that the outcomes we measure mean the
 same thing for every group in the target population. If they do not,
 contrasts between groups can reflect measurement artefact, not causal
 differences. This week examines that assumption.</p>
+<blockquote>
+<p><strong>Where we are in the heterogeneity sequence</strong></p>
+<ul>
+<li>Week 6: define effect modification and CATE.</li>
+<li>Week 8: estimate CATE rankings and ask whether rankings contain
+useful targeting information.</li>
+<li>Week 9: turn modelled heterogeneity into interpretable policy trees.</li>
+<li>Week 10: ask whether the measured outcomes and covariates support
+the interpretation we place on the tree.</li>
+<li>Final assessment: report outcome-wide ATEs, then interpret policy
+trees as readable targeting summaries.</li>
+</ul>
+</blockquote>
+<p>Week 10 closes the heterogeneity sequence by asking what the policy tree
+is made of. Its splits use measured covariates. Its value is judged on
+measured outcomes. Its fairness depends on whether those measurements
+behave comparably across groups. A clear tree can still mislead if the
+variables inside it do not mean what the analysis says they mean.</p>
+<div class="table-wrapper"><table><thead><tr><th>Object</th><th>Question</th><th>Output</th></tr></thead><tbody>
+<tr><td>Outcome-wide ATEs</td><td>Which outcomes show credible average evidence?</td><td>Four-outcome ATE table or plot</td></tr>
+<tr><td>CATE</td><td>For whom does the effect vary?</td><td>$\hat{\tau}(X)$ estimates</td></tr>
+<tr><td>RATE / Qini</td><td>Does the ranking carry targeting value?</td><td>Diagnostic curves and summaries</td></tr>
+<tr><td>Policy tree</td><td>Can we state a readable rule?</td><td>Depth-1 or depth-2 allocation rule</td></tr>
+<tr><td>Measurement checks</td><td>Do the variables mean what the rule assumes?</td><td>Cautions about construct meaning and comparability</td></tr>
+</tbody></table>
+</div>
 <h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
 <h3 id="classical-validity-and-its-limits"><a class="header" href="#classical-validity-and-its-limits">Classical validity and its limits</a></h3>
 <p>Psychology textbooks organise measurement quality around four types of
@@ -802,7 +828,12 @@ confounder or outcome in a DAG).</li>
 structure and invariance, we should avoid strong causal claims about
 cross-group latent differences.</p>
 <p>Our job as investigators is to separate what the model fits from what
-the design identifies.</p>
+the design identifies. That discipline applies directly to the final
+assignment. Outcome-wide ATEs require outcomes that mean what the report
+says they mean. Policy trees require covariates whose split points can
+be interpreted without turning proxies into causes. Fairness checks
+require attention to whether measurement differs across groups before a
+rule is treated as publicly defensible.</p>
 <blockquote>
 <p><strong>Pair exercise: measurement as an identification problem</strong></p>
 <ol>
@@ -839,7 +870,7 @@ Online Causal Inference Seminar. The linked timestamp begins near the
 practical implications for measure construction.</li>
 </ul>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2022" class="csl-entry">
 <p>Bulbulia, J. A. (2023). A workflow for causal inference in
 cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(3),
@@ -850,18 +881,18 @@ cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(
 multi-group invariance testing possibilities in r. <em>Frontiers in
 Psychology</em>, 1507.</p>
 </div>
+<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
+<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
+<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
+</div>
 <div id="ref-harkness2003questionnaire" class="csl-entry">
 <p>Harkness, J. A., Van de Vijver, F. J., &amp; Johnson, T. P. (2003).
 Questionnaire design in comparative research. <em>Cross-Cultural Survey
 Methods</em>, 19–34.</p>
 </div>
-<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
-<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
-<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
-</div>
 <div id="ref-he2012" class="csl-entry">
-<p>He, J., &amp; Vijver, F. van de. (2012). Bias and Equivalence in
-Cross-Cultural Research. <em>Online Readings in Psychology and Culture</em>,
+<p>He, J., &amp; Vijver, F. van de. (2012). Bias and equivalence in
+cross-cultural research. <em>Online Readings in Psychology and Culture</em>,
 <em>2</em>(2). <a href="https://doi.org/10.9707/2307-0919.1111">https://doi.org/10.9707/2307-0919.1111</a></p>
 </div>
 <div id="ref-vanderweele2022" class="csl-entry">

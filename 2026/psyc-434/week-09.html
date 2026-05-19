@@ -279,31 +279,63 @@ interpretability.</li>
 </ol>
 </blockquote>
 <hr />
-<p>Week 8 estimated individual-level treatment contrasts and assessed
-whether targeting has practical value. Rankings alone are not policy.
-This week translates those rankings into interpretable, publicly
-defensible allocation rules, and asks how much of the underlying
-heterogeneity a short rule can recover.</p>
+<p>Week 8 introduced causal forests and ranking diagnostics one outcome at
+a time so the CATE machinery was visible. Week 9 connects that machinery
+to the final assignment's decision sequence. First, estimate
+outcome-wide ATEs for the prespecified outcome family. Second, for each
+outcome with enough evidence to discuss, use policy trees to summarise
+where treatment appears most valuable. Rankings alone are not policy.
+This week asks how much of the underlying heterogeneity a short,
+publicly defensible policy tree can recover.</p>
+<blockquote>
+<p><strong>Where we are in the heterogeneity sequence</strong></p>
+<ul>
+<li>Week 6: define effect modification and CATE.</li>
+<li>Week 8: estimate CATE rankings and ask whether rankings contain
+useful targeting information.</li>
+<li>Week 9: turn modelled heterogeneity into interpretable policy trees.</li>
+<li>Week 10: ask whether the measured outcomes and covariates support
+the interpretation we place on the tree.</li>
+<li>Final assessment: report outcome-wide ATEs, then interpret policy
+trees as readable targeting summaries.</li>
+</ul>
+</blockquote>
 <h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
 <h3 id="motivating-example"><a class="header" href="#motivating-example">Motivating example</a></h3>
-<p>A district health board is considering an intervention to enhance sense
-of purpose. A causal forest suggests large heterogeneity: some residents
-appear to benefit more than others. The board now needs a rule that can
-be described in public, not just a ranking inside a script. The rule
-must be short enough to fit on a single page, clear enough for people
-who did not fit the model, and accompanied by an honest account of what
-the data can and cannot decide.</p>
-<p>We work through purpose for concreteness; Lab 9 repeats a simplified
-teaching version of this workflow across four outcomes (purpose,
-belonging, self-esteem, life satisfaction).</p>
-<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The lab&#39;s teaching workflow estimates effects across several outcomes at once, then asks the policy question only for those whose effects survive sensitivity analysis." /></p>
+<p>A district health board is considering a community-group intervention.
+The analysis begins outcome-wide: purpose, belonging, self-esteem, and
+life satisfaction are all possible targets, and investigators should not
+pick whichever outcome looks most convenient after the fact. Suppose the
+outcome-wide screen suggests that sense of purpose is the clearest
+outcome to inspect further. Week 8 then asks whether effects on purpose
+vary across residents and whether a CATE ranking has targeting value.
+Week 9 asks the next question: can that ranking be turned into a rule
+the board could describe in public?</p>
+<p>We work through purpose for concreteness. The final assignment applies
+the same broad logic across the four wellbeing outcomes: report the
+outcome-wide ATEs, then use policy trees as the interpretable
+heterogeneity output. RATE and Qini remain useful for understanding
+rankings, but they are not the report scaffold.</p>
+<p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The course assignment uses this outcome-wide ATE view before asking whether policy trees provide an interpretable targeting story." /></p>
+<h2 id="where-week-9-fits"><a class="header" href="#where-week-9-fits">Where Week 9 Fits</a></h2>
+<p>Keep three layers separate:</p>
+<div class="table-wrapper"><table><thead><tr><th>Layer</th><th>Question</th><th>Week 8 role</th><th>Week 9 role</th></tr></thead><tbody>
+<tr><td>Outcome-wide ATEs</td><td>Which outcomes show credible average evidence?</td><td>Introduced as the screen before heterogeneity</td><td>Reopened as the gate before policy work</td></tr>
+<tr><td>Single-outcome CATE ranking</td><td>Within one outcome, who is predicted to benefit more?</td><td>Estimated and evaluated with causal forests, RATE, and Qini as teaching diagnostics</td><td>Used as background for policy learning</td></tr>
+<tr><td>Policy tree</td><td>Can a short rule recover enough value from the ranking?</td><td>Named as the opacity problem</td><td>Fitted, evaluated, and interpreted</td></tr>
+</tbody></table>
+</div>
+<p>The order matters for students and for practice. A policy tree is not
+the first analysis to run. It is a late-stage summary used after the
+outcome-wide ATEs have established what needs interpretation.</p>
 <h2 id="outcome-wide-evidence-before-targeting"><a class="header" href="#outcome-wide-evidence-before-targeting">Outcome-wide evidence before targeting</a></h2>
 <p>Before fitting a policy tree, ask whether the underlying average effects
-are credible enough to justify a targeting exercise. Lab 9 estimates one
-exposure across four outcomes: purpose, belonging, self-esteem, and life
-satisfaction. This is a small teaching version of an <strong>outcome-wide</strong>
-design. The point is to read the pattern across outcomes, not to hunt
-for whichever row happens to look best.</p>
+are credible enough to justify a targeting exercise. In the final
+assignment, students estimate one exposure across four outcomes:
+purpose, belonging, self-esteem, and life satisfaction. This is the same
+outcome-wide screen introduced in Week 8, now used as the context for
+policy-tree interpretation. The point is to read the pattern across
+outcomes, not to hunt for whichever row happens to look best.</p>
 <p>VanderWeele's outcome-wide design starts from a common problem in social
 and psychological science: exposures often plausibly affect several
 outcomes, and investigators can tell a convincing story after the fact
@@ -325,8 +357,8 @@ require multiplicity control and sensitivity analysis.</p>
 correction?</li>
 <li>Which estimates are robust enough to unmeasured confounding to
 discuss seriously?</li>
-<li>Which outcome, if any, has enough evidence to justify asking a
-targeting question?</li>
+<li>Which outcome, if any, has enough evidence to justify asking a Week
+8 targeting question and a Week 9 policy-tree question?</li>
 </ol>
 <p>When a single exposure is tested against several outcomes, the chance
 that at least one confidence interval excludes zero by chance alone is
@@ -390,20 +422,20 @@ input.</p>
 <p>If a project has a fixed budget, the policy problem can be written with
 a treatment-share cap:</p>
 <p>$$ \mathbb{E}[d(X)] \le q. $$</p>
-<p>That is useful to discuss, but it is not what the current course lab
-enforces. In the lab workflow, policy trees identify regions where the
-estimated reward for treatment is higher than control, then report the
-expected mean differences and the size of those regions. Production
-scripts add further safeguards and interpretation layers, including more
-outcomes, sample weights, adverse-outcome flipping, cross-validated
-heterogeneity interpretation, depth comparison, and larger stability
-runs. Two practical complications remain. First, $V(d)$ is a
-counterfactual quantity, since for any individual we observe at most one
-of $Y(0)$ or $Y(1)$. We need to evaluate candidate rules without
-assigning everyone to them. Second, the rule must be small enough to
-defend in front of a non-statistical audience. Both constraints push the
-analysis toward shallow, transparent decision trees evaluated with
-doubly-robust scores.</p>
+<p>That is useful to discuss, but it is not what the course assignment
+enforces. In the assignment scaffold, policy trees identify regions
+where the estimated reward for treatment is higher than control, then
+report the expected mean differences and the size of those regions.
+Production scripts add further safeguards and interpretation layers,
+including more outcomes, sample weights, adverse-outcome flipping,
+cross-validated heterogeneity interpretation, depth comparison, and
+larger stability runs. Two practical complications remain. First,
+$V(d)$ is a counterfactual quantity, since for any individual we
+observe at most one of $Y(0)$ or $Y(1)$. We need to evaluate
+candidate rules without assigning everyone to them. Second, the rule
+must be small enough to defend in front of a non-statistical audience.
+Both constraints push the analysis toward shallow, transparent decision
+trees evaluated with doubly-robust scores.</p>
 <h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
 <p>A causal forest maps a high-dimensional covariate vector $X$ to a
 personalised CATE score $\hat{\tau}(X)$. The score says how much
@@ -681,7 +713,7 @@ even when any single fit looks reasonable.</li>
 <li>Report trade-offs: value, fairness, transparency, and feasibility.</li>
 </ol>
 <h2 id="which-question-are-we-answering"><a class="header" href="#which-question-are-we-answering">Which question are we answering?</a></h2>
-<p>The methods in weeks 5-9 answer related but different questions. The
+<p>The methods in weeks 5-10 answer related but different questions. The
 sequence matters because each step changes the causal estimand, the
 statistical summary, and the decision that the evidence can support.</p>
 <div class="table-wrapper"><table><thead><tr><th>Tool</th><th>Question</th><th>Main quantity</th><th>What it can support</th><th>What it does not settle</th></tr></thead><tbody>
@@ -690,6 +722,7 @@ statistical summary, and the decision that the evidence can support.</p>
 <tr><td>Forest CATE ranking</td><td>Who is predicted to benefit more, conditional on baseline covariates?</td><td>$\hat{\tau}(X)$</td><td>A ranking for possible targeting</td><td>A transparent public rule, or a fixed treatment share by itself</td></tr>
 <tr><td>RATE / Qini</td><td>Does targeting by the CATE ranking improve outcomes over random or uniform allocation?</td><td>Targeting gain over the ranked population</td><td>Whether heterogeneity has practical value</td><td>Which simple rule should be used</td></tr>
 <tr><td>Policy tree</td><td>What short allocation rule has high expected policy value?</td><td>$V(d)=\mathbb{E}[Y(d(X))]$</td><td>A defensible, interpretable rule to consider</td><td>Whether the split variables are causes, or whether the rule is fair</td></tr>
+<tr><td>Measurement checks</td><td>Do the outcomes and covariates mean what the analysis assumes?</td><td>Fit, invariance, construct, and measurement-error diagnostics</td><td>Whether interpretation needs qualification before policy use</td><td>The causal effect, or the fairness of the rule</td></tr>
 </tbody></table>
 </div>
 <p>The table is also a writing guide. In a report, avoid presenting policy
@@ -697,7 +730,9 @@ trees as though they answer the same question as an average treatment
 effect. The ATE asks whether the exposure helps on average. CATE
 summaries ask whether effects vary. RATE and Qini ask whether a ranking
 is useful for targeting. Policy trees ask whether a short rule can
-recover enough value to be worth considering.</p>
+recover enough value to be worth considering. Measurement checks ask
+whether the variables inside the analysis support the interpretation
+being placed on them.</p>
 <h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
 <p>We will reserve about 25 minutes today for the assessments.</p>
 <ol>
@@ -751,7 +786,7 @@ anyone uses them.</li>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
