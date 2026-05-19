@@ -437,14 +437,17 @@ m1_syntax &lt;- psych::fa(train, nfactors = 1) |&gt; efa_to_cfa()
 m2_syntax &lt;- psych::fa(train, nfactors = 2) |&gt; efa_to_cfa()
 m3_syntax &lt;- psych::fa(train, nfactors = 3) |&gt; efa_to_cfa()
 
-m1 &lt;- suppressWarnings(cfa(m1_syntax, data = test))
-m2 &lt;- suppressWarnings(cfa(m2_syntax, data = test))
-m3 &lt;- suppressWarnings(cfa(m3_syntax, data = test))
+m1 &lt;- cfa(m1_syntax, data = test)
+m2 &lt;- cfa(m2_syntax, data = test)
+m3 &lt;- cfa(m3_syntax, data = test)
 
 compare_performance(m1, m2, m3, verbose = FALSE)
 </code></pre>
 <p>Read CFI, RMSEA, AIC, and BIC together. Prefer simpler models when fit
-is comparable.</p>
+is comparable. Do not suppress convergence or Heywood warnings here. A
+three-factor model on six items is near the limit of what the data can
+identify, so any warnings <code>m3</code> produces are part of the model-comparison
+evidence, not noise to hide.</p>
 <h3 id="step-4-test-invariance-across-groups"><a class="header" href="#step-4-test-invariance-across-groups">Step 4: test invariance across groups</a></h3>
 <p>We teach invariance testing because it is widely used and because you
 may be asked to use it in comparative work. Treat it as a descriptive
@@ -480,12 +483,10 @@ k6_eth &lt;- df_nz |&gt;
     eth_cat
   )
 
-# example template
-# measurementInvariance(
-#   model = model_syntax,
-#   data = k6_eth,
-#   group = "eth_cat"
-# )
+# invariance testing is run end-to-end in Lab 10.
+# current semTools fits the configural / metric / scalar sequence with
+# measEq.syntax() and compares the steps with compareFit(). the older
+# measurementInvariance() wrapper has been removed and no longer runs.
 </code></pre>
 <ul>
 <li><strong>Configural invariance:</strong> same loading pattern.</li>

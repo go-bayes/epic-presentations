@@ -307,8 +307,6 @@ than the vaccine itself. That is the structure of confounding: a fork in
 which a common cause affects both treatment and outcome.</p>
 <p>Same question. Different assignment mechanism. Different estimate,
 different reliability.</p>
-<p>Salk later reported on the 1956 vaccination campaign (<a href="#ref-salk1957">Salk,
-1957</a>).</p>
 <h2 id="why-this-week-matters"><a class="header" href="#why-this-week-matters">Why this week matters</a></h2>
 <p>In Week 1 we defined causal questions. This week we learn how to
 represent structural assumptions using a causal directed acyclic graph
@@ -368,8 +366,11 @@ bias is a failure of internal validity).</p>
 <p>Confounding arises because <strong>there is a common cause of the treatment
 and the outcome.</strong></p>
 <p>In causal graph terminology, confounding corresponds to an open
-non-causal path from $A$ to $Y$ (a "backdoor path," formalised below
-in the four rules of confounding control).</p>
+non-causal path from $A$ to $Y$. Such a path is called a <strong>backdoor
+path</strong>: a path between $A$ and $Y$ that begins with an arrow
+pointing into $A$. The four rules of confounding control below show
+how to close these paths, and Week 3 develops the backdoor criterion in
+full.</p>
 <h2 id="causal-dag-notation-and-elements"><a class="header" href="#causal-dag-notation-and-elements">Causal DAG notation and elements</a></h2>
 <p><img src="figures/terminologylocalconventions.svg" alt="Our variable naming conventions (adapted from Bulbulia, 2023)" /></p>
 <ul>
@@ -629,11 +630,6 @@ Chapman &amp; Hall/CRC.
 <p>Neurath, O. (1973). Anti-spengler. In M. Neurath &amp; R. S. Cohen (Eds.),
 <em>Empiricism and sociology</em> (pp. 158–213). Springer Netherlands.
 <a href="https://doi.org/10.1007/978-94-010-2525-6_6">https://doi.org/10.1007/978-94-010-2525-6_6</a></p>
-</div>
-<div id="ref-salk1957" class="csl-entry">
-<p>Salk, J. E. (1957). Poliomyelitis vaccination in the fall of 1956.
-<em>American Journal of Public Health and the Nation’s Health</em>, <em>47</em>(1),
-1–18. <a href="https://doi.org/10.2105/AJPH.47.1.1">https://doi.org/10.2105/AJPH.47.1.1</a></p>
 </div>
 </div>
 

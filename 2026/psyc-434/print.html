@@ -935,7 +935,7 @@ and external validity); Bulbulia (<a href="readings.html#ref-bulbulia2024swigsti
 <p><strong>Required:</strong> Hernán &amp; Robins (<a href="readings.html#ref-hernanrobins2025">2025</a>), chapters
 1–2 (review identification assumptions).
 <a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">PDF</a>;
-(<a href="readings.html#ref-cashin2025target"><strong>cashin2025target?</strong></a>) — the TARGET
+Cashin et al. (<a href="readings.html#ref-cashin2025transparent">2025</a>) — the TARGET
 (Transparent Reporting of Observational Studies Emulating a Target
 Trial) statement, a reporting checklist for studies that emulate a
 target trial.</p>
@@ -1027,6 +1027,13 @@ e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2
 in experiments. <em>Evolutionary Human Sciences</em>, <em>6</em>, e43.
 <a href="https://doi.org/10.1017/ehs.2024.34">https://doi.org/10.1017/ehs.2024.34</a></p>
 </div>
+<div id="ref-cashin2025transparent" class="csl-entry">
+<p>Cashin, A. G., Hansford, H. J., Hernán, M. A., Swanson, S. A., Lee, H.,
+Jones, M. D., Dahabreh, I. J., Dickerman, B. A., Egger, M.,
+Garcia-Albeniz, X., et al. (2025). Transparent reporting of
+observational studies emulating a target trial—the TARGET statement.
+<em>JAMA</em>, <em>334</em>(12), 1084–1093. <a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
+</div>
 <div id="ref-hernan2009MEASUREMENT" class="csl-entry">
 <p>Hernán, M. A., &amp; Cole, S. R. (2009). Invited commentary: Causal diagrams
 and measurement bias. <em>American Journal of Epidemiology</em>, <em>170</em>(8),
@@ -1093,15 +1100,16 @@ of the contrast for one person</li>
 Instructions are in <a href="lab-02.html">Lab 2: Install R and Set Up Your IDE</a>.</p>
 </blockquote>
 <hr />
-<h2 id="motivating-example-does-social-media-harm-adolescent-purpose"><a class="header" href="#motivating-example-does-social-media-harm-adolescent-purpose">Motivating example: does social media harm adolescent purpose?</a></h2>
+<h2 id="motivating-example-does-social-media-harm-adolescent-wellbeing"><a class="header" href="#motivating-example-does-social-media-harm-adolescent-wellbeing">Motivating example: does social media harm adolescent wellbeing?</a></h2>
 <p>Orben &amp; Przybylski (<a href="week-01.html#ref-orben2019">2019</a>) reports a negative
-association between time spent on social media and purpose among British
-teenagers. The observed correlation was 0.04, comparable in magnitude to
-the association between wearing glasses and purpose in the same dataset.</p>
+association between time spent on social media and wellbeing among
+British teenagers. The observed correlation was 0.04, comparable in
+magnitude to the association between wearing glasses and wellbeing in
+the same dataset.</p>
 <p>The finding was widely reported as evidence that social media harms
 young people. Some investigators argued the conclusions were not strong
 enough: those teenagers who most frequently engaged with social media
-exhibited the lowest purpose scores, and the negative association is
+exhibited the lowest wellbeing scores, and the negative association is
 non-linear (<a href="week-01.html#ref-twenge2020underestimating">Twenge et al., 2020</a>).</p>
 <p>Questions about whether social media use harms young people are in the
 news. On 18 February 2026, CNN reported testimony in ongoing litigation
@@ -1133,10 +1141,12 @@ too vague. If it forgets the third question, it will slip from causal
 language into loose talk about associations.</p>
 <h2 id="psychology-begins-with-a-question"><a class="header" href="#psychology-begins-with-a-question">Psychology begins with a question</a></h2>
 <p>Before we can answer whether social media harms teenagers, we must ask a
-question that is clear enough to be answered. "Does social media harm
-purpose?" is not yet a causal question because it does not specify what
-is being compared with what. A causal question compares two states of
-the world. This question names only one.</p>
+question that is clear enough to be answered. Wellbeing is broad, so for
+a worked example we narrow it to one specific outcome: a person's sense
+of purpose. Even "Does social media harm purpose?" is not yet a causal
+question, because it does not specify what is being compared with what.
+A causal question compares two states of the world. This question names
+only one.</p>
 <p>We will use two words that are easy to confuse. An <em>association</em> asks
 whether two variables co-occur. A <em>causal effect</em>, on the other hand,
 asks what would happen if we changed something about the world.</p>
@@ -1184,13 +1194,16 @@ we want to evaluate is the <em>intervention</em>. The state we compare it
 against is the <em>control</em>. "Intervention" and "control" are placeholders:
 neither implies a medical procedure or a laboratory setting. They simply
 label the two states of the world that define our comparison.</p>
-<p>Precision extends to what we measure. "Sense of Purpose" aggregates
-self-esteem, life satisfaction, anxiety symptoms, and depressive
-symptoms. Each is a distinct construct, and they do not always move
-together. We must define the <em>outcome</em>, its measure (for example, life
-satisfaction on a 0 to 10 scale), and the time frame over which we
-assess it. The consequences of scrolling for a teenager's purpose in
-five hundred years are zero because life ends.</p>
+<p>Precision extends to what we measure. Purpose is one specific outcome: a
+person's sense that their life has direction and meaning. It is distinct
+from related wellbeing outcomes such as life satisfaction, self-esteem,
+anxiety, and depressive symptoms, which need not move together. We must
+define the <em>outcome</em>, its measure (for example, a sense-of-purpose
+measure on a 1 to 7 scale), and the time frame over which we assess it.
+Later weeks examine several wellbeing outcomes together in an
+outcome-wide design; this week we keep one outcome, purpose, in view.
+The consequences of scrolling for a teenager's purpose in five hundred
+years are zero because life ends.</p>
 <p>Notice that specifying interventions and outcomes forces us <strong>to order
 events along a timeline.</strong> For one state to influence another, it must
 precede it. There must be a contrast condition and a stated time
@@ -1226,7 +1239,8 @@ before bed. Suppose she enrolled in an experiment and was randomised to
 the doom-scrolling condition. The contrast is studying mathematics for
 two hours each night. At the end of the trial Alice reports high life
 satisfaction. Can we say that doom-scrolling <em>caused</em> Alice's life
-satisfaction?</p>
+satisfaction to be higher than it would have been under the mathematics
+condition?</p>
 <p>We cannot, because no more than one side of the contrast can be measured
 for Alice in a given period. Alice followed the doom-scrolling protocol.
 She did not follow the mathematics protocol. We observe only one state
@@ -1288,17 +1302,17 @@ this statement to have content.</p>
 <h2 id="what-we-learned"><a class="header" href="#what-we-learned">What we learned</a></h2>
 <p>Return to the social media question. Orben &amp; Przybylski
 (<a href="week-01.html#ref-orben2019">2019</a>) found an association of 0.04 between social
-media use and lower purpose. Courts and legislators are treating this as
-evidence of harm. We now see three reasons why the leap from association
-to causation fails.</p>
-<p>First, "the influence of social media on purpose" is undefined until we
-specify the interventions (scrolling versus what?), the outcomes (which
-dimension of purpose?), and the time frame. Second, the answer to a
-causal question depends on the target population, and the populations
-that matter (thirteen-year-olds in Aotearoa New Zealand today) may
-differ from the population studied (British teenagers before 2019).
-Third, the individual causal effect is never observable; we can only
-recover average effects under assumptions we have not yet stated.</p>
+media use and lower wellbeing. Courts and legislators are treating this
+as evidence of harm. We now see three reasons why the leap from
+association to causation fails.</p>
+<p>First, "the influence of social media on wellbeing" is undefined until
+we specify the interventions (scrolling versus what?), the outcomes
+(which dimension of wellbeing?), and the time frame. Second, the answer
+to a causal question depends on the target population, and the
+populations that matter (thirteen-year-olds in Aotearoa New Zealand
+today) may differ from the population studied (British teenagers before
+2019). Third, the individual causal effect is never observable; we can
+only recover average effects under assumptions we have not yet stated.</p>
 <p>The lesson is that before answering a question we must ask it.
 Psychology begins with a clearly defined question. A well-defined causal
 question requires a contrast between at least two interventions, a
@@ -1429,8 +1443,6 @@ than the vaccine itself. That is the structure of confounding: a fork in
 which a common cause affects both treatment and outcome.</p>
 <p>Same question. Different assignment mechanism. Different estimate,
 different reliability.</p>
-<p>Salk later reported on the 1956 vaccination campaign (<a href="week-02.html#ref-salk1957">Salk,
-1957</a>).</p>
 <h2 id="why-this-week-matters"><a class="header" href="#why-this-week-matters">Why this week matters</a></h2>
 <p>In Week 1 we defined causal questions. This week we learn how to
 represent structural assumptions using a causal directed acyclic graph
@@ -1490,8 +1502,11 @@ bias is a failure of internal validity).</p>
 <p>Confounding arises because <strong>there is a common cause of the treatment
 and the outcome.</strong></p>
 <p>In causal graph terminology, confounding corresponds to an open
-non-causal path from $A$ to $Y$ (a "backdoor path," formalised below
-in the four rules of confounding control).</p>
+non-causal path from $A$ to $Y$. Such a path is called a <strong>backdoor
+path</strong>: a path between $A$ and $Y$ that begins with an arrow
+pointing into $A$. The four rules of confounding control below show
+how to close these paths, and Week 3 develops the backdoor criterion in
+full.</p>
 <h2 id="causal-dag-notation-and-elements"><a class="header" href="#causal-dag-notation-and-elements">Causal DAG notation and elements</a></h2>
 <p><img src="figures/terminologylocalconventions.svg" alt="Our variable naming conventions (adapted from Bulbulia, 2023)" /></p>
 <ul>
@@ -1752,11 +1767,6 @@ Chapman &amp; Hall/CRC.
 <em>Empiricism and sociology</em> (pp. 158–213). Springer Netherlands.
 <a href="https://doi.org/10.1007/978-94-010-2525-6_6">https://doi.org/10.1007/978-94-010-2525-6_6</a></p>
 </div>
-<div id="ref-salk1957" class="csl-entry">
-<p>Salk, J. E. (1957). Poliomyelitis vaccination in the fall of 1956.
-<em>American Journal of Public Health and the Nation’s Health</em>, <em>47</em>(1),
-1–18. <a href="https://doi.org/10.2105/AJPH.47.1.1">https://doi.org/10.2105/AJPH.47.1.1</a></p>
-</div>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-3-causal-diagrams-the-structures-of-confounding-bias"><a class="header" href="#week-3-causal-diagrams-the-structures-of-confounding-bias">Week 3: Causal Diagrams: The Structures of Confounding Bias</a></h1>
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w03/">Slides</a></p>
@@ -1926,9 +1936,20 @@ can resolve several ambiguities. A common strategy is:</p>
 <li>Measure treatment at $t_1$.</li>
 <li>Measure outcome at $t_2$.</li>
 </ol>
+<p>Measuring variables in this order rules out two ambiguities at once. The
+outcome cannot have caused the treatment, because it is measured later.
+A measured confounder cannot be a consequence of the treatment, because
+it is measured earlier. Time stamps make the assumed arrow directions
+checkable rather than merely asserted.</p>
 <p><img src="figures/time-resolved-confounding.svg" alt="Confounding problems resolved by time-series data (adapted from Bulbulia, 2023)" /></p>
 <h3 id="confounding-problems-that-time-ordering-alone-cannot-resolve"><a class="header" href="#confounding-problems-that-time-ordering-alone-cannot-resolve">Confounding problems that time ordering alone cannot resolve</a></h3>
-<p>Some problems persist even with multiple waves.</p>
+<p>Time ordering fixes the direction of arrows. It does not supply missing
+variables. If a common cause of treatment and outcome is never measured,
+for example a stable disposition that drives both, then adding waves
+does not close that backdoor path: repeated measurement of the wrong
+variables cannot substitute for measuring the right ones. Time ordering
+also cannot resolve M-bias, where the offending structure is a
+pre-treatment collider rather than an open backdoor path.</p>
 <p><img src="figures/dag-time-series-not-resolved.svg" alt="Confounding problems not resolved by time-series data (adapted from Bulbulia, 2023)" /></p>
 <blockquote>
 <p><strong>Definition: M-bias</strong></p>
@@ -1953,11 +1974,17 @@ $U_2 \to Y$.</li>
 fails here.</li>
 </ol>
 </blockquote>
-<h3 id="worked-example-mediation-assumptions"><a class="header" href="#worked-example-mediation-assumptions">Worked example: mediation assumptions</a></h3>
+<h3 id="note-on-mediation-assumptions"><a class="header" href="#note-on-mediation-assumptions">Note on mediation assumptions</a></h3>
 <p><img src="figures/mediation.svg" alt="The assumptions in causal mediation (adapted from Bulbulia, 2023)" /></p>
 <p>Mediation analysis needs stronger assumptions than total-effect
-analysis. Treatment-induced confounding of the mediator-outcome relation
-can make standard regression unsuitable.</p>
+analysis. One reason is <em>treatment-induced confounding</em>: the treatment
+$A$ can affect a variable that then confounds the mediator-outcome
+relation, so no fixed adjustment set both blocks the confounding and
+leaves the mediated path intact. When this happens, standard regression
+cannot recover the direct and indirect effects. We do not estimate
+mediation in this course. The point here is only that splitting a total
+effect into separate paths carries assumptions beyond those needed for
+the total effect itself.</p>
 <h2 id="return-to-the-opening-example-1"><a class="header" href="#return-to-the-opening-example-1">Return to the opening example</a></h2>
 <p>Back to the exercise programme example. Higher $R^2$ did not answer
 the causal question, because adding post-treatment body composition
@@ -2152,9 +2179,10 @@ condition on $C$?</li>
 require different causal estimands. Different questions require
 different assumptions. The important point for this week is that the
 same picture language can represent confounding, selection, measurement,
-mediation, and transport problems. The effect modification graph (open
-circle into the outcome) reappears below when we distinguish two
-mechanisms of selection bias.</p>
+mediation, and transport problems. The effect modification graph (the
+open circle on an arrow marks effect modification, not a standard causal
+arrow) reappears below when we distinguish two mechanisms of selection
+bias.</p>
 <h2 id="a-typology-of-measurement-error-bias"><a class="header" href="#a-typology-of-measurement-error-bias">A typology of measurement error bias</a></h2>
 <p>Sometimes measurement error can be clarified by causal DAGS.</p>
 <p><img src="figures/measurementerrorbias.svg" alt="A typology of measurement error bias, adapted from Bulbulia (2024)" /></p>
@@ -2308,7 +2336,7 @@ effect.</li>
 <li>Propose one design change that avoids this bias.</li>
 </ol>
 </blockquote>
-<h2 id="attrition-as-a-measurement-error-structure"><a class="header" href="#attrition-as-a-measurement-error-structure">Attrition as a measurement error structure</a></h2>
+<h2 id="attrition-and-the-measurement-error-analogy"><a class="header" href="#attrition-and-the-measurement-error-analogy">Attrition and the measurement-error analogy</a></h2>
 <p>Right-censoring (attrition) can bias causal estimates through two
 distinct mechanisms. The first is distortion: if the outcome affects who
 drops out, conditioning on the end-of-study sample conditions on a
@@ -2438,7 +2466,7 @@ directed acyclic graphs. <em>American Journal of Epidemiology</em>, <em>175</em>
 <ul>
 <li>Hernán &amp; Robins (<a href="week-05.html#ref-hernanrobins2025">2025</a>), chapters 1-3.
 <a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">link</a></li>
-<li>(<a href="week-05.html#ref-cashin2025target"><strong>cashin2025target?</strong></a>). TARGET
+<li>Cashin et al. (<a href="week-05.html#ref-cashin2025transparent">2025</a>). TARGET
 (Transparent Reporting of Observational Studies Emulating a Target
 Trial) statement.</li>
 </ul>
@@ -2579,11 +2607,12 @@ when treatment versions are mixed under one label. If "mindfulness
 practice" includes different apps, dosages, and start dates under the
 same label, $Y(1)$ does not refer to one intervention.</p>
 <h3 id="assumption-2-exchangeability"><a class="header" href="#assumption-2-exchangeability">Assumption 2: exchangeability</a></h3>
-<p>The conditional probability of receiving every value of an exposure
-level, though not decided by investigators, depends only on the measured
-covariates
-((<a href="week-05.html#ref-chatton_g-computation_2020"><strong>chatton_g-computation_2020?</strong></a>);
-(<a href="week-05.html#ref-hernan_causal_2023"><strong>hernan_causal_2023?</strong></a>)).</p>
+<p>Within levels of the measured covariates $L$, treatment is independent
+of the potential outcomes: once we know a person's $L$, their
+treatment status carries no further information about how they would
+respond under either exposure (Chatton et al.
+(<a href="week-05.html#ref-chatton2020">2020</a>); Hernán &amp; Robins
+(<a href="week-05.html#ref-hernanrobins2025">2025</a>)).</p>
 <p>In a randomised trial, exchangeability holds unconditionally:</p>
 <p>$$ Y(a) \coprod A. $$</p>
 <p>In observational data, we require conditional exchangeability. For each
@@ -2599,9 +2628,9 @@ defended by subject-matter knowledge and a plausible DAG. This is the
 no-unmeasured-confounding assumption.</p>
 <h3 id="assumption-3-positivity"><a class="header" href="#assumption-3-positivity">Assumption 3: positivity</a></h3>
 <p>The probability of receiving every value of the exposure within all
-strata of covariates is greater than zero
-((<a href="week-05.html#ref-hernan_causal_2023"><strong>hernan_causal_2023?</strong></a>);
-(<a href="week-05.html#ref-westreich_invited_2010"><strong>westreich_invited_2010?</strong></a>)):</p>
+strata of covariates is greater than zero (Hernán &amp; Robins
+(<a href="week-05.html#ref-hernanrobins2025">2025</a>); Westreich &amp; Cole
+(<a href="week-05.html#ref-westreich2010">2010</a>)):</p>
 <p>$$ 0 &lt; P(A=a \mid L=l) &lt; 1, \quad \forall, a \in \mathcal{A},;
 \forall, l \in \mathcal{L}. $$</p>
 <p>There are two types of positivity violation.</p>
@@ -2778,7 +2807,7 @@ post-intervention measured with the Kessler-6" is interpretable and
 reproducible. Include timing, scale, and instrument.</p>
 <p><strong>Step 4: evaluate exchangeability.</strong> Make the case that potential
 outcomes are independent of treatment conditional on covariates: $Y(a)
-\coprod A \mid L$ (Hernan &amp; Robins (<a href="week-05.html#ref-hernan2024WHATIF">2020</a>)).
+\coprod A \mid L$ (Hernán &amp; Robins (<a href="week-05.html#ref-hernanrobins2025">2025</a>)).
 Use design and diagnostics: DAGs, subject-matter arguments,
 pre-treatment covariate balance, and overlap checks. If exchangeability
 is doubtful, redesign rather than rely solely on modelling.</p>
@@ -2786,21 +2815,20 @@ is doubtful, redesign rather than rely solely on modelling.</p>
 units receiving a treatment version compatible with level $a$, the
 observed outcome equals $Y(a)$. It also presumes well-defined versions
 and no interference between units (VanderWeele &amp; Hernan
-(<a href="week-05.html#ref-vanderweele2013">2013</a>); Hernan &amp; Robins
-(<a href="week-05.html#ref-hernan2024WHATIF">2020</a>)). When multiple versions exist, either
+(<a href="week-05.html#ref-vanderweele2013">2013</a>); Hernán &amp; Robins
+(<a href="week-05.html#ref-hernanrobins2025">2025</a>)). When multiple versions exist, either
 refine the intervention so versions are irrelevant to $Y(a)$, or
 condition on version-defining covariates.</p>
 <p><strong>Step 6: check positivity.</strong> Each treatment level must occur with
 non-zero probability at every covariate profile needed for
-exchangeability
-((<a href="week-05.html#ref-westreich_invited_2010"><strong>westreich_invited_2010?</strong></a>)). Diagnose
-limited overlap using propensity score distributions and extreme
-weights. Consider design-stage remedies (trimming, restriction) before
-estimation.</p>
+exchangeability (Westreich &amp; Cole (<a href="week-05.html#ref-westreich2010">2010</a>)).
+Diagnose limited overlap using propensity score distributions and
+extreme weights. Consider design-stage remedies (trimming, restriction)
+before estimation.</p>
 <p><strong>Step 7: ensure measurement aligns with the scientific question.</strong> Be
 explicit about probable forms of measurement error (classical, Berkson,
 differential, misclassification) and their structural implications for
-bias (Hernan &amp; Robins (<a href="week-05.html#ref-hernan2024WHATIF">2020</a>); Bulbulia
+bias (Hernán &amp; Robins (<a href="week-05.html#ref-hernanrobins2025">2025</a>); Bulbulia
 (<a href="week-05.html#ref-bulbulia2024wierd">2024</a>)). Where feasible, incorporate
 validation studies or calibration models.</p>
 <p><strong>Step 8: preserve representativeness from start to finish.</strong>
@@ -2817,51 +2845,22 @@ time-stamp the analytic plan. Include identification arguments, code,
 and data where possible. Report robustness and sensitivity analyses.
 Transparent reasoning is a scientific result in its own right (Ogburn &amp;
 Shpitser (<a href="week-05.html#ref-ogburn2021">2021</a>)).</p>
-<h2 id="reporting-the-target-checklist"><a class="header" href="#reporting-the-target-checklist">Reporting: the TARGET checklist</a></h2>
-<p>The TARGET (Transparent Reporting of Observational Studies Emulating a
-Target Trial) statement
-((<a href="week-05.html#ref-cashin2025target"><strong>cashin2025target?</strong></a>)) provides a structured
-checklist for reporting studies that emulate a target trial. It maps
-directly onto the causal workflow above. Use it when writing up results.</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">No.</th><th style="text-align: left">Item</th><th style="text-align: left">Workflow step</th></tr></thead><tbody>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Title and Abstract</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">1</td><td style="text-align: left">Identify that the study emulates a target trial; state objectives</td><td style="text-align: left">Steps 0–1</td></tr>
-<tr><td style="text-align: left">2</td><td style="text-align: left">Report the data source(s)</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">3</td><td style="text-align: left">Summarise assumptions, methods, findings, conclusions</td><td style="text-align: left">Steps 4–9</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Introduction</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">4</td><td style="text-align: left">Describe scientific background and gap</td><td style="text-align: left">Motivation</td></tr>
-<tr><td style="text-align: left">5</td><td style="text-align: left">Summarise the causal question</td><td style="text-align: left">Steps 0–2</td></tr>
-<tr><td style="text-align: left">6</td><td style="text-align: left">Describe rationale for emulating a target trial</td><td style="text-align: left">Steps 0–1</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Methods</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">7</td><td style="text-align: left">Cite data sources; describe purpose, type, setting, time period</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">8a</td><td style="text-align: left">Eligibility criteria and operationalisation</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">8b</td><td style="text-align: left">Treatment strategies and operationalisation</td><td style="text-align: left">Step 0</td></tr>
-<tr><td style="text-align: left">8c</td><td style="text-align: left">Assignment procedures and operationalisation</td><td style="text-align: left">Step 4</td></tr>
-<tr><td style="text-align: left">8d</td><td style="text-align: left">Follow-up: starts at assignment; describe operationalisation</td><td style="text-align: left">Step 1</td></tr>
-<tr><td style="text-align: left">8e</td><td style="text-align: left">Outcomes and operationalisation</td><td style="text-align: left">Step 2</td></tr>
-<tr><td style="text-align: left">8f</td><td style="text-align: left">Causal contrasts and operationalisation</td><td style="text-align: left">Steps 0–2</td></tr>
-<tr><td style="text-align: left">8g</td><td style="text-align: left">Identifying assumptions; describe related variables</td><td style="text-align: left">Steps 4–6</td></tr>
-<tr><td style="text-align: left">8h</td><td style="text-align: left">Data analysis procedures for each causal estimand</td><td style="text-align: left">Steps 4–8</td></tr>
-<tr><td style="text-align: left">8i</td><td style="text-align: left">Additional analyses for each causal estimand</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Results</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">9</td><td style="text-align: left">Numbers assessed, eligible, and assigned</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">10</td><td style="text-align: left">Baseline characteristics by treatment strategy</td><td style="text-align: left">Step 4</td></tr>
-<tr><td style="text-align: left">11</td><td style="text-align: left">Follow-up length and reasons for end of follow-up</td><td style="text-align: left">Steps 1, 8</td></tr>
-<tr><td style="text-align: left">12</td><td style="text-align: left">Missing data frequency by variable</td><td style="text-align: left">Step 8</td></tr>
-<tr><td style="text-align: left">13</td><td style="text-align: left">Outcome frequency or distribution at each wave</td><td style="text-align: left">Step 2</td></tr>
-<tr><td style="text-align: left">14</td><td style="text-align: left">Effect estimates with measures of precision</td><td style="text-align: left">Steps 4–6</td></tr>
-<tr><td style="text-align: left">15</td><td style="text-align: left">Sensitivity of estimates to choices and assumptions</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Discussion</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">16</td><td style="text-align: left">Interpretation of key findings</td><td style="text-align: left">—</td></tr>
-<tr><td style="text-align: left">17</td><td style="text-align: left">Limitations, including differences between target trial and emulation</td><td style="text-align: left">Steps 4–8</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Other Information</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">18</td><td style="text-align: left">Ethics approval</td><td style="text-align: left">—</td></tr>
-<tr><td style="text-align: left">19</td><td style="text-align: left">Registration</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left">20</td><td style="text-align: left">Data and code availability</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left">21</td><td style="text-align: left">Funding sources</td><td style="text-align: left">—</td></tr>
-<tr><td style="text-align: left">22</td><td style="text-align: left">Conflicts of interest</td><td style="text-align: left">—</td></tr>
-</tbody></table>
-</div>
+<h2 id="a-note-on-reporting-standards"><a class="header" href="#a-note-on-reporting-standards">A note on reporting standards</a></h2>
+<p>When a study that emulates a target trial is published, journals in
+epidemiology and medicine increasingly expect a thorough, standardised
+account of its design and assumptions. The TARGET statement (Transparent
+Reporting of Observational Studies Emulating a Target Trial; Cashin et
+al. (<a href="week-05.html#ref-cashin2025transparent">2025</a>)) is one such reporting format.
+It asks authors to state, point by point, the target population, the
+treatment strategies, time zero, the outcomes, the identification
+assumptions, and the sensitivity analyses. Each of those points
+corresponds to a step of the causal workflow above.</p>
+<p>Read the TARGET statement once, to see the level of detail a
+professional causal analysis is held to. You are not asked to apply its
+full checklist in this course. For the final assessment, Option A
+reports follow the course research-report template and <a href="reporting-guide.html">reporting
+guide</a>, which ask for the same reasoning in a
+shorter, course-specific form.</p>
 <p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
 <hr />
 <h2 id="appendix-a-notation-variants"><a class="header" href="#appendix-a-notation-variants">Appendix A: notation variants</a></h2>
@@ -2876,10 +2875,20 @@ line-spacing="2">
 error and external validity threats. <em>Evolutionary Human Sciences</em>, <em>6</em>,
 e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2024.33</a></p>
 </div>
-<div id="ref-hernan2024WHATIF" class="csl-entry">
-<p>Hernan, M. A., &amp; Robins, J. M. (2020). <em>Causal inference: What if?</em>
-Taylor &amp; Francis.
-<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/</a></p>
+<div id="ref-cashin2025transparent" class="csl-entry">
+<p>Cashin, A. G., Hansford, H. J., Hernán, M. A., Swanson, S. A., Lee, H.,
+Jones, M. D., Dahabreh, I. J., Dickerman, B. A., Egger, M.,
+Garcia-Albeniz, X., et al. (2025). Transparent reporting of
+observational studies emulating a target trial—the TARGET statement.
+<em>JAMA</em>, <em>334</em>(12), 1084–1093. <a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
+</div>
+<div id="ref-chatton2020" class="csl-entry">
+<p>Chatton, A., Le Borgne, F., Leyrat, C., Gillaizeau, F., Rousseau, C.,
+Barbin, L., Laplaud, D., Léger, M., Giraudeau, B., &amp; Foucher, Y. (2020).
+G-computation, propensity score-based methods, and targeted maximum
+likelihood estimator for causal inference with different covariates
+sets: a comparative simulation study. <em>Scientific Reports</em>, <em>10</em>(1),
+9219. <a href="https://doi.org/10.1038/s41598-020-65917-x">https://doi.org/10.1038/s41598-020-65917-x</a></p>
 </div>
 <div id="ref-hernan2017SELECTIONWITHOUTCOLLIDER" class="csl-entry">
 <p>Hernán, M. A. (2017). Invited commentary: Selection bias without
@@ -2906,6 +2915,11 @@ cultures. <em>Observational Studies</em>, <em>7</em>(1), 179–183.
 <p>VanderWeele, T. J., &amp; Hernan, M. A. (2013). Causal inference under
 multiple versions of treatment. <em>Journal of Causal Inference</em>, <em>1</em>(1),
 1–20.</p>
+</div>
+<div id="ref-westreich2010" class="csl-entry">
+<p>Westreich, D., &amp; Cole, S. R. (2010). Invited commentary: positivity in
+practice. <em>American Journal of Epidemiology</em>, <em>171</em>(6).
+<a href="https://doi.org/10.1093/aje/kwp436">https://doi.org/10.1093/aje/kwp436</a></p>
 </div>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-6-effect-modification-and-cate-1"><a class="header" href="#week-6-effect-modification-and-cate-1">Week 6: Effect Modification and CATE</a></h1>
@@ -3090,6 +3104,14 @@ distribution of $L$ differs across levels of $G$ (which it does,
 because $G \to L$). When both hold, $\tau(g)$ varies with $g$.
 Effect modification by $G$ is present even though $G$ has no direct
 structural path to $Y$ after conditioning.</p>
+<p>A concrete instance shows this. Suppose $L$ has two levels. The effect
+of $A$ on $Y$ is $+2$ when $L$ is low and $+6$ when $L$ is
+high, so the effect varies across $L$. Among younger people, $80%$
+are low-$L$ and $20%$ high-$L$, giving $\tau(\text{young}) =
+0.8(2) + 0.2(6) = 2.8$. Among older people, $30%$ are low-$L$ and
+$70%$ high-$L$, giving $\tau(\text{old}) = 0.3(2) + 0.7(6) = 4.8$.
+The CATE differs by age even though age has no direct arrow to $Y$:
+age changes the mix of $L$, and $L$ is where the effect varies.</p>
 <p>This result has practical consequences. Investigators who equate
 d-separation with absence of effect modification will miss genuine
 heterogeneity. A non-significant regression interaction term between
@@ -3249,7 +3271,7 @@ question.</p>
 </ul>
 <h2 id="format-1"><a class="header" href="#format-1">Format</a></h2>
 <ul>
-<li>Duration: 50 minutes (allocated time: 1 hour 50 minutes)</li>
+<li>Duration: 1 hour 50 minutes</li>
 <li>Closed book, one A4 sheet of notes permitted, no devices</li>
 <li>Bring a pen or pencil</li>
 <li>Location: EA120 (the usual seminar room)</li>
@@ -3394,7 +3416,7 @@ read, question, and apply.</p>
 pick one outcome at a time to make the heterogeneity story concrete. The
 final report applies the outcome-wide ATE plus policy-tree sequence
 across the prespecified outcomes.</p>
-<p><img src="figures/lab-09/cate-histogram.svg" alt="Histogram of estimated individual treatment effects from a small causal forest fit on the simulated NZAVS panel (outcome: sense of purpose). Each bar counts how many people received an estimate $\hat{\tau}(x)$ in that bin. The orange line marks the average treatment effect; the dashed line marks zero. A wide spread is the empirical signature of heterogeneity, not of individual-level estimates: each bar is a count of people whose covariate profile produced an estimate near that value." /></p>
+<p><img src="figures/lab-09/cate-histogram.svg" alt="Histogram of estimated subgroup-level treatment effects from a small causal forest fit on the simulated NZAVS panel (outcome: sense of purpose). Each bar counts how many people received an estimate $\hat{\tau}(x)$ in that bin. The orange line marks the average treatment effect; the dashed line marks zero. A wide spread is the empirical signature of heterogeneity, not of individual-level estimates: each bar is a count of people whose covariate profile produced an estimate near that value." /></p>
 <h2 id="causal-estimand-statistical-estimand-estimator"><a class="header" href="#causal-estimand-statistical-estimand-estimator">Causal estimand, statistical estimand, estimator</a></h2>
 <p>The same workflow that organised weeks 5 and 6 still organises this
 week. The full ten-step version lives on the <a href="causal-workflow.html">causal
@@ -3629,14 +3651,21 @@ enough real information to improve allocation.</p>
 <p>The first question is: does treating high-ranked units first yield
 meaningfully larger gains than treating at random?</p>
 <p>The Targeting Operator Characteristic (TOC) curve answers this question.
-It plots cumulative targeting gain against treatment coverage:</p>
-<p>$$ G(q)=\frac{1}{n}\sum_{i=1}^{\lfloor
-qn\rfloor}\hat{\tau}_{(i)},\qquad 0\le q\le 1, $$</p>
+For each treatment coverage $q$, it plots how much larger the average
+treatment effect is among the top-$q$ ranked individuals than the
+average effect across the whole population:</p>
+<p>$$ \text{TOC}(q)=\frac{1}{\lfloor qn\rfloor}\sum_{i=1}^{\lfloor
+qn\rfloor}\hat{\tau}<em>{(i)};-;\frac{1}{n}\sum</em>{i=1}^{n}\hat{\tau}_i,\qquad
+0 &lt; q \le 1, $$</p>
 <p>where $\hat{\tau}_{(1)} \ge \hat{\tau}_{(2)} \ge \cdots$ are the
-sorted estimated effects. The horizontal axis $q$ is the fraction of
-the population we would treat. The vertical axis $G(q)$ is the
-cumulative gain from treating that top-$q$ slice rather than treating
-a randomly chosen slice of the same size.</p>
+sorted estimated effects. The first term is the mean estimated effect in
+the top-$q$ slice; the second is the overall ATE. The horizontal axis
+$q$ is the fraction of the population we would treat. The vertical
+axis is the gain from selecting that top-$q$ slice by the CATE ranking
+rather than choosing a slice of the same size at random: a random slice
+has the overall ATE as its average effect, so the TOC measures how far
+the ranked slice beats it. At $q = 1$ the top slice is the whole
+population, so the TOC returns to zero.</p>
 <p><img src="figures/lab-09/toc-curve.svg" alt="TOC curve from the same small causal forest used above. Targeting rate $q$ on the horizontal axis; gain over random assignment on the vertical axis. A steep early rise indicates concentrated heterogeneity: the highest-ranked individuals carry most of the treatment benefit. A flat curve indicates none. The curve must return to zero at $q = 1$, since at full coverage every targeting rule is identical to &quot;treat everyone&quot;." /></p>
 <p>The TOC curve is the most direct answer to "does targeting beat random?"
 but it carries no single-number summary. Two summaries of the curve are
@@ -3668,9 +3697,9 @@ the grey line at the 40% marker and roughly $0.02$ above at the 10%
 marker. Those gaps are the <em>lift from targeting</em> at those budgets,
 expressed in the outcome's standard-deviation units. The 0.05 lift at
 40% spend says that a CATE-targeted rule covering forty percent of the
-population delivers, on average, $0.05$ more standard-deviation units
-of purpose per person treated than a treat-everyone-equally policy at
-the same coverage.</p>
+population delivers, on average, about $0.05$ more standard-deviation
+units of purpose per eligible person, averaged across the whole eligible
+population, than a treat-everyone-equally policy at the same coverage.</p>
 <p>Third, look at the shape near $q = 0$. A curve that rises steeply over
 the leftmost few percent indicates that the very top of the ranking is
 heavily concentrated. A curve that hugs the diagonal everywhere
@@ -3703,10 +3732,13 @@ one sentence.</li>
 <ol>
 <li><strong>Is there substantial heterogeneity?</strong> The causal-forest
 <strong>calibration test</strong> checks whether $\hat{\tau}(x)$ varies across
-people more than chance alone would produce; its
-<em>differential-prediction</em> coefficient is the signal to read. Reject
-the null that $\tau(x)$ is constant if that test rejects, or if
-RATE-AUTOC is positive and statistically reliable.</li>
+people more than chance alone would produce. The coefficient to read
+is the one <code>grf</code> labels <code>differential.forest.prediction</code>: a value
+near 1 means the forest's heterogeneity estimates track real
+variation, a value near 0 means there is little usable
+heterogeneity. Reject the null that $\tau(x)$ is constant if that
+test rejects, or if RATE-AUTOC is positive and statistically
+reliable.</li>
 <li><strong>Does targeting pay at realistic budgets?</strong> Inspect the slope of
 the Qini curve around plausible coverage levels.</li>
 <li><strong>Can we express the targeting rule in a few defensible steps?</strong>
@@ -3998,9 +4030,10 @@ enforces. In the assignment scaffold, policy trees identify regions
 where the estimated reward for treatment is higher than control, then
 report the expected mean differences and the size of those regions.
 Production scripts add further safeguards and interpretation layers,
-including more outcomes, sample weights, adverse-outcome flipping,
-cross-validated heterogeneity interpretation, depth comparison, and
-larger stability runs. Two practical complications remain. First,
+including more outcomes, sample weights, adverse-outcome flipping
+(reorienting harmful outcomes so a higher value always means a better
+result), cross-validated heterogeneity interpretation, depth comparison,
+and larger stability runs. Two practical complications remain. First,
 $V(d)$ is a counterfactual quantity, since for any individual we
 observe at most one of $Y(0)$ or $Y(1)$. We need to evaluate
 candidate rules without assigning everyone to them. Second, the rule
@@ -4590,14 +4623,17 @@ m1_syntax &lt;- psych::fa(train, nfactors = 1) |&gt; efa_to_cfa()
 m2_syntax &lt;- psych::fa(train, nfactors = 2) |&gt; efa_to_cfa()
 m3_syntax &lt;- psych::fa(train, nfactors = 3) |&gt; efa_to_cfa()
 
-m1 &lt;- suppressWarnings(cfa(m1_syntax, data = test))
-m2 &lt;- suppressWarnings(cfa(m2_syntax, data = test))
-m3 &lt;- suppressWarnings(cfa(m3_syntax, data = test))
+m1 &lt;- cfa(m1_syntax, data = test)
+m2 &lt;- cfa(m2_syntax, data = test)
+m3 &lt;- cfa(m3_syntax, data = test)
 
 compare_performance(m1, m2, m3, verbose = FALSE)
 </code></pre>
 <p>Read CFI, RMSEA, AIC, and BIC together. Prefer simpler models when fit
-is comparable.</p>
+is comparable. Do not suppress convergence or Heywood warnings here. A
+three-factor model on six items is near the limit of what the data can
+identify, so any warnings <code>m3</code> produces are part of the model-comparison
+evidence, not noise to hide.</p>
 <h3 id="step-4-test-invariance-across-groups"><a class="header" href="#step-4-test-invariance-across-groups">Step 4: test invariance across groups</a></h3>
 <p>We teach invariance testing because it is widely used and because you
 may be asked to use it in comparative work. Treat it as a descriptive
@@ -4633,12 +4669,10 @@ k6_eth &lt;- df_nz |&gt;
     eth_cat
   )
 
-# example template
-# measurementInvariance(
-#   model = model_syntax,
-#   data = k6_eth,
-#   group = "eth_cat"
-# )
+# invariance testing is run end-to-end in Lab 10.
+# current semTools fits the configural / metric / scalar sequence with
+# measEq.syntax() and compares the steps with compareFit(). the older
+# measurementInvariance() wrapper has been removed and no longer runs.
 </code></pre>
 <ul>
 <li><strong>Configural invariance:</strong> same loading pattern.</li>

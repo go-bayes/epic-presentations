@@ -427,9 +427,10 @@ enforces. In the assignment scaffold, policy trees identify regions
 where the estimated reward for treatment is higher than control, then
 report the expected mean differences and the size of those regions.
 Production scripts add further safeguards and interpretation layers,
-including more outcomes, sample weights, adverse-outcome flipping,
-cross-validated heterogeneity interpretation, depth comparison, and
-larger stability runs. Two practical complications remain. First,
+including more outcomes, sample weights, adverse-outcome flipping
+(reorienting harmful outcomes so a higher value always means a better
+result), cross-validated heterogeneity interpretation, depth comparison,
+and larger stability runs. Two practical complications remain. First,
 $V(d)$ is a counterfactual quantity, since for any individual we
 observe at most one of $Y(0)$ or $Y(1)$. We need to evaluate
 candidate rules without assigning everyone to them. Second, the rule

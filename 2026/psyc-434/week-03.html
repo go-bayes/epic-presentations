@@ -412,9 +412,20 @@ can resolve several ambiguities. A common strategy is:</p>
 <li>Measure treatment at $t_1$.</li>
 <li>Measure outcome at $t_2$.</li>
 </ol>
+<p>Measuring variables in this order rules out two ambiguities at once. The
+outcome cannot have caused the treatment, because it is measured later.
+A measured confounder cannot be a consequence of the treatment, because
+it is measured earlier. Time stamps make the assumed arrow directions
+checkable rather than merely asserted.</p>
 <p><img src="figures/time-resolved-confounding.svg" alt="Confounding problems resolved by time-series data (adapted from Bulbulia, 2023)" /></p>
 <h3 id="confounding-problems-that-time-ordering-alone-cannot-resolve"><a class="header" href="#confounding-problems-that-time-ordering-alone-cannot-resolve">Confounding problems that time ordering alone cannot resolve</a></h3>
-<p>Some problems persist even with multiple waves.</p>
+<p>Time ordering fixes the direction of arrows. It does not supply missing
+variables. If a common cause of treatment and outcome is never measured,
+for example a stable disposition that drives both, then adding waves
+does not close that backdoor path: repeated measurement of the wrong
+variables cannot substitute for measuring the right ones. Time ordering
+also cannot resolve M-bias, where the offending structure is a
+pre-treatment collider rather than an open backdoor path.</p>
 <p><img src="figures/dag-time-series-not-resolved.svg" alt="Confounding problems not resolved by time-series data (adapted from Bulbulia, 2023)" /></p>
 <blockquote>
 <p><strong>Definition: M-bias</strong></p>
@@ -439,11 +450,17 @@ $U_2 \to Y$.</li>
 fails here.</li>
 </ol>
 </blockquote>
-<h3 id="worked-example-mediation-assumptions"><a class="header" href="#worked-example-mediation-assumptions">Worked example: mediation assumptions</a></h3>
+<h3 id="note-on-mediation-assumptions"><a class="header" href="#note-on-mediation-assumptions">Note on mediation assumptions</a></h3>
 <p><img src="figures/mediation.svg" alt="The assumptions in causal mediation (adapted from Bulbulia, 2023)" /></p>
 <p>Mediation analysis needs stronger assumptions than total-effect
-analysis. Treatment-induced confounding of the mediator-outcome relation
-can make standard regression unsuitable.</p>
+analysis. One reason is <em>treatment-induced confounding</em>: the treatment
+$A$ can affect a variable that then confounds the mediator-outcome
+relation, so no fixed adjustment set both blocks the confounding and
+leaves the mediated path intact. When this happens, standard regression
+cannot recover the direct and indirect effects. We do not estimate
+mediation in this course. The point here is only that splitting a total
+effect into separate paths carries assumptions beyond those needed for
+the total effect itself.</p>
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
 <p>Back to the exercise programme example. Higher $R^2$ did not answer
 the causal question, because adding post-treatment body composition

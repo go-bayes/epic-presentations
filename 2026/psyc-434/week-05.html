@@ -253,7 +253,7 @@
 <ul>
 <li>Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>), chapters 1-3.
 <a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">link</a></li>
-<li>(<a href="#ref-cashin2025target"><strong>cashin2025target?</strong></a>). TARGET
+<li>Cashin et al. (<a href="#ref-cashin2025transparent">2025</a>). TARGET
 (Transparent Reporting of Observational Studies Emulating a Target
 Trial) statement.</li>
 </ul>
@@ -394,11 +394,12 @@ when treatment versions are mixed under one label. If "mindfulness
 practice" includes different apps, dosages, and start dates under the
 same label, $Y(1)$ does not refer to one intervention.</p>
 <h3 id="assumption-2-exchangeability"><a class="header" href="#assumption-2-exchangeability">Assumption 2: exchangeability</a></h3>
-<p>The conditional probability of receiving every value of an exposure
-level, though not decided by investigators, depends only on the measured
-covariates
-((<a href="#ref-chatton_g-computation_2020"><strong>chatton_g-computation_2020?</strong></a>);
-(<a href="#ref-hernan_causal_2023"><strong>hernan_causal_2023?</strong></a>)).</p>
+<p>Within levels of the measured covariates $L$, treatment is independent
+of the potential outcomes: once we know a person's $L$, their
+treatment status carries no further information about how they would
+respond under either exposure (Chatton et al.
+(<a href="#ref-chatton2020">2020</a>); Hernán &amp; Robins
+(<a href="#ref-hernanrobins2025">2025</a>)).</p>
 <p>In a randomised trial, exchangeability holds unconditionally:</p>
 <p>$$ Y(a) \coprod A. $$</p>
 <p>In observational data, we require conditional exchangeability. For each
@@ -414,9 +415,9 @@ defended by subject-matter knowledge and a plausible DAG. This is the
 no-unmeasured-confounding assumption.</p>
 <h3 id="assumption-3-positivity"><a class="header" href="#assumption-3-positivity">Assumption 3: positivity</a></h3>
 <p>The probability of receiving every value of the exposure within all
-strata of covariates is greater than zero
-((<a href="#ref-hernan_causal_2023"><strong>hernan_causal_2023?</strong></a>);
-(<a href="#ref-westreich_invited_2010"><strong>westreich_invited_2010?</strong></a>)):</p>
+strata of covariates is greater than zero (Hernán &amp; Robins
+(<a href="#ref-hernanrobins2025">2025</a>); Westreich &amp; Cole
+(<a href="#ref-westreich2010">2010</a>)):</p>
 <p>$$ 0 &lt; P(A=a \mid L=l) &lt; 1, \quad \forall, a \in \mathcal{A},;
 \forall, l \in \mathcal{L}. $$</p>
 <p>There are two types of positivity violation.</p>
@@ -593,7 +594,7 @@ post-intervention measured with the Kessler-6" is interpretable and
 reproducible. Include timing, scale, and instrument.</p>
 <p><strong>Step 4: evaluate exchangeability.</strong> Make the case that potential
 outcomes are independent of treatment conditional on covariates: $Y(a)
-\coprod A \mid L$ (Hernan &amp; Robins (<a href="#ref-hernan2024WHATIF">2020</a>)).
+\coprod A \mid L$ (Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>)).
 Use design and diagnostics: DAGs, subject-matter arguments,
 pre-treatment covariate balance, and overlap checks. If exchangeability
 is doubtful, redesign rather than rely solely on modelling.</p>
@@ -601,21 +602,20 @@ is doubtful, redesign rather than rely solely on modelling.</p>
 units receiving a treatment version compatible with level $a$, the
 observed outcome equals $Y(a)$. It also presumes well-defined versions
 and no interference between units (VanderWeele &amp; Hernan
-(<a href="#ref-vanderweele2013">2013</a>); Hernan &amp; Robins
-(<a href="#ref-hernan2024WHATIF">2020</a>)). When multiple versions exist, either
+(<a href="#ref-vanderweele2013">2013</a>); Hernán &amp; Robins
+(<a href="#ref-hernanrobins2025">2025</a>)). When multiple versions exist, either
 refine the intervention so versions are irrelevant to $Y(a)$, or
 condition on version-defining covariates.</p>
 <p><strong>Step 6: check positivity.</strong> Each treatment level must occur with
 non-zero probability at every covariate profile needed for
-exchangeability
-((<a href="#ref-westreich_invited_2010"><strong>westreich_invited_2010?</strong></a>)). Diagnose
-limited overlap using propensity score distributions and extreme
-weights. Consider design-stage remedies (trimming, restriction) before
-estimation.</p>
+exchangeability (Westreich &amp; Cole (<a href="#ref-westreich2010">2010</a>)).
+Diagnose limited overlap using propensity score distributions and
+extreme weights. Consider design-stage remedies (trimming, restriction)
+before estimation.</p>
 <p><strong>Step 7: ensure measurement aligns with the scientific question.</strong> Be
 explicit about probable forms of measurement error (classical, Berkson,
 differential, misclassification) and their structural implications for
-bias (Hernan &amp; Robins (<a href="#ref-hernan2024WHATIF">2020</a>); Bulbulia
+bias (Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>); Bulbulia
 (<a href="#ref-bulbulia2024wierd">2024</a>)). Where feasible, incorporate
 validation studies or calibration models.</p>
 <p><strong>Step 8: preserve representativeness from start to finish.</strong>
@@ -632,51 +632,22 @@ time-stamp the analytic plan. Include identification arguments, code,
 and data where possible. Report robustness and sensitivity analyses.
 Transparent reasoning is a scientific result in its own right (Ogburn &amp;
 Shpitser (<a href="#ref-ogburn2021">2021</a>)).</p>
-<h2 id="reporting-the-target-checklist"><a class="header" href="#reporting-the-target-checklist">Reporting: the TARGET checklist</a></h2>
-<p>The TARGET (Transparent Reporting of Observational Studies Emulating a
-Target Trial) statement
-((<a href="#ref-cashin2025target"><strong>cashin2025target?</strong></a>)) provides a structured
-checklist for reporting studies that emulate a target trial. It maps
-directly onto the causal workflow above. Use it when writing up results.</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">No.</th><th style="text-align: left">Item</th><th style="text-align: left">Workflow step</th></tr></thead><tbody>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Title and Abstract</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">1</td><td style="text-align: left">Identify that the study emulates a target trial; state objectives</td><td style="text-align: left">Steps 0–1</td></tr>
-<tr><td style="text-align: left">2</td><td style="text-align: left">Report the data source(s)</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">3</td><td style="text-align: left">Summarise assumptions, methods, findings, conclusions</td><td style="text-align: left">Steps 4–9</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Introduction</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">4</td><td style="text-align: left">Describe scientific background and gap</td><td style="text-align: left">Motivation</td></tr>
-<tr><td style="text-align: left">5</td><td style="text-align: left">Summarise the causal question</td><td style="text-align: left">Steps 0–2</td></tr>
-<tr><td style="text-align: left">6</td><td style="text-align: left">Describe rationale for emulating a target trial</td><td style="text-align: left">Steps 0–1</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Methods</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">7</td><td style="text-align: left">Cite data sources; describe purpose, type, setting, time period</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">8a</td><td style="text-align: left">Eligibility criteria and operationalisation</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">8b</td><td style="text-align: left">Treatment strategies and operationalisation</td><td style="text-align: left">Step 0</td></tr>
-<tr><td style="text-align: left">8c</td><td style="text-align: left">Assignment procedures and operationalisation</td><td style="text-align: left">Step 4</td></tr>
-<tr><td style="text-align: left">8d</td><td style="text-align: left">Follow-up: starts at assignment; describe operationalisation</td><td style="text-align: left">Step 1</td></tr>
-<tr><td style="text-align: left">8e</td><td style="text-align: left">Outcomes and operationalisation</td><td style="text-align: left">Step 2</td></tr>
-<tr><td style="text-align: left">8f</td><td style="text-align: left">Causal contrasts and operationalisation</td><td style="text-align: left">Steps 0–2</td></tr>
-<tr><td style="text-align: left">8g</td><td style="text-align: left">Identifying assumptions; describe related variables</td><td style="text-align: left">Steps 4–6</td></tr>
-<tr><td style="text-align: left">8h</td><td style="text-align: left">Data analysis procedures for each causal estimand</td><td style="text-align: left">Steps 4–8</td></tr>
-<tr><td style="text-align: left">8i</td><td style="text-align: left">Additional analyses for each causal estimand</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Results</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">9</td><td style="text-align: left">Numbers assessed, eligible, and assigned</td><td style="text-align: left">Step 3</td></tr>
-<tr><td style="text-align: left">10</td><td style="text-align: left">Baseline characteristics by treatment strategy</td><td style="text-align: left">Step 4</td></tr>
-<tr><td style="text-align: left">11</td><td style="text-align: left">Follow-up length and reasons for end of follow-up</td><td style="text-align: left">Steps 1, 8</td></tr>
-<tr><td style="text-align: left">12</td><td style="text-align: left">Missing data frequency by variable</td><td style="text-align: left">Step 8</td></tr>
-<tr><td style="text-align: left">13</td><td style="text-align: left">Outcome frequency or distribution at each wave</td><td style="text-align: left">Step 2</td></tr>
-<tr><td style="text-align: left">14</td><td style="text-align: left">Effect estimates with measures of precision</td><td style="text-align: left">Steps 4–6</td></tr>
-<tr><td style="text-align: left">15</td><td style="text-align: left">Sensitivity of estimates to choices and assumptions</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Discussion</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">16</td><td style="text-align: left">Interpretation of key findings</td><td style="text-align: left">—</td></tr>
-<tr><td style="text-align: left">17</td><td style="text-align: left">Limitations, including differences between target trial and emulation</td><td style="text-align: left">Steps 4–8</td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><strong>Other Information</strong></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">18</td><td style="text-align: left">Ethics approval</td><td style="text-align: left">—</td></tr>
-<tr><td style="text-align: left">19</td><td style="text-align: left">Registration</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left">20</td><td style="text-align: left">Data and code availability</td><td style="text-align: left">Step 9</td></tr>
-<tr><td style="text-align: left">21</td><td style="text-align: left">Funding sources</td><td style="text-align: left">—</td></tr>
-<tr><td style="text-align: left">22</td><td style="text-align: left">Conflicts of interest</td><td style="text-align: left">—</td></tr>
-</tbody></table>
-</div>
+<h2 id="a-note-on-reporting-standards"><a class="header" href="#a-note-on-reporting-standards">A note on reporting standards</a></h2>
+<p>When a study that emulates a target trial is published, journals in
+epidemiology and medicine increasingly expect a thorough, standardised
+account of its design and assumptions. The TARGET statement (Transparent
+Reporting of Observational Studies Emulating a Target Trial; Cashin et
+al. (<a href="#ref-cashin2025transparent">2025</a>)) is one such reporting format.
+It asks authors to state, point by point, the target population, the
+treatment strategies, time zero, the outcomes, the identification
+assumptions, and the sensitivity analyses. Each of those points
+corresponds to a step of the causal workflow above.</p>
+<p>Read the TARGET statement once, to see the level of detail a
+professional causal analysis is held to. You are not asked to apply its
+full checklist in this course. For the final assessment, Option A
+reports follow the course research-report template and <a href="reporting-guide.html">reporting
+guide</a>, which ask for the same reasoning in a
+shorter, course-specific form.</p>
 <p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
 <hr />
 <h2 id="appendix-a-notation-variants"><a class="header" href="#appendix-a-notation-variants">Appendix A: notation variants</a></h2>
@@ -691,10 +662,20 @@ line-spacing="2">
 error and external validity threats. <em>Evolutionary Human Sciences</em>, <em>6</em>,
 e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2024.33</a></p>
 </div>
-<div id="ref-hernan2024WHATIF" class="csl-entry">
-<p>Hernan, M. A., &amp; Robins, J. M. (2020). <em>Causal inference: What if?</em>
-Taylor &amp; Francis.
-<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/</a></p>
+<div id="ref-cashin2025transparent" class="csl-entry">
+<p>Cashin, A. G., Hansford, H. J., Hernán, M. A., Swanson, S. A., Lee, H.,
+Jones, M. D., Dahabreh, I. J., Dickerman, B. A., Egger, M.,
+Garcia-Albeniz, X., et al. (2025). Transparent reporting of
+observational studies emulating a target trial—the TARGET statement.
+<em>JAMA</em>, <em>334</em>(12), 1084–1093. <a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
+</div>
+<div id="ref-chatton2020" class="csl-entry">
+<p>Chatton, A., Le Borgne, F., Leyrat, C., Gillaizeau, F., Rousseau, C.,
+Barbin, L., Laplaud, D., Léger, M., Giraudeau, B., &amp; Foucher, Y. (2020).
+G-computation, propensity score-based methods, and targeted maximum
+likelihood estimator for causal inference with different covariates
+sets: a comparative simulation study. <em>Scientific Reports</em>, <em>10</em>(1),
+9219. <a href="https://doi.org/10.1038/s41598-020-65917-x">https://doi.org/10.1038/s41598-020-65917-x</a></p>
 </div>
 <div id="ref-hernan2017SELECTIONWITHOUTCOLLIDER" class="csl-entry">
 <p>Hernán, M. A. (2017). Invited commentary: Selection bias without
@@ -721,6 +702,11 @@ cultures. <em>Observational Studies</em>, <em>7</em>(1), 179–183.
 <p>VanderWeele, T. J., &amp; Hernan, M. A. (2013). Causal inference under
 multiple versions of treatment. <em>Journal of Causal Inference</em>, <em>1</em>(1),
 1–20.</p>
+</div>
+<div id="ref-westreich2010" class="csl-entry">
+<p>Westreich, D., &amp; Cole, S. R. (2010). Invited commentary: positivity in
+practice. <em>American Journal of Epidemiology</em>, <em>171</em>(6).
+<a href="https://doi.org/10.1093/aje/kwp436">https://doi.org/10.1093/aje/kwp436</a></p>
 </div>
 </div>
 

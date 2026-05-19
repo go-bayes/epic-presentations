@@ -426,6 +426,14 @@ distribution of $L$ differs across levels of $G$ (which it does,
 because $G \to L$). When both hold, $\tau(g)$ varies with $g$.
 Effect modification by $G$ is present even though $G$ has no direct
 structural path to $Y$ after conditioning.</p>
+<p>A concrete instance shows this. Suppose $L$ has two levels. The effect
+of $A$ on $Y$ is $+2$ when $L$ is low and $+6$ when $L$ is
+high, so the effect varies across $L$. Among younger people, $80%$
+are low-$L$ and $20%$ high-$L$, giving $\tau(\text{young}) =
+0.8(2) + 0.2(6) = 2.8$. Among older people, $30%$ are low-$L$ and
+$70%$ high-$L$, giving $\tau(\text{old}) = 0.3(2) + 0.7(6) = 4.8$.
+The CATE differs by age even though age has no direct arrow to $Y$:
+age changes the mix of $L$, and $L$ is where the effect varies.</p>
 <p>This result has practical consequences. Investigators who equate
 d-separation with absence of effect modification will miss genuine
 heterogeneity. A non-significant regression interaction term between

@@ -372,7 +372,7 @@ read, question, and apply.</p>
 pick one outcome at a time to make the heterogeneity story concrete. The
 final report applies the outcome-wide ATE plus policy-tree sequence
 across the prespecified outcomes.</p>
-<p><img src="figures/lab-09/cate-histogram.svg" alt="Histogram of estimated individual treatment effects from a small causal forest fit on the simulated NZAVS panel (outcome: sense of purpose). Each bar counts how many people received an estimate $\hat{\tau}(x)$ in that bin. The orange line marks the average treatment effect; the dashed line marks zero. A wide spread is the empirical signature of heterogeneity, not of individual-level estimates: each bar is a count of people whose covariate profile produced an estimate near that value." /></p>
+<p><img src="figures/lab-09/cate-histogram.svg" alt="Histogram of estimated subgroup-level treatment effects from a small causal forest fit on the simulated NZAVS panel (outcome: sense of purpose). Each bar counts how many people received an estimate $\hat{\tau}(x)$ in that bin. The orange line marks the average treatment effect; the dashed line marks zero. A wide spread is the empirical signature of heterogeneity, not of individual-level estimates: each bar is a count of people whose covariate profile produced an estimate near that value." /></p>
 <h2 id="causal-estimand-statistical-estimand-estimator"><a class="header" href="#causal-estimand-statistical-estimand-estimator">Causal estimand, statistical estimand, estimator</a></h2>
 <p>The same workflow that organised weeks 5 and 6 still organises this
 week. The full ten-step version lives on the <a href="causal-workflow.html">causal
@@ -607,14 +607,21 @@ enough real information to improve allocation.</p>
 <p>The first question is: does treating high-ranked units first yield
 meaningfully larger gains than treating at random?</p>
 <p>The Targeting Operator Characteristic (TOC) curve answers this question.
-It plots cumulative targeting gain against treatment coverage:</p>
-<p>$$ G(q)=\frac{1}{n}\sum_{i=1}^{\lfloor
-qn\rfloor}\hat{\tau}_{(i)},\qquad 0\le q\le 1, $$</p>
+For each treatment coverage $q$, it plots how much larger the average
+treatment effect is among the top-$q$ ranked individuals than the
+average effect across the whole population:</p>
+<p>$$ \text{TOC}(q)=\frac{1}{\lfloor qn\rfloor}\sum_{i=1}^{\lfloor
+qn\rfloor}\hat{\tau}<em>{(i)};-;\frac{1}{n}\sum</em>{i=1}^{n}\hat{\tau}_i,\qquad
+0 &lt; q \le 1, $$</p>
 <p>where $\hat{\tau}_{(1)} \ge \hat{\tau}_{(2)} \ge \cdots$ are the
-sorted estimated effects. The horizontal axis $q$ is the fraction of
-the population we would treat. The vertical axis $G(q)$ is the
-cumulative gain from treating that top-$q$ slice rather than treating
-a randomly chosen slice of the same size.</p>
+sorted estimated effects. The first term is the mean estimated effect in
+the top-$q$ slice; the second is the overall ATE. The horizontal axis
+$q$ is the fraction of the population we would treat. The vertical
+axis is the gain from selecting that top-$q$ slice by the CATE ranking
+rather than choosing a slice of the same size at random: a random slice
+has the overall ATE as its average effect, so the TOC measures how far
+the ranked slice beats it. At $q = 1$ the top slice is the whole
+population, so the TOC returns to zero.</p>
 <p><img src="figures/lab-09/toc-curve.svg" alt="TOC curve from the same small causal forest used above. Targeting rate $q$ on the horizontal axis; gain over random assignment on the vertical axis. A steep early rise indicates concentrated heterogeneity: the highest-ranked individuals carry most of the treatment benefit. A flat curve indicates none. The curve must return to zero at $q = 1$, since at full coverage every targeting rule is identical to &quot;treat everyone&quot;." /></p>
 <p>The TOC curve is the most direct answer to "does targeting beat random?"
 but it carries no single-number summary. Two summaries of the curve are
@@ -646,9 +653,9 @@ the grey line at the 40% marker and roughly $0.02$ above at the 10%
 marker. Those gaps are the <em>lift from targeting</em> at those budgets,
 expressed in the outcome's standard-deviation units. The 0.05 lift at
 40% spend says that a CATE-targeted rule covering forty percent of the
-population delivers, on average, $0.05$ more standard-deviation units
-of purpose per person treated than a treat-everyone-equally policy at
-the same coverage.</p>
+population delivers, on average, about $0.05$ more standard-deviation
+units of purpose per eligible person, averaged across the whole eligible
+population, than a treat-everyone-equally policy at the same coverage.</p>
 <p>Third, look at the shape near $q = 0$. A curve that rises steeply over
 the leftmost few percent indicates that the very top of the ranking is
 heavily concentrated. A curve that hugs the diagonal everywhere
@@ -681,10 +688,13 @@ one sentence.</li>
 <ol>
 <li><strong>Is there substantial heterogeneity?</strong> The causal-forest
 <strong>calibration test</strong> checks whether $\hat{\tau}(x)$ varies across
-people more than chance alone would produce; its
-<em>differential-prediction</em> coefficient is the signal to read. Reject
-the null that $\tau(x)$ is constant if that test rejects, or if
-RATE-AUTOC is positive and statistically reliable.</li>
+people more than chance alone would produce. The coefficient to read
+is the one <code>grf</code> labels <code>differential.forest.prediction</code>: a value
+near 1 means the forest's heterogeneity estimates track real
+variation, a value near 0 means there is little usable
+heterogeneity. Reject the null that $\tau(x)$ is constant if that
+test rejects, or if RATE-AUTOC is positive and statistically
+reliable.</li>
 <li><strong>Does targeting pay at realistic budgets?</strong> Inspect the slope of
 the Qini curve around plausible coverage levels.</li>
 <li><strong>Can we express the targeting rule in a few defensible steps?</strong>
