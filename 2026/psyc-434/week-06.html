@@ -415,8 +415,8 @@ on $Y$, we condition on $L$. But $G$ causes $L$, and
 conditioning on $L$ d-separates $G$ from $Y$. Does this mean $G$
 is not an effect modifier?</p>
 <p><img src="figures/effect-mod-dsep.svg" alt="d-separation $\neq$ no effect modification: $G$ is d-separated from $Y$ conditional on $L$, yet $G$ can still modify the effect of $A$ on $Y$ because $G$ shifts the distribution of $L$." /></p>
-<p>No. Even when $G \perp!!!\perp Y \mid L$, the CATE for a given level
-of $G$ is a weighted average of the $L$-specific treatment effects,
+<p>No. Even when $G \coprod Y \mid L$, the CATE for a given level of
+$G$ is a weighted average of the $L$-specific treatment effects,
 where the weights come from the distribution of $L$ given $G$:</p>
 <p>$$ \tau(g) = \mathbb{E}\left[\mathbb{E}[Y(1) - Y(0) \mid L]
 \middle| G = g\right]. $$</p>

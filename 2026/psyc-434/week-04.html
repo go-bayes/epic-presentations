@@ -379,11 +379,7 @@ mediation, and transport problems. The effect modification graph (open
 circle into the outcome) reappears below when we distinguish two
 mechanisms of selection bias.</p>
 <h2 id="a-typology-of-measurement-error-bias"><a class="header" href="#a-typology-of-measurement-error-bias">A typology of measurement error bias</a></h2>
-<p>Measurement error is not a separate universe from the DAGs you have
-already seen. It becomes easier to understand once we separate the true
-variable from the recorded variable. Then the same questions return:
-what causes what, what is shared, and what happens if we condition on
-the recorded value?</p>
+<p>Sometimes measurement error can be clarified by causal DAGS.</p>
 <p><img src="figures/measurementerrorbias.svg" alt="A typology of measurement error bias, adapted from Bulbulia (2024)" /></p>
 <blockquote>
 <p><strong>Four structural types of measurement error</strong></p>
@@ -449,8 +445,8 @@ creates a path through the measurement node to the recorded outcome.</p>
 </blockquote>
 <h2 id="selection-bias-and-transportability"><a class="header" href="#selection-bias-and-transportability">Selection bias and transportability</a></h2>
 <p>Selection bias occurs when inclusion in the analytic sample depends on
-variables related to treatment, outcome, or effect modifiers. It
-threatens validity in two structurally distinct ways.</p>
+variables related to treatment, outcome, or effect modifiers. Selection
+bias threatens validity in two structurally distinct ways.</p>
 <p><strong>Mechanism 1: collider conditioning (internal validity).</strong> When both
 treatment and outcome affect who enters the sample, selection acts as a
 collider. Conditioning on it opens a non-causal path between $A$ and

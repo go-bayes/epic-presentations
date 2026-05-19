@@ -1104,8 +1104,8 @@ enough: those teenagers who most frequently engaged with social media
 exhibited the lowest purpose scores, and the negative association is
 non-linear (<a href="week-01.html#ref-twenge2020underestimating">Twenge et al., 2020</a>).</p>
 <p>Questions about whether social media use harms young people are in the
-news this week. On 18 February 2026, CNN reported testimony in ongoing
-litigation about adolescent social media use
+news. On 18 February 2026, CNN reported testimony in ongoing litigation
+about adolescent social media use
 (<a href="https://edition.cnn.com/2026/02/18/tech/meta-mark-zuckerberg-testifies-social-media-addiction-trial">link</a>).
 Courts, legislators, and parents are making decisions right now on the
 basis of findings reported in scientific journals.</p>
@@ -1471,34 +1471,27 @@ drawn inside a box.</p>
 <h2 id="randomisation-and-exchangeability"><a class="header" href="#randomisation-and-exchangeability">Randomisation and exchangeability</a></h2>
 <p>Under random assignment,</p>
 <p>$$ Y(a) \coprod A. $$</p>
-<p>This condition is unconditional exchangeability. Under this condition, a
+<p>We call this state unconditional exchangeability. Under this state, a
 difference in means identifies the average treatment effect (ATE):</p>
 <p>$$ \widehat{\text{ATE}}=\hat{\mathbb{E}}[Y\mid
 A=1]-\hat{\mathbb{E}}[Y\mid A=0]. $$</p>
-<p>In observational studies, this condition usually fails without
-adjustment.</p>
+<p>In observational studies, unconditional exchangeability usually fails.</p>
 <h2 id="working-definitions"><a class="header" href="#working-definitions">Working definitions</a></h2>
 <p><strong>Internal validity</strong> concerns whether the study contrast estimates the
-target causal contrast in the study population. In DAG terms, a threat
-to internal validity corresponds to an open non-causal path between
-$A$ and $Y$ that the design has not closed.</p>
+target causal contrast in the study population. A threat to internal
+validity corresponds to an open non-causal path between $A$ and $Y$.</p>
 <p><strong>External validity</strong> concerns whether that causal contrast transports
-to the target population. In DAG terms, external validity is threatened
-when the structural relationships in the study population differ from
-those in the target population (Week 4 formalises this as
-transportability).</p>
-<p>These are design properties, not instrument properties. Measurement
-quality is part of the causal question because the outcome must be well
-defined. Week 4 returns to measurement from the vantage point of causal
-inference; Week 10 focuses on the problems with classical test theory.</p>
-<p><strong>Confounding bias</strong> exists when treatment groups differ systematically
+to the target population. We will say more about transportation failures
+in week 4.</p>
+<p><strong>Confounding bias</strong> occurs when treatment groups differ systematically
 in ways that affect the outcome, so that the observed association
-between $A$ and $Y$ does not equal the causal effect.</p>
+between $A$ and $Y$ does not equal the causal effect. (Confounding
+bias is a failure of internal validity).</p>
 <p>Confounding arises because <strong>there is a common cause of the treatment
 and the outcome.</strong></p>
-<p>In graph terms, confounding corresponds to an open non-causal path from
-$A$ to $Y$ (a "backdoor path," formalised below in the four rules of
-confounding control).</p>
+<p>In causal graph terminology, confounding corresponds to an open
+non-causal path from $A$ to $Y$ (a "backdoor path," formalised below
+in the four rules of confounding control).</p>
 <h2 id="causal-dag-notation-and-elements"><a class="header" href="#causal-dag-notation-and-elements">Causal DAG notation and elements</a></h2>
 <p><img src="figures/terminologylocalconventions.svg" alt="Our variable naming conventions (adapted from Bulbulia, 2023)" /></p>
 <ul>
@@ -1594,8 +1587,8 @@ not tell us which structure generated them.</p>
 <blockquote>
 <p><strong>Pair exercise: Neurath's ship and your own causal DAG</strong></p>
 <ol>
-<li>Draw a causal DAG from your own discipline or research interest
-with at least four variables.</li>
+<li>Draw a causal DAG from your own research interest with at least
+four variables.</li>
 <li>Identify one fork and one chain in your causal DAG.</li>
 <li>Swap with your partner. Your partner plays sceptic: challenge one
 arrow by proposing an alternative causal direction or an omitted
@@ -1806,8 +1799,8 @@ script for Lab 03</a>.</p>
 <hr />
 <p>Week 2 introduced five elementary causal structures and the rules of
 d-separation. This week we use those structures to diagnose confounding
-bias: when does conditioning on a variable remove bias, and when does it
-create bias?</p>
+bias and ask: when does conditioning on a variable remove bias, and when
+does it create bias?</p>
 <h2 id="seminar-1"><a class="header" href="#seminar-1">Seminar</a></h2>
 <h3 id="motivating-example-higher-r2-worse-identification"><a class="header" href="#motivating-example-higher-r2-worse-identification">Motivating example: higher $R^2$, worse identification</a></h3>
 <p>Suppose investigators want the total effect of an exercise programme
@@ -2163,11 +2156,7 @@ mediation, and transport problems. The effect modification graph (open
 circle into the outcome) reappears below when we distinguish two
 mechanisms of selection bias.</p>
 <h2 id="a-typology-of-measurement-error-bias"><a class="header" href="#a-typology-of-measurement-error-bias">A typology of measurement error bias</a></h2>
-<p>Measurement error is not a separate universe from the DAGs you have
-already seen. It becomes easier to understand once we separate the true
-variable from the recorded variable. Then the same questions return:
-what causes what, what is shared, and what happens if we condition on
-the recorded value?</p>
+<p>Sometimes measurement error can be clarified by causal DAGS.</p>
 <p><img src="figures/measurementerrorbias.svg" alt="A typology of measurement error bias, adapted from Bulbulia (2024)" /></p>
 <blockquote>
 <p><strong>Four structural types of measurement error</strong></p>
@@ -2233,8 +2222,8 @@ creates a path through the measurement node to the recorded outcome.</p>
 </blockquote>
 <h2 id="selection-bias-and-transportability"><a class="header" href="#selection-bias-and-transportability">Selection bias and transportability</a></h2>
 <p>Selection bias occurs when inclusion in the analytic sample depends on
-variables related to treatment, outcome, or effect modifiers. It
-threatens validity in two structurally distinct ways.</p>
+variables related to treatment, outcome, or effect modifiers. Selection
+bias threatens validity in two structurally distinct ways.</p>
 <p><strong>Mechanism 1: collider conditioning (internal validity).</strong> When both
 treatment and outcome affect who enters the sample, selection acts as a
 collider. Conditioning on it opens a non-causal path between $A$ and
@@ -2484,8 +2473,7 @@ identifying the structural threats that obstruct answers: confounding,
 selection bias, and measurement error. Week 2 stated the three
 identification assumptions. This week shows how those assumptions,
 together with a well-specified target trial, connect a causal question
-to an estimable population contrast.</p>
-<p>The shift in emphasis matters. Week 4 asked, "where can bias enter?"
+to an estimable population contrast. We asked, "where can bias enter?"
 Week 5 asks, "what causal contrast do we want, and what assumptions let
 observed data stand in for the missing counterfactuals?"</p>
 <h2 id="seminar-3"><a class="header" href="#seminar-3">Seminar</a></h2>
@@ -3091,8 +3079,8 @@ on $Y$, we condition on $L$. But $G$ causes $L$, and
 conditioning on $L$ d-separates $G$ from $Y$. Does this mean $G$
 is not an effect modifier?</p>
 <p><img src="figures/effect-mod-dsep.svg" alt="d-separation $\neq$ no effect modification: $G$ is d-separated from $Y$ conditional on $L$, yet $G$ can still modify the effect of $A$ on $Y$ because $G$ shifts the distribution of $L$." /></p>
-<p>No. Even when $G \perp!!!\perp Y \mid L$, the CATE for a given level
-of $G$ is a weighted average of the $L$-specific treatment effects,
+<p>No. Even when $G \coprod Y \mid L$, the CATE for a given level of
+$G$ is a weighted average of the $L$-specific treatment effects,
 where the weights come from the distribution of $L$ given $G$:</p>
 <p>$$ \tau(g) = \mathbb{E}\left[\mathbb{E}[Y(1) - Y(0) \mid L]
 \middle| G = g\right]. $$</p>
