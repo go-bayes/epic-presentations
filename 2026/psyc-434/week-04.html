@@ -247,6 +247,14 @@
                         <h1 id="week-4-selection-bias-and-measurement-bias"><a class="header" href="#week-4-selection-bias-and-measurement-bias">Week 4: Selection Bias and Measurement Bias</a></h1>
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w04/">Slides</a></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Confounding, selection bias, and measurement error are three forms of
+one underlying problem: the data we would need are missing, and what
+we observe stands in for them imperfectly. Causal diagrams capture
+much of this shared structure, though some aspects of selection bias
+and measurement error resist a clean graphical treatment.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -307,22 +315,14 @@ enters a study.</li>
 <li>Distinguish target, source, and analytic populations for transport
 claims.</li>
 </ol>
-<h2 id="why-this-week-extends-weeks-2-3"><a class="header" href="#why-this-week-extends-weeks-2-3">Why this week extends Weeks 2-3</a></h2>
-<p>Weeks 2-3 focused on confounding paths between treatment and outcome.
-That may have made DAGs look like a tool just for "finding confounders".
-They are more general than that.</p>
-<p>Week 4 adds two structural threats. The first threat is selection bias.
-The second threat is measurement bias. Both can be analysed with the
-same elementary graph logic you already know.</p>
 <h2 id="the-same-graph-logic-still-applies"><a class="header" href="#the-same-graph-logic-still-applies">The same graph logic still applies</a></h2>
-<p>The key idea from the earlier weeks reaches past "adjust for
-confounders": a small number of graph structures determine which paths
-are open and which are blocked. Once you can recognise a fork, a chain,
-and a collider, you can start to diagnose bias in almost any study.</p>
-<p>More complicated studies are built from simpler pieces. Selection
-problems, attrition problems, and measurement problems usually look
-confusing at first because they involve more nodes. But the underlying
-logic is still the same.</p>
+<p>Weeks 2-3 used causal diagrams to find confounders. That can make a DAG
+look like a tool for one job. It is more general. A small number of
+graph structures determine which paths carry association and which are
+blocked, and once you can recognise a fork, a chain, and a collider, you
+can diagnose bias in almost any study. Selection problems, attrition
+problems, and measurement problems look harder only because they involve
+more nodes; the logic is the same.</p>
 <p><img src="figures/terminologydirectedgraph.svg" alt="Five elementary graph structures, adapted from Bulbulia (2023)" /></p>
 <blockquote>
 <p><strong>Five elementary structures</strong></p>
@@ -337,7 +337,6 @@ logic is still the same.</p>
 <p>When you see $A \coprod Y$, read this as "A is statistically
 independent of Y". When you see $A \cancel\coprod Y$, read this as "A
 is statistically dependent on Y".</p>
-<h2 id="a-short-rulebook-for-week-4"><a class="header" href="#a-short-rulebook-for-week-4">A short rulebook for week 4</a></h2>
 <p><img src="figures/terminologyelconfounders.svg" alt="Four practical rules for conditioning on DAGs, adapted from Bulbulia (2023)" /></p>
 <blockquote>
 <p><strong>Four practical rules</strong></p>
@@ -352,11 +351,13 @@ that was previously blocked.</li>
 them can behave like conditioning on their parent.</li>
 </ul>
 </blockquote>
-<p>This is the bridge to this week. Selection bias often appears because
-study entry, study retention, or analytic restriction acts like a
-collider or a descendant of a collider. Measurement bias often appears
-because the variable we record is a noisy proxy or downstream
-consequence of the variable we actually care about.</p>
+<p>The new work this week is to find those same structures inside two
+problems that do not at first look like confounding. Selection bias
+often appears because study entry, study retention, or analytic
+restriction acts like a collider, or a descendant of a collider.
+Measurement bias often appears because the variable we record is a noisy
+proxy, or a downstream consequence, of the variable we actually care
+about.</p>
 <blockquote>
 <p><strong>Pair check: what does conditioning do?</strong></p>
 <ol>
@@ -371,16 +372,15 @@ condition on $C$?</li>
 </blockquote>
 <h2 id="common-causal-questions-as-graphs"><a class="header" href="#common-causal-questions-as-graphs">Common causal questions as graphs</a></h2>
 <p><img src="figures/common-causal-questions.svg" alt="Common causal questions presented as causal graphs, adapted from Bulbulia (2024)" /></p>
-<p>Different questions require different graphs. Different questions
-require different causal estimands. Different questions require
-different assumptions. The important point for this week is that the
-same picture language can represent confounding, selection, measurement,
-mediation, and transport problems. The effect modification graph (the
-open circle on an arrow marks effect modification, not a standard causal
-arrow) reappears below when we distinguish two mechanisms of selection
-bias.</p>
+<p>Different questions need different graphs, different estimands, and
+different assumptions, but they share one picture language: the same
+diagrams represent confounding, selection, measurement, mediation, and
+transport problems. The effect-modification graph below (the open circle
+on an arrow marks effect modification, not a standard causal arrow)
+returns when we distinguish two mechanisms of selection bias.</p>
 <h2 id="a-typology-of-measurement-error-bias"><a class="header" href="#a-typology-of-measurement-error-bias">A typology of measurement error bias</a></h2>
-<p>Sometimes measurement error can be clarified by causal DAGS.</p>
+<p>A causal diagram also brings structure to measurement error. Four cases
+cover most of what investigators meet.</p>
 <p><img src="figures/measurementerrorbias.svg" alt="A typology of measurement error bias, adapted from Bulbulia (2024)" /></p>
 <blockquote>
 <p><strong>Four structural types of measurement error</strong></p>
@@ -552,14 +552,14 @@ the outcome causally affects what is recorded. Restriction through
 attrition mirrors independent measurement error off the null (type 1):
 the signal is diluted because the analytic sample differs from the
 target in composition. Investigators should diagnose which mechanism is
-operating, because the remedies differ. Inverse-probability-of-censoring
-weights (IPCW) address distortion: each participant still observed at
-the end of the study is up-weighted by the inverse of their estimated
-probability of remaining, so the analysed cases stand in for the similar
-participants who dropped out. The weights remove the bias only when the
-measured covariates capture why people left. Restriction is handled
-differently, by reweighting the sample to match the target population's
-distribution of effect modifiers.</p>
+operating, because the remedies differ.</p>
+<p>Inverse-probability-of-censoring weights (IPCW) address distortion: each
+participant still observed at the end of the study is up-weighted by the
+inverse of their estimated probability of remaining, so the analysed
+cases stand in for the similar participants who dropped out. The weights
+remove the bias only when the measured covariates capture why people
+left. Restriction is handled differently, by reweighting the sample to
+match the target population's distribution of effect modifiers.</p>
 <h2 id="weird-samples-and-effect-heterogeneity"><a class="header" href="#weird-samples-and-effect-heterogeneity">WEIRD samples and effect heterogeneity</a></h2>
 <p>A WEIRD (Western, Educated, Industrialised, Rich, Democratic) sample is
 not automatically invalid. The problem is Mechanism 2: if effect

@@ -1080,6 +1080,13 @@ Statistical Association</em>, <em>113</em>(523), 1228–1242.
 <p><strong>Lab: Git and GitHub</strong></p>
 <p><img src="figures/dag-week01.svg" alt="Causal graph: we refer to this image in the lecture and begin reviewing causal graphs in Week 2" /></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>A claim becomes a causal question only when it names two states to
+compare, a target population, an outcome, and a time horizon. Even
+then one hard limit remains: for any individual, only one side of the
+contrast is ever observed.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required:</strong> Hernán &amp; Robins (<a href="week-01.html#ref-hernanrobins2025">2025</a>),
 chapter 1. Recommended readings are listed at the end of this page.</p>
@@ -1237,9 +1244,9 @@ specificity when we discuss variation in responses across subgroups
 <p>Consider Alice, who takes up two hours of doom-scrolling each night
 before bed. Suppose she enrolled in an experiment and was randomised to
 the doom-scrolling condition. The contrast is studying mathematics for
-two hours each night. At the end of the trial Alice reports high life
-satisfaction. Can we say that doom-scrolling <em>caused</em> Alice's life
-satisfaction to be higher than it would have been under the mathematics
+two hours each night. At the end of the trial Alice reports a high sense
+of purpose. Can we say that doom-scrolling <em>caused</em> Alice's sense of
+purpose to be higher than it would have been under the mathematics
 condition?</p>
 <p>We cannot, because no more than one side of the contrast can be measured
 for Alice in a given period. Alice followed the doom-scrolling protocol.
@@ -1288,9 +1295,9 @@ person.</p>
 <p>Causal inference contrasts counterfactual states at the population or
 subpopulation level. When we say "social media influences purpose," we
 mean that on average, across a defined population, one pattern of use
-changes life satisfaction relative to the counterfactual of another
-pattern. We must specify the contrast conditions and the population for
-this statement to have content.</p>
+changes purpose relative to the counterfactual of another pattern. We
+must specify the contrast conditions and the population for this
+statement to have content.</p>
 <blockquote>
 <p><strong>A short memory aid</strong></p>
 <ul>
@@ -1383,6 +1390,12 @@ digital media harm. <em>Nature Human Behaviour</em>, <em>4</em>, 346–348.
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-2-causal-diagrams-five-elementary-structures"><a class="header" href="#week-2-causal-diagrams-five-elementary-structures">Week 2: Causal Diagrams: Five Elementary Structures</a></h1>
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w02/">Slides</a></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>A causal directed acyclic graph (DAG) does not create causal
+knowledge. It makes the assumptions behind a causal claim explicit, so
+they can be stated, checked, and challenged.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -1463,8 +1476,9 @@ and discussable.</p>
 <p>If you can do those three things, you can usually explain the bias logic
 in words.</p>
 <h2 id="independence-language"><a class="header" href="#independence-language">Independence language</a></h2>
-<p>Do not let the notation do more work than it should. It is just
-shorthand.</p>
+<p>To say precisely what randomisation buys us, we need a compact way to
+write that two quantities are independent. The notation below is exactly
+that shorthand. It carries no causal force on its own.</p>
 <p>We never observe $Y(a)$ for more than one treatment level per person
 (Week 1's unobservability problem). The notation $Y(a)$ refers to "the
 outcome this person would have under treatment level $a$." The
@@ -1772,6 +1786,13 @@ Chapman &amp; Hall/CRC.
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w03/">Slides</a></p>
 <p><strong>Date:</strong> 11 Mar 2026</p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Which variables to adjust for is a question about causal structure,
+not about model fit. A regression can fit the data better and still
+answer the wrong causal question, because $R^2$ cannot detect
+confounding.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -2051,6 +2072,14 @@ Pitfalls and Tips. <em>Journal of Epidemiology</em>, <em>30</em>(4), 153–162.
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-4-selection-bias-and-measurement-bias-1"><a class="header" href="#week-4-selection-bias-and-measurement-bias-1">Week 4: Selection Bias and Measurement Bias</a></h1>
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w04/">Slides</a></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Confounding, selection bias, and measurement error are three forms of
+one underlying problem: the data we would need are missing, and what
+we observe stands in for them imperfectly. Causal diagrams capture
+much of this shared structure, though some aspects of selection bias
+and measurement error resist a clean graphical treatment.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -2111,22 +2140,14 @@ enters a study.</li>
 <li>Distinguish target, source, and analytic populations for transport
 claims.</li>
 </ol>
-<h2 id="why-this-week-extends-weeks-2-3"><a class="header" href="#why-this-week-extends-weeks-2-3">Why this week extends Weeks 2-3</a></h2>
-<p>Weeks 2-3 focused on confounding paths between treatment and outcome.
-That may have made DAGs look like a tool just for "finding confounders".
-They are more general than that.</p>
-<p>Week 4 adds two structural threats. The first threat is selection bias.
-The second threat is measurement bias. Both can be analysed with the
-same elementary graph logic you already know.</p>
 <h2 id="the-same-graph-logic-still-applies"><a class="header" href="#the-same-graph-logic-still-applies">The same graph logic still applies</a></h2>
-<p>The key idea from the earlier weeks reaches past "adjust for
-confounders": a small number of graph structures determine which paths
-are open and which are blocked. Once you can recognise a fork, a chain,
-and a collider, you can start to diagnose bias in almost any study.</p>
-<p>More complicated studies are built from simpler pieces. Selection
-problems, attrition problems, and measurement problems usually look
-confusing at first because they involve more nodes. But the underlying
-logic is still the same.</p>
+<p>Weeks 2-3 used causal diagrams to find confounders. That can make a DAG
+look like a tool for one job. It is more general. A small number of
+graph structures determine which paths carry association and which are
+blocked, and once you can recognise a fork, a chain, and a collider, you
+can diagnose bias in almost any study. Selection problems, attrition
+problems, and measurement problems look harder only because they involve
+more nodes; the logic is the same.</p>
 <p><img src="figures/terminologydirectedgraph.svg" alt="Five elementary graph structures, adapted from Bulbulia (2023)" /></p>
 <blockquote>
 <p><strong>Five elementary structures</strong></p>
@@ -2141,7 +2162,6 @@ logic is still the same.</p>
 <p>When you see $A \coprod Y$, read this as "A is statistically
 independent of Y". When you see $A \cancel\coprod Y$, read this as "A
 is statistically dependent on Y".</p>
-<h2 id="a-short-rulebook-for-week-4"><a class="header" href="#a-short-rulebook-for-week-4">A short rulebook for week 4</a></h2>
 <p><img src="figures/terminologyelconfounders.svg" alt="Four practical rules for conditioning on DAGs, adapted from Bulbulia (2023)" /></p>
 <blockquote>
 <p><strong>Four practical rules</strong></p>
@@ -2156,11 +2176,13 @@ that was previously blocked.</li>
 them can behave like conditioning on their parent.</li>
 </ul>
 </blockquote>
-<p>This is the bridge to this week. Selection bias often appears because
-study entry, study retention, or analytic restriction acts like a
-collider or a descendant of a collider. Measurement bias often appears
-because the variable we record is a noisy proxy or downstream
-consequence of the variable we actually care about.</p>
+<p>The new work this week is to find those same structures inside two
+problems that do not at first look like confounding. Selection bias
+often appears because study entry, study retention, or analytic
+restriction acts like a collider, or a descendant of a collider.
+Measurement bias often appears because the variable we record is a noisy
+proxy, or a downstream consequence, of the variable we actually care
+about.</p>
 <blockquote>
 <p><strong>Pair check: what does conditioning do?</strong></p>
 <ol>
@@ -2175,16 +2197,15 @@ condition on $C$?</li>
 </blockquote>
 <h2 id="common-causal-questions-as-graphs"><a class="header" href="#common-causal-questions-as-graphs">Common causal questions as graphs</a></h2>
 <p><img src="figures/common-causal-questions.svg" alt="Common causal questions presented as causal graphs, adapted from Bulbulia (2024)" /></p>
-<p>Different questions require different graphs. Different questions
-require different causal estimands. Different questions require
-different assumptions. The important point for this week is that the
-same picture language can represent confounding, selection, measurement,
-mediation, and transport problems. The effect modification graph (the
-open circle on an arrow marks effect modification, not a standard causal
-arrow) reappears below when we distinguish two mechanisms of selection
-bias.</p>
+<p>Different questions need different graphs, different estimands, and
+different assumptions, but they share one picture language: the same
+diagrams represent confounding, selection, measurement, mediation, and
+transport problems. The effect-modification graph below (the open circle
+on an arrow marks effect modification, not a standard causal arrow)
+returns when we distinguish two mechanisms of selection bias.</p>
 <h2 id="a-typology-of-measurement-error-bias"><a class="header" href="#a-typology-of-measurement-error-bias">A typology of measurement error bias</a></h2>
-<p>Sometimes measurement error can be clarified by causal DAGS.</p>
+<p>A causal diagram also brings structure to measurement error. Four cases
+cover most of what investigators meet.</p>
 <p><img src="figures/measurementerrorbias.svg" alt="A typology of measurement error bias, adapted from Bulbulia (2024)" /></p>
 <blockquote>
 <p><strong>Four structural types of measurement error</strong></p>
@@ -2356,14 +2377,14 @@ the outcome causally affects what is recorded. Restriction through
 attrition mirrors independent measurement error off the null (type 1):
 the signal is diluted because the analytic sample differs from the
 target in composition. Investigators should diagnose which mechanism is
-operating, because the remedies differ. Inverse-probability-of-censoring
-weights (IPCW) address distortion: each participant still observed at
-the end of the study is up-weighted by the inverse of their estimated
-probability of remaining, so the analysed cases stand in for the similar
-participants who dropped out. The weights remove the bias only when the
-measured covariates capture why people left. Restriction is handled
-differently, by reweighting the sample to match the target population's
-distribution of effect modifiers.</p>
+operating, because the remedies differ.</p>
+<p>Inverse-probability-of-censoring weights (IPCW) address distortion: each
+participant still observed at the end of the study is up-weighted by the
+inverse of their estimated probability of remaining, so the analysed
+cases stand in for the similar participants who dropped out. The weights
+remove the bias only when the measured covariates capture why people
+left. Restriction is handled differently, by reweighting the sample to
+match the target population's distribution of effect modifiers.</p>
 <h2 id="weird-samples-and-effect-heterogeneity"><a class="header" href="#weird-samples-and-effect-heterogeneity">WEIRD samples and effect heterogeneity</a></h2>
 <p>A WEIRD (Western, Educated, Industrialised, Rich, Democratic) sample is
 not automatically invalid. The problem is Mechanism 2: if effect
@@ -2461,6 +2482,14 @@ directed acyclic graphs. <em>American Journal of Epidemiology</em>, <em>175</em>
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w05/">Slides</a></p>
 <p><strong>Date:</strong> 25 Mar 2026</p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Causal inference replaces unobservable counterfactual averages with
+observed averages. Three identification assumptions, consistency,
+exchangeability, and positivity, license that substitution. They are
+design commitments to defend before estimation, not boxes to tick
+afterwards.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -2528,7 +2557,7 @@ from observed data.</li>
 the causal contrast. DAGs help us judge whether exchangeability is
 plausible, which variables belong in $L$, and whether the design has a
 coherent time zero.</p>
-<h2 id="step-1-state-the-causal-question"><a class="header" href="#step-1-state-the-causal-question">Step 1: state the causal question</a></h2>
+<h2 id="move-1-state-the-causal-question"><a class="header" href="#move-1-state-the-causal-question">Move 1: state the causal question</a></h2>
 <p>Return to the mindfulness example. Let $A=1$ denote starting a guided
 mindfulness app at the beginning of semester and completing one
 10-minute session per day for eight weeks. Let $A=0$ denote not
@@ -2565,14 +2594,14 @@ $\bar{Y}<em>{A=1}^{\mathrm{obs}} - \bar{Y}</em>{A=0}^{\mathrm{obs}}$.</li>
 (or why it does not).</li>
 </ol>
 </blockquote>
-<h2 id="step-2-move-from-individuals-to-populations"><a class="header" href="#step-2-move-from-individuals-to-populations">Step 2: move from individuals to populations</a></h2>
+<h2 id="move-2-from-individuals-to-populations"><a class="header" href="#move-2-from-individuals-to-populations">Move 2: from individuals to populations</a></h2>
 <p>Because individual effects are unobservable, we target a population
 causal estimand: the quantity we want our analysis to estimate. The
 average treatment effect (ATE) is:</p>
 <p>$$ \text{ATE}=\mathbb{E}[Y(1)-Y(0)]. $$</p>
 <p>This is the mean contrast if everyone in the target population received
 $A=1$ versus $A=0$.</p>
-<h2 id="step-3-connect-the-causal-estimand-to-observed-data"><a class="header" href="#step-3-connect-the-causal-estimand-to-observed-data">Step 3: connect the causal estimand to observed data</a></h2>
+<h2 id="move-3-connect-the-causal-estimand-to-observed-data"><a class="header" href="#move-3-connect-the-causal-estimand-to-observed-data">Move 3: connect the causal estimand to observed data</a></h2>
 <p>The three identification assumptions are easier to remember if you ask
 what each one contributes to the argument.</p>
 <h3 id="assumption-1-causal-consistency"><a class="header" href="#assumption-1-causal-consistency">Assumption 1: causal consistency</a></h3>
@@ -2745,18 +2774,6 @@ worry about exchangeability.</li>
 positivity.</li>
 </ul>
 </blockquote>
-<h2 id="return-to-the-opening-example-3"><a class="header" href="#return-to-the-opening-example-3">Return to the opening example</a></h2>
-<p>The mindfulness discrepancy illustrates what happens when investigators
-fail to emulate a target trial. If "users" are defined as students who
-have already adopted the app, the design mixes recent starters with
-persistent users who may differ in motivation, baseline distress, and
-help-seeking. That makes the exposed group look healthier than a true
-start-of-intervention comparison would justify.</p>
-<p>The lesson is that design comes before estimation. If the hypothetical
-trial is not specified, the identifying assumptions are hard to
-interpret and even harder to defend. We now have the tools to identify
-and estimate an average causal contrast for a defined population. Week 6
-asks the next question: does that contrast vary across subgroups?</p>
 <blockquote>
 <p><strong>Pair exercise: designing a target trial</strong></p>
 <ol>
@@ -2861,6 +2878,18 @@ full checklist in this course. For the final assessment, Option A
 reports follow the course research-report template and <a href="reporting-guide.html">reporting
 guide</a>, which ask for the same reasoning in a
 shorter, course-specific form.</p>
+<h2 id="return-to-the-opening-example-3"><a class="header" href="#return-to-the-opening-example-3">Return to the opening example</a></h2>
+<p>The mindfulness discrepancy illustrates what happens when investigators
+fail to emulate a target trial. If "users" are defined as students who
+have already adopted the app, the design mixes recent starters with
+persistent users who may differ in motivation, baseline distress, and
+help-seeking. That makes the exposed group look healthier than a true
+start-of-intervention comparison would justify.</p>
+<p>The lesson is that design comes before estimation. If the hypothetical
+trial is not specified, the identifying assumptions are hard to
+interpret and even harder to defend. We now have the tools to identify
+and estimate an average causal contrast for a defined population. Week 6
+asks the next question: does that contrast vary across subgroups?</p>
 <p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
 <hr />
 <h2 id="appendix-a-notation-variants"><a class="header" href="#appendix-a-notation-variants">Appendix A: notation variants</a></h2>
@@ -2925,6 +2954,13 @@ practice. <em>American Journal of Epidemiology</em>, <em>171</em>(6).
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-6-effect-modification-and-cate-1"><a class="header" href="#week-6-effect-modification-and-cate-1">Week 6: Effect Modification and CATE</a></h1>
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w06/">Slides</a></p>
 <p><em>Date: 1 Apr 2026</em></p>
+<blockquote>
+<p><strong>Key idea</strong></p>
+<p>Interaction, effect modification, a regression product term, and the
+conditional average treatment effect (CATE) are four distinct things.
+Keeping them apart is what makes a claim about who benefits more
+defensible.</p>
+</blockquote>
 <blockquote>
 <p><strong>Required reading</strong></p>
 <ul>
@@ -3162,9 +3198,8 @@ patterns without requiring the analyst to guess the correct
 specification. These estimators help with functional form, but they do
 not remove confounding by design.</p>
 <h3 id="demo-functional-form-matters"><a class="header" href="#demo-functional-form-matters">Demo: functional form matters</a></h3>
-<p>This simulation has randomised treatment.</p>
-<p>There is no confounding.</p>
-<p>The challenge is functional form.</p>
+<p>This simulation randomises treatment, so there is no confounding. The
+only challenge is functional form.</p>
 <pre><code class="language-r"># install once
 # install.packages("pak")
 # pak::pak("go-bayes/causalworkshop")
@@ -3290,6 +3325,13 @@ question.</p>
 <!-- [previous test](https://github.com/go-bayes/psych-434-2025/blob/main/content/434-inclass-test-2024.pdf) -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-8-heterogeneous-treatment-effects-and-machine-learning-1"><a class="header" href="#week-8-heterogeneous-treatment-effects-and-machine-learning-1">Week 8: Heterogeneous Treatment Effects and Machine Learning</a></h1>
 <p><strong>Date: 29 Apr 2026</strong></p>
+<blockquote>
+<p><strong>Key idea</strong></p>
+<p>Machine learning changes the estimator, not the identification logic.
+A causal forest can rank who is predicted to benefit most, but that
+ranking is worth acting on only when held-out evidence shows it beats
+treating at random.</p>
+</blockquote>
 <blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
@@ -3631,17 +3673,6 @@ protected against every threat.</p>
 scores rather than raw outcomes. The scores let us evaluate rules that
 assign different actions to different people, even though each person
 was observed under only one action.</p>
-<h2 id="missing-data-in-grf"><a class="header" href="#missing-data-in-grf">Missing data in <code>grf</code></a></h2>
-<p><code>grf</code> can treat missingness as a splitting attribute (MIA) rather than
-deleting rows by default. A missing value is itself informative: it can
-correlate with treatment, with the outcome, or with both. MIA lets the
-tree send "missing" units down whichever branch produces the cleaner
-treatment-control contrast.</p>
-<p>That can preserve sample size, but it does not remove identification
-concerns. We still need a causal missingness argument, and we still need
-covariates defined before treatment if they are to index $\tau(x)$.
-MIA is a convenience for estimation; it does not absolve the analyst of
-the duty to model why data are missing.</p>
 <h2 id="is-heterogeneity-actionable"><a class="header" href="#is-heterogeneity-actionable">Is heterogeneity actionable?</a></h2>
 <p>After estimating $\hat{\tau}(x)$, we rank units from largest to
 smallest estimated effect. That ranking is not yet a policy. It is a
@@ -3728,46 +3759,37 @@ one sentence.</li>
 </ol>
 </blockquote>
 <h2 id="workflow-for-this-week"><a class="header" href="#workflow-for-this-week">Workflow for this week</a></h2>
-<p>The week's tools answer three questions in sequence:</p>
+<p>The week's tools fit together as a short pipeline:</p>
 <ol>
-<li><strong>Is there substantial heterogeneity?</strong> The causal-forest
-<strong>calibration test</strong> checks whether $\hat{\tau}(x)$ varies across
-people more than chance alone would produce. The coefficient to read
-is the one <code>grf</code> labels <code>differential.forest.prediction</code>: a value
-near 1 means the forest's heterogeneity estimates track real
-variation, a value near 0 means there is little usable
-heterogeneity. Reject the null that $\tau(x)$ is constant if that
-test rejects, or if RATE-AUTOC is positive and statistically
-reliable.</li>
-<li><strong>Does targeting pay at realistic budgets?</strong> Inspect the slope of
-the Qini curve around plausible coverage levels.</li>
-<li><strong>Can we express the targeting rule in a few defensible steps?</strong>
-Week 9 fits and validates a shallow policy tree to answer this
-question.</li>
-</ol>
-<p>Treat these three checks as diagnostics. A positive calibration test or
-RATE is evidence that effects vary, but variation improves on a blanket
-policy only when the better action differs across covariate regions, or
-a budget forces a choice. Whether a particular rule actually wins is
-settled by the policy tree's held-out policy value, compared against the
-blanket policies of treating everyone or treating no-one (Week 9).</p>
-<p>The pipeline below turns these questions into steps:</p>
-<ol>
-<li>Specify the causal estimand: treatment, time zero, target
-population, outcome, and identification assumptions.</li>
-<li>Fit a causal forest with honest splitting on baseline covariates
+<li><strong>Specify the causal estimand</strong>: treatment, time zero, target
+population, outcome, and the identification assumptions.</li>
+<li><strong>Fit a causal forest</strong> with honest splitting on baseline covariates
 measured at time zero.</li>
-<li>Verify that heterogeneity is real (the calibration test above, run
-early to avoid spending time on a flat forest).</li>
-<li>Estimate targeting value with RATE-AUTOC and RATE-Qini on held-out
-data.</li>
-<li>Run sensitivity analysis on the underlying ATE before staking a
+<li><strong>Check that heterogeneity is real.</strong> The causal-forest
+<strong>calibration test</strong> asks whether $\hat{\tau}(x)$ varies across
+people more than chance alone would produce; the coefficient to read
+is the one <code>grf</code> labels <code>differential.forest.prediction</code>, where a
+value near 1 means the heterogeneity estimates track real variation
+and a value near 0 means there is little to use. Run this early, to
+avoid spending time on a flat forest.</li>
+<li><strong>Estimate targeting value</strong> with RATE-AUTOC and RATE-Qini on
+held-out data, and inspect the slope of the Qini curve around
+plausible budgets.</li>
+<li><strong>Run sensitivity analysis</strong> on the underlying ATE before staking a
 policy on it.</li>
-<li>Decide whether heterogeneity is large enough to inform allocation.
-If yes, Week 9 turns the ranking into a transparent rule. If no, use
-a simpler allocation rule: random allocation under a fixed budget,
-or uniform provision when treatment can be offered to everyone.</li>
+<li><strong>Decide whether heterogeneity is large enough to inform
+allocation.</strong> If yes, Week 9 turns the ranking into a transparent
+rule. If no, use a simpler allocation rule: random allocation under
+a fixed budget, or uniform provision when treatment can be offered
+to everyone.</li>
 </ol>
+<p>Treat these steps as diagnostics, not as a verdict. A positive
+calibration test or RATE is evidence that effects vary, but variation
+improves on a blanket policy only when the better action differs across
+covariate regions, or a budget forces a choice. Whether a particular
+rule actually wins is settled by the policy tree's held-out policy
+value, compared against the blanket policies of treating everyone or
+treating no-one (Week 9).</p>
 <h2 id="return-to-the-opening-example-5"><a class="header" href="#return-to-the-opening-example-5">Return to the opening example</a></h2>
 <p>Back to the university budget. The question is not only whether the
 programme works. The question is whether gains are concentrated enough
@@ -3805,6 +3827,17 @@ does and does not show.</li>
 </ol>
 </blockquote>
 <hr />
+<h2 id="missing-data-in-grf"><a class="header" href="#missing-data-in-grf">Missing data in <code>grf</code></a></h2>
+<p><code>grf</code> can treat missingness as a splitting attribute (MIA) rather than
+deleting rows by default. A missing value is itself informative: it can
+correlate with treatment, with the outcome, or with both. MIA lets the
+tree send "missing" units down whichever branch produces the cleaner
+treatment-control contrast.</p>
+<p>That can preserve sample size, but it does not remove identification
+concerns. We still need a causal missingness argument, and we still need
+covariates defined before treatment if they are to index $\tau(x)$.
+MIA is a convenience for estimation; it does not absolve the analyst of
+the duty to model why data are missing.</p>
 <h2 id="further-material"><a class="header" href="#further-material">Further material</a></h2>
 <p>Susan Athey's lecture on causal forests gives a deeper account of the
 statistical machinery introduced above. The relevant material on causal
@@ -3849,6 +3882,13 @@ Statistical Association</em>, <em>113</em>(523), 1228–1242.
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-9-resource-allocation-and-policy-trees-1"><a class="header" href="#week-9-resource-allocation-and-policy-trees-1">Week 9: Resource Allocation and Policy Trees</a></h1>
 <p><strong>Date: 6 May 2026</strong></p>
+<blockquote>
+<p><strong>Key idea</strong></p>
+<p>A policy tree turns an opaque heterogeneity ranking into a short
+allocation rule that a non-specialist can read, apply, and contest.
+The variables the tree splits on are useful for targeting, but they
+are not thereby causes.</p>
+</blockquote>
 <blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
@@ -3920,17 +3960,13 @@ outcome-wide ATEs, then use policy trees as the interpretable
 heterogeneity output. RATE and Qini remain useful for understanding
 rankings, but they are not the report scaffold.</p>
 <p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The course assignment uses this outcome-wide ATE view before asking whether policy trees provide an interpretable targeting story." /></p>
-<h2 id="where-week-9-fits"><a class="header" href="#where-week-9-fits">Where Week 9 Fits</a></h2>
-<p>Keep three layers separate:</p>
-<div class="table-wrapper"><table><thead><tr><th>Layer</th><th>Question</th><th>Week 8 role</th><th>Week 9 role</th></tr></thead><tbody>
-<tr><td>Outcome-wide ATEs</td><td>Which outcomes show credible average evidence?</td><td>Introduced as the screen before heterogeneity</td><td>Reopened as the gate before policy work</td></tr>
-<tr><td>Single-outcome CATE ranking</td><td>Within one outcome, who is predicted to benefit more?</td><td>Estimated and evaluated with causal forests, RATE, and Qini as teaching diagnostics</td><td>Used as background for policy learning</td></tr>
-<tr><td>Policy tree</td><td>Can a short rule recover enough value from the ranking?</td><td>Named as the opacity problem</td><td>Fitted, evaluated, and interpreted</td></tr>
-</tbody></table>
-</div>
-<p>The order matters for students and for practice. A policy tree is not
-the first analysis to run. It is a late-stage summary used after the
-outcome-wide ATEs have established what needs interpretation.</p>
+<h2 id="where-week-9-fits"><a class="header" href="#where-week-9-fits">Where Week 9 fits</a></h2>
+<p>A policy tree is not the first analysis to run. It is a late-stage
+summary, used after the outcome-wide ATEs have established which
+outcomes need interpretation. Week 8 estimated and evaluated
+single-outcome CATE rankings as teaching diagnostics; Week 9 reopens the
+outcome-wide screen as the gate before policy work, then fits,
+evaluates, and interprets the policy tree.</p>
 <h2 id="outcome-wide-evidence-before-targeting"><a class="header" href="#outcome-wide-evidence-before-targeting">Outcome-wide evidence before targeting</a></h2>
 <p>Before fitting a policy tree, ask whether the underlying average effects
 are credible enough to justify a targeting exercise. In the final
@@ -4033,13 +4069,13 @@ Production scripts add further safeguards and interpretation layers,
 including more outcomes, sample weights, adverse-outcome flipping
 (reorienting harmful outcomes so a higher value always means a better
 result), cross-validated heterogeneity interpretation, depth comparison,
-and larger stability runs. Two practical complications remain. First,
-$V(d)$ is a counterfactual quantity, since for any individual we
-observe at most one of $Y(0)$ or $Y(1)$. We need to evaluate
-candidate rules without assigning everyone to them. Second, the rule
-must be small enough to defend in front of a non-statistical audience.
-Both constraints push the analysis toward shallow, transparent decision
-trees evaluated with doubly-robust scores.</p>
+and larger stability runs.</p>
+<p>Two practical complications remain. First, $V(d)$ is a counterfactual
+quantity, since for any individual we observe at most one of $Y(0)$ or
+$Y(1)$. We need to evaluate candidate rules without assigning everyone
+to them. Second, the rule must be small enough to defend in front of a
+non-statistical audience. Both constraints push the analysis toward
+shallow, transparent decision trees evaluated with doubly-robust scores.</p>
 <h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
 <p>A causal forest maps a high-dimensional covariate vector $X$ to a
 personalised CATE score $\hat{\tau}(X)$. The score says how much
@@ -4237,7 +4273,7 @@ hypothesis about social connection; it does not prove that loneliness is
 the causal source of the heterogeneity. This use of heterogeneity is
 exploratory, not confirmatory, and a follow-up study designed around the
 discovered subgroup is the proper test.</p>
-<h2 id="appendix-why-effect-modifiers-are-descriptive"><a class="header" href="#appendix-why-effect-modifiers-are-descriptive">Appendix: why effect modifiers are descriptive</a></h2>
+<h2 id="why-effect-modifiers-are-descriptive"><a class="header" href="#why-effect-modifiers-are-descriptive">Why effect modifiers are descriptive</a></h2>
 <p>Heterogeneous treatment effect (HET) estimates are descriptions of how
 treatment contrasts vary across measured covariates. They are not causal
 effects of the covariates that appear in the forest or policy tree. A
@@ -4337,26 +4373,6 @@ is useful for targeting. Policy trees ask whether a short rule can
 recover enough value to be worth considering. Measurement checks ask
 whether the variables inside the analysis support the interpretation
 being placed on them.</p>
-<h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
-<p>We will reserve about 25 minutes today for the assessments.</p>
-<ol>
-<li><strong>Test 2, 5 minutes.</strong> The test covers weeks 8-10: heterogeneous
-treatment effects, policy trees, and measurement. Bring one A4 sheet
-of notes. No devices.</li>
-<li><strong>Test preparation, 10 minutes.</strong> The public study sheet and
-practice questions are linked from the resources section of the
-course book. Use them to practise short answers, not just
-definitions.</li>
-<li><strong>Research report and Marsden option, 10 minutes.</strong> Option A should
-follow the current <a href="assets/research-report-template.zip">research-report
-template</a> or the Google Drive
-mirror if already downloaded: choose <code>religious_service</code> or
-<code>volunteer_work</code>, then report effects on all four wellbeing
-outcomes. Historical examples can help you see tone and structure,
-but this year's report is narrower and uses simulated data. For
-Option B, the old Marsden example is a model of compact grant style
-only; follow the current criteria in <a href="assessments.html">Assessments</a>.</li>
-</ol>
 <h2 id="return-to-the-opening-example-6"><a class="header" href="#return-to-the-opening-example-6">Return to the opening example</a></h2>
 <p>Back to the district health board. The question is not only "what rule
 maximises sample gain?" The question is also whether the rule works out
@@ -4389,6 +4405,27 @@ anyone uses them.</li>
 </blockquote>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
+<hr />
+<h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
+<p>We will reserve about 25 minutes today for the assessments.</p>
+<ol>
+<li><strong>Test 2, 5 minutes.</strong> The test covers weeks 8-10: heterogeneous
+treatment effects, policy trees, and measurement. Bring one A4 sheet
+of notes. No devices.</li>
+<li><strong>Test preparation, 10 minutes.</strong> The public study sheet and
+practice questions are linked from the resources section of the
+course book. Use them to practise short answers, not just
+definitions.</li>
+<li><strong>Research report and Marsden option, 10 minutes.</strong> Option A should
+follow the current <a href="assets/research-report-template.zip">research-report
+template</a> or the Google Drive
+mirror if already downloaded: choose <code>religious_service</code> or
+<code>volunteer_work</code>, then report effects on all four wellbeing
+outcomes. Historical examples can help you see tone and structure,
+but this year's report is narrower and uses simulated data. For
+Option B, the old Marsden example is a model of compact grant style
+only; follow the current criteria in <a href="assessments.html">Assessments</a>.</li>
+</ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
 line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
@@ -4432,6 +4469,14 @@ studies. <em>Statistical Science</em>, <em>35</em>(3), 437–466.</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-10-classical-measurement-theory-from-a-causal-perspective-1"><a class="header" href="#week-10-classical-measurement-theory-from-a-causal-perspective-1">Week 10: Classical Measurement Theory from a Causal Perspective</a></h1>
 <p><strong>Date: 13 May 2026</strong></p>
+<blockquote>
+<p><strong>Key idea</strong></p>
+<p>Standard psychometric theories rest on strong, usually unstated,
+causal assumptions about how a construct and its indicators relate.
+These assumptions are especially likely to fail when measures are
+compared across cultures. Measurement is therefore part of causal
+identification, not a separate preliminary step.</p>
+</blockquote>
 <blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
@@ -4499,6 +4544,22 @@ variables inside it do not mean what the analysis says they mean.</p>
 </tbody></table>
 </div>
 <h2 id="seminar-7"><a class="header" href="#seminar-7">Seminar</a></h2>
+<h3 id="motivating-example-3"><a class="header" href="#motivating-example-3">Motivating example</a></h3>
+<p>The Kessler-6 (K6) is widely used to screen psychological distress.</p>
+<p>Two questions must be addressed before we try to compare scores causally
+across groups.</p>
+<ol>
+<li>Do the six items map to the same latent structure?</li>
+<li>Is that structure invariant across groups?</li>
+</ol>
+<p>These questions are necessary, but they are not sufficient. Even if a
+measurement model fits well and invariance tests pass, causal
+interpretation still depends on a defended causal story about what the
+construct is and how it is measured.</p>
+<p>This is why measurement belongs inside causal inference, not beside it.
+Measurement is part of identification: if a measure is unstable across
+the groups we compare, effect estimates and group contrasts can be
+distorted even when the adjustment set is otherwise defensible.</p>
 <h3 id="classical-validity-and-its-limits"><a class="header" href="#classical-validity-and-its-limits">Classical validity and its limits</a></h3>
 <p>Psychology textbooks organise measurement quality around four types of
 validity.</p>
@@ -4547,22 +4608,6 @@ formal model. A causal approach specifies the directed graph connecting
 constructs to indicators, states the assumptions under which observed
 scores recover latent quantities, and tests those assumptions. The rest
 of this lecture shows what that looks like in practice.</p>
-<h3 id="motivating-example-3"><a class="header" href="#motivating-example-3">Motivating example</a></h3>
-<p>The Kessler-6 (K6) is widely used to screen psychological distress.</p>
-<p>Two questions must be addressed before we try to compare scores causally
-across groups.</p>
-<ol>
-<li>Do the six items map to the same latent structure?</li>
-<li>Is that structure invariant across groups?</li>
-</ol>
-<p>These questions are necessary, but they are not sufficient. Even if a
-measurement model fits well and invariance tests pass, causal
-interpretation still depends on a defended causal story about what the
-construct is and how it is measured.</p>
-<h2 id="why-this-is-a-causal-lecture"><a class="header" href="#why-this-is-a-causal-lecture">Why this is a causal lecture</a></h2>
-<p>Measurement is part of identification. If measurement is unstable,
-effect estimates and group contrasts can be distorted even when
-adjustment sets are otherwise defensible.</p>
 <h2 id="learning-outcomes-2"><a class="header" href="#learning-outcomes-2">Learning outcomes</a></h2>
 <p>By the end of this week, you should be able to:</p>
 <ol>
@@ -4578,6 +4623,11 @@ state what they do not establish.</li>
 <li>Link measurement assumptions to DAG-based bias reasoning.</li>
 </ol>
 <h2 id="part-1-practical-workflow-with-k6"><a class="header" href="#part-1-practical-workflow-with-k6">Part 1: practical workflow with K6</a></h2>
+<p>This lecture has two parts. Part 1 is the practical workflow you may be
+asked to run: exploratory and confirmatory factor analysis, then
+invariance testing. Part 2 is the causal reasoning that says what those
+tools can and cannot establish. Work the tools first, then read Part 2
+before trusting them.</p>
 <h3 id="step-1-prepare-data-and-inspect-factorability"><a class="header" href="#step-1-prepare-data-and-inspect-factorability">Step 1: prepare data and inspect factorability</a></h3>
 <pre><code class="language-r">library(margot)
 library(tidyverse)
@@ -4733,13 +4783,14 @@ same outcome across groups.</li>
 </ol>
 </blockquote>
 <h2 id="part-2-how-traditional-measurement-theory-fails-for-causal-inference"><a class="header" href="#part-2-how-traditional-measurement-theory-fails-for-causal-inference">Part 2: how traditional measurement theory fails (for causal inference)</a></h2>
-<p>This part restores the core point of the lecture. Causal inference
-operates under assumptions. For measurement, it is causality all the way
-down. This follows from the potential outcomes framework: causal
-contrasts require well-defined outcomes under interventions, and
-constructed measures are outcomes of causal processes (question wording,
-translation, response styles, incentives, and the world that generates
-the experiences being reported).</p>
+<p>Part 1 showed the tools; Part 2 asks what they establish. Causal
+inference operates under assumptions, and for measurement it is
+causality all the way down. This follows from the potential outcomes
+framework: causal contrasts require well-defined outcomes under
+interventions, and constructed measures are themselves outcomes of
+causal processes (question wording, translation, response styles,
+incentives, and the world that generates the experiences being
+reported).</p>
 <p>Classical psychometric checks (internal consistency, model fit,
 invariance tests) can organise associations. They do not, by themselves,
 evaluate the causal assumptions about direction and causal efficacy that

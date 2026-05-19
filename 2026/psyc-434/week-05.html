@@ -248,6 +248,14 @@
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w05/">Slides</a></p>
 <p><strong>Date:</strong> 25 Mar 2026</p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Causal inference replaces unobservable counterfactual averages with
+observed averages. Three identification assumptions, consistency,
+exchangeability, and positivity, license that substitution. They are
+design commitments to defend before estimation, not boxes to tick
+afterwards.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -315,7 +323,7 @@ from observed data.</li>
 the causal contrast. DAGs help us judge whether exchangeability is
 plausible, which variables belong in $L$, and whether the design has a
 coherent time zero.</p>
-<h2 id="step-1-state-the-causal-question"><a class="header" href="#step-1-state-the-causal-question">Step 1: state the causal question</a></h2>
+<h2 id="move-1-state-the-causal-question"><a class="header" href="#move-1-state-the-causal-question">Move 1: state the causal question</a></h2>
 <p>Return to the mindfulness example. Let $A=1$ denote starting a guided
 mindfulness app at the beginning of semester and completing one
 10-minute session per day for eight weeks. Let $A=0$ denote not
@@ -352,14 +360,14 @@ $\bar{Y}<em>{A=1}^{\mathrm{obs}} - \bar{Y}</em>{A=0}^{\mathrm{obs}}$.</li>
 (or why it does not).</li>
 </ol>
 </blockquote>
-<h2 id="step-2-move-from-individuals-to-populations"><a class="header" href="#step-2-move-from-individuals-to-populations">Step 2: move from individuals to populations</a></h2>
+<h2 id="move-2-from-individuals-to-populations"><a class="header" href="#move-2-from-individuals-to-populations">Move 2: from individuals to populations</a></h2>
 <p>Because individual effects are unobservable, we target a population
 causal estimand: the quantity we want our analysis to estimate. The
 average treatment effect (ATE) is:</p>
 <p>$$ \text{ATE}=\mathbb{E}[Y(1)-Y(0)]. $$</p>
 <p>This is the mean contrast if everyone in the target population received
 $A=1$ versus $A=0$.</p>
-<h2 id="step-3-connect-the-causal-estimand-to-observed-data"><a class="header" href="#step-3-connect-the-causal-estimand-to-observed-data">Step 3: connect the causal estimand to observed data</a></h2>
+<h2 id="move-3-connect-the-causal-estimand-to-observed-data"><a class="header" href="#move-3-connect-the-causal-estimand-to-observed-data">Move 3: connect the causal estimand to observed data</a></h2>
 <p>The three identification assumptions are easier to remember if you ask
 what each one contributes to the argument.</p>
 <h3 id="assumption-1-causal-consistency"><a class="header" href="#assumption-1-causal-consistency">Assumption 1: causal consistency</a></h3>
@@ -532,18 +540,6 @@ worry about exchangeability.</li>
 positivity.</li>
 </ul>
 </blockquote>
-<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
-<p>The mindfulness discrepancy illustrates what happens when investigators
-fail to emulate a target trial. If "users" are defined as students who
-have already adopted the app, the design mixes recent starters with
-persistent users who may differ in motivation, baseline distress, and
-help-seeking. That makes the exposed group look healthier than a true
-start-of-intervention comparison would justify.</p>
-<p>The lesson is that design comes before estimation. If the hypothetical
-trial is not specified, the identifying assumptions are hard to
-interpret and even harder to defend. We now have the tools to identify
-and estimate an average causal contrast for a defined population. Week 6
-asks the next question: does that contrast vary across subgroups?</p>
 <blockquote>
 <p><strong>Pair exercise: designing a target trial</strong></p>
 <ol>
@@ -648,6 +644,18 @@ full checklist in this course. For the final assessment, Option A
 reports follow the course research-report template and <a href="reporting-guide.html">reporting
 guide</a>, which ask for the same reasoning in a
 shorter, course-specific form.</p>
+<h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
+<p>The mindfulness discrepancy illustrates what happens when investigators
+fail to emulate a target trial. If "users" are defined as students who
+have already adopted the app, the design mixes recent starters with
+persistent users who may differ in motivation, baseline distress, and
+help-seeking. That makes the exposed group look healthier than a true
+start-of-intervention comparison would justify.</p>
+<p>The lesson is that design comes before estimation. If the hypothetical
+trial is not specified, the identifying assumptions are hard to
+interpret and even harder to defend. We now have the tools to identify
+and estimate an average causal contrast for a defined population. Week 6
+asks the next question: does that contrast vary across subgroups?</p>
 <p>Lab materials: <a href="lab-05.html">Lab 5: Average Treatment Effects</a></p>
 <hr />
 <h2 id="appendix-a-notation-variants"><a class="header" href="#appendix-a-notation-variants">Appendix A: notation variants</a></h2>

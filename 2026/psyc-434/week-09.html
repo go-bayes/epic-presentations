@@ -247,6 +247,13 @@
                         <h1 id="week-9-resource-allocation-and-policy-trees"><a class="header" href="#week-9-resource-allocation-and-policy-trees">Week 9: Resource Allocation and Policy Trees</a></h1>
 <p><strong>Date: 6 May 2026</strong></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>A policy tree turns an opaque heterogeneity ranking into a short
+allocation rule that a non-specialist can read, apply, and contest.
+The variables the tree splits on are useful for targeting, but they
+are not thereby causes.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -317,17 +324,13 @@ outcome-wide ATEs, then use policy trees as the interpretable
 heterogeneity output. RATE and Qini remain useful for understanding
 rankings, but they are not the report scaffold.</p>
 <p><img src="figures/lab-09/ate-forest-multi-outcome.svg" alt="Outcome-wide average treatment effect (ATE) forest plot for community-group participation across four outcomes (purpose, belonging, self-esteem, life satisfaction). Each row shows the estimated average treatment effect on the risk-difference scale with a 95% confidence interval, accompanied by an E-value bound that quantifies how strong an unmeasured confounder would need to be on the relative-risk scale to explain the result away. The course assignment uses this outcome-wide ATE view before asking whether policy trees provide an interpretable targeting story." /></p>
-<h2 id="where-week-9-fits"><a class="header" href="#where-week-9-fits">Where Week 9 Fits</a></h2>
-<p>Keep three layers separate:</p>
-<div class="table-wrapper"><table><thead><tr><th>Layer</th><th>Question</th><th>Week 8 role</th><th>Week 9 role</th></tr></thead><tbody>
-<tr><td>Outcome-wide ATEs</td><td>Which outcomes show credible average evidence?</td><td>Introduced as the screen before heterogeneity</td><td>Reopened as the gate before policy work</td></tr>
-<tr><td>Single-outcome CATE ranking</td><td>Within one outcome, who is predicted to benefit more?</td><td>Estimated and evaluated with causal forests, RATE, and Qini as teaching diagnostics</td><td>Used as background for policy learning</td></tr>
-<tr><td>Policy tree</td><td>Can a short rule recover enough value from the ranking?</td><td>Named as the opacity problem</td><td>Fitted, evaluated, and interpreted</td></tr>
-</tbody></table>
-</div>
-<p>The order matters for students and for practice. A policy tree is not
-the first analysis to run. It is a late-stage summary used after the
-outcome-wide ATEs have established what needs interpretation.</p>
+<h2 id="where-week-9-fits"><a class="header" href="#where-week-9-fits">Where Week 9 fits</a></h2>
+<p>A policy tree is not the first analysis to run. It is a late-stage
+summary, used after the outcome-wide ATEs have established which
+outcomes need interpretation. Week 8 estimated and evaluated
+single-outcome CATE rankings as teaching diagnostics; Week 9 reopens the
+outcome-wide screen as the gate before policy work, then fits,
+evaluates, and interprets the policy tree.</p>
 <h2 id="outcome-wide-evidence-before-targeting"><a class="header" href="#outcome-wide-evidence-before-targeting">Outcome-wide evidence before targeting</a></h2>
 <p>Before fitting a policy tree, ask whether the underlying average effects
 are credible enough to justify a targeting exercise. In the final
@@ -430,13 +433,13 @@ Production scripts add further safeguards and interpretation layers,
 including more outcomes, sample weights, adverse-outcome flipping
 (reorienting harmful outcomes so a higher value always means a better
 result), cross-validated heterogeneity interpretation, depth comparison,
-and larger stability runs. Two practical complications remain. First,
-$V(d)$ is a counterfactual quantity, since for any individual we
-observe at most one of $Y(0)$ or $Y(1)$. We need to evaluate
-candidate rules without assigning everyone to them. Second, the rule
-must be small enough to defend in front of a non-statistical audience.
-Both constraints push the analysis toward shallow, transparent decision
-trees evaluated with doubly-robust scores.</p>
+and larger stability runs.</p>
+<p>Two practical complications remain. First, $V(d)$ is a counterfactual
+quantity, since for any individual we observe at most one of $Y(0)$ or
+$Y(1)$. We need to evaluate candidate rules without assigning everyone
+to them. Second, the rule must be small enough to defend in front of a
+non-statistical audience. Both constraints push the analysis toward
+shallow, transparent decision trees evaluated with doubly-robust scores.</p>
 <h2 id="why-policy-trees"><a class="header" href="#why-policy-trees">Why policy trees</a></h2>
 <p>A causal forest maps a high-dimensional covariate vector $X$ to a
 personalised CATE score $\hat{\tau}(X)$. The score says how much
@@ -634,7 +637,7 @@ hypothesis about social connection; it does not prove that loneliness is
 the causal source of the heterogeneity. This use of heterogeneity is
 exploratory, not confirmatory, and a follow-up study designed around the
 discovered subgroup is the proper test.</p>
-<h2 id="appendix-why-effect-modifiers-are-descriptive"><a class="header" href="#appendix-why-effect-modifiers-are-descriptive">Appendix: why effect modifiers are descriptive</a></h2>
+<h2 id="why-effect-modifiers-are-descriptive"><a class="header" href="#why-effect-modifiers-are-descriptive">Why effect modifiers are descriptive</a></h2>
 <p>Heterogeneous treatment effect (HET) estimates are descriptions of how
 treatment contrasts vary across measured covariates. They are not causal
 effects of the covariates that appear in the forest or policy tree. A
@@ -734,26 +737,6 @@ is useful for targeting. Policy trees ask whether a short rule can
 recover enough value to be worth considering. Measurement checks ask
 whether the variables inside the analysis support the interpretation
 being placed on them.</p>
-<h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
-<p>We will reserve about 25 minutes today for the assessments.</p>
-<ol>
-<li><strong>Test 2, 5 minutes.</strong> The test covers weeks 8-10: heterogeneous
-treatment effects, policy trees, and measurement. Bring one A4 sheet
-of notes. No devices.</li>
-<li><strong>Test preparation, 10 minutes.</strong> The public study sheet and
-practice questions are linked from the resources section of the
-course book. Use them to practise short answers, not just
-definitions.</li>
-<li><strong>Research report and Marsden option, 10 minutes.</strong> Option A should
-follow the current <a href="assets/research-report-template.zip">research-report
-template</a> or the Google Drive
-mirror if already downloaded: choose <code>religious_service</code> or
-<code>volunteer_work</code>, then report effects on all four wellbeing
-outcomes. Historical examples can help you see tone and structure,
-but this year's report is narrower and uses simulated data. For
-Option B, the old Marsden example is a model of compact grant style
-only; follow the current criteria in <a href="assessments.html">Assessments</a>.</li>
-</ol>
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
 <p>Back to the district health board. The question is not only "what rule
 maximises sample gain?" The question is also whether the rule works out
@@ -786,6 +769,27 @@ anyone uses them.</li>
 </blockquote>
 <hr />
 <p>Lab materials: <a href="lab-09.html">Lab 9: Policy Trees</a></p>
+<hr />
+<h2 id="assessment-checkpoint"><a class="header" href="#assessment-checkpoint">Assessment checkpoint</a></h2>
+<p>We will reserve about 25 minutes today for the assessments.</p>
+<ol>
+<li><strong>Test 2, 5 minutes.</strong> The test covers weeks 8-10: heterogeneous
+treatment effects, policy trees, and measurement. Bring one A4 sheet
+of notes. No devices.</li>
+<li><strong>Test preparation, 10 minutes.</strong> The public study sheet and
+practice questions are linked from the resources section of the
+course book. Use them to practise short answers, not just
+definitions.</li>
+<li><strong>Research report and Marsden option, 10 minutes.</strong> Option A should
+follow the current <a href="assets/research-report-template.zip">research-report
+template</a> or the Google Drive
+mirror if already downloaded: choose <code>religious_service</code> or
+<code>volunteer_work</code>, then report effects on all four wellbeing
+outcomes. Historical examples can help you see tone and structure,
+but this year's report is narrower and uses simulated data. For
+Option B, the old Marsden example is a model of compact grant style
+only; follow the current criteria in <a href="assessments.html">Assessments</a>.</li>
+</ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
 line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">

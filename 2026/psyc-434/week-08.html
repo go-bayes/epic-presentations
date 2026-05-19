@@ -247,6 +247,13 @@
                         <h1 id="week-8-heterogeneous-treatment-effects-and-machine-learning"><a class="header" href="#week-8-heterogeneous-treatment-effects-and-machine-learning">Week 8: Heterogeneous Treatment Effects and Machine Learning</a></h1>
 <p><strong>Date: 29 Apr 2026</strong></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Machine learning changes the estimator, not the identification logic.
+A causal forest can rank who is predicted to benefit most, but that
+ranking is worth acting on only when held-out evidence shows it beats
+treating at random.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -587,17 +594,6 @@ protected against every threat.</p>
 scores rather than raw outcomes. The scores let us evaluate rules that
 assign different actions to different people, even though each person
 was observed under only one action.</p>
-<h2 id="missing-data-in-grf"><a class="header" href="#missing-data-in-grf">Missing data in <code>grf</code></a></h2>
-<p><code>grf</code> can treat missingness as a splitting attribute (MIA) rather than
-deleting rows by default. A missing value is itself informative: it can
-correlate with treatment, with the outcome, or with both. MIA lets the
-tree send "missing" units down whichever branch produces the cleaner
-treatment-control contrast.</p>
-<p>That can preserve sample size, but it does not remove identification
-concerns. We still need a causal missingness argument, and we still need
-covariates defined before treatment if they are to index $\tau(x)$.
-MIA is a convenience for estimation; it does not absolve the analyst of
-the duty to model why data are missing.</p>
 <h2 id="is-heterogeneity-actionable"><a class="header" href="#is-heterogeneity-actionable">Is heterogeneity actionable?</a></h2>
 <p>After estimating $\hat{\tau}(x)$, we rank units from largest to
 smallest estimated effect. That ranking is not yet a policy. It is a
@@ -684,46 +680,37 @@ one sentence.</li>
 </ol>
 </blockquote>
 <h2 id="workflow-for-this-week"><a class="header" href="#workflow-for-this-week">Workflow for this week</a></h2>
-<p>The week's tools answer three questions in sequence:</p>
+<p>The week's tools fit together as a short pipeline:</p>
 <ol>
-<li><strong>Is there substantial heterogeneity?</strong> The causal-forest
-<strong>calibration test</strong> checks whether $\hat{\tau}(x)$ varies across
-people more than chance alone would produce. The coefficient to read
-is the one <code>grf</code> labels <code>differential.forest.prediction</code>: a value
-near 1 means the forest's heterogeneity estimates track real
-variation, a value near 0 means there is little usable
-heterogeneity. Reject the null that $\tau(x)$ is constant if that
-test rejects, or if RATE-AUTOC is positive and statistically
-reliable.</li>
-<li><strong>Does targeting pay at realistic budgets?</strong> Inspect the slope of
-the Qini curve around plausible coverage levels.</li>
-<li><strong>Can we express the targeting rule in a few defensible steps?</strong>
-Week 9 fits and validates a shallow policy tree to answer this
-question.</li>
-</ol>
-<p>Treat these three checks as diagnostics. A positive calibration test or
-RATE is evidence that effects vary, but variation improves on a blanket
-policy only when the better action differs across covariate regions, or
-a budget forces a choice. Whether a particular rule actually wins is
-settled by the policy tree's held-out policy value, compared against the
-blanket policies of treating everyone or treating no-one (Week 9).</p>
-<p>The pipeline below turns these questions into steps:</p>
-<ol>
-<li>Specify the causal estimand: treatment, time zero, target
-population, outcome, and identification assumptions.</li>
-<li>Fit a causal forest with honest splitting on baseline covariates
+<li><strong>Specify the causal estimand</strong>: treatment, time zero, target
+population, outcome, and the identification assumptions.</li>
+<li><strong>Fit a causal forest</strong> with honest splitting on baseline covariates
 measured at time zero.</li>
-<li>Verify that heterogeneity is real (the calibration test above, run
-early to avoid spending time on a flat forest).</li>
-<li>Estimate targeting value with RATE-AUTOC and RATE-Qini on held-out
-data.</li>
-<li>Run sensitivity analysis on the underlying ATE before staking a
+<li><strong>Check that heterogeneity is real.</strong> The causal-forest
+<strong>calibration test</strong> asks whether $\hat{\tau}(x)$ varies across
+people more than chance alone would produce; the coefficient to read
+is the one <code>grf</code> labels <code>differential.forest.prediction</code>, where a
+value near 1 means the heterogeneity estimates track real variation
+and a value near 0 means there is little to use. Run this early, to
+avoid spending time on a flat forest.</li>
+<li><strong>Estimate targeting value</strong> with RATE-AUTOC and RATE-Qini on
+held-out data, and inspect the slope of the Qini curve around
+plausible budgets.</li>
+<li><strong>Run sensitivity analysis</strong> on the underlying ATE before staking a
 policy on it.</li>
-<li>Decide whether heterogeneity is large enough to inform allocation.
-If yes, Week 9 turns the ranking into a transparent rule. If no, use
-a simpler allocation rule: random allocation under a fixed budget,
-or uniform provision when treatment can be offered to everyone.</li>
+<li><strong>Decide whether heterogeneity is large enough to inform
+allocation.</strong> If yes, Week 9 turns the ranking into a transparent
+rule. If no, use a simpler allocation rule: random allocation under
+a fixed budget, or uniform provision when treatment can be offered
+to everyone.</li>
 </ol>
+<p>Treat these steps as diagnostics, not as a verdict. A positive
+calibration test or RATE is evidence that effects vary, but variation
+improves on a blanket policy only when the better action differs across
+covariate regions, or a budget forces a choice. Whether a particular
+rule actually wins is settled by the policy tree's held-out policy
+value, compared against the blanket policies of treating everyone or
+treating no-one (Week 9).</p>
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
 <p>Back to the university budget. The question is not only whether the
 programme works. The question is whether gains are concentrated enough
@@ -761,6 +748,17 @@ does and does not show.</li>
 </ol>
 </blockquote>
 <hr />
+<h2 id="missing-data-in-grf"><a class="header" href="#missing-data-in-grf">Missing data in <code>grf</code></a></h2>
+<p><code>grf</code> can treat missingness as a splitting attribute (MIA) rather than
+deleting rows by default. A missing value is itself informative: it can
+correlate with treatment, with the outcome, or with both. MIA lets the
+tree send "missing" units down whichever branch produces the cleaner
+treatment-control contrast.</p>
+<p>That can preserve sample size, but it does not remove identification
+concerns. We still need a causal missingness argument, and we still need
+covariates defined before treatment if they are to index $\tau(x)$.
+MIA is a convenience for estimation; it does not absolve the analyst of
+the duty to model why data are missing.</p>
 <h2 id="further-material"><a class="header" href="#further-material">Further material</a></h2>
 <p>Susan Athey's lecture on causal forests gives a deeper account of the
 statistical machinery introduced above. The relevant material on causal

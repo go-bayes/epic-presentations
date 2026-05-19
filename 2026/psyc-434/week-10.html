@@ -247,6 +247,14 @@
                         <h1 id="week-10-classical-measurement-theory-from-a-causal-perspective"><a class="header" href="#week-10-classical-measurement-theory-from-a-causal-perspective">Week 10: Classical Measurement Theory from a Causal Perspective</a></h1>
 <p><strong>Date: 13 May 2026</strong></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Standard psychometric theories rest on strong, usually unstated,
+causal assumptions about how a construct and its indicators relate.
+These assumptions are especially likely to fail when measures are
+compared across cultures. Measurement is therefore part of causal
+identification, not a separate preliminary step.</p>
+</blockquote>
+<blockquote>
 <p><strong>Readings</strong></p>
 <p><strong>Required</strong></p>
 <ul>
@@ -313,6 +321,22 @@ variables inside it do not mean what the analysis says they mean.</p>
 </tbody></table>
 </div>
 <h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
+<h3 id="motivating-example"><a class="header" href="#motivating-example">Motivating example</a></h3>
+<p>The Kessler-6 (K6) is widely used to screen psychological distress.</p>
+<p>Two questions must be addressed before we try to compare scores causally
+across groups.</p>
+<ol>
+<li>Do the six items map to the same latent structure?</li>
+<li>Is that structure invariant across groups?</li>
+</ol>
+<p>These questions are necessary, but they are not sufficient. Even if a
+measurement model fits well and invariance tests pass, causal
+interpretation still depends on a defended causal story about what the
+construct is and how it is measured.</p>
+<p>This is why measurement belongs inside causal inference, not beside it.
+Measurement is part of identification: if a measure is unstable across
+the groups we compare, effect estimates and group contrasts can be
+distorted even when the adjustment set is otherwise defensible.</p>
 <h3 id="classical-validity-and-its-limits"><a class="header" href="#classical-validity-and-its-limits">Classical validity and its limits</a></h3>
 <p>Psychology textbooks organise measurement quality around four types of
 validity.</p>
@@ -361,22 +385,6 @@ formal model. A causal approach specifies the directed graph connecting
 constructs to indicators, states the assumptions under which observed
 scores recover latent quantities, and tests those assumptions. The rest
 of this lecture shows what that looks like in practice.</p>
-<h3 id="motivating-example"><a class="header" href="#motivating-example">Motivating example</a></h3>
-<p>The Kessler-6 (K6) is widely used to screen psychological distress.</p>
-<p>Two questions must be addressed before we try to compare scores causally
-across groups.</p>
-<ol>
-<li>Do the six items map to the same latent structure?</li>
-<li>Is that structure invariant across groups?</li>
-</ol>
-<p>These questions are necessary, but they are not sufficient. Even if a
-measurement model fits well and invariance tests pass, causal
-interpretation still depends on a defended causal story about what the
-construct is and how it is measured.</p>
-<h2 id="why-this-is-a-causal-lecture"><a class="header" href="#why-this-is-a-causal-lecture">Why this is a causal lecture</a></h2>
-<p>Measurement is part of identification. If measurement is unstable,
-effect estimates and group contrasts can be distorted even when
-adjustment sets are otherwise defensible.</p>
 <h2 id="learning-outcomes"><a class="header" href="#learning-outcomes">Learning outcomes</a></h2>
 <p>By the end of this week, you should be able to:</p>
 <ol>
@@ -392,6 +400,11 @@ state what they do not establish.</li>
 <li>Link measurement assumptions to DAG-based bias reasoning.</li>
 </ol>
 <h2 id="part-1-practical-workflow-with-k6"><a class="header" href="#part-1-practical-workflow-with-k6">Part 1: practical workflow with K6</a></h2>
+<p>This lecture has two parts. Part 1 is the practical workflow you may be
+asked to run: exploratory and confirmatory factor analysis, then
+invariance testing. Part 2 is the causal reasoning that says what those
+tools can and cannot establish. Work the tools first, then read Part 2
+before trusting them.</p>
 <h3 id="step-1-prepare-data-and-inspect-factorability"><a class="header" href="#step-1-prepare-data-and-inspect-factorability">Step 1: prepare data and inspect factorability</a></h3>
 <pre><code class="language-r">library(margot)
 library(tidyverse)
@@ -547,13 +560,14 @@ same outcome across groups.</li>
 </ol>
 </blockquote>
 <h2 id="part-2-how-traditional-measurement-theory-fails-for-causal-inference"><a class="header" href="#part-2-how-traditional-measurement-theory-fails-for-causal-inference">Part 2: how traditional measurement theory fails (for causal inference)</a></h2>
-<p>This part restores the core point of the lecture. Causal inference
-operates under assumptions. For measurement, it is causality all the way
-down. This follows from the potential outcomes framework: causal
-contrasts require well-defined outcomes under interventions, and
-constructed measures are outcomes of causal processes (question wording,
-translation, response styles, incentives, and the world that generates
-the experiences being reported).</p>
+<p>Part 1 showed the tools; Part 2 asks what they establish. Causal
+inference operates under assumptions, and for measurement it is
+causality all the way down. This follows from the potential outcomes
+framework: causal contrasts require well-defined outcomes under
+interventions, and constructed measures are themselves outcomes of
+causal processes (question wording, translation, response styles,
+incentives, and the world that generates the experiences being
+reported).</p>
 <p>Classical psychometric checks (internal consistency, model fit,
 invariance tests) can organise associations. They do not, by themselves,
 evaluate the causal assumptions about direction and causal efficacy that

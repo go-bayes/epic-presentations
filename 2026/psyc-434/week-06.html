@@ -248,6 +248,13 @@
 <p><a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-w06/">Slides</a></p>
 <p><em>Date: 1 Apr 2026</em></p>
 <blockquote>
+<p><strong>Key idea</strong></p>
+<p>Interaction, effect modification, a regression product term, and the
+conditional average treatment effect (CATE) are four distinct things.
+Keeping them apart is what makes a claim about who benefits more
+defensible.</p>
+</blockquote>
+<blockquote>
 <p><strong>Required reading</strong></p>
 <ul>
 <li>Hernán &amp; Robins (<a href="#ref-hernanrobins2025">2025</a>), chapters 4-5.
@@ -484,9 +491,8 @@ patterns without requiring the analyst to guess the correct
 specification. These estimators help with functional form, but they do
 not remove confounding by design.</p>
 <h3 id="demo-functional-form-matters"><a class="header" href="#demo-functional-form-matters">Demo: functional form matters</a></h3>
-<p>This simulation has randomised treatment.</p>
-<p>There is no confounding.</p>
-<p>The challenge is functional form.</p>
+<p>This simulation randomises treatment, so there is no confounding. The
+only challenge is functional form.</p>
 <pre><code class="language-r"># install once
 # install.packages("pak")
 # pak::pak("go-bayes/causalworkshop")
