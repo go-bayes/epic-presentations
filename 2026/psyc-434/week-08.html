@@ -292,14 +292,14 @@ contrast for a subgroup defined by baseline covariates at time zero.
 Investigators can estimate CATEs for theory-driven subgroups by
 stratifying first, then estimating effects separately within each
 subgroup. They can also use interaction models, which require a chosen
-functional form. This week introduces causal forests, which learn the
-heterogeneity surface from data. The machine-learning step changes the
-estimator, not the identification logic: treatment must still be
-well-defined, subgroup variables must still precede treatment, and
-exchangeability and positivity still do the causal work. What machine
-learning adds is the ability to estimate $\tau(x)$ at high resolution
-without committing in advance to a particular shape for the
-heterogeneity.</p>
+functional form.</p>
+<p>This week introduces causal forests, which learn the heterogeneity
+surface from data. The machine-learning step changes the estimator, not
+the identification logic. Treatment must still be well-defined, subgroup
+variables must still precede treatment, and exchangeability and
+positivity still do the causal work. Machine learning adds the ability
+to estimate $\tau(x)$ at high resolution without committing in advance
+to a particular shape for the heterogeneity.</p>
 <blockquote>
 <p><strong>Where we are in the heterogeneity sequence</strong></p>
 <ul>
@@ -340,13 +340,13 @@ justify tailoring an exposure to individual circumstances.</p>
 <p>Here $X$ must be a baseline profile measured before treatment begins.
 ATE answers "does it work on average?" CATE answers "for whom does it
 work more or less?"</p>
-<p>Recall, the individual treatment effect $Y_i(1) - Y_i(0)$ is
-unidentified, because for any single person we observe at most one of
-the potential outcomes. CATE is the most granular contrast we <em>can</em>
+<p>Recall that the individual treatment effect $Y_i(1) - Y_i(0)$ is
+unidentified. For any single person, we observe at most one of the
+potential outcomes. CATE is the most granular contrast we <em>can</em>
 identify: the average of individual effects across people who share
 covariate profile $x$. Two people with identical baseline covariates
 may differ in their realised potential outcomes, so $\tau(x)$ smooths
-over within-profile variation that is, by definition, beyond reach.</p>
+over within-profile variation that is beyond reach.</p>
 <h2 id="outcome-wide-effects-before-heterogeneity"><a class="header" href="#outcome-wide-effects-before-heterogeneity">Outcome-wide effects before heterogeneity</a></h2>
 <p>Before asking whether effects vary across people, ask whether the
 treatment appears to affect the outcome at all, and whether that
@@ -443,12 +443,13 @@ be cautious when the subgroup list is exploratory.</p>
 add modelling assumptions about shape.</p>
 <p>A small interaction model assumes a simple shape. If the analyst writes
 $\tau(x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2$ and stops there, every
-covariate must enter linearly and the heterogeneity along $x_1$ must
+covariate must enter linearly. The heterogeneity along $x_1$ must also
 be the same regardless of $x_2$. Real treatment-response surfaces are
 often non-linear, contain interactions among more than two variables,
-and carry sharp regime changes (the effect of a programme on purpose may
-climb steeply with extraversion up to a saturation point, then flatten).
-A pre-specified interaction model can miss all three features.</p>
+and carry sharp regime changes. For example, the effect of a programme
+on purpose may climb steeply with extraversion up to a saturation point,
+then flatten. A pre-specified interaction model can miss all three
+features.</p>
 <p>A pre-specified linear interaction model can still be useful when the
 scientific question is a specific, pre-declared contrast. For discovery,
 it is a weak test of heterogeneity because its answer is limited to the
@@ -480,13 +481,13 @@ that makes any one tree unreliable (<a href="#ref-breiman2001random">Breiman,
 forest's prediction surface is the average of hundreds of jagged tile
 patterns, with no single tree responsible for any particular prediction.</p>
 <p><strong>Causal forest.</strong> Each tree still asks "where should I split the
-covariate space?" — but the question it answers is different. A
-regression tree looks for splits that group units with similar
-<em>outcomes</em>: it finds cutpoints where the average value of $Y$ jumps. A
-causal tree looks for splits that group units with similar <em>treatment
-effects</em>: it finds cutpoints where the <em>gap between treated and control
-units jumps</em>. So the tree's splits land on covariates that change the
-<em>effect</em> of treatment, not covariates that merely predict the outcome.</p>
+covariate space?" The question it answers is different. A regression
+tree looks for splits that group units with similar <em>outcomes</em>: it finds
+cutpoints where the average value of $Y$ jumps. A causal tree looks
+for splits that group units with similar <em>treatment effects</em>: it finds
+cutpoints where the <em>gap between treated and control units jumps</em>. The
+tree's splits therefore land on covariates that change the <em>effect</em> of
+treatment, not covariates that merely predict the outcome.</p>
 <p>Each tree then plays an honest two-step game on its training subsample
 (<a href="#ref-wager2018">Wager &amp; Athey, 2018</a>). The first half decides where
 the splits go. The second, non-overlapping half estimates the
@@ -723,12 +724,12 @@ transparent lottery among eligible students, expand capacity, or spend
 the targeting budget on a different question.</p>
 <p>The hard problem at the end of this lecture is opacity. A causal forest
 predicts over the entire feature space $X$. That is a major gain over
-conventional subgroup analysis, because it can discover heterogeneity we
-did not specify in advance. It is also a decision problem: a
+conventional subgroup analysis because it can discover heterogeneity we
+did not specify in advance. It also creates a decision problem: a
 high-dimensional ranking is difficult to explain, contest, audit, or
 implement. Week 9 begins by returning to the outcome-wide screen,
 because policy work should start from outcomes with credible average
-evidence. It then uses policy trees as a workaround for the ranking
+evidence. It then uses policy trees as a response to the ranking
 problem. A shallow policy tree gives up some targeting precision in
 exchange for a rule that a decision-maker can read, defend, and apply.</p>
 <blockquote>
@@ -768,7 +769,7 @@ forests starts around the eighteen-minute mark.</p>
 <hr />
 <p>Lab materials: <a href="lab-08.html">Lab 8: RATE and QINI Curves</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-breiman2001random" class="csl-entry">
 <p>Breiman, L. (2001). Random forests. <em>Machine Learning</em>, <em>45</em>(1), 5–32.
 <a href="https://doi.org/10.1023/A:1010933404324">https://doi.org/10.1023/A:1010933404324</a></p>

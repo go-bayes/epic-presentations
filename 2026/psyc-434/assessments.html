@@ -351,7 +351,8 @@ devices, or other materials.</p>
 <li>Title and motivation (what is it, so what).</li>
 <li>Causal question, target population, exposure, and outcomes.</li>
 <li>A simple causal diagram showing your identification strategy.</li>
-<li>Causal estimand and analysis plan (what you will estimate, and how).</li>
+<li>Causal estimand and analysis plan (what causal quantity you will
+estimate, and how).</li>
 <li>One key limitation or risk, and how you will address it.</li>
 </ol>
 <p>The full grade-banded rubric is in the <a href="presentation-rubric.html">Presentation
@@ -390,8 +391,9 @@ background.</p>
 <p><strong>Current template and historical examples</strong></p>
 <ul>
 <li>Start from the current <a href="assets/research-report-template.zip">research-report
-template</a>. If the course-site
-download fails, use the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Google Drive
+template</a>, introduced and
+described in <a href="lab-10.html">Lab 10</a>. If the course-site download fails,
+use the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Google Drive
 mirror</a>.
 It is the 2026 scaffold for Option A.</li>
 <li>A historical report example is available here: <a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-assets/example-psyc434-report.pdf">Example PSYC434
@@ -477,22 +479,24 @@ contrast (binary or modified treatment policy). Address the consistency
 assumption — would two participants with the same recorded exposure
 value share the same potential outcomes? Confirm the exposure precedes
 the outcomes in time.</p>
-<p><strong>Determine the outcomes.</strong> Define each outcome $Y_k$ for $k = 1,
-\dots, 4$. State the scale (continuous, z-scored), the timing (wave 2,
-post-exposure), and how each outcome relates to the question. Following
-VanderWeele's outcome-wide approach (<a href="#ref-vanderweele2020">VanderWeele et al.,
-2020</a>), the four outcomes together index
-<em>wellbeing as a composite construct</em> rather than four independent
-endpoints. Explain why this design reduces selective reporting
-(selecting only the outcome that gave the strongest result after seeing
-the data) and lets the reader read the pattern across the family rather
-than over-interpreting any single outcome.</p>
+<p><strong>Determine the outcomes.</strong> Define each outcome $Y_j$ for $j = 1,
+\dots, 4$, where $j$ indexes the four wellbeing outcomes. The
+synthetic panel has three waves: baseline covariates, exposure at wave
+1, and outcomes at wave 2. State the outcome scale (continuous,
+z-scored), timing (wave 2, post-exposure), and how each outcome relates
+to the question. Following VanderWeele's outcome-wide approach
+(<a href="#ref-vanderweele2020">VanderWeele et al., 2020</a>), the four outcomes
+together index <em>wellbeing as a composite construct</em> rather than four
+independent endpoints. Explain why this design reduces selective
+reporting (selecting only the outcome that gave the strongest result
+after seeing the data) and lets the reader read the pattern across the
+family rather than over-interpreting any single outcome.</p>
 <p><strong>Sample characteristics.</strong> Provide descriptive statistics for baseline
 demographics, exposure prevalence, and outcome distributions. Make clear
 the data are simulated.</p>
 <p><strong>Account for confounders.</strong> Define the baseline confounder set $L$.
 Justify each variable as a plausible cause of both $A$ and the
-$Y_k$. Confirm temporal order. Include baseline values of the exposure
+$Y_j$. Confirm temporal order. Include baseline values of the exposure
 and of every outcome in $L$ — <em>lagged-self adjustment</em> (treating each
 variable's own past value as a covariate). Use z-scores for continuous
 covariates and one-hot encoding for categorical covariates with three or
@@ -509,7 +513,7 @@ can affect which others</em>, not commitments to specific causal mechanisms;
 the diagram is for checking d-separation (a graphical rule for reading
 off conditional independencies).</p>
 <p><strong>Identify the causal estimand.</strong> State the causal contrast for each
-outcome: $$ \mathrm{ATE}_k = \mathbb{E}[Y_k(1) - Y_k(0)], \quad k =
+outcome: $$ \mathrm{ATE}_j = \mathbb{E}[Y_j(1) - Y_j(0)], \quad j =
 1, \dots, 4. $$ State the joint causal estimand of interest (the
 vector of four ATEs) and how you will summarise it.</p>
 <p><strong>Missing data.</strong> Describe how missing data are handled. Use
@@ -697,7 +701,7 @@ it as a source.</li>
 <li>Ask for a plain-language explanation of a concept after you have
 checked the lecture notes.</li>
 <li>Ask whether your answer states the target population, causal
-contrast, outcome, estimand, and assumptions.</li>
+contrast, outcome, causal estimand, and assumptions.</li>
 <li>Ask where your wording sounds associational when you mean causal.</li>
 <li>Ask for a similar practice question, then answer that question
 yourself.</li>
@@ -710,7 +714,7 @@ yourself.</li>
 <li>Using it to memorise phrases rather than understand the logic.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-vanderweele2017" class="csl-entry">
 <p>VanderWeele, T. J., &amp; Ding, P. (2017). Sensitivity analysis in
 observational research: Introducing the E-value. <em>Annals of Internal

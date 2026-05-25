@@ -470,7 +470,8 @@ devices, or other materials.</p>
 <li>Title and motivation (what is it, so what).</li>
 <li>Causal question, target population, exposure, and outcomes.</li>
 <li>A simple causal diagram showing your identification strategy.</li>
-<li>Causal estimand and analysis plan (what you will estimate, and how).</li>
+<li>Causal estimand and analysis plan (what causal quantity you will
+estimate, and how).</li>
 <li>One key limitation or risk, and how you will address it.</li>
 </ol>
 <p>The full grade-banded rubric is in the <a href="presentation-rubric.html">Presentation
@@ -509,8 +510,9 @@ background.</p>
 <p><strong>Current template and historical examples</strong></p>
 <ul>
 <li>Start from the current <a href="assets/research-report-template.zip">research-report
-template</a>. If the course-site
-download fails, use the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Google Drive
+template</a>, introduced and
+described in <a href="lab-10.html">Lab 10</a>. If the course-site download fails,
+use the <a href="https://drive.google.com/drive/folders/1RO0vvQ3j_cZfwWgApKnIP4dHrkUbF4Ip">Google Drive
 mirror</a>.
 It is the 2026 scaffold for Option A.</li>
 <li>A historical report example is available here: <a href="https://go-bayes.github.io/epic-presentations/2026/psyc-434-assets/example-psyc434-report.pdf">Example PSYC434
@@ -596,22 +598,24 @@ contrast (binary or modified treatment policy). Address the consistency
 assumption — would two participants with the same recorded exposure
 value share the same potential outcomes? Confirm the exposure precedes
 the outcomes in time.</p>
-<p><strong>Determine the outcomes.</strong> Define each outcome $Y_k$ for $k = 1,
-\dots, 4$. State the scale (continuous, z-scored), the timing (wave 2,
-post-exposure), and how each outcome relates to the question. Following
-VanderWeele's outcome-wide approach (<a href="assessments.html#ref-vanderweele2020">VanderWeele et al.,
-2020</a>), the four outcomes together index
-<em>wellbeing as a composite construct</em> rather than four independent
-endpoints. Explain why this design reduces selective reporting
-(selecting only the outcome that gave the strongest result after seeing
-the data) and lets the reader read the pattern across the family rather
-than over-interpreting any single outcome.</p>
+<p><strong>Determine the outcomes.</strong> Define each outcome $Y_j$ for $j = 1,
+\dots, 4$, where $j$ indexes the four wellbeing outcomes. The
+synthetic panel has three waves: baseline covariates, exposure at wave
+1, and outcomes at wave 2. State the outcome scale (continuous,
+z-scored), timing (wave 2, post-exposure), and how each outcome relates
+to the question. Following VanderWeele's outcome-wide approach
+(<a href="assessments.html#ref-vanderweele2020">VanderWeele et al., 2020</a>), the four outcomes
+together index <em>wellbeing as a composite construct</em> rather than four
+independent endpoints. Explain why this design reduces selective
+reporting (selecting only the outcome that gave the strongest result
+after seeing the data) and lets the reader read the pattern across the
+family rather than over-interpreting any single outcome.</p>
 <p><strong>Sample characteristics.</strong> Provide descriptive statistics for baseline
 demographics, exposure prevalence, and outcome distributions. Make clear
 the data are simulated.</p>
 <p><strong>Account for confounders.</strong> Define the baseline confounder set $L$.
 Justify each variable as a plausible cause of both $A$ and the
-$Y_k$. Confirm temporal order. Include baseline values of the exposure
+$Y_j$. Confirm temporal order. Include baseline values of the exposure
 and of every outcome in $L$ — <em>lagged-self adjustment</em> (treating each
 variable's own past value as a covariate). Use z-scores for continuous
 covariates and one-hot encoding for categorical covariates with three or
@@ -628,7 +632,7 @@ can affect which others</em>, not commitments to specific causal mechanisms;
 the diagram is for checking d-separation (a graphical rule for reading
 off conditional independencies).</p>
 <p><strong>Identify the causal estimand.</strong> State the causal contrast for each
-outcome: $$ \mathrm{ATE}_k = \mathbb{E}[Y_k(1) - Y_k(0)], \quad k =
+outcome: $$ \mathrm{ATE}_j = \mathbb{E}[Y_j(1) - Y_j(0)], \quad j =
 1, \dots, 4. $$ State the joint causal estimand of interest (the
 vector of four ATEs) and how you will summarise it.</p>
 <p><strong>Missing data.</strong> Describe how missing data are handled. Use
@@ -816,7 +820,7 @@ it as a source.</li>
 <li>Ask for a plain-language explanation of a concept after you have
 checked the lecture notes.</li>
 <li>Ask whether your answer states the target population, causal
-contrast, outcome, estimand, and assumptions.</li>
+contrast, outcome, causal estimand, and assumptions.</li>
 <li>Ask where your wording sounds associational when you mean causal.</li>
 <li>Ask for a similar practice question, then answer that question
 yourself.</li>
@@ -829,7 +833,7 @@ yourself.</li>
 <li>Using it to memorise phrases rather than understand the logic.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-vanderweele2017" class="csl-entry">
 <p>VanderWeele, T. J., &amp; Ding, P. (2017). Sensitivity analysis in
 observational research: Introducing the E-value. <em>Annals of Internal
@@ -935,10 +939,10 @@ and external validity); Bulbulia (<a href="readings.html#ref-bulbulia2024swigsti
 <p><strong>Required:</strong> Hernán &amp; Robins (<a href="readings.html#ref-hernanrobins2025">2025</a>), chapters
 1–2 (review identification assumptions).
 <a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">PDF</a>;
-Cashin et al. (<a href="readings.html#ref-cashin2025transparent">2025</a>) — the TARGET
-(Transparent Reporting of Observational Studies Emulating a Target
-Trial) statement, a reporting checklist for studies that emulate a
-target trial.</p>
+<span class="nocase">Cashin et al.</span>
+(<a href="readings.html#ref-cashin2025transparent">2025</a>) — the TARGET (Transparent Reporting
+of Observational Studies Emulating a Target Trial) statement, a
+reporting checklist for studies that emulate a target trial.</p>
 <h3 id="week-6-effect-modification-and-cate"><a class="header" href="#week-6-effect-modification-and-cate">Week 6: Effect modification and CATE</a></h3>
 <p><strong>Required:</strong> Hernán &amp; Robins (<a href="readings.html#ref-hernanrobins2025">2025</a>), chapters
 4–5.
@@ -998,7 +1002,7 @@ website</a>. Documentation, guides, and
 vignettes used in weeks 6, 8, and 9.</li>
 </ul>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bandalos2018" class="csl-entry">
 <p>Bandalos, D. L. (2018). <em>Measurement theory and applications for the
 social sciences</em>. Guilford Publications.</p>
@@ -1028,11 +1032,12 @@ in experiments. <em>Evolutionary Human Sciences</em>, <em>6</em>, e43.
 <a href="https://doi.org/10.1017/ehs.2024.34">https://doi.org/10.1017/ehs.2024.34</a></p>
 </div>
 <div id="ref-cashin2025transparent" class="csl-entry">
-<p>Cashin, A. G., Hansford, H. J., Hernán, M. A., Swanson, S. A., Lee, H.,
-Jones, M. D., Dahabreh, I. J., Dickerman, B. A., Egger, M.,
-Garcia-Albeniz, X., et al. (2025). Transparent reporting of
-observational studies emulating a target trial—the TARGET statement.
-<em>JAMA</em>, <em>334</em>(12), 1084–1093. <a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
+<p><span class="nocase">Cashin, A. G., Hansford, H. J., Hernán, M. A.,
+Swanson, S. A., Lee, H., Jones, M. D., Dahabreh, I. J., Dickerman, B.
+A., Egger, M., Garcia-Albeniz, X., et al.</span> (2025). Transparent
+reporting of observational studies emulating a target trial—the TARGET
+statement. <em>JAMA</em>, <em>334</em>(12), 1084–1093.
+<a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
 </div>
 <div id="ref-hernan2009MEASUREMENT" class="csl-entry">
 <p>Hernán, M. A., &amp; Cole, S. R. (2009). Invited commentary: Causal diagrams
@@ -1117,7 +1122,8 @@ the same dataset.</p>
 young people. Some investigators argued the conclusions were not strong
 enough: those teenagers who most frequently engaged with social media
 exhibited the lowest wellbeing scores, and the negative association is
-non-linear (<a href="week-01.html#ref-twenge2020underestimating">Twenge et al., 2020</a>).</p>
+non-linear (<a href="week-01.html#ref-twenge2020underestimating"><span class="nocase">Twenge et al.</span>,
+2020</a>).</p>
 <p>Questions about whether social media use harms young people are in the
 news. On 18 February 2026, CNN reported testimony in ongoing litigation
 about adolescent social media use
@@ -1361,7 +1367,7 @@ Bulbulia (<a href="week-01.html#ref-bulbulia2023">2024</a>).</p>
 <hr />
 <p>Lab materials: <a href="lab-01.html">Lab 1: Git and GitHub</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2023" class="csl-entry">
 <p>Bulbulia, J. A. (2024). Methods in causal inference part 1: Causal
 diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
@@ -1382,9 +1388,9 @@ Behaviour</em>, <em>3</em>(2), 173–182. <a href="https://doi.org/10.1038/s4156
 cause and effect</em>. Basic books.</p>
 </div>
 <div id="ref-twenge2020underestimating" class="csl-entry">
-<p>Twenge, J. M., Haidt, J., Joiner, T. E., et al. (2020). Underestimating
-digital media harm. <em>Nature Human Behaviour</em>, <em>4</em>, 346–348.
-<a href="https://doi.org/10.1038/s41562-020-0839-4">https://doi.org/10.1038/s41562-020-0839-4</a></p>
+<p><span class="nocase">Twenge, J. M., Haidt, J., Joiner, T. E., et
+al.</span> (2020). Underestimating digital media harm. <em>Nature Human
+Behaviour</em>, <em>4</em>, 346–348. <a href="https://doi.org/10.1038/s41562-020-0839-4">https://doi.org/10.1038/s41562-020-0839-4</a></p>
 </div>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="week-2-causal-diagrams-five-elementary-structures"><a class="header" href="#week-2-causal-diagrams-five-elementary-structures">Week 2: Causal Diagrams: Five Elementary Structures</a></h1>
@@ -1696,16 +1702,16 @@ reduce confounding.</li>
 </blockquote>
 <h2 id="a-note-on-the-generality-of-d-separation"><a class="header" href="#a-note-on-the-generality-of-d-separation">A note on the generality of d-separation</a></h2>
 <p>Two variables are <strong>d-separated</strong> ("directionally separated") in a
-causal DAG when every path between them is blocked. In practice, this
-means the DAG implies conditional independence once the relevant
-conditioning set is stated. The rules above focus on confounding, but
-d-separation is more general than confounding control. It is the reason
-the same DAG logic works for collider bias, mediator bias, and
-measurement problems. For example, in a collider $A \to C \leftarrow
-Y$, $A$ and $Y$ are d-separated when we do not condition on $C$,
-but conditioning on $C$ opens the path and they become d-connected.
-The same blocking logic—ask whether every path is open or closed—applies
-in all three bias settings.</p>
+causal DAG when every path between them is blocked. In practice, the DAG
+implies conditional independence once the relevant conditioning set is
+stated. The rules above focus on confounding, but d-separation is more
+general than confounding control. The same DAG logic also works for
+collider bias, mediator bias, and measurement problems.</p>
+<p>For example, in a collider $A \to C \leftarrow Y$, $A$ and $Y$ are
+d-separated when we do not condition on $C$. Conditioning on $C$
+opens the path, so $A$ and $Y$ become d-connected. The same blocking
+logic applies in all three bias settings: ask whether every path is open
+or closed.</p>
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
 <p>The Salk example is a structural lesson about assignment. The
 observed-control design produced a biased effect estimate because
@@ -1744,7 +1750,7 @@ Bulbulia (<a href="week-02.html#ref-bulbulia2023">2024a</a>). See also Bulbulia
 <hr />
 <p>Lab materials: <a href="lab-02.html">Lab 2: Install R and Set Up Your IDE</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-barrett2023ggdag" class="csl-entry">
 <p>Barrett, M. (2023). <em>Ggdag: Analyze and create elegant directed acyclic
 graphs</em>. <a href="https://github.com/malcolmbarrett/ggdag">https://github.com/malcolmbarrett/ggdag</a></p>
@@ -1980,7 +1986,8 @@ collider.</p>
 $U_2 \to Y$, conditioning on $L$ opens a previously blocked path
 between $A$ and $Y$.</p>
 </blockquote>
-<p>M-bias is important because "control for everything" is not a safe rule.</p>
+<p>M-bias gives a direct warning: "control for everything" is not a safe
+rule.</p>
 <blockquote>
 <p><strong>Pair exercise: M-bias in practice</strong></p>
 <ol>
@@ -2042,12 +2049,12 @@ to satisfy the backdoor criterion.</li>
 <blockquote>
 <p><strong>Further reading</strong></p>
 <p>All open access: Bulbulia (<a href="week-03.html#ref-bulbulia2023">2024</a>); Hernán &amp; Robins
-(<a href="week-03.html#ref-hernanrobins2025">2025, 6</a>).</p>
+(<a href="week-03.html#ref-hernanrobins2025">2025, Chapter 6</a>).</p>
 </blockquote>
 <hr />
 <p>Lab materials: <a href="lab-03.html">Lab 3: Regression, Graphing, and Simulation</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2023" class="csl-entry">
 <p>Bulbulia, J. A. (2024). Methods in causal inference part 1: Causal
 diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
@@ -2430,7 +2437,7 @@ A. Bulbulia (<a href="week-04.html#ref-bulbulia2023">2024a</a>); J. A. Bulbulia
 <hr />
 <p>Lab materials: <a href="lab-04.html">Lab 4: Writing Regression Models</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2023" class="csl-entry">
 <p>Bulbulia, J. A. (2024a). Methods in causal inference part 1: Causal
 diagrams and confounding. <em>Evolutionary Human Sciences</em>, <em>6</em>, e40.
@@ -2495,9 +2502,9 @@ afterwards.</p>
 <ul>
 <li>Hernán &amp; Robins (<a href="week-05.html#ref-hernanrobins2025">2025</a>), chapters 1-3.
 <a href="https://www.dropbox.com/scl/fi/pkiqr4y1tg2l5mx7az8d9/hernanrobins_WhatIf_21nov25.pdf?rlkey=2jh5yxqv3itaanxqdgpiald0y&amp;dl=0">link</a></li>
-<li>Cashin et al. (<a href="week-05.html#ref-cashin2025transparent">2025</a>). TARGET
-(Transparent Reporting of Observational Studies Emulating a Target
-Trial) statement.</li>
+<li><span class="nocase">Cashin et al.</span>
+(<a href="week-05.html#ref-cashin2025transparent">2025</a>). TARGET (Transparent Reporting
+of Observational Studies Emulating a Target Trial) statement.</li>
 </ul>
 <p><strong>Optional</strong></p>
 <ul>
@@ -2866,9 +2873,10 @@ Shpitser (<a href="week-05.html#ref-ogburn2021">2021</a>)).</p>
 <p>When a study that emulates a target trial is published, journals in
 epidemiology and medicine increasingly expect a thorough, standardised
 account of its design and assumptions. The TARGET statement (Transparent
-Reporting of Observational Studies Emulating a Target Trial; Cashin et
-al. (<a href="week-05.html#ref-cashin2025transparent">2025</a>)) is one such reporting format.
-It asks authors to state, point by point, the target population, the
+Reporting of Observational Studies Emulating a Target Trial;
+<span class="nocase">Cashin et al.</span>
+(<a href="week-05.html#ref-cashin2025transparent">2025</a>)) is one such reporting format. It
+asks authors to state, point by point, the target population, the
 treatment strategies, time zero, the outcomes, the identification
 assumptions, and the sensitivity analyses. Each of those points
 corresponds to a step of the causal workflow above.</p>
@@ -2898,25 +2906,26 @@ asks the next question: does that contrast vary across subgroups?</p>
 <p>and</p>
 <p>$$ Y_i(a=1) - Y_i(a=0). $$</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024wierd" class="csl-entry">
 <p>Bulbulia, J. A. (2024). Methods in causal inference part 3: Measurement
 error and external validity threats. <em>Evolutionary Human Sciences</em>, <em>6</em>,
 e42. <a href="https://doi.org/10.1017/ehs.2024.33">https://doi.org/10.1017/ehs.2024.33</a></p>
 </div>
 <div id="ref-cashin2025transparent" class="csl-entry">
-<p>Cashin, A. G., Hansford, H. J., Hernán, M. A., Swanson, S. A., Lee, H.,
-Jones, M. D., Dahabreh, I. J., Dickerman, B. A., Egger, M.,
-Garcia-Albeniz, X., et al. (2025). Transparent reporting of
-observational studies emulating a target trial—the TARGET statement.
-<em>JAMA</em>, <em>334</em>(12), 1084–1093. <a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
+<p><span class="nocase">Cashin, A. G., Hansford, H. J., Hernán, M. A.,
+Swanson, S. A., Lee, H., Jones, M. D., Dahabreh, I. J., Dickerman, B.
+A., Egger, M., Garcia-Albeniz, X., et al.</span> (2025). Transparent
+reporting of observational studies emulating a target trial—the TARGET
+statement. <em>JAMA</em>, <em>334</em>(12), 1084–1093.
+<a href="https://doi.org/10.1001/jama.2025.13350">https://doi.org/10.1001/jama.2025.13350</a></p>
 </div>
 <div id="ref-chatton2020" class="csl-entry">
 <p>Chatton, A., Le Borgne, F., Leyrat, C., Gillaizeau, F., Rousseau, C.,
 Barbin, L., Laplaud, D., Léger, M., Giraudeau, B., &amp; Foucher, Y. (2020).
 G-computation, propensity score-based methods, and targeted maximum
 likelihood estimator for causal inference with different covariates
-sets: a comparative simulation study. <em>Scientific Reports</em>, <em>10</em>(1),
+sets: A comparative simulation study. <em>Scientific Reports</em>, <em>10</em>(1),
 9219. <a href="https://doi.org/10.1038/s41598-020-65917-x">https://doi.org/10.1038/s41598-020-65917-x</a></p>
 </div>
 <div id="ref-hernan2017SELECTIONWITHOUTCOLLIDER" class="csl-entry">
@@ -3016,9 +3025,9 @@ as $A \times G$.</li>
 </blockquote>
 <blockquote>
 <p><strong>Rule of thumb</strong></p>
-<p>If you cannot write the estimand as $\mathbb{E}[Y(1) - Y(0) \mid X =
-x]$ for baseline $X$ measured at time zero, you are not estimating
-a CATE.</p>
+<p>If you cannot write the causal estimand as $\mathbb{E}[Y(1) - Y(0)
+\mid X = x]$ for baseline $X$ measured at time zero, you are not
+estimating a CATE.</p>
 </blockquote>
 <h2 id="first-distinction-interaction-versus-effect-modification"><a class="header" href="#first-distinction-interaction-versus-effect-modification">First distinction: interaction versus effect modification</a></h2>
 <p>Start with the scientific question, not the software output. If the
@@ -3186,7 +3195,7 @@ simultaneously.</li>
 <h2 id="why-flexible-estimators-matter"><a class="header" href="#why-flexible-estimators-matter">Why flexible estimators matter</a></h2>
 <p>With many covariates, hand-built interaction models are fragile for four
 reasons. First, the number of possible interactions grows
-combinatorially: $k$ covariates generate $\binom{k}{2}$ pairwise
+combinatorially: $p$ covariates generate $\binom{p}{2}$ pairwise
 interactions and far more higher-order terms. Second, each interaction
 subgroup contains fewer observations, so estimates become noisy. Third,
 searching across many interactions inflates false-positive rates unless
@@ -3259,7 +3268,7 @@ $$</p>
 <p>$$ \mathbb{E}[Y(1,1)] - \mathbb{E}[Y(1,0)] -
 \mathbb{E}[Y(0,1)] + \mathbb{E}[Y(0,0)]. $$</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-hernanrobins2025" class="csl-entry">
 <p>Hernán, M. A., &amp; Robins, J. M. (2025). <em>Causal inference: What if</em>.
 Chapman &amp; Hall/CRC.
@@ -3270,8 +3279,8 @@ Chapman &amp; Hall/CRC.
 effect modification. <em>Epidemiology</em>, 863–871.</p>
 </div>
 <div id="ref-vanderweele2012" class="csl-entry">
-<p>VanderWeele, T. J. (2012). Confounding and Effect Modification:
-Distribution and Measure. <em>Epidemiologic Methods</em>, <em>1</em>(1), 55–82.
+<p>VanderWeele, T. J. (2012). Confounding and effect modification:
+Distribution and measure. <em>Epidemiologic Methods</em>, <em>1</em>(1), 55–82.
 <a href="https://doi.org/10.1515/2161-962X.1004">https://doi.org/10.1515/2161-962X.1004</a></p>
 </div>
 <div id="ref-vanderweele2007" class="csl-entry">
@@ -3371,14 +3380,14 @@ contrast for a subgroup defined by baseline covariates at time zero.
 Investigators can estimate CATEs for theory-driven subgroups by
 stratifying first, then estimating effects separately within each
 subgroup. They can also use interaction models, which require a chosen
-functional form. This week introduces causal forests, which learn the
-heterogeneity surface from data. The machine-learning step changes the
-estimator, not the identification logic: treatment must still be
-well-defined, subgroup variables must still precede treatment, and
-exchangeability and positivity still do the causal work. What machine
-learning adds is the ability to estimate $\tau(x)$ at high resolution
-without committing in advance to a particular shape for the
-heterogeneity.</p>
+functional form.</p>
+<p>This week introduces causal forests, which learn the heterogeneity
+surface from data. The machine-learning step changes the estimator, not
+the identification logic. Treatment must still be well-defined, subgroup
+variables must still precede treatment, and exchangeability and
+positivity still do the causal work. Machine learning adds the ability
+to estimate $\tau(x)$ at high resolution without committing in advance
+to a particular shape for the heterogeneity.</p>
 <blockquote>
 <p><strong>Where we are in the heterogeneity sequence</strong></p>
 <ul>
@@ -3419,13 +3428,13 @@ justify tailoring an exposure to individual circumstances.</p>
 <p>Here $X$ must be a baseline profile measured before treatment begins.
 ATE answers "does it work on average?" CATE answers "for whom does it
 work more or less?"</p>
-<p>Recall, the individual treatment effect $Y_i(1) - Y_i(0)$ is
-unidentified, because for any single person we observe at most one of
-the potential outcomes. CATE is the most granular contrast we <em>can</em>
+<p>Recall that the individual treatment effect $Y_i(1) - Y_i(0)$ is
+unidentified. For any single person, we observe at most one of the
+potential outcomes. CATE is the most granular contrast we <em>can</em>
 identify: the average of individual effects across people who share
 covariate profile $x$. Two people with identical baseline covariates
 may differ in their realised potential outcomes, so $\tau(x)$ smooths
-over within-profile variation that is, by definition, beyond reach.</p>
+over within-profile variation that is beyond reach.</p>
 <h2 id="outcome-wide-effects-before-heterogeneity"><a class="header" href="#outcome-wide-effects-before-heterogeneity">Outcome-wide effects before heterogeneity</a></h2>
 <p>Before asking whether effects vary across people, ask whether the
 treatment appears to affect the outcome at all, and whether that
@@ -3522,12 +3531,13 @@ be cautious when the subgroup list is exploratory.</p>
 add modelling assumptions about shape.</p>
 <p>A small interaction model assumes a simple shape. If the analyst writes
 $\tau(x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2$ and stops there, every
-covariate must enter linearly and the heterogeneity along $x_1$ must
+covariate must enter linearly. The heterogeneity along $x_1$ must also
 be the same regardless of $x_2$. Real treatment-response surfaces are
 often non-linear, contain interactions among more than two variables,
-and carry sharp regime changes (the effect of a programme on purpose may
-climb steeply with extraversion up to a saturation point, then flatten).
-A pre-specified interaction model can miss all three features.</p>
+and carry sharp regime changes. For example, the effect of a programme
+on purpose may climb steeply with extraversion up to a saturation point,
+then flatten. A pre-specified interaction model can miss all three
+features.</p>
 <p>A pre-specified linear interaction model can still be useful when the
 scientific question is a specific, pre-declared contrast. For discovery,
 it is a weak test of heterogeneity because its answer is limited to the
@@ -3559,13 +3569,13 @@ that makes any one tree unreliable (<a href="week-08.html#ref-breiman2001random"
 forest's prediction surface is the average of hundreds of jagged tile
 patterns, with no single tree responsible for any particular prediction.</p>
 <p><strong>Causal forest.</strong> Each tree still asks "where should I split the
-covariate space?" — but the question it answers is different. A
-regression tree looks for splits that group units with similar
-<em>outcomes</em>: it finds cutpoints where the average value of $Y$ jumps. A
-causal tree looks for splits that group units with similar <em>treatment
-effects</em>: it finds cutpoints where the <em>gap between treated and control
-units jumps</em>. So the tree's splits land on covariates that change the
-<em>effect</em> of treatment, not covariates that merely predict the outcome.</p>
+covariate space?" The question it answers is different. A regression
+tree looks for splits that group units with similar <em>outcomes</em>: it finds
+cutpoints where the average value of $Y$ jumps. A causal tree looks
+for splits that group units with similar <em>treatment effects</em>: it finds
+cutpoints where the <em>gap between treated and control units jumps</em>. The
+tree's splits therefore land on covariates that change the <em>effect</em> of
+treatment, not covariates that merely predict the outcome.</p>
 <p>Each tree then plays an honest two-step game on its training subsample
 (<a href="week-08.html#ref-wager2018">Wager &amp; Athey, 2018</a>). The first half decides where
 the splits go. The second, non-overlapping half estimates the
@@ -3802,12 +3812,12 @@ transparent lottery among eligible students, expand capacity, or spend
 the targeting budget on a different question.</p>
 <p>The hard problem at the end of this lecture is opacity. A causal forest
 predicts over the entire feature space $X$. That is a major gain over
-conventional subgroup analysis, because it can discover heterogeneity we
-did not specify in advance. It is also a decision problem: a
+conventional subgroup analysis because it can discover heterogeneity we
+did not specify in advance. It also creates a decision problem: a
 high-dimensional ranking is difficult to explain, contest, audit, or
 implement. Week 9 begins by returning to the outcome-wide screen,
 because policy work should start from outcomes with credible average
-evidence. It then uses policy trees as a workaround for the ranking
+evidence. It then uses policy trees as a response to the ranking
 problem. A shallow policy tree gives up some targeting precision in
 exchange for a rule that a decision-maker can read, defend, and apply.</p>
 <blockquote>
@@ -3847,7 +3857,7 @@ forests starts around the eighteen-minute mark.</p>
 <hr />
 <p>Lab materials: <a href="lab-08.html">Lab 8: RATE and QINI Curves</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-breiman2001random" class="csl-entry">
 <p>Breiman, L. (2001). Random forests. <em>Machine Learning</em>, <em>45</em>(1), 5–32.
 <a href="https://doi.org/10.1023/A:1010933404324">https://doi.org/10.1023/A:1010933404324</a></p>
@@ -4004,8 +4014,8 @@ that at least one confidence interval excludes zero by chance alone is
 higher than the nominal per-test error rate. A simple correction is
 <strong>Bonferroni</strong>:</p>
 <p>$$ \alpha_{\text{per outcome}} =
-\frac{\alpha_{\text{family-wise}}}{K}. $$</p>
-<p>With $K = 4$ outcomes and $\alpha_{\text{family-wise}} = 0.05$,
+\frac{\alpha_{\text{family-wise}}}{m}. $$</p>
+<p>With $m = 4$ outcomes and $\alpha_{\text{family-wise}} = 0.05$,
 each outcome is tested at $\alpha = 0.0125$. Equivalently, report a
 98.75% confidence interval for each outcome. This is conservative, but
 it is transparent and easy to explain.</p>
@@ -4039,9 +4049,10 @@ position drifts with sample size.</p>
 (CATE) estimation asks for a person-level contrast, $\tau(x) =
 \mathbb{E}[Y(1)-Y(0)\mid X=x]$. Policy learning asks which allocation
 rule has the highest expected utility if applied to the target
-population. We need a way to score competing rules: how much utility
-each would deliver, on average, if applied to the whole population. Call
-that number the rule's <strong>policy value</strong>, written $V(d)$:</p>
+population. We need a way to score competing rules. The score is the
+utility each rule would deliver, on average, if applied to the whole
+population. Call that number the rule's <strong>policy value</strong>, written
+$V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
 <p>In the course lab, utility is the outcome $Y$ itself. That assumes the
 treatment and control actions have equal cost, or that costs are being
@@ -4194,11 +4205,10 @@ checks, equity considerations, and implementation burden then inform how
 confidently investigators should act on the selected rule. For a
 high-stakes clinical intervention, a threshold-clearing gain may justify
 the extra complexity only with strong validation. For a community
-programme that must be administered by volunteers, the simpler depth-1
-rule may be preferable even when depth-2 clears the point-gain
-threshold, because the rule is more likely to be applied correctly in
-the field. A rule a worker mis-remembers is not the rule that was
-evaluated.</p>
+programme administered by volunteers, the simpler depth-1 rule may be
+preferable even when depth-2 clears the point-gain threshold. The
+simpler rule is more likely to be applied correctly in the field. A rule
+a worker mis-remembers is not the rule that was evaluated.</p>
 <p>The full research workflow compares both depths automatically. Lab 9
 shows depth-1 and depth-2 outputs so you can practise the same
 judgement: examine both trees, then justify the chosen depth in the
@@ -4357,7 +4367,7 @@ even when any single fit looks reasonable.</li>
 sequence matters because each step changes the causal estimand, the
 statistical summary, and the decision that the evidence can support.</p>
 <div class="table-wrapper"><table><thead><tr><th>Tool</th><th>Question</th><th>Main quantity</th><th>What it can support</th><th>What it does not settle</th></tr></thead><tbody>
-<tr><td>Outcome-wide ATE</td><td>Does one exposure appear to improve outcomes on average across a prespecified outcome family?</td><td>$\mathbb{E}[Y_k(1)-Y_k(0)]$ for each outcome $k$</td><td>Whether the exposure has credible average evidence for one or more outcomes</td><td>Who should receive treatment</td></tr>
+<tr><td>Outcome-wide ATE</td><td>Does one exposure appear to improve outcomes on average across a prespecified outcome family?</td><td>$\mathbb{E}[Y_j(1)-Y_j(0)]$ for each outcome $j$</td><td>Whether the exposure has credible average evidence for one or more outcomes</td><td>Who should receive treatment</td></tr>
 <tr><td>Prespecified group CATE</td><td>Do average effects differ across a group chosen before looking at results?</td><td>$\mathbb{E}[Y(1)-Y(0)\mid G=g]$</td><td>Whether an interpretable group comparison deserves attention</td><td>Individual assignment or a complete allocation rule</td></tr>
 <tr><td>Forest CATE ranking</td><td>Who is predicted to benefit more, conditional on baseline covariates?</td><td>$\hat{\tau}(X)$</td><td>A ranking for possible targeting</td><td>A transparent public rule, or a fixed treatment share by itself</td></tr>
 <tr><td>RATE / Qini</td><td>Does targeting by the CATE ranking improve outcomes over random or uniform allocation?</td><td>Targeting gain over the ranked population</td><td>Whether heterogeneity has practical value</td><td>Which simple rule should be used</td></tr>
@@ -4427,7 +4437,7 @@ Option B, the old Marsden example is a model of compact grant style
 only; follow the current criteria in <a href="assessments.html">Assessments</a>.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.
@@ -4546,8 +4556,7 @@ variables inside it do not mean what the analysis says they mean.</p>
 <h2 id="seminar-7"><a class="header" href="#seminar-7">Seminar</a></h2>
 <h3 id="motivating-example-3"><a class="header" href="#motivating-example-3">Motivating example</a></h3>
 <p>The Kessler-6 (K6) is widely used to screen psychological distress.</p>
-<p>Two questions must be addressed before we try to compare scores causally
-across groups.</p>
+<p>Two questions come before any causal comparison of scores across groups.</p>
 <ol>
 <li>Do the six items map to the same latent structure?</li>
 <li>Is that structure invariant across groups?</li>
@@ -4570,7 +4579,7 @@ validity.</p>
 intended domain.</li>
 <li><strong>Construct validity</strong>: whether the construct is accurately defined
 and operationalised.</li>
-<li><strong>Criterion validity</strong>: whether an instrument accurately predicts
+<li><strong>Criterion validity</strong>: whether an instrument statistically predicts
 performance on an external criterion.</li>
 <li><strong>Ecological validity</strong>: whether an instrument reflects real-world
 situations and behaviour.</li>
@@ -4592,12 +4601,12 @@ alternative). "Operationalised" concerns whether the same score means
 the same thing across individuals. This is a consistency question.
 Lumping both under one label obscures where a measurement fails.</p>
 <p><strong>Criterion validity</strong> is purely associational. An instrument can
-predict an outcome well for non-causal reasons: shared confounders,
-reverse causation, collider bias. "Predicts performance" tells you
-nothing about whether the instrument captures the construct that
-causally affects the criterion. Weeks 2 through 4 showed why prediction
-and causation are different questions. The same distinction applies
-here.</p>
+statistically predict an outcome for non-causal reasons: shared
+confounders, reverse causation, or collider bias. "Predicts performance"
+tells you nothing about whether the instrument captures the construct
+that causally affects the criterion. Weeks 2 through 4 showed why
+prediction and causation are different questions. The same distinction
+applies here.</p>
 <p><strong>Ecological validity</strong> gestures at transportability without specifying
 what changes across settings. A causal framework asks: does the
 construct-to-indicator relationship hold in the target population? That
@@ -4697,11 +4706,10 @@ particular statistical measurement model, with particular equality
 constraints, is compatible with the observed covariance structure.
 Failures and successes are both compatible with many causal stories.
 Causal structure is <em>underdetermined</em> by associations in the data.</p>
-<p>In this lecture, causal assumptions come first, and this means that
-statistical tests cannot replace thinking about our assumptions. We must
-define the construct and state a causal measurement story. Only then can
-invariance tests play a role, by checking some statistical implications
-of that story.</p>
+<p>In this lecture, causal assumptions come first. Statistical tests cannot
+replace thinking about those assumptions. We must define the construct
+and state a causal measurement story. Only then can invariance tests
+play a role, by checking some statistical implications of that story.</p>
 <p>For ordinal items, threshold invariance is the analogue of scalar
 invariance. In practice, fit an ordinal estimator (for example WLSMV)
 when items are Likert-type.</p>
@@ -4884,20 +4892,20 @@ but interpretation must state what is being averaged and what is
 unidentified.</p>
 <h4 id="review-multiple-versions-of-treatment"><a class="header" href="#review-multiple-versions-of-treatment">Review: multiple versions of treatment</a></h4>
 <p>The theory of multiple versions of treatment addresses the fact that
-real interventions are rarely uniform. Let $K$ denote the "true"
-versioned treatment and let $A$ be a coarsened indicator of $K$.</p>
-<p><img src="figures/vanderweele/vanderweele-multiple-versions.svg" alt="Multiple versions of treatment: $A$ as a coarsened indicator of $K$. Figure adapted from VanderWeele (2022)." /></p>
+real interventions are rarely uniform. Let $V$ denote the "true"
+versioned treatment and let $A$ be a coarsened indicator of $V$.</p>
+<p><img src="figures/vanderweele/vanderweele-multiple-versions.svg" alt="Multiple versions of treatment: $A$ as a coarsened indicator of $V$. Figure adapted from VanderWeele (2022)." /></p>
 <p>Recall that a causal effect is defined as the difference in expected
 potential outcomes if everyone were exposed to one level of a treatment
 versus another, conditional on covariates $L$:</p>
 <p>$$ \delta = \sum_l \left( \mathbb{E}[Y\mid A=a,l] -
 \mathbb{E}[Y\mid A=a^*,l] \right) P(l). $$</p>
 <p>Under the multiple-versions interpretation, we can express a consistent
-estimand in terms of $K$:</p>
-<p>$$ \delta = \sum_{k,l} \mathbb{E}[Y_k\mid l] P(k\mid a,l) P(l) -
-\sum_{k,l} \mathbb{E}[Y_k\mid l] P(k\mid a^*,l) P(l). $$</p>
+causal estimand in terms of $V$:</p>
+<p>$$ \delta = \sum_{v,l} \mathbb{E}[Y_v\mid l] P(v\mid a,l) P(l) -
+\sum_{v,l} \mathbb{E}[Y_v\mid l] P(v\mid a^*,l) P(l). $$</p>
 <p>This corresponds to a hypothetical randomised trial in which, within
-strata of $L$, the treated group receives versions $K$ drawn from
+strata of $L$, the treated group receives versions $V$ drawn from
 the version distribution among those with $A=a$ and the control group
 receives versions drawn from the version distribution among those with
 $A=a^*$ (<a href="week-10.html#ref-vanderweele2013">VanderWeele &amp; Hernan, 2013</a>).</p>
@@ -5108,7 +5116,7 @@ Online Causal Inference Seminar. The linked timestamp begins near the
 practical implications for measure construction.</li>
 </ul>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2022" class="csl-entry">
 <p>Bulbulia, J. A. (2023). A workflow for causal inference in
 cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(3),
@@ -5119,18 +5127,18 @@ cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(
 multi-group invariance testing possibilities in r. <em>Frontiers in
 Psychology</em>, 1507.</p>
 </div>
+<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
+<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
+<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
+</div>
 <div id="ref-harkness2003questionnaire" class="csl-entry">
 <p>Harkness, J. A., Van de Vijver, F. J., &amp; Johnson, T. P. (2003).
 Questionnaire design in comparative research. <em>Cross-Cultural Survey
 Methods</em>, 19–34.</p>
 </div>
-<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
-<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
-<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
-</div>
 <div id="ref-he2012" class="csl-entry">
-<p>He, J., &amp; Vijver, F. van de. (2012). Bias and Equivalence in
-Cross-Cultural Research. <em>Online Readings in Psychology and Culture</em>,
+<p>He, J., &amp; Vijver, F. van de. (2012). Bias and equivalence in
+cross-cultural research. <em>Online Readings in Psychology and Culture</em>,
 <em>2</em>(2). <a href="https://doi.org/10.9707/2307-0919.1111">https://doi.org/10.9707/2307-0919.1111</a></p>
 </div>
 <div id="ref-vanderweele2022" class="csl-entry">
@@ -5188,7 +5196,8 @@ question before answering.</li>
 <li>Title and motivation (what is it, so what).</li>
 <li>Causal question, target population, exposure, and outcomes.</li>
 <li>A simple causal diagram showing your identification strategy.</li>
-<li>Causal estimand and analysis plan (what you will estimate, and how).</li>
+<li>Causal estimand and analysis plan (what causal quantity you will
+estimate, and how).</li>
 <li>One focal limitation or risk, and how you will address it.</li>
 </ol>
 <h2 id="grading"><a class="header" href="#grading">Grading</a></h2>
@@ -5201,7 +5210,7 @@ response to the panel question — each scored in one of four bands.</p>
 <p><strong>Preparation</strong></p>
 <ul>
 <li>Plan the whiteboard layout before the talk; treat the board as three
-columns (DAG, estimand, result).</li>
+columns (DAG, causal estimand, result).</li>
 <li>Define every acronym at first use.</li>
 <li>Rehearse timing. Ten minutes is short. Aim for eight to leave
 breathing room.</li>
@@ -8669,8 +8678,8 @@ cat(ate$interpretation)                   # auto-drafted summary
 <code>plot_defaults</code> list (in <code>setup.R</code>) so you can restyle (colours,
 ordering, text size, x-axis limits) without editing the manuscript
 chunks. The Bonferroni correction widens each CI by the family-wise
-$z$ factor ($z_{\alpha_{FW}/(2k)}$ with $k = 4$), and the
-<strong>bound E-value</strong> is recomputed at the multiplicity-adjusted lower
+$z$ factor ($z_{\alpha_{FW}/(2m)}$ with $m = 4$ outcomes), and
+the <strong>bound E-value</strong> is recomputed at the multiplicity-adjusted lower
 limit. If that limit crosses zero, the bound E-value is reported as 1 —
 meaning no unmeasured-confounder strength is needed to push the bound to
 the null.</p>
@@ -8952,8 +8961,8 @@ the relevant lecture, lab, <a href="reporting-guide.html">Reporting Guide</a>, a
 <h2 id="heterogeneous-treatment-effects-week-8"><a class="header" href="#heterogeneous-treatment-effects-week-8">Heterogeneous Treatment Effects (Week 8)</a></h2>
 <ol>
 <li>State the difference between the average treatment effect and the
-conditional average treatment effect (CATE). When is the distinction
-substantively important?</li>
+conditional average treatment effect (CATE). When would that
+distinction change the conclusion or decision?</li>
 <li>A regression model with treatment-by-age and treatment-by-gender
 interactions reports both interactions as non-significant. Does this
 rule out heterogeneous treatment effects? Why or why not?</li>
@@ -9184,8 +9193,8 @@ policy value is large enough to justify lower transparency.</p>
 <p>The four causal estimands are the effects of the same exposure on
 each outcome: purpose, belonging, self-esteem, and life
 satisfaction. Formally,
-$\mathrm{ATE}_k=\mathbb{E}[Y_k(1)-Y_k(0)]$ for
-$k=1,\ldots,4$.</p>
+$\mathrm{ATE}_j=\mathbb{E}[Y_j(1)-Y_j(0)]$ for
+$j=1,\ldots,4$.</p>
 </li>
 <li>
 <p>With four outcomes, the chance of at least one apparently positive
@@ -9302,7 +9311,7 @@ baseline adjustment, and sensitivity analysis.</p>
 four separate effects. The evidence is strongest for the outcomes
 whose Bonferroni-adjusted intervals exclude zero. For the other
 outcomes, the estimates may still contribute to the overall pattern,
-but they remain compatible with no effect after family-wise
+while remaining compatible with no effect after family-wise
 correction. I would present the result as an outcome-wide pattern
 with graded uncertainty, not as four confirmed findings."</p>
 </li>
@@ -9565,8 +9574,8 @@ analyses. Transparent reasoning is a scientific result in its own right.</p>
 research report. They keep you focused on the causal framework taught in
 the course.</p>
 <p>Test 2 is in class, on paper, with one A4 sheet of notes, no devices,
-and no AI tools. The important work is yours: state the target
-population, causal contrast, outcome, estimand, assumptions, and limits.</p>
+and no AI tools. Your job is to state the target population, causal
+contrast, outcome, causal estimand, assumptions, and limits.</p>
 <h2 id="causal-question-check"><a class="header" href="#causal-question-check">Causal Question Check</a></h2>
 <p>Before estimating or interpreting anything, state:</p>
 <ol>
@@ -9575,7 +9584,7 @@ population, causal contrast, outcome, estimand, assumptions, and limits.</p>
 <li><strong>Outcome:</strong> what is measured, when it is measured, and how the
 score is constructed.</li>
 <li><strong>Causal estimand:</strong> average treatment effect (ATE), conditional
-average treatment effect (CATE), or another estimand.</li>
+average treatment effect (CATE), or another causal estimand.</li>
 <li><strong>Identification assumptions:</strong> consistency, exchangeability, and
 positivity.</li>
 <li><strong>Measurement assumptions:</strong> whether the measure represents the same
@@ -9591,8 +9600,9 @@ They are useful, and easy to over-read.</p>
 <ol>
 <li><strong>Outcome:</strong> which outcome the rule is for. A rule for one outcome
 may not be a rule for another.</li>
-<li><strong>Estimand:</strong> whether you are reporting CATEs, ranked heterogeneity,
-policy value, a high-response region, or an allocation rule.</li>
+<li><strong>Causal estimand and decision quantity:</strong> whether you are reporting
+CATEs, ranked heterogeneity, policy value, a high-response region,
+or an allocation rule.</li>
 <li><strong>Modifier status:</strong> whether a split variable is a measured
 descriptor, proxy, or downstream marker. Do not read a split
 variable as the causal source of effect modification.</li>
@@ -9712,8 +9722,8 @@ original 1–7 scale to recover.</li>
 <li><strong>Confidence intervals</strong>: report the multiplicity-adjusted
 (Bonferroni) interval, since the design is outcome-wide across four
 outcomes.</li>
-<li><strong>E-values</strong>: report two — one for the point estimate and one for
-the lower end of the multiplicity-adjusted confidence interval (the
+<li><strong>E-values</strong>: report two, one for the point estimate and one for the
+lower end of the multiplicity-adjusted confidence interval (the
 bound nearest the null). Both are produced by the <code>ate_table()</code>
 helper in the research-report template's <code>setup.R</code>.</li>
 <li><strong>Sample size</strong>: total analysed after exclusions and weighting.</li>
@@ -9724,10 +9734,10 @@ helper in the research-report template's <code>setup.R</code>.</li>
 wellbeing outcomes. The largest estimates were for sense of belonging
 ($\beta = 0.18$ SD units, Bonferroni 95% CI: 0.11–0.25) and life
 satisfaction ($\beta = 0.15$ SD units, Bonferroni 95% CI:
-0.08–0.22). The point E-values were above 1.6 and the Bonferroni-bound
-E-values above 1.3, meaning an unmeasured confounder would need to be
-associated with both attendance and these outcomes by a risk ratio of
-at least 1.3 each, above and beyond measured covariates, to push the
+0.08–0.22). The point E-values were above 1.6. The Bonferroni-bound
+E-values were above 1.3, meaning an unmeasured confounder would need
+risk-ratio associations of at least 1.3 with both attendance and these
+outcomes, above and beyond measured covariates, to push the
 multiplicity-adjusted lower bound to the null."</p>
 </blockquote>
 <hr />
@@ -9739,17 +9749,17 @@ does not ship code for them, and you do not need to include them.</p>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
 <p>Present each policy tree on the standardised outcome scale used by the
-simulator (the four wellbeing outcomes are pre-z-scored, so SD units are
-the only scale available). The tree describes the action or
-high-response region implied by the supplied rewards; it does not force
-a fixed percentage treated.</p>
+simulator. The four wellbeing outcomes are pre-z-scored, so standard
+deviation (SD) units are the only scale available. The tree describes
+the action or high-response region implied by the supplied rewards; it
+does not force a fixed percentage treated.</p>
 <p>The course policy-tree workflow uses an outcome-only objective. A <em>do
 not treat</em> leaf means the rule assigns the no-treatment action for that
 covariate profile. It does not compute money saved, staff time saved, or
 other resource savings. To make savings part of the analysis,
-investigators would need to specify a treatment cost in outcome units,
-subtract that cost from the treatment reward, and refit or compare trees
-across plausible cost values.</p>
+investigators would need to specify a treatment cost in outcome units.
+They would then subtract that cost from the treatment reward and refit
+or compare trees across plausible cost values.</p>
 <h3 id="parsimony-rule"><a class="header" href="#parsimony-rule">Parsimony rule</a></h3>
 <p>Fit both depth-1 and depth-2 policy trees. Prefer the depth-1 tree
 unless the depth-2 tree improves held-out policy value, using the point
@@ -9761,16 +9771,16 @@ is:</p>
 not clear the threshold, report the simpler tree in the main text and
 place the full depth comparison in the appendix. If depth-2 clears the
 threshold but uncertainty is wide, describe the rule as promising or
-fragile and use stability, equity, and implementation burden to temper
-the conclusion. The <code>margot_policy_workflow()</code> function applies the
+fragile. Use stability, equity, and implementation burden to temper the
+conclusion. The <code>margot_policy_workflow()</code> function applies the
 point-gain rule automatically and exposes the comparison in
 <code>wf$best$depth_summary_df</code>.</p>
 <h3 id="graphing-rule"><a class="header" href="#graphing-rule">Graphing rule</a></h3>
 <p>Apply <code>margot::margot_select_grf_policy_trees()</code> after the policy-tree
 workflow runs. The graphing rule keeps a policy tree only when <strong>both</strong>
 the policy-value lower confidence limit and the treated-uplift lower
-confidence limit exceed zero. Course defaults set both lower-CI
-thresholds at zero:</p>
+confidence limit exceed zero. Course defaults set both
+lower-confidence-interval thresholds at zero:</p>
 <pre><code class="language-r">policy_value_lower_threshold &lt;- 0
 treated_uplift_lower_threshold &lt;- 0
 </code></pre>
@@ -9780,7 +9790,7 @@ is a precommitment device: state the test, then graph only what passes.</p>
 <h3 id="subgroup-reporting"><a class="header" href="#subgroup-reporting">Subgroup reporting</a></h3>
 <p>For each graphed tree, report the high-response subgroups with their
 estimated effects, uncertainty, and sample proportions. Use the
-standardised scale; do not invent an original-scale interpretation,
+standardised scale. Do not invent an original-scale interpretation,
 because the simulator outcomes are not on a 1–7 (or any other) raw
 scale.</p>
 <p>Report coverage as the treated share implied by the selected rule, not
@@ -9816,9 +9826,9 @@ purpose &lt; 0)
 treatment according to the fitted rule. In this example, the rule
 assigns treatment to two profiles with larger estimated gains in life
 satisfaction. Older adults (45+) with high baseline belonging had the
-largest estimated gain ($\beta = 0.28$ SD units), representing 23%
-of the sample. Interpret these leaves as parts of an allocation rule,
-with age and baseline belonging used as splitting variables."</p>
+largest estimated gain ($\beta = 0.28$ SD units). They represented
+23% of the sample. Interpret these leaves as parts of an allocation
+rule, with age and baseline belonging used as splitting variables."</p>
 </blockquote>
 <p>Avoid phrasing such as "the do-not-treat leaf saves resources" unless a
 treatment cost has been built into the objective. Under the course
@@ -9947,22 +9957,21 @@ and signposting.</p>
 part of the mark.</p>
 <div class="table-wrapper"><table><thead><tr><th>Band</th><th>Descriptor</th></tr></thead><tbody>
 <tr><td><strong>A range</strong></td><td>States the causal question clearly: target population, exposure contrast, and outcome(s). Names the causal estimand, such as the average treatment effect, and keeps it separate from the statistical estimate. Uses the directed acyclic graph (DAG) to justify the adjustment set. Names and defends consistency, positivity, and conditional exchangeability.</td></tr>
-<tr><td><strong>B range</strong></td><td>The question, exposure, and outcome are clear. The DAG is present and mostly right. Identification assumptions are mentioned, though one is a bit thin or vague. The estimand is stated but sometimes blurred with the estimate.</td></tr>
+<tr><td><strong>B range</strong></td><td>The question, exposure, and outcome are clear. The DAG is present and mostly right. Identification assumptions are mentioned, though one is a bit thin or vague. The causal estimand is stated but sometimes blurred with the estimate.</td></tr>
 <tr><td><strong>C range</strong></td><td>The causal question is implied rather than stated. The DAG is there, but misses important arrows or confounders. Causal language slips, for example using "predicts" when the claim is causal.</td></tr>
 <tr><td><strong>D / E</strong></td><td>The causal question is treated as if it were just a statistical model. The DAG is missing or wrong. Causal language is loose throughout.</td></tr>
 </tbody></table>
 </div>
 <h3 id="3-so-what--including-subgroup-and-ethics-25"><a class="header" href="#3-so-what--including-subgroup-and-ethics-25">3. So what — including subgroup and ethics (2.5%)</a></h3>
-<p>Why should anyone outside the room care? This is the bit students most
-often leave too late. Because this course studies differences across
-people and groups, your "so what" should name the subgroup with the
-strongest estimated treatment effect (from your policy tree) and one
-practical or ethical issue that would matter before anyone acted on the
-result.</p>
+<p>Why should anyone outside the room care? Students often leave this part
+too late. Because this course studies differences across people and
+groups, your "so what" should name the subgroup with the strongest
+estimated treatment effect (from your policy tree) and one practical or
+ethical issue that would shape any action on the result.</p>
 <div class="table-wrapper"><table><thead><tr><th>Band</th><th>Descriptor</th></tr></thead><tbody>
 <tr><td><strong>A range</strong></td><td>Names the population, the size of effect that would matter in practice, who might act on the result, and the assumption that would change the conclusion if it failed. Describes the strongest-response subgroup in plain language. Names one issue such as fairness, proxy variables, consent, cost, or who gets to decide.</td></tr>
 <tr><td><strong>B range</strong></td><td>Names a plausible audience and decision. Mentions the size of the effect, but does not anchor it well. Names the strongest-response subgroup. The practical or ethical issue is present, but needs more detail.</td></tr>
-<tr><td><strong>C range</strong></td><td>Says the result is important without saying who would use it. Subgroup or ethics is tacked on at the end. The "so what" is generic, for example "this matters for wellbeing".</td></tr>
+<tr><td><strong>C range</strong></td><td>Says the result is useful without saying who would use it. Subgroup or ethics is tacked on at the end. The "so what" is generic, for example "this matters for wellbeing".</td></tr>
 <tr><td><strong>D / E</strong></td><td>The "so what" is missing, or just says the topic is interesting. No subgroup content and no practical or ethical issue.</td></tr>
 </tbody></table>
 </div>
@@ -10004,7 +10013,7 @@ community programmes), and the assumption that would change the answer
 <h2 id="common-pitfalls"><a class="header" href="#common-pitfalls">Common pitfalls</a></h2>
 <ul>
 <li>Spending the first three minutes on background and never reaching the
-estimand.</li>
+causal estimand.</li>
 <li>Drawing the DAG without naming the adjustment set it implies.</li>
 <li>Reporting only standardised effects, with no sense of whether the
 effect is big enough to matter.</li>
@@ -10020,7 +10029,7 @@ the assessment.</li>
 <ul>
 <li>Rehearse the opening sentence until it is short and clear.</li>
 <li>Plan the whiteboard layout in advance (left third for the DAG,
-centre for the estimand, right for the result).</li>
+centre for the causal estimand, right for the result).</li>
 <li>Time yourself: aim for eight minutes, leaving two for breathing
 room.</li>
 <li>Anticipate one likely panel question and prepare a one-sentence

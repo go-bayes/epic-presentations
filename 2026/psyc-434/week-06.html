@@ -309,9 +309,9 @@ as $A \times G$.</li>
 </blockquote>
 <blockquote>
 <p><strong>Rule of thumb</strong></p>
-<p>If you cannot write the estimand as $\mathbb{E}[Y(1) - Y(0) \mid X =
-x]$ for baseline $X$ measured at time zero, you are not estimating
-a CATE.</p>
+<p>If you cannot write the causal estimand as $\mathbb{E}[Y(1) - Y(0)
+\mid X = x]$ for baseline $X$ measured at time zero, you are not
+estimating a CATE.</p>
 </blockquote>
 <h2 id="first-distinction-interaction-versus-effect-modification"><a class="header" href="#first-distinction-interaction-versus-effect-modification">First distinction: interaction versus effect modification</a></h2>
 <p>Start with the scientific question, not the software output. If the
@@ -479,7 +479,7 @@ simultaneously.</li>
 <h2 id="why-flexible-estimators-matter"><a class="header" href="#why-flexible-estimators-matter">Why flexible estimators matter</a></h2>
 <p>With many covariates, hand-built interaction models are fragile for four
 reasons. First, the number of possible interactions grows
-combinatorially: $k$ covariates generate $\binom{k}{2}$ pairwise
+combinatorially: $p$ covariates generate $\binom{p}{2}$ pairwise
 interactions and far more higher-order terms. Second, each interaction
 subgroup contains fewer observations, so estimates become noisy. Third,
 searching across many interactions inflates false-positive rates unless
@@ -552,7 +552,7 @@ $$</p>
 <p>$$ \mathbb{E}[Y(1,1)] - \mathbb{E}[Y(1,0)] -
 \mathbb{E}[Y(0,1)] + \mathbb{E}[Y(0,0)]. $$</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-hernanrobins2025" class="csl-entry">
 <p>Hernán, M. A., &amp; Robins, J. M. (2025). <em>Causal inference: What if</em>.
 Chapman &amp; Hall/CRC.
@@ -563,8 +563,8 @@ Chapman &amp; Hall/CRC.
 effect modification. <em>Epidemiology</em>, 863–871.</p>
 </div>
 <div id="ref-vanderweele2012" class="csl-entry">
-<p>VanderWeele, T. J. (2012). Confounding and Effect Modification:
-Distribution and Measure. <em>Epidemiologic Methods</em>, <em>1</em>(1), 55–82.
+<p>VanderWeele, T. J. (2012). Confounding and effect modification:
+Distribution and measure. <em>Epidemiologic Methods</em>, <em>1</em>(1), 55–82.
 <a href="https://doi.org/10.1515/2161-962X.1004">https://doi.org/10.1515/2161-962X.1004</a></p>
 </div>
 <div id="ref-vanderweele2007" class="csl-entry">

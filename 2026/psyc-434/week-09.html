@@ -368,8 +368,8 @@ that at least one confidence interval excludes zero by chance alone is
 higher than the nominal per-test error rate. A simple correction is
 <strong>Bonferroni</strong>:</p>
 <p>$$ \alpha_{\text{per outcome}} =
-\frac{\alpha_{\text{family-wise}}}{K}. $$</p>
-<p>With $K = 4$ outcomes and $\alpha_{\text{family-wise}} = 0.05$,
+\frac{\alpha_{\text{family-wise}}}{m}. $$</p>
+<p>With $m = 4$ outcomes and $\alpha_{\text{family-wise}} = 0.05$,
 each outcome is tested at $\alpha = 0.0125$. Equivalently, report a
 98.75% confidence interval for each outcome. This is conservative, but
 it is transparent and easy to explain.</p>
@@ -403,9 +403,10 @@ position drifts with sample size.</p>
 (CATE) estimation asks for a person-level contrast, $\tau(x) =
 \mathbb{E}[Y(1)-Y(0)\mid X=x]$. Policy learning asks which allocation
 rule has the highest expected utility if applied to the target
-population. We need a way to score competing rules: how much utility
-each would deliver, on average, if applied to the whole population. Call
-that number the rule's <strong>policy value</strong>, written $V(d)$:</p>
+population. We need a way to score competing rules. The score is the
+utility each rule would deliver, on average, if applied to the whole
+population. Call that number the rule's <strong>policy value</strong>, written
+$V(d)$:</p>
 <p>$$ V(d) = \mathbb{E}[Y(d(X))]. $$</p>
 <p>In the course lab, utility is the outcome $Y$ itself. That assumes the
 treatment and control actions have equal cost, or that costs are being
@@ -558,11 +559,10 @@ checks, equity considerations, and implementation burden then inform how
 confidently investigators should act on the selected rule. For a
 high-stakes clinical intervention, a threshold-clearing gain may justify
 the extra complexity only with strong validation. For a community
-programme that must be administered by volunteers, the simpler depth-1
-rule may be preferable even when depth-2 clears the point-gain
-threshold, because the rule is more likely to be applied correctly in
-the field. A rule a worker mis-remembers is not the rule that was
-evaluated.</p>
+programme administered by volunteers, the simpler depth-1 rule may be
+preferable even when depth-2 clears the point-gain threshold. The
+simpler rule is more likely to be applied correctly in the field. A rule
+a worker mis-remembers is not the rule that was evaluated.</p>
 <p>The full research workflow compares both depths automatically. Lab 9
 shows depth-1 and depth-2 outputs so you can practise the same
 judgement: examine both trees, then justify the chosen depth in the
@@ -721,7 +721,7 @@ even when any single fit looks reasonable.</li>
 sequence matters because each step changes the causal estimand, the
 statistical summary, and the decision that the evidence can support.</p>
 <div class="table-wrapper"><table><thead><tr><th>Tool</th><th>Question</th><th>Main quantity</th><th>What it can support</th><th>What it does not settle</th></tr></thead><tbody>
-<tr><td>Outcome-wide ATE</td><td>Does one exposure appear to improve outcomes on average across a prespecified outcome family?</td><td>$\mathbb{E}[Y_k(1)-Y_k(0)]$ for each outcome $k$</td><td>Whether the exposure has credible average evidence for one or more outcomes</td><td>Who should receive treatment</td></tr>
+<tr><td>Outcome-wide ATE</td><td>Does one exposure appear to improve outcomes on average across a prespecified outcome family?</td><td>$\mathbb{E}[Y_j(1)-Y_j(0)]$ for each outcome $j$</td><td>Whether the exposure has credible average evidence for one or more outcomes</td><td>Who should receive treatment</td></tr>
 <tr><td>Prespecified group CATE</td><td>Do average effects differ across a group chosen before looking at results?</td><td>$\mathbb{E}[Y(1)-Y(0)\mid G=g]$</td><td>Whether an interpretable group comparison deserves attention</td><td>Individual assignment or a complete allocation rule</td></tr>
 <tr><td>Forest CATE ranking</td><td>Who is predicted to benefit more, conditional on baseline covariates?</td><td>$\hat{\tau}(X)$</td><td>A ranking for possible targeting</td><td>A transparent public rule, or a fixed treatment share by itself</td></tr>
 <tr><td>RATE / Qini</td><td>Does targeting by the CATE ranking improve outcomes over random or uniform allocation?</td><td>Targeting gain over the ranked population</td><td>Whether heterogeneity has practical value</td><td>Which simple rule should be used</td></tr>
@@ -791,7 +791,7 @@ Option B, the old Marsden example is a model of compact grant style
 only; follow the current criteria in <a href="assessments.html">Assessments</a>.</li>
 </ol>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2024PRACTICAL" class="csl-entry">
 <p>Bulbulia, J. A. (2024). A practical guide to causal inference in
 three-wave panel studies. <em>PsyArXiv Preprints</em>.

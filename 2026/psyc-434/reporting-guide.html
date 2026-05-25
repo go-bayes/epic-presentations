@@ -309,8 +309,8 @@ original 1–7 scale to recover.</li>
 <li><strong>Confidence intervals</strong>: report the multiplicity-adjusted
 (Bonferroni) interval, since the design is outcome-wide across four
 outcomes.</li>
-<li><strong>E-values</strong>: report two — one for the point estimate and one for
-the lower end of the multiplicity-adjusted confidence interval (the
+<li><strong>E-values</strong>: report two, one for the point estimate and one for the
+lower end of the multiplicity-adjusted confidence interval (the
 bound nearest the null). Both are produced by the <code>ate_table()</code>
 helper in the research-report template's <code>setup.R</code>.</li>
 <li><strong>Sample size</strong>: total analysed after exclusions and weighting.</li>
@@ -321,10 +321,10 @@ helper in the research-report template's <code>setup.R</code>.</li>
 wellbeing outcomes. The largest estimates were for sense of belonging
 ($\beta = 0.18$ SD units, Bonferroni 95% CI: 0.11–0.25) and life
 satisfaction ($\beta = 0.15$ SD units, Bonferroni 95% CI:
-0.08–0.22). The point E-values were above 1.6 and the Bonferroni-bound
-E-values above 1.3, meaning an unmeasured confounder would need to be
-associated with both attendance and these outcomes by a risk ratio of
-at least 1.3 each, above and beyond measured covariates, to push the
+0.08–0.22). The point E-values were above 1.6. The Bonferroni-bound
+E-values were above 1.3, meaning an unmeasured confounder would need
+risk-ratio associations of at least 1.3 with both attendance and these
+outcomes, above and beyond measured covariates, to push the
 multiplicity-adjusted lower bound to the null."</p>
 </blockquote>
 <hr />
@@ -336,17 +336,17 @@ does not ship code for them, and you do not need to include them.</p>
 <hr />
 <h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
 <p>Present each policy tree on the standardised outcome scale used by the
-simulator (the four wellbeing outcomes are pre-z-scored, so SD units are
-the only scale available). The tree describes the action or
-high-response region implied by the supplied rewards; it does not force
-a fixed percentage treated.</p>
+simulator. The four wellbeing outcomes are pre-z-scored, so standard
+deviation (SD) units are the only scale available. The tree describes
+the action or high-response region implied by the supplied rewards; it
+does not force a fixed percentage treated.</p>
 <p>The course policy-tree workflow uses an outcome-only objective. A <em>do
 not treat</em> leaf means the rule assigns the no-treatment action for that
 covariate profile. It does not compute money saved, staff time saved, or
 other resource savings. To make savings part of the analysis,
-investigators would need to specify a treatment cost in outcome units,
-subtract that cost from the treatment reward, and refit or compare trees
-across plausible cost values.</p>
+investigators would need to specify a treatment cost in outcome units.
+They would then subtract that cost from the treatment reward and refit
+or compare trees across plausible cost values.</p>
 <h3 id="parsimony-rule"><a class="header" href="#parsimony-rule">Parsimony rule</a></h3>
 <p>Fit both depth-1 and depth-2 policy trees. Prefer the depth-1 tree
 unless the depth-2 tree improves held-out policy value, using the point
@@ -358,16 +358,16 @@ is:</p>
 not clear the threshold, report the simpler tree in the main text and
 place the full depth comparison in the appendix. If depth-2 clears the
 threshold but uncertainty is wide, describe the rule as promising or
-fragile and use stability, equity, and implementation burden to temper
-the conclusion. The <code>margot_policy_workflow()</code> function applies the
+fragile. Use stability, equity, and implementation burden to temper the
+conclusion. The <code>margot_policy_workflow()</code> function applies the
 point-gain rule automatically and exposes the comparison in
 <code>wf$best$depth_summary_df</code>.</p>
 <h3 id="graphing-rule"><a class="header" href="#graphing-rule">Graphing rule</a></h3>
 <p>Apply <code>margot::margot_select_grf_policy_trees()</code> after the policy-tree
 workflow runs. The graphing rule keeps a policy tree only when <strong>both</strong>
 the policy-value lower confidence limit and the treated-uplift lower
-confidence limit exceed zero. Course defaults set both lower-CI
-thresholds at zero:</p>
+confidence limit exceed zero. Course defaults set both
+lower-confidence-interval thresholds at zero:</p>
 <pre><code class="language-r">policy_value_lower_threshold &lt;- 0
 treated_uplift_lower_threshold &lt;- 0
 </code></pre>
@@ -377,7 +377,7 @@ is a precommitment device: state the test, then graph only what passes.</p>
 <h3 id="subgroup-reporting"><a class="header" href="#subgroup-reporting">Subgroup reporting</a></h3>
 <p>For each graphed tree, report the high-response subgroups with their
 estimated effects, uncertainty, and sample proportions. Use the
-standardised scale; do not invent an original-scale interpretation,
+standardised scale. Do not invent an original-scale interpretation,
 because the simulator outcomes are not on a 1–7 (or any other) raw
 scale.</p>
 <p>Report coverage as the treated share implied by the selected rule, not
@@ -413,9 +413,9 @@ purpose &lt; 0)
 treatment according to the fitted rule. In this example, the rule
 assigns treatment to two profiles with larger estimated gains in life
 satisfaction. Older adults (45+) with high baseline belonging had the
-largest estimated gain ($\beta = 0.28$ SD units), representing 23%
-of the sample. Interpret these leaves as parts of an allocation rule,
-with age and baseline belonging used as splitting variables."</p>
+largest estimated gain ($\beta = 0.28$ SD units). They represented
+23% of the sample. Interpret these leaves as parts of an allocation
+rule, with age and baseline belonging used as splitting variables."</p>
 </blockquote>
 <p>Avoid phrasing such as "the do-not-treat leaf saves resources" unless a
 treatment cost has been built into the objective. Under the course

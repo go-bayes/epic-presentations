@@ -553,16 +553,16 @@ reduce confounding.</li>
 </blockquote>
 <h2 id="a-note-on-the-generality-of-d-separation"><a class="header" href="#a-note-on-the-generality-of-d-separation">A note on the generality of d-separation</a></h2>
 <p>Two variables are <strong>d-separated</strong> ("directionally separated") in a
-causal DAG when every path between them is blocked. In practice, this
-means the DAG implies conditional independence once the relevant
-conditioning set is stated. The rules above focus on confounding, but
-d-separation is more general than confounding control. It is the reason
-the same DAG logic works for collider bias, mediator bias, and
-measurement problems. For example, in a collider $A \to C \leftarrow
-Y$, $A$ and $Y$ are d-separated when we do not condition on $C$,
-but conditioning on $C$ opens the path and they become d-connected.
-The same blocking logic—ask whether every path is open or closed—applies
-in all three bias settings.</p>
+causal DAG when every path between them is blocked. In practice, the DAG
+implies conditional independence once the relevant conditioning set is
+stated. The rules above focus on confounding, but d-separation is more
+general than confounding control. The same DAG logic also works for
+collider bias, mediator bias, and measurement problems.</p>
+<p>For example, in a collider $A \to C \leftarrow Y$, $A$ and $Y$ are
+d-separated when we do not condition on $C$. Conditioning on $C$
+opens the path, so $A$ and $Y$ become d-connected. The same blocking
+logic applies in all three bias settings: ask whether every path is open
+or closed.</p>
 <h2 id="return-to-the-opening-example"><a class="header" href="#return-to-the-opening-example">Return to the opening example</a></h2>
 <p>The Salk example is a structural lesson about assignment. The
 observed-control design produced a biased effect estimate because
@@ -601,7 +601,7 @@ Bulbulia (<a href="#ref-bulbulia2023">2024a</a>). See also Bulbulia
 <hr />
 <p>Lab materials: <a href="lab-02.html">Lab 2: Install R and Set Up Your IDE</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-barrett2023ggdag" class="csl-entry">
 <p>Barrett, M. (2023). <em>Ggdag: Analyze and create elegant directed acyclic
 graphs</em>. <a href="https://github.com/malcolmbarrett/ggdag">https://github.com/malcolmbarrett/ggdag</a></p>

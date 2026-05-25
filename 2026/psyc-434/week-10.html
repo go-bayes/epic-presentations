@@ -323,8 +323,7 @@ variables inside it do not mean what the analysis says they mean.</p>
 <h2 id="seminar"><a class="header" href="#seminar">Seminar</a></h2>
 <h3 id="motivating-example"><a class="header" href="#motivating-example">Motivating example</a></h3>
 <p>The Kessler-6 (K6) is widely used to screen psychological distress.</p>
-<p>Two questions must be addressed before we try to compare scores causally
-across groups.</p>
+<p>Two questions come before any causal comparison of scores across groups.</p>
 <ol>
 <li>Do the six items map to the same latent structure?</li>
 <li>Is that structure invariant across groups?</li>
@@ -347,7 +346,7 @@ validity.</p>
 intended domain.</li>
 <li><strong>Construct validity</strong>: whether the construct is accurately defined
 and operationalised.</li>
-<li><strong>Criterion validity</strong>: whether an instrument accurately predicts
+<li><strong>Criterion validity</strong>: whether an instrument statistically predicts
 performance on an external criterion.</li>
 <li><strong>Ecological validity</strong>: whether an instrument reflects real-world
 situations and behaviour.</li>
@@ -369,12 +368,12 @@ alternative). "Operationalised" concerns whether the same score means
 the same thing across individuals. This is a consistency question.
 Lumping both under one label obscures where a measurement fails.</p>
 <p><strong>Criterion validity</strong> is purely associational. An instrument can
-predict an outcome well for non-causal reasons: shared confounders,
-reverse causation, collider bias. "Predicts performance" tells you
-nothing about whether the instrument captures the construct that
-causally affects the criterion. Weeks 2 through 4 showed why prediction
-and causation are different questions. The same distinction applies
-here.</p>
+statistically predict an outcome for non-causal reasons: shared
+confounders, reverse causation, or collider bias. "Predicts performance"
+tells you nothing about whether the instrument captures the construct
+that causally affects the criterion. Weeks 2 through 4 showed why
+prediction and causation are different questions. The same distinction
+applies here.</p>
 <p><strong>Ecological validity</strong> gestures at transportability without specifying
 what changes across settings. A causal framework asks: does the
 construct-to-indicator relationship hold in the target population? That
@@ -474,11 +473,10 @@ particular statistical measurement model, with particular equality
 constraints, is compatible with the observed covariance structure.
 Failures and successes are both compatible with many causal stories.
 Causal structure is <em>underdetermined</em> by associations in the data.</p>
-<p>In this lecture, causal assumptions come first, and this means that
-statistical tests cannot replace thinking about our assumptions. We must
-define the construct and state a causal measurement story. Only then can
-invariance tests play a role, by checking some statistical implications
-of that story.</p>
+<p>In this lecture, causal assumptions come first. Statistical tests cannot
+replace thinking about those assumptions. We must define the construct
+and state a causal measurement story. Only then can invariance tests
+play a role, by checking some statistical implications of that story.</p>
 <p>For ordinal items, threshold invariance is the analogue of scalar
 invariance. In practice, fit an ordinal estimator (for example WLSMV)
 when items are Likert-type.</p>
@@ -661,20 +659,20 @@ but interpretation must state what is being averaged and what is
 unidentified.</p>
 <h4 id="review-multiple-versions-of-treatment"><a class="header" href="#review-multiple-versions-of-treatment">Review: multiple versions of treatment</a></h4>
 <p>The theory of multiple versions of treatment addresses the fact that
-real interventions are rarely uniform. Let $K$ denote the "true"
-versioned treatment and let $A$ be a coarsened indicator of $K$.</p>
-<p><img src="figures/vanderweele/vanderweele-multiple-versions.svg" alt="Multiple versions of treatment: $A$ as a coarsened indicator of $K$. Figure adapted from VanderWeele (2022)." /></p>
+real interventions are rarely uniform. Let $V$ denote the "true"
+versioned treatment and let $A$ be a coarsened indicator of $V$.</p>
+<p><img src="figures/vanderweele/vanderweele-multiple-versions.svg" alt="Multiple versions of treatment: $A$ as a coarsened indicator of $V$. Figure adapted from VanderWeele (2022)." /></p>
 <p>Recall that a causal effect is defined as the difference in expected
 potential outcomes if everyone were exposed to one level of a treatment
 versus another, conditional on covariates $L$:</p>
 <p>$$ \delta = \sum_l \left( \mathbb{E}[Y\mid A=a,l] -
 \mathbb{E}[Y\mid A=a^*,l] \right) P(l). $$</p>
 <p>Under the multiple-versions interpretation, we can express a consistent
-estimand in terms of $K$:</p>
-<p>$$ \delta = \sum_{k,l} \mathbb{E}[Y_k\mid l] P(k\mid a,l) P(l) -
-\sum_{k,l} \mathbb{E}[Y_k\mid l] P(k\mid a^*,l) P(l). $$</p>
+causal estimand in terms of $V$:</p>
+<p>$$ \delta = \sum_{v,l} \mathbb{E}[Y_v\mid l] P(v\mid a,l) P(l) -
+\sum_{v,l} \mathbb{E}[Y_v\mid l] P(v\mid a^*,l) P(l). $$</p>
 <p>This corresponds to a hypothetical randomised trial in which, within
-strata of $L$, the treated group receives versions $K$ drawn from
+strata of $L$, the treated group receives versions $V$ drawn from
 the version distribution among those with $A=a$ and the control group
 receives versions drawn from the version distribution among those with
 $A=a^*$ (<a href="#ref-vanderweele2013">VanderWeele &amp; Hernan, 2013</a>).</p>
@@ -885,7 +883,7 @@ Online Causal Inference Seminar. The linked timestamp begins near the
 practical implications for measure construction.</li>
 </ul>
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 <div id="ref-bulbulia2022" class="csl-entry">
 <p>Bulbulia, J. A. (2023). A workflow for causal inference in
 cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(3),
@@ -896,18 +894,18 @@ cross-cultural psychology. <em>Religion, Brain &amp; Behavior</em>, <em>13</em>(
 multi-group invariance testing possibilities in r. <em>Frontiers in
 Psychology</em>, 1507.</p>
 </div>
+<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
+<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
+<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
+</div>
 <div id="ref-harkness2003questionnaire" class="csl-entry">
 <p>Harkness, J. A., Van de Vijver, F. J., &amp; Johnson, T. P. (2003).
 Questionnaire design in comparative research. <em>Cross-Cultural Survey
 Methods</em>, 19–34.</p>
 </div>
-<div id="ref-Harkness2003TRANSALTION" class="csl-entry">
-<p>Harkness, J. [et. al]. (2003). Questionnaire translation. In
-<em>Cross-cultural survey methods</em> (pp. 35–56). Wiley.</p>
-</div>
 <div id="ref-he2012" class="csl-entry">
-<p>He, J., &amp; Vijver, F. van de. (2012). Bias and Equivalence in
-Cross-Cultural Research. <em>Online Readings in Psychology and Culture</em>,
+<p>He, J., &amp; Vijver, F. van de. (2012). Bias and equivalence in
+cross-cultural research. <em>Online Readings in Psychology and Culture</em>,
 <em>2</em>(2). <a href="https://doi.org/10.9707/2307-0919.1111">https://doi.org/10.9707/2307-0919.1111</a></p>
 </div>
 <div id="ref-vanderweele2022" class="csl-entry">
