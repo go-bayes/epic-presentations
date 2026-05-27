@@ -245,17 +245,85 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="reporting-guide"><a class="header" href="#reporting-guide">Reporting Guide</a></h1>
-<p>This guide shows what to report in the research report. Use it as a
-checklist for average treatment effects, heterogeneous effects, policy
-trees, and sensitivity analyses.</p>
+<p>This guide shows what to report in the research report. Use it to
+connect a clear psychological question to the causal estimand, analysis
+choices, results, and interpretation.</p>
+<p>The main task is to define a psychological question clearly, then answer
+that question. Do not let the statistical workflow replace the question.
+Each table, figure, and paragraph should help the reader see what you
+asked, why it matters psychologically, what comparison you estimated,
+and what answer the evidence supports.</p>
+<blockquote>
+<p><strong>Scope of this guide</strong></p>
+<p>This guide is written mainly for the Option A final assignment, where
+the supplied scaffold covers average treatment effects, policy trees,
+and E-values. Option B students should still use the
+question-definition, identification, measurement, reporting, and
+sensitivity-analysis sections as a structure. Where Option B departs
+from the supplied scaffold, state the corresponding analysis choices
+and explain why they answer the same psychological question.</p>
+</blockquote>
+<hr />
+<h2 id="minimum-complete-report"><a class="header" href="#minimum-complete-report">Minimum complete report</a></h2>
+<p>A complete report should include:</p>
+<ol>
+<li><strong>Psychological question</strong>: the question, its psychological
+interest, and the causal estimand that answers it.</li>
+<li><strong>Identification argument</strong>: the treatment, time zero, outcome,
+target population, adjustment set, and assumptions.</li>
+<li><strong>Average treatment effect table</strong>: estimates, Bonferroni-adjusted
+confidence intervals, E-values, and sample sizes.</li>
+<li><strong>Results interpretation</strong>: a direct answer to the psychological
+question, using the standardised outcome scale.</li>
+<li><strong>Sensitivity analysis</strong>: E-values for Option A, or the
+corresponding sensitivity analysis for Option B.</li>
+<li><strong>Policy-tree material for Option A</strong>: selected trees, graphing
+decisions, subgroup estimates, and the depth comparison appendix.</li>
+</ol>
+<p>For Option B, replace item 6 with the analysis required by your question
+and assignment brief. Explain how that analysis answers the
+psychological question.</p>
+<hr />
+<h2 id="start-with-the-psychological-question"><a class="header" href="#start-with-the-psychological-question">Start with the psychological question</a></h2>
+<p>Begin the report by stating the psychological interest of the question.
+A clear question names the population, treatment contrast, outcome, time
+frame, and reason the answer matters.</p>
+<p>Use this structure:</p>
+<blockquote>
+<p>Among [target population], how would [psychological outcome]
+change if investigators intervened to set [exposure/treatment] to
+[level $a=1$] rather than [level $a=0$], over [follow-up
+period]?</p>
+</blockquote>
+<p>Then add one or two sentences explaining the psychological interest. For
+example, say whether the question concerns belonging, meaning, distress,
+social support, identity, emotion, behaviour, or another psychological
+process. This explanation should make clear why the treatment contrast
+and outcome belong together.</p>
+<blockquote>
+<p><strong>Outcome scale rule</strong></p>
+<p>The simulator's four wellbeing outcomes are pre-z-scored. Report
+effects in standard deviation (SD) units. Do not report original-scale
+1–7 effects, because that scale is not available in the simulated
+outcomes.</p>
+</blockquote>
+<p>The report should keep returning to this question:</p>
+<ol>
+<li><strong>Methods</strong>: show how the design identifies the causal estimand
+implied by the question.</li>
+<li><strong>Results</strong>: report the estimates needed to answer the question.</li>
+<li><strong>Interpretation</strong>: explain what the estimates imply for the
+psychological question, within the limits of the identification
+strategy.</li>
+</ol>
 <hr />
 <h2 id="the-ten-step-causal-inference-checklist"><a class="header" href="#the-ten-step-causal-inference-checklist">The ten-step causal inference checklist</a></h2>
 <p>Before reporting results, check that each piece is in place.</p>
 <h3 id="steps-03-problem-definition"><a class="header" href="#steps-03-problem-definition">Steps 0–3: problem definition</a></h3>
 <ol>
-<li><strong>Well-defined treatment.</strong> Specify the exposure precisely,
-including the contrast (e.g., "weekly religious service attendance
-vs. less than weekly").</li>
+<li><strong>Psychological question and well-defined treatment.</strong> Specify the
+psychological question, the exposure, and the contrast (e.g.,
+"weekly religious service attendance vs. less than weekly").</li>
 <li><strong>Time zero.</strong> State when treatment assignment or initiation begins
 and when follow-up starts.</li>
 <li><strong>Well-defined outcome.</strong> State the outcome measure, its scale, and
@@ -275,9 +343,9 @@ appear across the relevant covariate patterns.</li>
 </ol>
 <h3 id="steps-79-implementation"><a class="header" href="#steps-79-implementation">Steps 7–9: implementation</a></h3>
 <ol>
-<li><strong>Measurement.</strong> Explain how the outcome is measured and any
-assumptions needed for the measure to mean the same thing across
-people, groups, and time.</li>
+<li><strong>Measurement (Week 10 preview).</strong> Explain how the outcome is
+measured and any assumptions needed for the measure to mean the same
+thing across people, groups, and time.</li>
 <li><strong>Attrition handling.</strong> The simulated data do not have missing
 responses, so follow the Lab 10 template: state how panel dropout
 would be handled if present, for example with inverse probability of
@@ -287,13 +355,13 @@ assumptions.</li>
 </ol>
 <blockquote>
 <p><strong>Target trial emulation</strong></p>
-<p>Frame your causal question as: "How would outcomes change if we
-intervened to set everyone's exposure to level $a=1$ rather than
-$a=0$, conditional on baseline characteristics?"</p>
+<p>Frame your causal question as: "How would the psychological outcome
+change if we intervened to set everyone's exposure to level $a=1$
+rather than $a=0$, conditional on baseline characteristics?"</p>
 </blockquote>
 <hr />
 <h2 id="reporting-average-treatment-effects"><a class="header" href="#reporting-average-treatment-effects">Reporting average treatment effects</a></h2>
-<h3 id="standard-ate-table-format"><a class="header" href="#standard-ate-table-format">Standard ATE table format</a></h3>
+<h3 id="required-average-treatment-effect-ate-table"><a class="header" href="#required-average-treatment-effect-ate-table">Required average treatment effect (ATE) table</a></h3>
 <p>Include these elements for each outcome:</p>
 <div class="table-wrapper"><table><thead><tr><th>Outcome</th><th>Estimate (SD units)</th><th>Bonferroni 95% CI</th><th>E-value (point)</th><th>E-value (Bonferroni bound)</th></tr></thead><tbody>
 <tr><td>Outcome A</td><td>0.12</td><td>[0.05, 0.19]</td><td>1.8</td><td>1.3</td></tr>
@@ -302,10 +370,8 @@ $a=0$, conditional on baseline characteristics?"</p>
 </div>
 <h3 id="key-reporting-elements"><a class="header" href="#key-reporting-elements">Key reporting elements</a></h3>
 <ol>
-<li><strong>Effect sizes</strong>: report in standard deviation units. The
-simulator's four wellbeing outcomes are pre-z-scored, so the
-standardised scale is the only scale available — there is no
-original 1–7 scale to recover.</li>
+<li><strong>Effect sizes</strong>: report in standard deviation units, following the
+outcome scale rule above.</li>
 <li><strong>Confidence intervals</strong>: report the multiplicity-adjusted
 (Bonferroni) interval, since the design is outcome-wide across four
 outcomes.</li>
@@ -314,8 +380,14 @@ lower end of the multiplicity-adjusted confidence interval (the
 bound nearest the null). Both are produced by the <code>ate_table()</code>
 helper in the research-report template's <code>setup.R</code>.</li>
 <li><strong>Sample size</strong>: total analysed after exclusions and weighting.</li>
+<li><strong>Question connection</strong>: state how the estimate answers the
+psychological question posed at the start of the report.</li>
+<li><strong>Practical interpretation</strong>: explain the size of the estimate
+without inventing a raw scale. For example, a 0.20 SD estimate is
+modest for one person, but may matter at population scale if the
+intervention is credible, low burden, or widely available.</li>
 </ol>
-<h3 id="example-results-text"><a class="header" href="#example-results-text">Example results text</a></h3>
+<h3 id="example-results-text-not-a-template"><a class="header" href="#example-results-text-not-a-template">Example results text, not a template</a></h3>
 <blockquote>
 <p>"Weekly religious service attendance was estimated to improve all four
 wellbeing outcomes. The largest estimates were for sense of belonging
@@ -329,17 +401,24 @@ multiplicity-adjusted lower bound to the null."</p>
 </blockquote>
 <hr />
 <h2 id="reporting-heterogeneous-treatment-effects"><a class="header" href="#reporting-heterogeneous-treatment-effects">Reporting heterogeneous treatment effects</a></h2>
-<p>For Option A, the policy-tree workflow is the only heterogeneity output.
-The rank-weighted average treatment effect (RATE) and Qini diagnostics
-introduced in Lab 8 are not part of this report's scaffold; the template
-does not ship code for them, and you do not need to include them.</p>
+<blockquote>
+<p><strong>Option A</strong></p>
+<p>The policy-tree workflow is the only heterogeneity output. The
+rank-weighted average treatment effect (RATE) and Qini diagnostics
+introduced in Lab 8 are not part of this report's scaffold; the
+template does not ship code for them, and you do not need to include
+them.</p>
+</blockquote>
+<p>For Option B, report the heterogeneity analysis that follows from your
+psychological question and available data. If you do not conduct a
+heterogeneity analysis, state that the report focuses on the overall
+causal estimand and explain why that estimand is the appropriate answer
+to the question.</p>
 <hr />
-<h2 id="reporting-policy-tree-results"><a class="header" href="#reporting-policy-tree-results">Reporting policy tree results</a></h2>
-<p>Present each policy tree on the standardised outcome scale used by the
-simulator. The four wellbeing outcomes are pre-z-scored, so standard
-deviation (SD) units are the only scale available. The tree describes
-the action or high-response region implied by the supplied rewards; it
-does not force a fixed percentage treated.</p>
+<h2 id="reporting-policy-tree-results-for-option-a"><a class="header" href="#reporting-policy-tree-results-for-option-a">Reporting policy tree results for Option A</a></h2>
+<p>Present each policy tree on the standardised outcome scale. The tree
+describes the action or high-response region implied by the supplied
+rewards; it does not force a fixed percentage treated.</p>
 <p>The course policy-tree workflow uses an outcome-only objective. A <em>do
 not treat</em> leaf means the rule assigns the no-treatment action for that
 covariate profile. It does not compute money saved, staff time saved, or
@@ -347,22 +426,28 @@ other resource savings. To make savings part of the analysis,
 investigators would need to specify a treatment cost in outcome units.
 They would then subtract that cost from the treatment reward and refit
 or compare trees across plausible cost values.</p>
-<h3 id="parsimony-rule"><a class="header" href="#parsimony-rule">Parsimony rule</a></h3>
-<p>Fit both depth-1 and depth-2 policy trees. Prefer the depth-1 tree
-unless the depth-2 tree improves held-out policy value, using the point
-estimate, by at least <code>min_gain_for_depth_switch</code>. The course default
-is:</p>
+<h3 id="selection-and-graphing-workflow"><a class="header" href="#selection-and-graphing-workflow">Selection and graphing workflow</a></h3>
+<p>Use this sequence:</p>
+<ol>
+<li>Fit both depth-1 and depth-2 policy trees.</li>
+<li>Compare held-out policy value.</li>
+<li>Select the depth-2 tree only when its point estimate improves
+held-out policy value by at least <code>min_gain_for_depth_switch</code>.</li>
+<li>Report the selected tree in the main text.</li>
+<li>Put the full depth comparison in the appendix.</li>
+<li>Apply the graphing rule.</li>
+<li>Keep all outcomes in the tables and prose, even when their trees are
+not graphed.</li>
+</ol>
+<p>The course default for switching from depth-1 to depth-2 is:</p>
 <pre><code class="language-r">min_gain_for_depth_switch &lt;- 0.01
 </code></pre>
-<p>State the threshold before reporting the selected tree. If depth-2 does
-not clear the threshold, report the simpler tree in the main text and
-place the full depth comparison in the appendix. If depth-2 clears the
-threshold but uncertainty is wide, describe the rule as promising or
-fragile. Use stability, equity, and implementation burden to temper the
-conclusion. The <code>margot_policy_workflow()</code> function applies the
-point-gain rule automatically and exposes the comparison in
+<p>State this threshold before reporting the selected tree. If depth-2
+clears the threshold but uncertainty is wide, describe the rule as
+promising or fragile. Use stability, equity, and implementation burden
+to temper the conclusion. The <code>margot_policy_workflow()</code> function
+applies the point-gain rule automatically and exposes the comparison in
 <code>wf$best$depth_summary_df</code>.</p>
-<h3 id="graphing-rule"><a class="header" href="#graphing-rule">Graphing rule</a></h3>
 <p>Apply <code>margot::margot_select_grf_policy_trees()</code> after the policy-tree
 workflow runs. The graphing rule keeps a policy tree only when <strong>both</strong>
 the policy-value lower confidence limit and the treated-uplift lower
@@ -371,15 +456,12 @@ lower-confidence-interval thresholds at zero:</p>
 <pre><code class="language-r">policy_value_lower_threshold &lt;- 0
 treated_uplift_lower_threshold &lt;- 0
 </code></pre>
-<p>State the thresholds in your methods. Outcomes that fail the rule remain
-in your tables and prose; their trees do not appear as figures. The rule
-is a precommitment device: state the test, then graph only what passes.</p>
+<p>State these thresholds in your methods. The graphing rule is a
+precommitment device: state the test, then graph only what passes.</p>
 <h3 id="subgroup-reporting"><a class="header" href="#subgroup-reporting">Subgroup reporting</a></h3>
 <p>For each graphed tree, report the high-response subgroups with their
 estimated effects, uncertainty, and sample proportions. Use the
-standardised scale. Do not invent an original-scale interpretation,
-because the simulator outcomes are not on a 1–7 (or any other) raw
-scale.</p>
+standardised scale.</p>
 <p>Report coverage as the treated share implied by the selected rule, not
 as a budget constraint. If a programme can treat only a fixed share, say
 so explicitly. The default policy tree estimates the value of a shallow
@@ -407,7 +489,7 @@ purpose &lt; 0)
 </ul>
 </li>
 </ol>
-<h3 id="example-policy-tree-text"><a class="header" href="#example-policy-tree-text">Example policy tree text</a></h3>
+<h3 id="example-policy-tree-text-not-a-template"><a class="header" href="#example-policy-tree-text-not-a-template">Example policy tree text, not a template</a></h3>
 <blockquote>
 <p>"The policy tree estimates the expected value of assigning the single
 treatment according to the fitted rule. In this example, the rule
@@ -428,6 +510,8 @@ estimated value for that leaf."</p>
 <p>An E-value says how strong an unmeasured confounder would need to be, on
 the risk ratio scale, with both the treatment and the outcome to explain
 away the observed effect.</p>
+<p>An E-value is a sensitivity analysis for unmeasured confounding. It does
+not prove that unmeasured confounding is absent.</p>
 <p>There is no universal threshold at which an E-value becomes "safe".
 Interpret it against the study design, the covariates already measured,
 and plausible omitted causes in the setting. Report the E-value for the
@@ -445,6 +529,8 @@ covariates, to explain away the estimate."</p>
 <h2 id="methods-section-template"><a class="header" href="#methods-section-template">Methods section template</a></h2>
 <p>A complete methods section should include:</p>
 <ol>
+<li><strong>Psychological question and causal estimand</strong>: the question, why it
+matters psychologically, and the causal comparison that answers it.</li>
 <li><strong>Treatment definition</strong>: what the exposure is, how it is coded, and
 the contrast of interest.</li>
 <li><strong>Time zero and follow-up</strong>: when assignment occurs, when follow-up
@@ -461,8 +547,10 @@ justification for conditional exchangeability.</li>
 addressed.</li>
 <li><strong>Heterogeneity assessment</strong>: policy-tree depth (with parsimony
 decision), policy value, treated uplift, and the graphing-rule
-decision.</li>
-<li><strong>Sensitivity analysis</strong>: E-values for all primary estimates.</li>
+decision. For Option B, describe the corresponding heterogeneity
+analysis if one is used.</li>
+<li><strong>Sensitivity analysis</strong>: E-values for all primary estimates, or the
+corresponding sensitivity analysis for Option B.</li>
 </ol>
 <hr />
 <h2 id="reporting-checklist"><a class="header" href="#reporting-checklist">Reporting checklist</a></h2>
@@ -478,6 +566,8 @@ bound</li>
 <li>The parsimony threshold and the graphing-rule thresholds you used</li>
 <li>Target trial framework and causal question</li>
 <li>Explicit treatment and outcome definitions</li>
+<li>A direct answer to the psychological question stated at the start of
+the report</li>
 </ul>
 <h3 id="do-not-report"><a class="header" href="#do-not-report">Do not report</a></h3>
 <ul>
@@ -487,6 +577,7 @@ bound</li>
 returns z-scored outcomes only</li>
 <li>Technical details that obscure main findings</li>
 <li>Causal claims beyond your identification strategy</li>
+<li>Results that are disconnected from the psychological question</li>
 </ul>
 <hr />
 <h2 id="figure-presentation"><a class="header" href="#figure-presentation">Figure presentation</a></h2>
